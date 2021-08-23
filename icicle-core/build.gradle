@@ -9,10 +9,47 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    // configuration that holds jars to include in the jar
+    extraLibs
+}
+
 dependencies {
+    // https://mvnrepository.com/artifact/org.reflections/reflections
+    implementation project(":icicle-utilities")
+
+    implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
+    implementation 'org.jetbrains:annotations:20.1.0'
+
+
+    compileOnly 'org.slf4j:slf4j-api:1.7.32'
+    extraLibs 'org.slf4j:slf4j-log4j12:1.7.29'
+
+
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.20'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    configurations.implementation.extendsFrom(configurations.extraLibs)
 }
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 
 test {
     useJUnitPlatform()

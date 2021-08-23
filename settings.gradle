@@ -1,3 +1,4 @@
 rootProject.name = 'icicle'
 include 'icicle-core'
+include 'icicle-utilities'
 
