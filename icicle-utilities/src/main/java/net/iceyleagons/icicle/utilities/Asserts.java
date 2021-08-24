@@ -1,4 +1,4 @@
-package net.iceyleagons.icicle.core.utils;
+package net.iceyleagons.icicle.utilities;
 
 public class Asserts {
 

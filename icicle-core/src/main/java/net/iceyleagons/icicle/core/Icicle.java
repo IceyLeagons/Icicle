@@ -41,7 +41,6 @@ public class Icicle {
         }
     }
 
-
     static class Test2 {
 
         public String test() {

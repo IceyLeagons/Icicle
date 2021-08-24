@@ -1,6 +1,7 @@
 package net.iceyleagons.icicle.core.utils;
 
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
+import net.iceyleagons.icicle.utilities.Asserts;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
