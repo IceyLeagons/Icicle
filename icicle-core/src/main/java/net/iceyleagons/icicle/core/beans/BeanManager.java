@@ -8,11 +8,13 @@ import org.reflections.Reflections;
 
 public interface BeanManager {
 
-    void scanAndCreateBeans(Reflections reflections) throws BeanCreationException, CircularDependencyException;
+    void scanAndCreateBeans() throws BeanCreationException, CircularDependencyException;
     void createAndRegisterBean(Class<?> beanClass) throws BeanCreationException, CircularDependencyException;
 
     BeanRegistry getBeanRegistry();
     DependencyTreeResolver getDependencyTreeResolver();
     ConstructorParameterResolver getConstructorParameterResolver();
+
+    Reflections getReflectionsInstance();
 
 }

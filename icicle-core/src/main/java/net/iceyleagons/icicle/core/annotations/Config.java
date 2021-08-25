@@ -6,6 +6,7 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static java.lang.annotation.ElementType.TYPE;
 
+@AutoCreate
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface Config {
