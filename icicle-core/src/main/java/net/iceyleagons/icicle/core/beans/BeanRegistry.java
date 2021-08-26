@@ -12,4 +12,6 @@ public interface BeanRegistry {
     void registerBean(Class<?> type, Object object);
     void registerBean(Object object);
 
+    void unregisterBean(Class<?> type);
+
 }

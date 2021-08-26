@@ -43,4 +43,10 @@ public class DelegatingBeanRegistry implements BeanRegistry {
     public void registerBean(Object object) {
         this.registerBean(object.getClass(), object);
     }
+
+    @Override
+    public void unregisterBean(Class<?> type) {
+        logger.debug("Unregistering bean of type {}", type.getName());
+        this.beans.remove(type);
+    }
 }

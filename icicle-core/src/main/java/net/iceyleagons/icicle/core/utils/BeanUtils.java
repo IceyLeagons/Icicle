@@ -1,14 +1,16 @@
 package net.iceyleagons.icicle.core.utils;
 
+import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.utilities.Asserts;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public final class BeanUtils {
 
-    public static <T> T instantiateClass(Class<T> clazz) throws BeanCreationException {
+    public static <T> T instantiateClass(Class<T> clazz, @Nullable BeanProxyHandler beanProxyHandler) throws BeanCreationException {
         Asserts.notNull(clazz, "Class must not be null!");
 
         if (clazz.isInterface()) {
@@ -16,13 +18,13 @@ public final class BeanUtils {
         }
 
         try {
-            return instantiateClass(clazz.getDeclaredConstructor());
+            return instantiateClass(clazz.getDeclaredConstructor(), beanProxyHandler);
         } catch (NoSuchMethodException e) {
             throw new BeanCreationException(clazz, "No default constructor found!", e);
         }
     }
 
-    public static <T> T instantiateClass(Constructor<T> constructor, Object... arguments) throws BeanCreationException{
+    public static <T> T instantiateClass(Constructor<T> constructor, @Nullable  BeanProxyHandler beanProxyHandler, Object... arguments) throws BeanCreationException{
         Asserts.notNull(constructor, "Constructor must not be null!");
 
         try {
@@ -41,7 +43,7 @@ public final class BeanUtils {
                 argObjects[i] = arguments[i];
             }
 
-            return constructor.newInstance(argObjects);
+            return beanProxyHandler == null ? constructor.newInstance(argObjects) : beanProxyHandler.createEnhancedBean(constructor, argObjects);
         } catch (InvocationTargetException e) {
             throw new BeanCreationException(constructor, "Constructor execution resulted in an exception.", e);
         } catch (InstantiationException e) {
