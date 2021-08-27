@@ -15,7 +15,11 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
 
     private final Map<Class<?>, Configuration> configurations = new ConcurrentHashMap<>();
     private final Map<String, Object> values = new ConcurrentHashMap<>();
+    private final File configRootFolder;
 
+    public ConfigurationEnvironmentImpl(File configRootFolder) {
+        this.configRootFolder = configRootFolder;
+    }
 
     @Override
     public void addConfiguration(Configuration configuration) {
@@ -30,7 +34,6 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
                 configuration.getValues().forEach(entry ->
                         values.put(entry.getKey(), entry.getValue())));
     }
-
 
     @Override
     public Optional<Object> getProperty(String path) {
@@ -55,6 +58,14 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
 
     @Override
     public File getConfigRootFolder() {
-        return null;
+        return this.configRootFolder;
+    }
+
+    @Override
+    public void cleanUp() {
+        getConfigurations().forEach(Configuration::save);
+
+        this.values.clear();
+        this.configurations.clear();
     }
 }

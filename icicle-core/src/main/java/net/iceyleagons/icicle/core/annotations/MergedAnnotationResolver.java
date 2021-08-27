@@ -45,6 +45,12 @@ public class MergedAnnotationResolver {
         return false;
     }
 
+    @Internal
+    public void cleanUp() {
+        this.childrenAnnotations.clear();
+    }
+
+    @SuppressWarnings("unchecked")
     private Set<Class<? extends Annotation>> getChildren(Reflections reflections) {
         Set<Class<? extends Annotation>> children = new HashSet<>();
         Stack<Class<? extends Annotation>> stack = new Stack<>();

@@ -6,6 +6,9 @@ import org.reflections.Reflections;
 
 public interface Application {
 
+    void start() throws Exception;
+    void shutdown();
+
     BeanManager getBeanManager();
     ConfigurationEnvironment getConfigurationEnvironment();
     Reflections getReflections();

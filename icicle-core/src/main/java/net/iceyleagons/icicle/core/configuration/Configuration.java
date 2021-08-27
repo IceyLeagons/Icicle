@@ -1,6 +1,7 @@
 package net.iceyleagons.icicle.core.configuration;
 
 import lombok.Setter;
+import net.iceyleagons.icicle.core.annotations.Internal;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 
 import java.util.Map;
@@ -21,5 +22,8 @@ public interface Configuration {
     void setOrigin(Object origin);
     void setOriginType(Class<?> originType);
     void setHeader(String header);
+
+    @Internal
+    void afterConstruct();
 
 }

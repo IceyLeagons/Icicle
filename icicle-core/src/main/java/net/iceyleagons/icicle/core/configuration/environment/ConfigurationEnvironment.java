@@ -1,5 +1,6 @@
 package net.iceyleagons.icicle.core.configuration.environment;
 
+import net.iceyleagons.icicle.core.annotations.Internal;
 import net.iceyleagons.icicle.core.configuration.Configuration;
 
 import java.io.File;
@@ -17,4 +18,7 @@ public interface ConfigurationEnvironment {
     Collection<Configuration> getConfigurations();
     Configuration getConfiguration(Class<?> declaringType);
     File getConfigRootFolder();
+
+    @Internal
+    void cleanUp();
 }

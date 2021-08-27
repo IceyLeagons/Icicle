@@ -1,5 +1,6 @@
 package net.iceyleagons.icicle.core.beans.resolvers.impl;
 
+import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
@@ -13,6 +14,11 @@ import java.util.Stack;
 public class DelegatingDependencyTreeResolver implements DependencyTreeResolver {
 
     private static final Logger logger = LoggerFactory.getLogger(DelegatingDependencyTreeResolver.class);
+    private final BeanRegistry beanRegistry;
+
+    public DelegatingDependencyTreeResolver(BeanRegistry beanRegistry) {
+        this.beanRegistry = beanRegistry;
+    }
 
     @Override
     public LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException {
@@ -26,6 +32,7 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
 
         while (!stack.isEmpty()) {
             Class<?> bean = stack.pop();
+            if (beanRegistry.contains(bean)) continue; //making sure it's already registered to not spend time
 
             Class<?>[] dependencies = BeanUtils.getResolvableConstructor(bean).getParameterTypes();
             for (Class<?> dependency : dependencies) {

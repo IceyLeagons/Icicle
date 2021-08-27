@@ -1,6 +1,7 @@
 package net.iceyleagons.icicle.core.beans;
 
 import net.iceyleagons.icicle.core.utils.BeanUtils;
+import net.iceyleagons.icicle.utilities.Asserts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ public class DelegatingBeanRegistry implements BeanRegistry {
 
     @Override
     public <T> T getBeanNullable(Class<T> type) {
-        return BeanUtils.castIfNecessary(type, this.beans.get(type));
+        return this.beans.containsKey(type) ? BeanUtils.castIfNecessary(type, this.beans.get(type)) : null;
     }
 
     @Override
@@ -30,6 +31,8 @@ public class DelegatingBeanRegistry implements BeanRegistry {
 
     @Override
     public void registerBean(Class<?> type, Object object) {
+        Asserts.isTrue(type != String.class, "String cannot be registered as a bean!");
+
         if (!isRegistered(type)) {
             beans.put(type, object);
             logger.info("Registered bean of type: {}", type.getName());
@@ -45,8 +48,19 @@ public class DelegatingBeanRegistry implements BeanRegistry {
     }
 
     @Override
+    public boolean contains(Class<?> type) {
+        return this.beans.containsKey(type);
+    }
+
+    @Override
     public void unregisterBean(Class<?> type) {
         logger.debug("Unregistering bean of type {}", type.getName());
         this.beans.remove(type);
+    }
+
+    @Override
+    public void cleanUp() {
+        logger.info("Cleaning up...");
+        beans.clear();
     }
 }

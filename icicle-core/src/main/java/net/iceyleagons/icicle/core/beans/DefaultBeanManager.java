@@ -4,8 +4,12 @@ import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.AutoCreate;
 import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
 import net.iceyleagons.icicle.core.annotations.config.Config;
+import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.ConstructorParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
+import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingAutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingConstructorParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingDependencyTreeResolver;
 import net.iceyleagons.icicle.core.configuration.Configuration;
@@ -18,10 +22,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultBeanManager implements BeanManager {
 
@@ -31,7 +38,10 @@ public class DefaultBeanManager implements BeanManager {
     private final DependencyTreeResolver dependencyTreeResolver;
     private final ConstructorParameterResolver constructorParameterResolver;
     private final Reflections reflections;
+
     private final MergedAnnotationResolver autoCreationAnnotationResolver;
+    private final AutowiringAnnotationResolver autowiringAnnotationResolver;
+
     private final Application application;
 
     public DefaultBeanManager(Application application) {
@@ -39,46 +49,72 @@ public class DefaultBeanManager implements BeanManager {
         this.reflections = application.getReflections();
 
         this.beanRegistry = new DelegatingBeanRegistry();
-        this.dependencyTreeResolver = new DelegatingDependencyTreeResolver();
-        this.constructorParameterResolver = new DelegatingConstructorParameterResolver();
+        this.dependencyTreeResolver = new DelegatingDependencyTreeResolver(this.beanRegistry);
+        this.autowiringAnnotationResolver = new DelegatingAutowiringAnnotationResolver();
+        this.constructorParameterResolver = new DelegatingConstructorParameterResolver(autowiringAnnotationResolver);
 
         this.autoCreationAnnotationResolver = new MergedAnnotationResolver(AutoCreate.class, reflections);
-
     }
 
-    private void createConfigs(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException {
+    private static Set<Class<?>> getAndRemoveTypesAnnotatedWith(Class<? extends Annotation> annotation, Set<Class<?>> autoCreationTypes) {
         Iterator<Class<?>> iterator = autoCreationTypes.iterator(); //creating an iterator to avoid concurrent modification
+        Set<Class<?>> result = new HashSet<>();
+
 
         while (iterator.hasNext()) {
             Class<?> autoCreationType = iterator.next();
 
-            if (!autoCreationType.isAnnotationPresent(Config.class)) continue;
-            iterator.remove(); //removing the config from the types to not iterate over the afterwards
+            if (autoCreationType.isAnnotationPresent(annotation)) {
+                result.add(autoCreationType);
+                iterator.remove();
+            }
+        }
 
+        return result;
+    }
 
-            createAndRegisterBean(autoCreationType);
-            Object object = this.beanRegistry.getBeanNullable(autoCreationType);
+    private void createConfigs(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException {
+        Set<Class<?>> configs = getAndRemoveTypesAnnotatedWith(Config.class, autoCreationTypes);
+
+        for (Class<?> config : configs) {
+            createAndRegisterBean(config);
+            Object object = this.beanRegistry.getBeanNullable(config);
 
             if (!(object instanceof Configuration)) {
-                LOGGER.warn("Config described by {} does not extend any Configuration instance. (Did you forget to extend AbstractConfiguration?)", autoCreationType);
-                this.beanRegistry.unregisterBean(autoCreationType);
+                LOGGER.warn("Config described by {} does not extend any Configuration instance. (Did you forget to extend AbstractConfiguration?)", config.getName());
+                this.beanRegistry.unregisterBean(config);
                 continue;
             }
 
             Configuration configuration = (Configuration) object;
-            Config annotation = autoCreationType.getAnnotation(Config.class);
+            Config annotation = config.getAnnotation(Config.class);
 
             configuration.setConfigFile(new AdvancedFile(new File(this.application.getConfigurationEnvironment().getConfigRootFolder(), annotation.value())));
 
             configuration.setOrigin(object);
-            configuration.setOriginType(autoCreationType);
+            configuration.setOriginType(config);
 
             if (annotation.headerLines().length != 0) {
                 configuration.setHeader(String.join("\n", annotation.headerLines()));
             }
 
-
+            configuration.afterConstruct();
             this.application.getConfigurationEnvironment().addConfiguration(configuration);
+        }
+
+        this.application.getConfigurationEnvironment().updateValues();
+    }
+
+    private void createAnnotationHandlers(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException {
+        Set<Class<?>> handlers = getAndRemoveTypesAnnotatedWith(AnnotationHandler.class, autoCreationTypes);
+
+        for (Class<?> handler : handlers) {
+            createAndRegisterBean(handler);
+            Object object = this.beanRegistry.getBeanNullable(handler);
+
+            if (object instanceof AutowiringAnnotationHandler) {
+                this.autowiringAnnotationResolver.registerAutowiringAnnotationHandler((AutowiringAnnotationHandler) object);
+            }
         }
     }
 
@@ -88,6 +124,9 @@ public class DefaultBeanManager implements BeanManager {
 
         //First we want to create all the configurations because other beans may need them during construction
         createConfigs(autoCreationTypes);
+
+        //Second we want to register all autowiring annotation handlers before creating beans
+        createAnnotationHandlers(autoCreationTypes);
 
         for (Class<?> autoCreationType : autoCreationTypes) {
             createAndRegisterBean(autoCreationType);
@@ -116,6 +155,8 @@ public class DefaultBeanManager implements BeanManager {
 
     @Override
     public void createAndRegisterBean(Class<?> beanClass) throws BeanCreationException, CircularDependencyException {
+        if (beanClass == String.class) return; //it can happen, so we'll just ignore it and leave it null
+
         if (!this.beanRegistry.isRegistered(beanClass)) {
             LOGGER.debug("Creating and registering bean of type: {}", beanClass.getName());
 
@@ -137,5 +178,11 @@ public class DefaultBeanManager implements BeanManager {
             Object[] parameters = this.constructorParameterResolver.resolveConstructorParameters(constructor, getBeanRegistry());
             this.beanRegistry.registerBean(beanClass, BeanUtils.instantiateClass(constructor, null, parameters));
         }
+    }
+
+    @Override
+    public void cleanUp() {
+        this.autoCreationAnnotationResolver.cleanUp();
+        this.beanRegistry.cleanUp();
     }
 }

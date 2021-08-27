@@ -1,5 +1,7 @@
 package net.iceyleagons.icicle.core.beans;
 
+import net.iceyleagons.icicle.core.annotations.Internal;
+
 import java.util.Optional;
 
 public interface BeanRegistry {
@@ -12,6 +14,12 @@ public interface BeanRegistry {
     void registerBean(Class<?> type, Object object);
     void registerBean(Object object);
 
+    boolean contains(Class<?> type);
+
+    @Internal
     void unregisterBean(Class<?> type);
+
+    @Internal
+    void cleanUp();
 
 }
