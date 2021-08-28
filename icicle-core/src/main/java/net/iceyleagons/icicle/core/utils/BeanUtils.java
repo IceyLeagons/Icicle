@@ -79,19 +79,4 @@ public final class BeanUtils {
             throw new IllegalStateException("No default or single public constructor found for " + clazz);
         }
     }
-
-    /**
-     * Attempts to cast the supplied object to the required type.
-     * If the object is instance of the required type it will get returned,
-     * if the object is not instance of the required type, null will be returned.
-     *
-     * @param required the required type to cast to
-     * @param object the object to cast
-     * @param <T> the type wanted
-     * @return the casted object or null
-     */
-    @Nullable
-    public static <T> T castIfNecessary(Class<T> required, Object object) {
-        return required.isInstance(object) ? required.cast(object) : null;
-    }
 }

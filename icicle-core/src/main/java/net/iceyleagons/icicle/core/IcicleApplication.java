@@ -18,6 +18,7 @@ public class IcicleApplication implements Application {
     private static final Logger LOGGER = LoggerFactory.getLogger(IcicleApplication.class);
 
     private final Reflections reflections;
+
     private final BeanManager beanManager;
     private final ConfigurationEnvironment configurationEnvironment;
 

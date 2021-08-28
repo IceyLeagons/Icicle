@@ -2,6 +2,7 @@ package net.iceyleagons.icicle.core.configuration.environment;
 
 import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
+import net.iceyleagons.icicle.utilities.ReflectionUtils;
 
 import java.io.File;
 import java.util.Collection;
@@ -43,7 +44,7 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
     @Override
     public <T> Optional<T> getProperty(String path, Class<T> type) {
         Object value = values.get(path);
-        return value == null ? Optional.empty() : Optional.ofNullable(BeanUtils.castIfNecessary(type, value));
+        return value == null ? Optional.empty() : Optional.ofNullable(ReflectionUtils.castIfNecessary(type, value));
     }
 
     @Override

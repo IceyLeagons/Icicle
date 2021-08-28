@@ -4,6 +4,7 @@ import lombok.Setter;
 import net.iceyleagons.icicle.core.annotations.config.ConfigComment;
 import net.iceyleagons.icicle.core.annotations.config.ConfigField;
 import net.iceyleagons.icicle.utilities.Asserts;
+import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.simpleyaml.configuration.file.YamlFile;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
@@ -130,11 +131,7 @@ public abstract class AbstractConfiguration implements Configuration {
 
         values.forEach((path, field) -> {
             if (file.get(path) != null) {
-                try {
-                    field.set(origin, file.get(path));
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                ReflectionUtils.set(field, origin, file.get(path));
             }
         });
     }
@@ -149,11 +146,7 @@ public abstract class AbstractConfiguration implements Configuration {
 
         for (Field field : fields) {
             ConfigField configPath = field.getAnnotation(ConfigField.class);
-            try {
-                values.put(configPath.value(), field.get(origin));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            values.put(configPath.value(), ReflectionUtils.get(field, origin, Object.class));
         }
         return values.entrySet();
     }

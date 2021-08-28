@@ -2,6 +2,7 @@ package net.iceyleagons.icicle.core.beans;
 
 import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.utilities.Asserts;
+import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,12 +17,12 @@ public class DelegatingBeanRegistry implements BeanRegistry {
 
     @Override
     public <T> Optional<T> getBean(Class<T> type) {
-        return beans.containsKey(type) ? Optional.ofNullable(BeanUtils.castIfNecessary(type, beans.get(type))) : Optional.empty();
+        return beans.containsKey(type) ? Optional.ofNullable(ReflectionUtils.castIfNecessary(type, beans.get(type))) : Optional.empty();
     }
 
     @Override
     public <T> T getBeanNullable(Class<T> type) {
-        return this.beans.containsKey(type) ? BeanUtils.castIfNecessary(type, this.beans.get(type)) : null;
+        return this.beans.containsKey(type) ? ReflectionUtils.castIfNecessary(type, this.beans.get(type)) : null;
     }
 
     @Override
