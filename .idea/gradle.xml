@@ -11,6 +11,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/icicle-core" />
+            <option value="$PROJECT_DIR$/icicle-serialization" />
             <option value="$PROJECT_DIR$/icicle-utilities" />
           </set>
         </option>

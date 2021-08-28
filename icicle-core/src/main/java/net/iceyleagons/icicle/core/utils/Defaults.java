@@ -21,6 +21,7 @@ public final class Defaults {
                 int.class, 0,
                 long.class, 0L,
                 float.class, 0f,
+                double.class, 0d,
                 char.class, (char) 0);
     }
 }
