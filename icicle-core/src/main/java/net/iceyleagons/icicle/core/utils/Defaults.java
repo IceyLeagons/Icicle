@@ -20,6 +20,7 @@ public final class Defaults {
                 short.class, (short) 0,
                 int.class, 0,
                 long.class, 0L,
-                float.class, 0f);
+                float.class, 0f,
+                char.class, (char) 0);
     }
 }

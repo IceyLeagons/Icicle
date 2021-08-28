@@ -1,9 +1,7 @@
 package net.iceyleagons.icicle.utilities;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Utility class for {@link List}s.
@@ -44,5 +42,12 @@ public final class ListUtils {
         }
 
         return result;
+    }
+
+    @SafeVarargs
+    public static <T> List<T> mergeLists(List<T>... lists) {
+        if (lists.length == 0) return Collections.emptyList();
+
+        return Arrays.stream(lists).flatMap(Collection::stream).collect(Collectors.toList());
     }
 }

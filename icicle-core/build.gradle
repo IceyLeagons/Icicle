@@ -27,7 +27,7 @@ dependencies {
     // https://mvnrepository.com/artifact/cglib/cglib
     extraLibs group: 'cglib', name: 'cglib', version: '3.3.0'
 
-    extraLibs 'org.slf4j:slf4j-log4j12:1.7.29'
+    extraLibs 'org.slf4j:slf4j-log4j12:1.7.32'
     extraLibs 'me.carleslc.Simple-YAML:Simple-Yaml:1.7.2'
 
 

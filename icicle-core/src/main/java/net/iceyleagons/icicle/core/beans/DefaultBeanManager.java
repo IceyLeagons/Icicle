@@ -6,11 +6,14 @@ import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
 import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.ConstructorParameterResolver;
+import net.iceyleagons.icicle.core.beans.resolvers.CustomAutoCreateAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingAutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingConstructorParameterResolver;
+import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingCustomAutoCreateAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingDependencyTreeResolver;
 import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
@@ -28,7 +31,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultBeanManager implements BeanManager {
 
@@ -40,7 +42,9 @@ public class DefaultBeanManager implements BeanManager {
     private final Reflections reflections;
 
     private final MergedAnnotationResolver autoCreationAnnotationResolver;
+
     private final AutowiringAnnotationResolver autowiringAnnotationResolver;
+    private final CustomAutoCreateAnnotationResolver customAutoCreateAnnotationResolver;
 
     private final Application application;
 
@@ -50,7 +54,10 @@ public class DefaultBeanManager implements BeanManager {
 
         this.beanRegistry = new DelegatingBeanRegistry();
         this.dependencyTreeResolver = new DelegatingDependencyTreeResolver(this.beanRegistry);
+
         this.autowiringAnnotationResolver = new DelegatingAutowiringAnnotationResolver();
+        this.customAutoCreateAnnotationResolver = new DelegatingCustomAutoCreateAnnotationResolver();
+
         this.constructorParameterResolver = new DelegatingConstructorParameterResolver(autowiringAnnotationResolver);
 
         this.autoCreationAnnotationResolver = new MergedAnnotationResolver(AutoCreate.class, reflections);
@@ -114,6 +121,8 @@ public class DefaultBeanManager implements BeanManager {
 
             if (object instanceof AutowiringAnnotationHandler) {
                 this.autowiringAnnotationResolver.registerAutowiringAnnotationHandler((AutowiringAnnotationHandler) object);
+            } else if (object instanceof CustomAutoCreateAnnotationHandler) {
+                this.customAutoCreateAnnotationResolver.registerCustomAutoCreateAnnotationHandler((CustomAutoCreateAnnotationHandler) object);
             }
         }
     }
@@ -155,16 +164,16 @@ public class DefaultBeanManager implements BeanManager {
 
     @Override
     public void createAndRegisterBean(Class<?> beanClass) throws BeanCreationException, CircularDependencyException {
-        if (beanClass == String.class) return; //it can happen, so we'll just ignore it and leave it null
+        if (beanClass == String.class || beanClass.isPrimitive()) return;
 
-        if (!this.beanRegistry.isRegistered(beanClass)) {
+        if (!this.beanRegistry.isRegistered(beanClass)) { //this is here because a class may have multiple auto-create annotations and also just a precaution
             LOGGER.debug("Creating and registering bean of type: {}", beanClass.getName());
 
             Constructor<?> constructor = BeanUtils.getResolvableConstructor(beanClass);
 
             if (constructor.getParameterTypes().length == 0) {
                 Object bean = BeanUtils.instantiateClass(constructor, null);
-                this.beanRegistry.registerBean(beanClass, bean);
+                this.registerBean(beanClass, bean);
                 return;
             } else {
                 LinkedList<Class<?>> dependencies = this.dependencyTreeResolver.resolveDependencyTree(beanClass);
@@ -176,8 +185,13 @@ public class DefaultBeanManager implements BeanManager {
             }
 
             Object[] parameters = this.constructorParameterResolver.resolveConstructorParameters(constructor, getBeanRegistry());
-            this.beanRegistry.registerBean(beanClass, BeanUtils.instantiateClass(constructor, null, parameters));
+            this.registerBean(beanClass, BeanUtils.instantiateClass(constructor, null, parameters));
         }
+    }
+
+    private void registerBean(Class<?> beanClass, Object bean) {
+        this.beanRegistry.registerBean(beanClass, bean);
+        this.customAutoCreateAnnotationResolver.onCreated(bean, beanClass);
     }
 
     @Override

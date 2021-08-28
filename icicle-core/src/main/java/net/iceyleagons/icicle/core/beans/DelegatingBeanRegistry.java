@@ -5,14 +5,14 @@ import net.iceyleagons.icicle.utilities.Asserts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DelegatingBeanRegistry implements BeanRegistry {
 
     private static final Logger logger = LoggerFactory.getLogger(DelegatingBeanRegistry.class);
-    private final Map<Class<?>, Object> beans = new HashMap<>();
+    private final Map<Class<?>, Object> beans = new ConcurrentHashMap<>();
 
     @Override
     public <T> Optional<T> getBean(Class<T> type) {
@@ -31,7 +31,7 @@ public class DelegatingBeanRegistry implements BeanRegistry {
 
     @Override
     public void registerBean(Class<?> type, Object object) {
-        Asserts.isTrue(type != String.class, "String cannot be registered as a bean!");
+        Asserts.isTrue(type != String.class && !type.isPrimitive(), "Strings and primitives cannot be registered as a bean!");
 
         if (!isRegistered(type)) {
             beans.put(type, object);

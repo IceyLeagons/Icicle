@@ -1,7 +1,6 @@
 package net.iceyleagons.icicle.core.configuration;
 
 import lombok.Setter;
-import net.iceyleagons.icicle.core.annotations.Internal;
 import net.iceyleagons.icicle.core.annotations.config.ConfigComment;
 import net.iceyleagons.icicle.core.annotations.config.ConfigField;
 import net.iceyleagons.icicle.utilities.Asserts;
