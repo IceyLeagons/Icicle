@@ -44,8 +44,7 @@ public class JsonSerializer implements ComplexSerializer<JSONObject> {
 
     @Override
     public <T> T deserializeObject(Class<T> wantedType, JSONObject value) {
-        //TODO
-        return null;
+        return ObjectMapper.generateObjectFromData(wantedType, value.toMap());
     }
 
     @Override

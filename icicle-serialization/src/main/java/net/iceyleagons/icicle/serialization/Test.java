@@ -1,18 +1,21 @@
 package net.iceyleagons.icicle.serialization;
 
+import net.iceyleagons.icicle.serialization.serializers.StringSerializer;
 import net.iceyleagons.icicle.serialization.serializers.impl.JsonSerializer;
-import net.iceyleagons.icicle.serialization.serializers.impl.PropertiesSerializer;
-import net.iceyleagons.icicle.serialization.serializers.impl.XmlSerializer;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
+import org.json.JSONObject;
 
 import java.io.File;
 
 public class Test {
 
     public static void main(String[] args) {
-        XmlSerializer xmlSerializer = new XmlSerializer();
+        StringSerializer<JSONObject> stringSerializer = new JsonSerializer(true);
 
-        xmlSerializer.writeToFile(new Test2(), new AdvancedFile(new File("hello.xml")));
+        String output = stringSerializer.serializeToString(new Test2());
+        String out2 = stringSerializer.serializeToString(stringSerializer.deserializeFromString(Test2.class, output));
+
+        System.out.println("Matching: " + output.equals(out2));
     }
 
     static class Test2 {

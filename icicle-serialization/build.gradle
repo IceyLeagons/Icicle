@@ -2,10 +2,11 @@ plugins {
     id 'java'
 }
 
-version 'unspecified'
+version '1.0.0'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io/' }
 }
 
 configurations {
@@ -18,7 +19,9 @@ dependencies {
 
     implementation 'org.slf4j:slf4j-api:1.7.32'
     implementation 'org.jetbrains:annotations:20.1.0'
-    implementation group: 'org.json', name: 'json', version: '20210307'
+    extraLibs group: 'org.json', name: 'json', version: '20210307'
+
+    extraLibs 'com.github.Querz:NBT:6.1'
 
 
     compileOnly 'org.projectlombok:lombok:1.18.20'
