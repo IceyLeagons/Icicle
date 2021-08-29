@@ -26,7 +26,7 @@ public class ObjectMapper {
         return map;
     }
 
-    private static boolean isSubObject(Class<?> type) {
+    public static boolean isSubObject(Class<?> type) {
         return type != String.class && !type.isPrimitive();
     }
 }
