@@ -1,3 +1,6 @@
 .gradle/**
 .idea/**
 build/**
+
+# This should fix builds being present.
+**/build/**
