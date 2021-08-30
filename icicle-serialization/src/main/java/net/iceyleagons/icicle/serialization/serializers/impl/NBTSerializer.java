@@ -9,6 +9,7 @@ import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.querz.nbt.io.NBTUtil;
 import net.querz.nbt.tag.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -85,15 +86,24 @@ public class NBTSerializer implements FileSerializer {
             }
 
             compoundTag.put(name, mapTag);
-        } else if (object instanceof List) {
-            List<?> list = (List<?>) object;
+        } else if (object instanceof Collection) {
+            Object[] list = ((Collection<?>) object).toArray();
             CompoundTag listTag = new CompoundTag();
 
-            for (int i = 0; i < list.size(); i++) {
-                addToTag(listTag, String.valueOf(i), list.get(i));
+            for (int i = 0; i < list.length; i++) {
+                addToTag(listTag, String.valueOf(i), list[i]);
             }
 
             compoundTag.put(name, listTag);
+        } else if (object instanceof String[]) {
+            ListTag<StringTag> list = new ListTag<>(StringTag.class);
+
+            String[] array = (String[]) object;
+            for (String s : array) {
+                list.add(new StringTag(s));
+            }
+
+            compoundTag.put(name, list);
         } else {
             compoundTag.putString(name, object.toString());
         }
