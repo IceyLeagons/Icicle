@@ -51,6 +51,7 @@ tasks.withType(JavaCompile) {
 }
 
 jar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     from {
         configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
     }

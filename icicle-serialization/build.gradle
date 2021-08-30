@@ -16,6 +16,7 @@ configurations {
 
 dependencies {
     implementation project(":icicle-utilities")
+    implementation project(":icicle-core")
 
     implementation 'org.slf4j:slf4j-api:1.7.32'
     implementation 'org.jetbrains:annotations:20.1.0'
@@ -34,6 +35,7 @@ dependencies {
 }
 
 jar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     from {
         configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
     }
