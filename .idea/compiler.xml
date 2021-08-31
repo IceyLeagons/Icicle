@@ -10,10 +10,11 @@
         <module name="icicle.icicle-core.main" />
         <module name="icicle.icicle-serialization.main" />
         <module name="icicle.icicle-utilities.main" />
+        <module name="icicle.icicle-gradle.main" />
         <module name="icicle.icicle-utilities.test" />
         <module name="icicle.icicle-core.test" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="12" />
+    <bytecodeTargetLevel target="16" />
   </component>
 </project>

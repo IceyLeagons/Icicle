@@ -106,7 +106,7 @@ public class ObjectMapper {
             if (converters.containsKey(genericType)) {
 
                 Object obj = null;
-                if (value instanceof JSONObject) {
+                if (value instanceof JSONObject) { //TODO (TOTHTOMI) this is always false, I don't remember what I wanted here, todo: figure it out :P
                     JSONObject jsonObject = (JSONObject) value;
                     Object subObject = toObject(jsonObject.toMap(), fieldType);
                     obj = converters.get(genericType).convertToEntityAttributeFromObject(subObject);
