@@ -1,58 +1,38 @@
 package net.iceyleagons.icicle.serialization;
 
-import net.iceyleagons.icicle.core.Application;
-import net.iceyleagons.icicle.core.IcicleApplication;
-import net.iceyleagons.icicle.serialization.serializers.impl.JsonSerializer;
-import net.iceyleagons.icicle.serialization.serializers.impl.NBTSerializer;
-import net.iceyleagons.icicle.utilities.file.AdvancedFile;
-
-import java.io.File;
+import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
 
 public class Test {
 
-    public static void main(String[] args) throws Exception {
-        Application application = new IcicleApplication("net.iceyleagons.icicle");
-        application.start();
+    public static void main(String[] args) {
+        JsonSerializer jsonSerializer = new JsonSerializer(true);
 
-        //NBTSerializer serializer = new NBTSerializer(true);
-        JsonSerializer jsonSerializer = new JsonSerializer(false);
+        String out = jsonSerializer.serializeToString(new Test1());
 
-        Test2 test = new Test2();
-        //serializer.writeToFile(test, new AdvancedFile(new File("test.nbt")));
+        Test1 test = jsonSerializer.deSerializeFromString(out, Test1.class);
+        String out2 = jsonSerializer.serializeToString(test);
 
+        System.out.println("Matching: " + out.equals(out2));
+    }
 
-        String output = jsonSerializer.serializeToString(test);
+    static class Test1 {
 
-        Test2 newTest2 = jsonSerializer.deserializeFromString(Test2.class, output);
-        String out2 = jsonSerializer.serializeToString(newTest2);
+        private final String name = "Test1";
+        private final int id = 20;
+        private final String[] alias = new String[] { "t1", "tst1"};
 
+        private final Test2 test2 = new Test2();
+        private final Test2[] tests = new Test2[]{new Test2(), new Test2()};
 
-        System.out.println("Match: " + output.equals(out2));
+        public Test1() {}
 
-
-        //System.out.println("Serialization process took: " + end + " ms!");
     }
 
     static class Test2 {
         private final String name = "Test2";
-        private final String[] names = new String[] {"asd1", "asd2", "asd3", "asd4"};
-        private final int asd = 2;
-        private final int[] hello = new int[] {1, 5, 3, 2};
+        private final int id = 30;
+        private final boolean asd = true;
 
-        private final Test3[] test = new Test3[]{new Test3(), new Test3()}; //
-
-        public Test2() {
-
-        }
-    }
-
-    static class Test3 {
-        private final String name = "Testf";
-        private final int hello = 4;
-        private final long[] bb = new long[] {5L, 3L, 5L};
-
-        public Test3() {
-
-        }
+        public Test2() {}
     }
 }

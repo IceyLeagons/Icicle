@@ -1,10 +1,13 @@
 package net.iceyleagons.icicle.serialization.annotations;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SerializeIgnore { }
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+
+@Retention(RUNTIME)
+@Target(TYPE)
+public @interface SerializeIgnore {
+}

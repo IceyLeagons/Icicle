@@ -1,189 +1,146 @@
 package net.iceyleagons.icicle.serialization;
 
-import net.iceyleagons.icicle.serialization.annotations.SerializeIgnore;
+import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.serialization.annotations.SerializedName;
+import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
 import net.iceyleagons.icicle.utilities.GenericUtils;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
-import org.json.JSONObject;
+import net.iceyleagons.icicle.utilities.datastores.triple.Triple;
+import net.iceyleagons.icicle.utilities.datastores.triple.UnmodifiableTriple;
+import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
+import net.iceyleagons.icicle.utilities.datastores.tuple.UnmodifiableTuple;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-import static net.iceyleagons.icicle.serialization.converter.ConverterAutoCreateAnnotationHandler.converters;
-import static net.iceyleagons.icicle.utilities.StringUtils.containsIgnoresCase;
-
+@RequiredArgsConstructor
 public class ObjectMapper {
+    
+    public <T> T unMapObject(ObjectDescriptor objectDescriptor, Class<T> wantedType) {
+        if (!objectDescriptor.getObjectType().equals(wantedType)) return null;
 
-    public static Map<String, Object> mapObject(Object object) {
-        //Warning! probably ugly code ahead, however it "hopefully" it works fine, all edge-cases "should" be implemented.
-        //The good thing i that it runs 5ms avg.
+        T parent = SerializationConstants.generateInstance(wantedType);
 
-        Map<String, Object> map = new HashMap<>();
+        for (Triple<String, Field, ObjectDescriptor> subObject : objectDescriptor.getSubObjects()) {
+            Field field = subObject.getB();
 
-        for (Field declaredField : object.getClass().getDeclaredFields()) {
-            if (shouldIgnore(declaredField)) continue;
-
-            Class<?> type = declaredField.getType();
-            String name = declaredField.isAnnotationPresent(SerializedName.class) ? declaredField.getAnnotation(SerializedName.class).value() : declaredField.getName();
-            Object value = ReflectionUtils.get(declaredField, object, Object.class);
-
-            if (value == null) {
-                map.put(name, null);
-                continue;
-            }
-
-            if (value instanceof JSONObject) {
-                map.put(name, ((JSONObject) value).toMap());
-                continue;
-            }
-
-            Type genericType = declaredField.getGenericType();
-            if (converters.containsKey(genericType)) {
-                Object obj = converters.get(genericType).convertToStorageAttributeFromObject(value);
-
-                if (obj instanceof JSONObject) {
-                    map.put(name, ((JSONObject) obj).toMap());
-                    continue;
-                }
-
-                if (isSubObject(obj.getClass())) {
-                    Map<String, Object> mappedConvertedSubObject = mapObject(obj);
-                    map.put(name, mappedConvertedSubObject);
-                    continue;
-                }
-
-                map.put(name, obj);
-            }
-
-            if (isSubObject(type)) {
-                if (type.isArray()) {
-                    List<Map<String, Object>> mapArray = new ArrayList<>();
-
-                    for (int i = 0; i < Array.getLength(value); i++) {
-                        Map<String, Object> mappedConvertedSubObject = mapObject(Array.get(value, i));
-                        mapArray.add(mappedConvertedSubObject);
-                    }
-
-                    map.put(name, mapArray);
-                    continue;
-                }
-
-                Map<String, Object> mappedSubObject = mapObject(value);
-                map.put(name, mappedSubObject);
-                continue;
-            }
-
-
-            map.put(name, value);
+            //TODO converters
+            Object unMappedObject = unMapObject(subObject.getC(), field.getType());
+            ReflectionUtils.set(field, parent, unMappedObject);
         }
 
-        return map;
-    }
+        //TODO collections not just arrays
+        for (Triple<String, Field, List<ObjectDescriptor>> subObjectArray : objectDescriptor.getSubObjectArrays()) {
+            Field field = subObjectArray.getB();
+            List<ObjectDescriptor> content = subObjectArray.getC();
 
-    @SuppressWarnings("unchecked")
-    public static <T> T toObject(Map<String, Object> values, Class<T> type) {
-        T instance = generateInstance(type);
-        Map<String, Field> fields = getFields(type);
+            Object[] array = GenericUtils.createGenericArray(field.getType(), content.size());
 
-        for (Map.Entry<String, Object> stringObjectEntry : values.entrySet()) {
-            String key = stringObjectEntry.getKey();
-            Object value = stringObjectEntry.getValue();
+            for (int i = 0; i < content.size(); i++) {
+                ObjectDescriptor desc = content.get(i);
 
-            Field field = fields.get(key);
-            Class<?> fieldType = field.getType();
-
-            if (value instanceof JSONObject) {
-                JSONObject jsonObject = (JSONObject) value;
-                Object obj = toObject(jsonObject.toMap(), fieldType);
-                ReflectionUtils.set(field, instance, obj);
-                continue;
+                array[i] = unMapObject(desc, desc.getObjectType().getComponentType());
             }
 
-            Type genericType = field.getGenericType();
-            if (converters.containsKey(genericType)) {
-
-                Object obj = null;
-                if (value instanceof JSONObject) { //TODO (TOTHTOMI) this is always false, I don't remember what I wanted here, todo: figure it out :P
-                    JSONObject jsonObject = (JSONObject) value;
-                    Object subObject = toObject(jsonObject.toMap(), fieldType);
-                    obj = converters.get(genericType).convertToEntityAttributeFromObject(subObject);
-                }
-
-                if (isSubObject(fieldType)) {
-                    Object subObject = toObject((Map<String, Object>) value, fieldType);
-                    obj = converters.get(genericType).convertToEntityAttributeFromObject(subObject);
-                }
-
-                ReflectionUtils.set(field, instance, obj);
-            }
-
-            if (isSubObject(fieldType)) {
-                if (fieldType.isArray()) {
-                    List<Map<String, Object>> mapArray = (List<Map<String, Object>>) value;
-                    Object[] array = GenericUtils.createGenericArray(fieldType.getComponentType(), mapArray.size());
-
-                    for (int i = 0; i < mapArray.size(); i++) {
-                        Map<String, Object> map = mapArray.get(i);
-                        array[i] = toObject(map, fieldType.getComponentType());
-                    }
-
-                    ReflectionUtils.set(field, instance, array);
-                    continue;
-                }
-
-                Object subObject = toObject((Map<String, Object>) value, fieldType);
-                ReflectionUtils.set(field, instance, subObject);
-                continue;
-            }
-
-            ReflectionUtils.set(field, instance, value);
+            ReflectionUtils.set(field, parent, array);
         }
 
-        return instance;
+        for (Triple<String, Field, Object> valueField : objectDescriptor.getValueFields()) {
+            Field field = valueField.getB();
+            Object value = valueField.getC();
+
+            //TODO converters
+            ReflectionUtils.set(field, parent, value);
+        }
+
+        return parent;
     }
 
-    private static Map<String, Field> getFields(Class<?> clazz) {
-        Map<String, Field> fields = new HashMap<>();
+    public ObjectDescriptor mapObject(Object object) {
+        Class<?> type = object.getClass();
+
+        Tuple<Field[], Field[]> fields = getFields(type);
+        Field[] valueFields = fields.getA();
+        Field[] subObjectFields = fields.getB();
+
+        ObjectDescriptor objectDescriptor = new ObjectDescriptor(type);
+
+        for (Field valueField : valueFields) {
+            objectDescriptor.getValueFields().add(getFieldValues(valueField, object));
+        }
+
+        for (Field subObjectField : subObjectFields) {
+            Triple<String, Field, Object> values = getFieldValues(subObjectField, object);
+            Object value = values.getC();
+            //TODO converters
+
+            //TODO collections not just arrays
+            if (subObjectField.getType().isArray()) {
+                List<ObjectDescriptor> subArray = new ArrayList<>();
+
+                for (int i = 0; i < Array.getLength(value); i++) {
+                    ObjectDescriptor descriptor = mapObject(Array.get(value, i));
+                    subArray.add(descriptor);
+                }
+
+                objectDescriptor.getSubObjectArrays().add(new UnmodifiableTriple<>(values.getA(), values.getB(), subArray));
+                continue;
+            }
+
+            objectDescriptor.getSubObjects().add(new UnmodifiableTriple<>(values.getA(), values.getB(), mapObject(values.getC())));
+        }
+
+        return objectDescriptor;
+    }
+
+    private static Triple<String, Field, Object> getFieldValues(Field field, Object parent) {
+        String name = getFieldKey(field);
+        Object value = ReflectionUtils.get(field, parent, Object.class);
+
+        return new UnmodifiableTriple<>(name, field, value);
+    }
+
+    public static Triple<String, Field, List<ObjectDescriptor>> getFieldWithValue(Field field, List<ObjectDescriptor> value) {
+        String name = getFieldKey(field);
+
+        return new UnmodifiableTriple<>(name, field, value);
+    }
+
+    public static Triple<String, Field, ObjectDescriptor> getFieldWithValue(Field field, ObjectDescriptor value) {
+        String name = getFieldKey(field);
+
+        return new UnmodifiableTriple<>(name, field, value);
+    }
+
+    public static Triple<String, Field, Object> getFieldWithValue(Field field, Object value) {
+        String name = getFieldKey(field);
+
+        return new UnmodifiableTriple<>(name, field, value);
+    }
+
+    public static String getFieldKey(Field field) {
+        return field.isAnnotationPresent(SerializedName.class) ? field.getAnnotation(SerializedName.class).value() : field.getName();
+    }
+
+    public static Tuple<Field[], Field[]> getFields(Class<?> clazz) {
+        Set<Field> valueFields = new HashSet<>();
+        Set<Field> subObjectFields = new HashSet<>();
 
         for (Field declaredField : clazz.getDeclaredFields()) {
-            if (shouldIgnore(declaredField)) continue;
-            String name = declaredField.isAnnotationPresent(SerializedName.class) ? declaredField.getAnnotation(SerializedName.class).value() : declaredField.getName();
+            if (SerializationConstants.shouldIgnore(declaredField)) continue;
 
-            fields.put(name, declaredField);
+            if (SerializationConstants.isSubObject(declaredField.getType())) {
+                subObjectFields.add(declaredField);
+                continue;
+            }
+
+            valueFields.add(declaredField);
         }
 
-        return fields;
-    }
-
-    private static <T> T generateInstance(Class<T> type) throws IllegalStateException {
-        try {
-            Constructor<T>  constructor = type.getDeclaredConstructor();
-            constructor.setAccessible(true);
-            return constructor.newInstance();
-        } catch (NoSuchMethodException e) {
-            throw new IllegalStateException("Object must contain one public empty constructor!", e);
-        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            throw new IllegalStateException("Could not instantiate object!");
-        }
-    }
-
-    public static boolean isSubObject(Class<?> type) {
-        String typeName = type.getTypeName();
-        return !containsIgnoresCase(typeName, "string") &&
-                !containsIgnoresCase(typeName, "int") &&
-                !containsIgnoresCase(typeName, "boolean") &&
-                !containsIgnoresCase(typeName, "long") &&
-                !containsIgnoresCase(typeName, "float") &&
-                !containsIgnoresCase(typeName, "double") &&
-                !containsIgnoresCase(typeName, "short") &&
-                !containsIgnoresCase(typeName, "byte") &&
-                !containsIgnoresCase(typeName, "char");
-    }
-
-    private static boolean shouldIgnore(Field field) {
-        return Modifier.isTransient(field.getModifiers()) && field.isAnnotationPresent(SerializeIgnore.class);
+        return new UnmodifiableTuple<>(valueFields.toArray(Field[]::new), subObjectFields.toArray(Field[]::new));
     }
 }
