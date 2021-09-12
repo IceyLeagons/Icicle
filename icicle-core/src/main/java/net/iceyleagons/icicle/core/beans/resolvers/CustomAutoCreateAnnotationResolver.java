@@ -5,6 +5,7 @@ import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotati
 public interface CustomAutoCreateAnnotationResolver {
 
     void registerCustomAutoCreateAnnotationHandler(CustomAutoCreateAnnotationHandler handler);
+
     void onCreated(Object bean, Class<?> type);
 
 }

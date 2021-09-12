@@ -1,14 +1,12 @@
 package net.iceyleagons.icicle.core.configuration.environment;
 
 import net.iceyleagons.icicle.core.configuration.Configuration;
-import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
-
 import java.util.concurrent.ConcurrentHashMap;
 
 

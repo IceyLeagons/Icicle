@@ -1,6 +1,5 @@
 package net.iceyleagons.icicle.core.beans;
 
-import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import org.slf4j.Logger;

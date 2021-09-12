@@ -20,6 +20,25 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         this.beanRegistry = beanRegistry;
     }
 
+    private static String getCycleString(LinkedList<Class<?>> tree, Class<?> start, Class<?> end) {
+        int startIndex = tree.indexOf(start);
+        int endIndex = tree.indexOf(end);
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+
+        stringBuilder.append("\n\t\t|-----|").append("\n\r");
+        stringBuilder.append("\t\t|     |").append("\n\r");
+        for (int i = startIndex; i <= endIndex; i++) {
+            stringBuilder.append("\t\t|   ").append(tree.get(i).getName()).append("\n\r");
+            stringBuilder.append("\t\t|     |").append("\n\r");
+        }
+
+        stringBuilder.append("\t\t|_____|").append("\n\r");
+
+        return stringBuilder.toString();
+    }
+
     @Override
     public LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException {
         logger.debug("Resolving dependency tree for bean-type: {}", currentBean.getName());
@@ -49,24 +68,5 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         tree.remove(currentBean);
 
         return ListUtils.reverseLinkedList(tree);
-    }
-
-    private static String getCycleString(LinkedList<Class<?>> tree, Class<?> start, Class<?> end) {
-        int startIndex = tree.indexOf(start);
-        int endIndex = tree.indexOf(end);
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-
-        stringBuilder.append("\n\t\t|-----|").append("\n\r");
-        stringBuilder.append("\t\t|     |").append("\n\r");
-        for (int i = startIndex; i <= endIndex; i++) {
-            stringBuilder.append("\t\t|   ").append(tree.get(i).getName()).append("\n\r");
-            stringBuilder.append("\t\t|     |").append("\n\r");
-        }
-
-        stringBuilder.append("\t\t|_____|").append("\n\r");
-
-        return stringBuilder.toString();
     }
 }

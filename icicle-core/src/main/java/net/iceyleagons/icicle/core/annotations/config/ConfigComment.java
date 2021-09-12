@@ -13,6 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface ConfigComment {
 
     String value();
+
     CommentType type() default CommentType.SIDE;
 
 }

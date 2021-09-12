@@ -18,6 +18,8 @@ import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingDependencyTree
 import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
+import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
+import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.reflections.Reflections;
@@ -41,6 +43,8 @@ public class DefaultBeanManager implements BeanManager {
     private final ConstructorParameterResolver constructorParameterResolver;
     private final Reflections reflections;
 
+    private final BeanProxyHandler beanProxyHandler;
+
     private final MergedAnnotationResolver autoCreationAnnotationResolver;
 
     private final AutowiringAnnotationResolver autowiringAnnotationResolver;
@@ -54,6 +58,8 @@ public class DefaultBeanManager implements BeanManager {
 
         this.beanRegistry = new DelegatingBeanRegistry();
         this.dependencyTreeResolver = new DelegatingDependencyTreeResolver(this.beanRegistry);
+
+        this.beanProxyHandler = new ByteBuddyProxyHandler();
 
         this.autowiringAnnotationResolver = new DelegatingAutowiringAnnotationResolver();
         this.customAutoCreateAnnotationResolver = new DelegatingCustomAutoCreateAnnotationResolver();
@@ -172,7 +178,7 @@ public class DefaultBeanManager implements BeanManager {
             Constructor<?> constructor = BeanUtils.getResolvableConstructor(beanClass);
 
             if (constructor.getParameterTypes().length == 0) {
-                Object bean = BeanUtils.instantiateClass(constructor, null);
+                Object bean = BeanUtils.instantiateClass(constructor, this.beanProxyHandler);
                 this.registerBean(beanClass, bean);
                 return;
             } else {
@@ -185,7 +191,7 @@ public class DefaultBeanManager implements BeanManager {
             }
 
             Object[] parameters = this.constructorParameterResolver.resolveConstructorParameters(constructor, getBeanRegistry());
-            this.registerBean(beanClass, BeanUtils.instantiateClass(constructor, null, parameters));
+            this.registerBean(beanClass, BeanUtils.instantiateClass(constructor, this.beanProxyHandler, parameters));
         }
     }
 

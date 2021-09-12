@@ -18,7 +18,9 @@ public interface BeanManager {
     void cleanUp();
 
     BeanRegistry getBeanRegistry();
+
     DependencyTreeResolver getDependencyTreeResolver();
+
     ConstructorParameterResolver getConstructorParameterResolver();
 
     Reflections getReflectionsInstance();

@@ -10,13 +10,17 @@ import java.util.Optional;
 public interface ConfigurationEnvironment {
 
     void addConfiguration(Configuration configuration);
+
     void updateValues();
 
     Optional<Object> getProperty(String path);
+
     <T> Optional<T> getProperty(String path, Class<T> type);
 
     Collection<Configuration> getConfigurations();
+
     Configuration getConfiguration(Class<?> declaringType);
+
     File getConfigRootFolder();
 
     @Internal

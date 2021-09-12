@@ -1,7 +1,7 @@
 package net.iceyleagons.icicle.core.utils;
 
-import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
+import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.utilities.Asserts;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,9 +11,9 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Utility methods for the creating and autowiring of beans.
  *
+ * @author TOTHTOMI
  * @version 1.0.0
  * @since Aug. 23, 2021
- * @author TOTHTOMI
  */
 public final class BeanUtils {
 
@@ -21,14 +21,14 @@ public final class BeanUtils {
      * Instantiates a class using the supplied constructor and arguments.
      * If a {@link BeanProxyHandler} is present and not null, the object will be created via the proxy and not {@link Constructor#newInstance(Object...)}
      *
-     * @param constructor the constructor to use (from {@link #getResolvableConstructor(Class)})
+     * @param constructor      the constructor to use (from {@link #getResolvableConstructor(Class)})
      * @param beanProxyHandler the {@link BeanProxyHandler} to use (can be null)
-     * @param arguments the constructor parameters
-     * @param <T> the type
+     * @param arguments        the constructor parameters
+     * @param <T>              the type
      * @return the created bean
      * @throws BeanCreationException if any exception happens during the instantiation
      */
-    public static <T> T instantiateClass(Constructor<T> constructor, @Nullable BeanProxyHandler beanProxyHandler, Object... arguments) throws BeanCreationException{
+    public static <T> T instantiateClass(Constructor<T> constructor, @Nullable BeanProxyHandler beanProxyHandler, Object... arguments) throws BeanCreationException {
         Asserts.notNull(constructor, "Constructor must not be null!");
 
         try {
@@ -47,7 +47,11 @@ public final class BeanUtils {
                 argObjects[i] = arguments[i];
             }
 
-            return beanProxyHandler == null ? constructor.newInstance(argObjects) : beanProxyHandler.createEnhancedBean(constructor, argObjects);
+            T value = beanProxyHandler == null ? constructor.newInstance(argObjects) : beanProxyHandler.createEnhancedBean(constructor, argObjects);
+            if (value == null)
+                throw new BeanCreationException(constructor, "Resulting value from instance generation is null."); //just in case
+
+            return value;
         } catch (InvocationTargetException e) {
             throw new BeanCreationException(constructor, "Constructor execution resulted in an exception.", e);
         } catch (InstantiationException e) {
@@ -59,11 +63,11 @@ public final class BeanUtils {
 
     /**
      * Returns the resolvable constructor of the class:
-     *  - if the class only has 1 constructor it will be used
-     *  - if the class has more than 1 constructors, the one with the least parameters will be used (not implemented, an empty constructor is used currently)
+     * - if the class only has 1 constructor it will be used
+     * - if the class has more than 1 constructors, the one with the least parameters will be used (not implemented, an empty constructor is used currently)
      *
      * @param clazz the class
-     * @param <T> the type of the class
+     * @param <T>   the type of the class
      * @return the constructor
      * @throws IllegalStateException if no public constructors were found
      */

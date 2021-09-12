@@ -5,9 +5,9 @@ import java.util.Map;
 /**
  * Utility class to hold all the default values for all the primitive types to be used when autowiring.
  *
+ * @author TOTHTOMI
  * @version 1.0.0
  * @since Aug. 23, 2021
- * @author TOTHTOMI
  */
 public final class Defaults {
 

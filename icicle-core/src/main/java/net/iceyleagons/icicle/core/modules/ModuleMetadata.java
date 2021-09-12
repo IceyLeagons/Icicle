@@ -26,7 +26,7 @@ public class ModuleMetadata {
     public static ModuleMetadata fromFile(File file) {
         Asserts.notNull(file, "File must not be null!");
 
-        try (JarFile jarFile = new JarFile(file)){
+        try (JarFile jarFile = new JarFile(file)) {
             JarEntry metaEntry = jarFile.getJarEntry("icicle.yaml");
 
             if (metaEntry == null || metaEntry.isDirectory())

@@ -6,9 +6,9 @@ import java.lang.reflect.Parameter;
 /**
  * This exception is used when a dependency can not be found when autowiring.
  *
+ * @author TOTHTOMI
  * @version 1.0.0
  * @since Aug. 23, 2021
- * @author TOTHTOMI
  */
 public class UnsatisfiedDependencyException extends Exception {
 

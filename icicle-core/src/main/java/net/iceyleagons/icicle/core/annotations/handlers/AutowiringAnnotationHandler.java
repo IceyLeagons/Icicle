@@ -11,7 +11,6 @@ public interface AutowiringAnnotationHandler {
     @NotNull
     Set<Class<? extends Annotation>> getSupportedAnnotations();
 
-    @Nullable
-    <T> T getValueForAnnotation(Annotation annotation, Class<T> wantedType);
+    @Nullable <T> T getValueForAnnotation(Annotation annotation, Class<T> wantedType);
 
 }

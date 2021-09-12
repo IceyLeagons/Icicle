@@ -33,9 +33,9 @@ public class DelegatingConstructorParameterResolver implements ConstructorParame
                 for (Annotation annotation : parameter.getAnnotations()) {
                     result = autowiringAnnotationResolver.getValueForAnnotation(annotation.annotationType(), annotation, type);
                     if (result != null) break;
-                }    
+                }
             }
-            
+
             params[i] = result;
         }
 

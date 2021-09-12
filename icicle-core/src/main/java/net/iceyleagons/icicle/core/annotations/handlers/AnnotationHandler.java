@@ -11,4 +11,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AutoCreate
 @Target(TYPE)
 @Retention(RUNTIME)
-public @interface AnnotationHandler { }
+public @interface AnnotationHandler {
+}

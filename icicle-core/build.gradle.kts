@@ -16,9 +16,8 @@ dependencies {
 
     implementation("org.reflections:reflections:0.9.12")
     implementation("org.jetbrains:annotations:20.1.0")
-
     shadow("org.slf4j:slf4j-api:1.7.32")
-    shadow("cglib:cglib:3.3.0")
+    shadow("net.bytebuddy:byte-buddy:1.11.15")
 
     shadow("org.slf4j:slf4j-log4j12:1.7.32")
     shadow("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")

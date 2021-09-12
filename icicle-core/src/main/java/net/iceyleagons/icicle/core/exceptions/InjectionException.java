@@ -5,9 +5,9 @@ import java.lang.reflect.Field;
 /**
  * This exception is used when a field cannot be injected due to other exceptions.
  *
+ * @author TOTHTOMI
  * @version 1.0.0
  * @since Aug. 23, 2021
- * @author TOTHTOMI
  */
 public class InjectionException extends Exception {
 
