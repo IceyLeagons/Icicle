@@ -1,18 +1,20 @@
 package net.iceyleagons.icicle.serialization;
 
-import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
+import net.iceyleagons.icicle.serialization.serializers.YamlSerializer;
+import net.iceyleagons.icicle.serialization.serializers.nbt.NBTSerializer;
+import net.iceyleagons.icicle.utilities.generic.GenericUtils;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Test {
 
     public static void main(String[] args) {
-        JsonSerializer jsonSerializer = new JsonSerializer(true);
+        AbstractSerializer serializer = new YamlSerializer();
 
-        String out = jsonSerializer.serializeToString(new Test1());
-
-        Test1 test = jsonSerializer.deSerializeFromString(out, Test1.class);
-        String out2 = jsonSerializer.serializeToString(test);
-
-        System.out.println("Matching: " + out.equals(out2));
+        serializer.serializeToFile(new Test1(), new File("test.yml"));
     }
 
     static class Test1 {

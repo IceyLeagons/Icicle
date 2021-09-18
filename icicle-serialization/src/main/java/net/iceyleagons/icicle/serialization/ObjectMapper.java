@@ -3,7 +3,7 @@ package net.iceyleagons.icicle.serialization;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.serialization.annotations.SerializedName;
 import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
-import net.iceyleagons.icicle.utilities.GenericUtils;
+import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.datastores.triple.Triple;
 import net.iceyleagons.icicle.utilities.datastores.triple.UnmodifiableTriple;

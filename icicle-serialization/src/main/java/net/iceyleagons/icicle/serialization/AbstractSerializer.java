@@ -1,5 +1,6 @@
 package net.iceyleagons.icicle.serialization;
 
+import net.iceyleagons.icicle.core.annotations.Internal;
 import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 
@@ -25,12 +26,14 @@ public abstract class AbstractSerializer {
         return this.objectMapper.unMapObject(objectDescriptor, type);
     }
 
+    @Internal
     protected String serializeToString(ObjectDescriptor objectDescriptor) {
         // Method is here as a default, implementation of such serialization should happen with overriding.
 
         throw new IllegalStateException("This serializer does not support serialization to string.");
     }
 
+    @Internal
     protected ObjectDescriptor getFromString(String string, Class<?> type) {
         // Method is here as a default, implementation of such deserialization should happen with overriding.
 
@@ -57,12 +60,14 @@ public abstract class AbstractSerializer {
         return this.objectMapper.unMapObject(objectDescriptor, type);
     }
 
+    @Internal
     protected void serializeToFile(ObjectDescriptor objectDescriptor, AdvancedFile file) {
         // Method is here as a default, implementation of such serialization should happen with overriding.
 
         throw new IllegalStateException("This serializer does not support serialization to file.");
     }
 
+    @Internal
     protected ObjectDescriptor getFromFile(AdvancedFile file, Class<?> type) {
         // Method is here as a default, implementation of such deserialization should happen with overriding.
 

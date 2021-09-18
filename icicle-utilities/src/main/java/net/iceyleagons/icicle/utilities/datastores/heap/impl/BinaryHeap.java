@@ -2,7 +2,7 @@ package net.iceyleagons.icicle.utilities.datastores.heap.impl;
 
 import lombok.Getter;
 import net.iceyleagons.icicle.utilities.Asserts;
-import net.iceyleagons.icicle.utilities.GenericUtils;
+import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import net.iceyleagons.icicle.utilities.datastores.heap.Heap;
 import net.iceyleagons.icicle.utilities.datastores.heap.HeapItem;
 

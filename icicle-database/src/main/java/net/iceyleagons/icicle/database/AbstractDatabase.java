@@ -1,81 +1,51 @@
 package net.iceyleagons.icicle.database;
 
-import net.iceyleagons.icicle.database.schema.CollectionSchema;
 import net.iceyleagons.icicle.serialization.ObjectMapper;
-import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
-import org.jetbrains.annotations.Nullable;
+import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
+import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+@SuppressWarnings("unchecked")
 public abstract class AbstractDatabase<K, V> implements Database<K, V> {
 
-    private Class<V> typeOfV;
-    private CollectionSchema schema = null;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @SuppressWarnings("unchecked")
-    public AbstractDatabase() {
-        //Hopefully this works...
-        this.typeOfV = (Class<V>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-    }
+    private final Class<K> keyClass = (Class<K>) GenericUtils.getGenericTypeClass(this.getClass(), 0);
+    private final Class<V> valueClass = (Class<V>) GenericUtils.getGenericTypeClass(this.getClass(), 1);
 
-    protected abstract void save(K id, Map<String, Object> values);
+    protected abstract void save(K id, ObjectDescriptor objectDescriptor);
 
-    protected abstract Map<String, Object> getById(K id);
-    protected abstract Set<Map<String, Object>> getAll();
-
-    protected abstract void onSchemaUpdate(CollectionSchema schema);
+    protected abstract ObjectDescriptor getById(K id);
+    protected abstract Set<ObjectDescriptor> getAll();
 
     @Override
     public void save(V object) {
-       // Map<String, Tuple<Field, Object>> mappedObject = ObjectMapper.mapObjectWithFields(object);
+        ObjectDescriptor objectDescriptor = objectMapper.mapObject(object);
+        K id = null; // TODO: find out id from fields etc.
 
-        if (schema == null) {
-            //TODO generate schema
-        }
-
-       // save(null, ObjectMapper.convertToObjectValueMap(mappedObject));
+        save(id, objectDescriptor);
     }
 
     @Override
     public Optional<V> findById(K id) {
-        return Optional.ofNullable(getFromValues(getById(id)));
+        return getFrom(getById(id));
     }
 
     @Override
     public Set<V> findAll() {
-        Set<V> set = new HashSet<>();
+        Set<V> resultSet = new HashSet<>();
 
-        for (Map<String, Object> stringObjectMap : getAll()) {
-            V value = getFromValues(stringObjectMap);
-            if (value == null) continue;
-
-            set.add(value);
+        for (ObjectDescriptor objectDescriptor : getAll()) {
+            getFrom(objectDescriptor).ifPresent(resultSet::add);
         }
 
-        return set;
+        return resultSet;
     }
 
-    @Override
-    public void updateSchema(CollectionSchema updatedSchema) {
-        this.schema = updatedSchema;
-
-        onSchemaUpdate(this.schema);
-    }
-
-    @Override
-    public CollectionSchema getSchema() {
-        return this.schema;
-    }
-
-    @Nullable
-    private V getFromValues(Map<String, Object> values) {
-        if (values == null) return null;
-
-        return null;//ObjectMapper.toObject(values, typeOfV);
+    private Optional<V> getFrom(ObjectDescriptor objectDescriptor) {
+        return objectDescriptor == null ? Optional.empty() : Optional.ofNullable(objectMapper.unMapObject(objectDescriptor, valueClass));
     }
 }

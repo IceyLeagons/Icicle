@@ -17,9 +17,10 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.32")
     implementation("org.jetbrains:annotations:20.1.0")
 
-    // File handling APIs
+    // File handling APIs (TODO some of these may already be shadowed in core, we don't want duplicates -> fix)
     shadow("org.json:json:20210307")
     shadow("com.github.Querz:NBT:6.1")
+    shadow("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
 
     compileOnly("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.projectlombok:lombok:1.18.20")

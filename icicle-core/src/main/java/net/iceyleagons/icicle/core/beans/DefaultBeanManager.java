@@ -7,6 +7,7 @@ import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.MethodInterceptor;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.ConstructorParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.CustomAutoCreateAnnotationResolver;
@@ -118,6 +119,19 @@ public class DefaultBeanManager implements BeanManager {
         this.application.getConfigurationEnvironment().updateValues();
     }
 
+    private void createAndRegisterMethodInterceptors(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException {
+        Set<Class<?>> interceptors = getAndRemoveTypesAnnotatedWith(MethodInterceptor.class, autoCreationTypes);
+
+        for (Class<?> interceptor : interceptors) {
+            createAndRegisterBean(interceptor);
+            Object object = this.beanRegistry.getBeanNullable(interceptor);
+
+            if (object instanceof net.iceyleagons.icicle.core.proxy.MethodInterceptor) {
+                this.beanProxyHandler.registerInterceptor((net.iceyleagons.icicle.core.proxy.MethodInterceptor) object);
+            }
+        }
+    }
+
     private void createAnnotationHandlers(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException {
         Set<Class<?>> handlers = getAndRemoveTypesAnnotatedWith(AnnotationHandler.class, autoCreationTypes);
 
@@ -142,6 +156,8 @@ public class DefaultBeanManager implements BeanManager {
 
         //Second we want to register all autowiring annotation handlers before creating beans
         createAnnotationHandlers(autoCreationTypes);
+
+        createAndRegisterMethodInterceptors(autoCreationTypes);
 
         for (Class<?> autoCreationType : autoCreationTypes) {
             createAndRegisterBean(autoCreationType);

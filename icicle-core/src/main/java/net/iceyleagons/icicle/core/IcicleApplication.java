@@ -27,6 +27,8 @@ public class IcicleApplication implements Application {
         this.beanManager = new DefaultBeanManager(this);
 
         this.configurationEnvironment = new ConfigurationEnvironmentImpl(new AdvancedFile(new File("configs"), true).getFile()); //TODO once Bukkit API is present
+
+        this.beanManager.getBeanRegistry().registerBean(Application.class, this); //registering self instance
         this.beanManager.getBeanRegistry().registerBean(ConfigurationEnvironment.class, configurationEnvironment);
     }
 

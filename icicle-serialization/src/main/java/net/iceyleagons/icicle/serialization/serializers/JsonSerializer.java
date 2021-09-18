@@ -1,7 +1,6 @@
 package net.iceyleagons.icicle.serialization.serializers;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.serialization.AbstractSerializer;
 import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;

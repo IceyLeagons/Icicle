@@ -37,6 +37,6 @@ public final class SerializationConstants {
     }
 
     public static boolean shouldIgnore(Field field) {
-        return Modifier.isTransient(field.getModifiers()) && field.isAnnotationPresent(SerializeIgnore.class);
+        return Modifier.isTransient(field.getModifiers()) || field.isAnnotationPresent(SerializeIgnore.class);
     }
 }
