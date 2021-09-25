@@ -7,7 +7,7 @@ import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.MethodInterceptor;
+import net.iceyleagons.icicle.core.annotations.handlers.MethodAdviceHandler;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.ConstructorParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.CustomAutoCreateAnnotationResolver;
@@ -21,6 +21,7 @@ import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
+import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.reflections.Reflections;
@@ -120,14 +121,14 @@ public class DefaultBeanManager implements BeanManager {
     }
 
     private void createAndRegisterMethodInterceptors(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException {
-        Set<Class<?>> interceptors = getAndRemoveTypesAnnotatedWith(MethodInterceptor.class, autoCreationTypes);
+        Set<Class<?>> interceptors = getAndRemoveTypesAnnotatedWith(MethodAdviceHandler.class, autoCreationTypes);
 
         for (Class<?> interceptor : interceptors) {
             createAndRegisterBean(interceptor);
             Object object = this.beanRegistry.getBeanNullable(interceptor);
 
-            if (object instanceof net.iceyleagons.icicle.core.proxy.MethodInterceptor) {
-                this.beanProxyHandler.registerInterceptor((net.iceyleagons.icicle.core.proxy.MethodInterceptor) object);
+            if (object instanceof MethodAdviceHandlerTemplate) {
+                this.beanProxyHandler.registerInterceptor((MethodAdviceHandlerTemplate) object);
             }
         }
     }

@@ -6,6 +6,7 @@ import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnviro
 import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironmentImpl;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
+import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -58,5 +59,10 @@ public class IcicleApplication implements Application {
     @Override
     public Reflections getReflections() {
         return this.reflections;
+    }
+
+    @Override
+    public ExecutionHandler getExecutionHandler() {
+        return null;
     }
 }

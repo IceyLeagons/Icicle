@@ -19,6 +19,8 @@ import lombok.SneakyThrows;
 import net.iceyleagons.icicle.utilities.Asserts;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -194,6 +196,30 @@ public final class FileUtils {
             }
         } catch (IOException e) {
             throw new IllegalStateException("Error occurred while copying file content.", e);
+        }
+    }
+
+    @SneakyThrows
+    public static void downloadTo(File file, String rawUrl) throws IllegalArgumentException {
+        Asserts.notNull(file, "Destination file must not be null!");
+        Asserts.notNull(rawUrl, "Download URL must not be null!");
+
+        try {
+            URL url = new URL(rawUrl);
+
+            // TODO user agent
+            try (InputStream inputStream = url.openConnection().getInputStream()) {
+               try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+                   byte[] buffer = new byte[1024];
+                   int read;
+
+                   while ((read = inputStream.read(buffer, 0, buffer.length)) >= 0) {
+                       fileOutputStream.write(buffer, 0, read);
+                   }
+               }
+            }
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("Download URL must be a valid URL!", e);
         }
     }
 }

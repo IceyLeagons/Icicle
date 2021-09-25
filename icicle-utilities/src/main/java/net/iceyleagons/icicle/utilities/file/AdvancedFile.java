@@ -16,6 +16,7 @@
 package net.iceyleagons.icicle.utilities.file;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import net.iceyleagons.icicle.utilities.Asserts;
 
 import java.io.File;
@@ -256,8 +257,9 @@ public class AdvancedFile {
         }
     }
 
+
     public void compressSelf() {
-        //TODO
+        //TODO set byte content first or what
     }
 
     public void compressTo(AdvancedFile output) {

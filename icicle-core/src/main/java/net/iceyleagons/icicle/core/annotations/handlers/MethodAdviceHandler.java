@@ -11,5 +11,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AutoCreate
 @Target(TYPE)
 @Retention(RUNTIME)
-public @interface MethodInterceptor {
+public @interface MethodAdviceHandler {
 }

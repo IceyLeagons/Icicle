@@ -21,7 +21,7 @@ public class Icicle {
         Application application = new IcicleApplication("net.iceyleagons.icicle");
         try {
             application.start();
-
+            application.getBeanManager().getBeanRegistry().getBeanNullable(Test.class).test();
         } catch (Exception e) {
             e.printStackTrace();
         }
