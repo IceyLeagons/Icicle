@@ -25,6 +25,7 @@ Icicle currently has the following official modules (if the "Dependencies" colum
 | icicle-core | This is the base of the operations, the almighty overlord of the project. | 1.0.0-beta | icicle-utilities
 | icicle-gradle | Our Gradle plugin to create Icicle-based projects easily. | 1.0.0 | -
 | icicle-serialization | This module contains everything you need for serializing objects. | 1.0.0-beta | icicle-core, icicle-utilities
+| icicle-database | This module is used to interact with many database engines with a common interface. | 0.0.1 | icicle-core, icicle-utilities, icicle-serialization
 | icicle-kotlin | Utilities for Kotlin to speed up your workflow even more! | Planned Feature | N/A
 | icicle-utilities | Utility classes containing useful methods for development. | 1.0.0 | - |
 
