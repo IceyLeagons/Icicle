@@ -1,6 +1,7 @@
 .gradle/**
 .idea/**
 build/**
+debug-server/**
 
 # This should fix builds being present.
 **/build/**
