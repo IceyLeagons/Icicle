@@ -1,10 +1,10 @@
 package net.iceyleagons.icicle.utilities.updater.comparator;
 
-import org.jetbrains.annotations.NotNull;
+import net.iceyleagons.icicle.utilities.updater.UpdateStatus;
 
 public class SemanticVersionComparator implements VersionComparator {
     @Override
-    public int compareTo(@NotNull String o) {
-        return 0;
+    public UpdateStatus compare(String local, String remote) {
+        return null;
     }
 }

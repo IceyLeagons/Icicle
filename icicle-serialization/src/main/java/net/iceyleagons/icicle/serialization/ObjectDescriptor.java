@@ -1,4 +1,4 @@
-package net.iceyleagons.icicle.serialization.map;
+package net.iceyleagons.icicle.serialization;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

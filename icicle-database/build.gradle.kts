@@ -22,6 +22,8 @@ dependencies {
     shadow("org.json:json:20210307")
     shadow("com.github.Querz:NBT:6.1")
 
+
+
     compileOnly("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.projectlombok:lombok:1.18.20")
 

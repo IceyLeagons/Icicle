@@ -1,51 +1,56 @@
 package net.iceyleagons.icicle.database;
 
+import lombok.Getter;
 import net.iceyleagons.icicle.serialization.ObjectMapper;
-import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
-import net.iceyleagons.icicle.utilities.generic.GenericUtils;
+import net.iceyleagons.icicle.serialization.ObjectDescriptor;
+import net.iceyleagons.icicle.utilities.Asserts;
+import net.iceyleagons.icicle.utilities.ReflectionUtils;
+import net.iceyleagons.icicle.utilities.generic.acessors.TwoTypeAccessor;
 
-import java.util.HashSet;
+import java.lang.reflect.Field;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-@SuppressWarnings("unchecked")
-public abstract class AbstractDatabase<K, V> implements Database<K, V> {
+@Getter
+public abstract class AbstractDatabase<K, V> extends TwoTypeAccessor<K, V> implements Database<K, V> {
 
+    private final Class<K> kClass;
+    private final Class<V> vClass;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final Class<K> keyClass = (Class<K>) GenericUtils.getGenericTypeClass(this.getClass(), 0);
-    private final Class<V> valueClass = (Class<V>) GenericUtils.getGenericTypeClass(this.getClass(), 1);
+    @SuppressWarnings("unchecked")
+    public AbstractDatabase() {
+        this.kClass = super.getATypeClass();
+        this.vClass = super.getBTypeClass();
+    }
 
-    protected abstract void save(K id, ObjectDescriptor objectDescriptor);
-
-    protected abstract ObjectDescriptor getById(K id);
-    protected abstract Set<ObjectDescriptor> getAll();
+    protected abstract void save(ObjectDescriptor objectDescriptor, K id);
+    protected abstract Optional<ObjectDescriptor> findById(K id, Class<V> type);
+    protected abstract Set<ObjectDescriptor> findAll(Class<V> type);
+    protected abstract K generateNewId();
 
     @Override
     public void save(V object) {
-        ObjectDescriptor objectDescriptor = objectMapper.mapObject(object);
-        K id = null; // TODO: find out id from fields etc.
+        final Field idField = DatabaseUtils.getIdField(object);
+        Asserts.notNull(idField, "ID is not found for DB entity.");
 
-        save(id, objectDescriptor);
+        K id = ReflectionUtils.get(idField, object, this.kClass);
+        if (DatabaseUtils.shouldAutoGenerate(idField) && id == null) id = generateNewId();
+
+        final ObjectDescriptor objectDescriptor = this.objectMapper.mapObject(object);
+        this.save(objectDescriptor, id);
     }
 
     @Override
     public Optional<V> findById(K id) {
-        return getFrom(getById(id));
+        final Optional<ObjectDescriptor> dbResult = this.findById(id, this.vClass);
+        return dbResult.isEmpty() ?  Optional.empty() : Optional.ofNullable(new ObjectMapper().unMapObject(dbResult.get(), this.vClass));
     }
 
     @Override
     public Set<V> findAll() {
-        Set<V> resultSet = new HashSet<>();
-
-        for (ObjectDescriptor objectDescriptor : getAll()) {
-            getFrom(objectDescriptor).ifPresent(resultSet::add);
-        }
-
-        return resultSet;
-    }
-
-    private Optional<V> getFrom(ObjectDescriptor objectDescriptor) {
-        return objectDescriptor == null ? Optional.empty() : Optional.ofNullable(objectMapper.unMapObject(objectDescriptor, valueClass));
+        final Set<ObjectDescriptor> objectDescriptorSet = this.findAll(this.vClass);
+        return objectDescriptorSet.stream().map(o -> this.objectMapper.unMapObject(o, this.vClass)).collect(Collectors.toSet());
     }
 }

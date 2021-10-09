@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * <p>
  * Generally this annotation will not be used on every internal method, only on methods that can be accessed publicly.
  */
-@Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
+@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
 public @interface Internal {
 }

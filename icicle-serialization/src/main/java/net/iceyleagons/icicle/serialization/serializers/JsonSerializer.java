@@ -3,7 +3,7 @@ package net.iceyleagons.icicle.serialization.serializers;
 import lombok.AllArgsConstructor;
 import net.iceyleagons.icicle.serialization.AbstractSerializer;
 import net.iceyleagons.icicle.serialization.ObjectMapper;
-import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
+import net.iceyleagons.icicle.serialization.ObjectDescriptor;
 import net.iceyleagons.icicle.utilities.datastores.triple.Triple;
 import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
 import org.json.JSONArray;
