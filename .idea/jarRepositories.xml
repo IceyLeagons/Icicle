@@ -31,5 +31,15 @@
       <option name="name" value="Igloo Releases" />
       <option name="url" value="https://mvn.iceyleagons.net/releases/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="https://hub.spigotmc.org/nexus/content/repositories/snapshots" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="https://hub.spigotmc.org/nexus/content/repositories/snapshots/" />
+    </remote-repository>
   </component>
 </project>

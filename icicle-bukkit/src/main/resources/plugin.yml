@@ -1,0 +1,10 @@
+version: 0.1.0
+name: IcicleBukkit
+description: Implementation of the Icicle ecosystem for Bukkit/Spigot
+website: https://icicle.iceyleagons.net/
+api-version: 1.17
+load: STARTUP
+authors:
+  - TOTHTOMI
+  - Gabe
+main: net.iceyleagons.icicle.bukkit.IcicleBukkit

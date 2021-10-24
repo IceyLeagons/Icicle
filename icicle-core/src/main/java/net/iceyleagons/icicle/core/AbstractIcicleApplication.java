@@ -6,7 +6,6 @@ import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnviro
 import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironmentImpl;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
-import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -14,16 +13,16 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class IcicleApplication implements Application {
+public abstract class AbstractIcicleApplication implements Application {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IcicleApplication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIcicleApplication.class);
 
     private final Reflections reflections;
 
     private final BeanManager beanManager;
     private final ConfigurationEnvironment configurationEnvironment;
 
-    public IcicleApplication(String rootPackage) {
+    public AbstractIcicleApplication(String rootPackage) {
         this.reflections = new Reflections(rootPackage).merge(Icicle.ICICLE_REFLECTIONS);
         this.beanManager = new DefaultBeanManager(this);
 
@@ -59,10 +58,5 @@ public class IcicleApplication implements Application {
     @Override
     public Reflections getReflections() {
         return this.reflections;
-    }
-
-    @Override
-    public ExecutionHandler getExecutionHandler() {
-        return null;
     }
 }

@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":icicle-utilities"))
+    shadow(project(":icicle-utilities"))
 
     implementation("org.reflections:reflections:0.9.12")
     implementation("org.jetbrains:annotations:20.1.0")

@@ -1,6 +1,7 @@
 package net.iceyleagons.icicle.core;
 
 
+import net.iceyleagons.icicle.utilities.updater.UpdateStatus;
 import org.reflections.Reflections;
 
 /**
@@ -17,13 +18,11 @@ public class Icicle {
     public static final ClassLoader[] ICICLE_CLASS_LOADERS = new ClassLoader[]{Icicle.class.getClassLoader()};
     public static final Reflections ICICLE_REFLECTIONS = new Reflections("net.iceyleagons.icicle", ICICLE_CLASS_LOADERS);
 
-    public static void main(String[] args) {
-        Application application = new IcicleApplication("net.iceyleagons.icicle");
-        try {
-            application.start();
-            application.getBeanManager().getBeanRegistry().getBeanNullable(Test.class).test();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static String getCopyrightText() {
+        return "Icicle is licensed under the terms of MIT License.";
+    }
+
+    public static String getLoadText() {
+        return String.format("Loading Icicle v%s. %s", ICICLE_VERSION, getCopyrightText());
     }
 }
