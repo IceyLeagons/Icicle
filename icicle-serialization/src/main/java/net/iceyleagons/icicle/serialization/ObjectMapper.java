@@ -2,6 +2,8 @@ package net.iceyleagons.icicle.serialization;
 
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.serialization.annotations.SerializedName;
+import net.iceyleagons.icicle.serialization.converters.Convert;
+import net.iceyleagons.icicle.serialization.converters.ValueConverter;
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.datastores.triple.Triple;
@@ -10,11 +12,10 @@ import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
 import net.iceyleagons.icicle.utilities.datastores.tuple.UnmodifiableTuple;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 @RequiredArgsConstructor
 public class ObjectMapper {
@@ -27,12 +28,17 @@ public class ObjectMapper {
         for (Triple<String, Field, ObjectDescriptor> subObject : objectDescriptor.getSubObjects()) {
             Field field = subObject.getB();
 
-            //TODO converters
             Object unMappedObject = unMapObject(subObject.getC(), field.getType());
+            if (field.isAnnotationPresent(Convert.class)) {
+                Class<?> converter = field.getAnnotation(Convert.class).converter();
+                unMappedObject = convert(unMappedObject, converter, false);
+            }
+
             ReflectionUtils.set(field, parent, unMappedObject);
         }
 
         //TODO collections not just arrays
+        //TODO maps
         for (Triple<String, Field, List<ObjectDescriptor>> subObjectArray : objectDescriptor.getSubObjectArrays()) {
             Field field = subObjectArray.getB();
             List<ObjectDescriptor> content = subObjectArray.getC();
@@ -52,7 +58,11 @@ public class ObjectMapper {
             Field field = valueField.getB();
             Object value = valueField.getC();
 
-            //TODO converters
+            if (field.isAnnotationPresent(Convert.class)) {
+                Class<?> converter = field.getAnnotation(Convert.class).converter();
+                value = convert(value, converter, false);
+            }
+
             ReflectionUtils.set(field, parent, value);
         }
 
@@ -75,9 +85,17 @@ public class ObjectMapper {
         for (Field subObjectField : subObjectFields) {
             Triple<String, Field, Object> values = getFieldValues(subObjectField, object);
             Object value = values.getC();
-            //TODO converters
+
+            if (subObjectField.isAnnotationPresent(Convert.class)) {
+                Class<?> converter = subObjectField.getAnnotation(Convert.class).converter();
+                ObjectDescriptor convertedValue = mapObject(Objects.requireNonNull(convert(values.getC(), converter, true)));
+
+                objectDescriptor.getSubObjects().add(new UnmodifiableTriple<>(values.getA(), values.getB(), convertedValue));
+                continue;
+            }
 
             //TODO collections not just arrays
+            //TODO maps
             if (subObjectField.getType().isArray()) {
                 List<ObjectDescriptor> subArray = new ArrayList<>();
 
@@ -94,6 +112,27 @@ public class ObjectMapper {
         }
 
         return objectDescriptor;
+    }
+
+    private static Object convert(Object input, Class<?> converterClass, boolean serialize)  {
+        try {
+            Constructor<?> constructor = converterClass.getDeclaredConstructor();
+
+            Object converterObject = constructor.newInstance();
+            if (!(converterObject instanceof ValueConverter)) {
+                throw new IllegalStateException("Converter must implement ValueConverter!");
+            }
+
+            ValueConverter converter = getConverterFrom(converterClass);
+
+            return serialize ? converter.convertToSerializedField(input) : converter.convertToObjectField(input);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalStateException("Converter must have 1 public empty constructor!", e);
+        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private static Triple<String, Field, Object> getFieldValues(Field field, Object parent) {
@@ -141,5 +180,9 @@ public class ObjectMapper {
         }
 
         return new UnmodifiableTuple<>(valueFields.toArray(Field[]::new), subObjectFields.toArray(Field[]::new));
+    }
+
+    public static ValueConverter<?, ?> getConverterFrom(Class<?> clazz) {
+        return null; //TODO
     }
 }
