@@ -1,6 +1,6 @@
 plugins {
     java
-    id("net.iceyleagons.icicle-gradle") version "1.0-SNAPSHOT"
+    id("net.iceyleagons.icicle-gradle") version "1.4-SNAPSHOT"
 }
 
 group = "net.iceyleagons"
@@ -8,7 +8,7 @@ version = "1.0.0"
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://jitpack.io") }
+    jitpack()
 }
 
 dependencies {
@@ -23,11 +23,7 @@ dependencies {
     shadow("org.slf4j:slf4j-log4j12:1.7.32")
     shadow("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
 
-    compileOnly("org.projectlombok:lombok:1.18.20")
-    annotationProcessor("org.projectlombok:lombok:1.18.20")
-
-    testCompileOnly("org.projectlombok:lombok:1.18.20")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.20")
+    lombok()
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")

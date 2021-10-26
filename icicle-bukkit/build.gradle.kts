@@ -1,28 +1,23 @@
 plugins {
     java
-    id("net.iceyleagons.icicle-gradle") version "1.0-SNAPSHOT"
+    id("net.iceyleagons.icicle-gradle") version "1.4-SNAPSHOT"
 }
 
 group = "net.iceyleagons"
 version = "1.0.0"
 
-val spigotVersion = "1.17.1-R0.1-SNAPSHOT"
+val spigotVersion = "1.17.1"
 
 repositories {
     mavenCentral()
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven("https://jitpack.io")
+    spigot()
+    jitpack()
 }
 
 dependencies {
     shadow(project(":icicle-core"))
-    implementation("org.spigotmc:spigot-api:${spigotVersion}")
-
-    compileOnly("org.projectlombok:lombok:1.18.20")
-    annotationProcessor("org.projectlombok:lombok:1.18.20")
-
-    testCompileOnly("org.projectlombok:lombok:1.18.20")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.20")
+    spigotApi(spigotVersion)
+    lombok()
 }
 
 icicle {

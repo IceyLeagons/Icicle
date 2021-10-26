@@ -2,9 +2,9 @@ package net.iceyleagons.gradle;
 
 import com.amihaiemil.eoyaml.Yaml;
 import com.amihaiemil.eoyaml.YamlMapping;
-import com.amihaiemil.eoyaml.YamlMappingBuilder;
-import com.amihaiemil.eoyaml.YamlSequenceBuilder;
 import lombok.Setter;
+import lombok.val;
+import lombok.var;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.model.ObjectFactory;
@@ -18,8 +18,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
-public class IcicleConfigTask
-        extends DefaultTask {
+public class IcicleConfigTask extends DefaultTask {
+
     @Setter
     private IcicleAddonData data;
     private final DirectoryProperty outputDirectory;
@@ -40,19 +40,26 @@ public class IcicleConfigTask
     }
 
     private YamlMapping createYaml() {
-        YamlSequenceBuilder sequenceBuilder;
-        YamlMappingBuilder yamlBuilder = Yaml.createYamlMappingBuilder().add("name", data.getName()).add("description", data.getDescription()).add("version", data.getVersion());
+        var yamlBuilder = Yaml.createYamlMappingBuilder().add("name", data.getName()).add("dependency-notation", data.getDependencyNotation()).add("description", data.getDescription()).add("version", data.getVersion());
         if (!data.getDevelopers().isEmpty()) {
-            sequenceBuilder = Yaml.createYamlSequenceBuilder();
+            var sequenceBuilder = Yaml.createYamlSequenceBuilder();
             for (String developer : data.getDevelopers())
                 sequenceBuilder = sequenceBuilder.add(developer);
             yamlBuilder = yamlBuilder.add("developers", sequenceBuilder.build());
         }
+
         if (!data.getDependencies().isEmpty()) {
-            sequenceBuilder = Yaml.createYamlSequenceBuilder();
+            var sequenceBuilder = Yaml.createYamlSequenceBuilder();
             for (String dependency : data.getDependencies())
                 sequenceBuilder = sequenceBuilder.add(dependency);
             yamlBuilder = yamlBuilder.add("dependencies", sequenceBuilder.build());
+        }
+
+        if (!data.getRuntimeDownloads().isEmpty()) {
+            var sequenceBuilder = Yaml.createYamlSequenceBuilder();
+            for (String dependency : data.getRuntimeDownloads())
+                sequenceBuilder = sequenceBuilder.add(dependency);
+            yamlBuilder = yamlBuilder.add("runtime-downloads", sequenceBuilder.build());
         }
 
         return yamlBuilder.build();
@@ -60,10 +67,12 @@ public class IcicleConfigTask
 
     @TaskAction
     public void generateIcicleConfig() {
-        File outputDir = outputDirectory.get().getAsFile();
+        // Clean output directory
+        val outputDir = outputDirectory.get().getAsFile();
         clearOutputDirectory(outputDir);
-        File icicleFile = new File(outputDir, "icicle.yml");
-        try (FileWriter fw = new FileWriter(icicleFile)) {
+
+        // Write contents of the icicle.yml file.
+        try (FileWriter fw = new FileWriter(new File(outputDir, "icicle.yml"))) {
             fw.write(createYaml().toString());
         } catch (IOException e) {
             throw new UncheckedIOException(e);

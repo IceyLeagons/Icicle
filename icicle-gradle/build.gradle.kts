@@ -1,5 +1,6 @@
 plugins {
     java
+    kotlin("jvm") version "1.5.30"
     id("java-gradle-plugin")
 }
 
@@ -9,6 +10,9 @@ version = "1.0.0"
 repositories {
     mavenCentral()
 }
+
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.targetCompatibility = JavaVersion.VERSION_1_8
 
 val extraLibs = configurations.create("extraLibs")
 

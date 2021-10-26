@@ -9,9 +9,12 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class IcicleModuleLoader {
 
@@ -22,6 +25,7 @@ public class IcicleModuleLoader {
     //This map keeps track of all loaded modules' classloaders, so when a plugin is dependent on the module
     //its reflections can use that ClassLoader as well
     private final Map<String, ClassLoader> moduleClassLoaders = new ConcurrentHashMap<>();
+    private final List<ModuleMetadata> loadedModules = new ArrayList<>();
 
     public IcicleModuleLoader(AdvancedFile folder) {
         Asserts.state(folder.isFolder(), "Folder must be a folder!");
@@ -40,25 +44,37 @@ public class IcicleModuleLoader {
     }
 
     public void loadModulesInFolder() {
-        for (File file : Objects.requireNonNull(modulesFolder.getFile().listFiles())) {
+        for (File file : Objects.requireNonNull(modulesFolder.getFile().listFiles()))
             try {
-                loadModule(file);
+                loadedModules.add(loadModule(file));
             } catch (MalformedURLException e) {
                 LOGGER.warn("Could not load module from file {} due to {}", file.getPath(), e);
             }
-        }
+
+        List<DependencyNotation> dependencyNotations = loadedModules.stream().map(ModuleMetadata::getDependencyNotation).collect(Collectors.toUnmodifiableList());
+
+        for (ModuleMetadata loadedModule : loadedModules)
+            if (dependencyNotations.containsAll(loadedModule.getDependencies()))
+                try {
+                    ClassLoader classLoader = URLClassLoader.newInstance(new URL[]{loadedModule.getBaseFile().toURI().toURL()}, getClass().getClassLoader());
+                    moduleClassLoaders.put(loadedModule.getName(), classLoader);
+                } catch (MalformedURLException e) {
+                    LOGGER.warn("Could not load module from file {} due to {}", loadedModule.getBaseFile().getPath(), e);
+                }
     }
 
-    public void loadModule(File file) throws MalformedURLException {
+    public ModuleMetadata loadModule(File file) throws MalformedURLException {
         Asserts.notNull(file, "Module file must not be null!");
         Asserts.state(file.exists(), "Module file does not exist!");
+        Asserts.isTrue(file.getName().endsWith(".jar"), "Module file is not a jar!");
 
-        ModuleMetadata moduleMetadata = ModuleMetadata.fromFile(file);
-        String name = file.getName(); //maybe replace it with moduleData.getName()???
+        // String name = file.getName(); //maybe replace it with moduleData.getName()???
 
+        return ModuleMetadata.fromFile(file);
         //TODO do stuff with module metadata
 
-        ClassLoader classLoader = URLClassLoader.newInstance(new URL[]{file.toURI().toURL()}, getClass().getClassLoader());
-        moduleClassLoaders.put(name, classLoader);
+        // TODO: Load the class in later...
+        /*ClassLoader classLoader = URLClassLoader.newInstance(new URL[]{file.toURI().toURL()}, getClass().getClassLoader());
+        moduleClassLoaders.put(name, classLoader);*/
     }
 }

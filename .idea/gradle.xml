@@ -10,10 +10,12 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/icicle-addon-server" />
             <option value="$PROJECT_DIR$/icicle-bukkit" />
             <option value="$PROJECT_DIR$/icicle-core" />
             <option value="$PROJECT_DIR$/icicle-database" />
             <option value="$PROJECT_DIR$/icicle-gradle" />
+            <option value="$PROJECT_DIR$/icicle-kotlin" />
             <option value="$PROJECT_DIR$/icicle-serialization" />
             <option value="$PROJECT_DIR$/icicle-utilities" />
           </set>

@@ -1,13 +1,13 @@
 plugins {
     java
-    id("net.iceyleagons.icicle-gradle") version "1.0-SNAPSHOT"
+    id("net.iceyleagons.icicle-gradle") version "1.4-SNAPSHOT"
 }
 
 version = "1.0.0"
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://jitpack.io/") }
+    jitpack()
 }
 
 dependencies {
@@ -22,10 +22,7 @@ dependencies {
     shadow("org.json:json:20210307")
     shadow("com.github.Querz:NBT:6.1")
 
-
-
-    compileOnly("org.projectlombok:lombok:1.18.20")
-    annotationProcessor("org.projectlombok:lombok:1.18.20")
+    lombok()
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")

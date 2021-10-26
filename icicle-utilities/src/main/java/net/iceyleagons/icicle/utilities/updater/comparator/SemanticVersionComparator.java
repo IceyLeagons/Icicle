@@ -7,4 +7,9 @@ public class SemanticVersionComparator implements VersionComparator {
     public UpdateStatus compare(String local, String remote) {
         return null;
     }
+
+    @Override
+    public VersionComparator getDefault() {
+        return null;
+    }
 }

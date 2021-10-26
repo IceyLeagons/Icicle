@@ -9,10 +9,9 @@ import java.util.List;
 @Getter
 public class IcicleAddonData {
     @Setter
-    private boolean snapshots = false;
-
-    @Setter
     private String name;
+    @Setter
+    private String dependencyNotation = "undefined";
     @Setter
     private String description = "No description provided.";
     @Setter
@@ -21,5 +20,6 @@ public class IcicleAddonData {
     private List<String> developers = new ArrayList<>(1);
 
     private final List<String> dependencies = new ArrayList<>(1);
+    private final List<String> runtimeDownloads = new ArrayList<>(1);
 
 }
