@@ -3,6 +3,7 @@ package net.iceyleagons.icicle.serialization;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import net.iceyleagons.icicle.utilities.datastores.triple.Triple;
+import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;

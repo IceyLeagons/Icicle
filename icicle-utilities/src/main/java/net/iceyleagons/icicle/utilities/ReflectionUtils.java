@@ -19,7 +19,7 @@ public final class ReflectionUtils {
             field.setAccessible(true);
             field.set(parent, value);
         } catch (Exception e) {
-            LOGGER.error("Could not set field ({}) value inside {}", field.getName(), parent.getClass().getName(), e);
+            LOGGER.warn("Could not set field ({}) value inside {}", field.getName(), parent.getClass().getName(), e);
         }
     }
 
@@ -29,7 +29,7 @@ public final class ReflectionUtils {
             field.setAccessible(true);
             return castIfNecessary(wantedType, field.get(parent));
         } catch (Exception e) {
-            LOGGER.error("Could not get field ({}) value inside {}", field.getName(), parent.getClass().getName(), e);
+            LOGGER.warn("Could not get field ({}) value inside {}", field.getName(), parent.getClass().getName(), e);
         }
 
         return null;

@@ -1,8 +1,12 @@
 package net.iceyleagons.icicle.serialization;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.serialization.annotations.SerializedName;
 import net.iceyleagons.icicle.serialization.converters.Convert;
+import net.iceyleagons.icicle.serialization.converters.DefaultConverters;
+import net.iceyleagons.icicle.serialization.converters.NoConvert;
 import net.iceyleagons.icicle.serialization.converters.ValueConverter;
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
@@ -61,6 +65,8 @@ public class ObjectMapper {
             if (field.isAnnotationPresent(Convert.class)) {
                 Class<?> converter = field.getAnnotation(Convert.class).converter();
                 value = convert(value, converter, false);
+            } else if (DefaultConverters.converters.containsKey(field.getType()) && !field.isAnnotationPresent(NoConvert.class)) { //it's elseif, so custom @Converters can overwrite default ones
+                value = convert(value, DefaultConverters.converters.get(field.getType()), false);
             }
 
             ReflectionUtils.set(field, parent, value);
@@ -86,11 +92,21 @@ public class ObjectMapper {
             Triple<String, Field, Object> values = getFieldValues(subObjectField, object);
             Object value = values.getC();
 
-            if (subObjectField.isAnnotationPresent(Convert.class)) {
-                Class<?> converter = subObjectField.getAnnotation(Convert.class).converter();
-                ObjectDescriptor convertedValue = mapObject(Objects.requireNonNull(convert(values.getC(), converter, true)));
+            if (!subObjectField.isAnnotationPresent(NoConvert.class) && (
+                    subObjectField.isAnnotationPresent(Convert.class) ||
+                    DefaultConverters.converters.containsKey(subObjectField.getType()))) {
+                // This is done like this to: a) prevent duplicate code, and most importantly b) so custom @Converters can overwrite default ones
 
-                objectDescriptor.getSubObjects().add(new UnmodifiableTriple<>(values.getA(), values.getB(), convertedValue));
+                Object converted = subObjectField.isAnnotationPresent(Convert.class) ?
+                        Objects.requireNonNull(convert(values.getC(), subObjectField.getAnnotation(Convert.class).converter(), true)) :
+                        Objects.requireNonNull(convert(values.getC(), DefaultConverters.converters.get(subObjectField.getType()), true));
+
+                if (SerializationConstants.isSubObject(converted.getClass())) {
+                    ObjectDescriptor convertedValue = mapObject(converted);
+                    objectDescriptor.getSubObjects().add(new UnmodifiableTriple<>(values.getA(), values.getB(), convertedValue));
+                }
+
+                objectDescriptor.getValueFields().add(new UnmodifiableTriple<>(values.getA(), values.getB(), converted));
                 continue;
             }
 
@@ -123,9 +139,8 @@ public class ObjectMapper {
                 throw new IllegalStateException("Converter must implement ValueConverter!");
             }
 
-            ValueConverter converter = getConverterFrom(converterClass);
-
-            return serialize ? converter.convertToSerializedField(input) : converter.convertToObjectField(input);
+            ValueConverter<?,?> converter = getConverterFrom(converterClass);
+            return convert(input, converter, serialize);
         } catch (NoSuchMethodException e) {
             throw new IllegalStateException("Converter must have 1 public empty constructor!", e);
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
@@ -135,11 +150,16 @@ public class ObjectMapper {
         return null;
     }
 
+    private static Object convert(Object input, ValueConverter<?,?> converter, boolean serialize)  {
+        if (converter == null) throw new IllegalStateException("Converter is null!");
+
+        return serialize ? converter.convertObjectToSerializedField(input) : converter.convertObjectToObjectField(input);
+    }
+
+    @SneakyThrows
     private static Triple<String, Field, Object> getFieldValues(Field field, Object parent) {
         String name = getFieldKey(field);
-        Object value = ReflectionUtils.get(field, parent, Object.class);
-
-        return new UnmodifiableTriple<>(name, field, value);
+        return new UnmodifiableTriple<>(name, field, ReflectionUtils.get(field, parent, Object.class));
     }
 
     public static Triple<String, Field, List<ObjectDescriptor>> getFieldWithValue(Field field, List<ObjectDescriptor> value) {
@@ -183,6 +203,15 @@ public class ObjectMapper {
     }
 
     public static ValueConverter<?, ?> getConverterFrom(Class<?> clazz) {
-        return null; //TODO
+        if (ValueConverter.class.isAssignableFrom(clazz)) {
+            try {
+                Object object = BeanUtils.getResolvableConstructor(clazz).newInstance();
+                return (ValueConverter<?, ?>) object;
+            } catch (Exception e) {
+                throw new IllegalStateException("Could not create ValueConverter from class " + clazz.getName(), e);
+            }
+        }
+
+        return null;
     }
 }
