@@ -27,6 +27,16 @@ public final class GenericUtils {
     }
 
     @Nullable
+    public static Type getGenericType(Field from, int typeIndex) {
+        return ((ParameterizedType) from.getGenericType()).getActualTypeArguments()[typeIndex];
+    }
+
+    @Nullable
+    public static Class<?> getGenericTypeClass(Field field, int typeIndex) {
+        return TypeToken.of(getGenericType(field, typeIndex)).getRawType();
+    }
+
+    @Nullable
     public static Class<?> getGenericTypeClass(Class<?> from, int typeIndex) {
         return TypeToken.of(getGenericType(from, typeIndex)).getRawType();
     }

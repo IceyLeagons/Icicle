@@ -7,5 +7,4 @@ public interface Tuple<A, B> {
 
     A getA();
     B getB();
-
 }

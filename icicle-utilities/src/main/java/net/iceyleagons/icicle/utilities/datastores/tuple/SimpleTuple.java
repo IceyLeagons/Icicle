@@ -9,5 +9,4 @@ public class SimpleTuple<A, B> implements Tuple<A, B> {
 
     private A a;
     private B b;
-
 }
