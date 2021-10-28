@@ -1,7 +1,6 @@
 package net.iceyleagons.icicle.core;
 
 
-import net.iceyleagons.icicle.utilities.updater.UpdateStatus;
 import org.reflections.Reflections;
 
 /**

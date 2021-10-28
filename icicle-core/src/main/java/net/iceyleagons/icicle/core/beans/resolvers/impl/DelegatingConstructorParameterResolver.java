@@ -3,11 +3,21 @@ package net.iceyleagons.icicle.core.beans.resolvers.impl;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.ConstructorParameterResolver;
+import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 
+/**
+ * Default implementation of {@link ConstructorParameterResolver}.
+ *
+ * @author TOTHTOMI
+ * @version 1.1.0
+ * @since Aug. 23, 2021
+ *
+ * @see ConstructorParameterResolver
+ */
 public class DelegatingConstructorParameterResolver implements ConstructorParameterResolver {
 
     private final AutowiringAnnotationResolver autowiringAnnotationResolver;
@@ -16,8 +26,11 @@ public class DelegatingConstructorParameterResolver implements ConstructorParame
         this.autowiringAnnotationResolver = autowiringAnnotationResolver;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Object[] resolveConstructorParameters(Constructor<?> constructor, BeanRegistry beanRegistry) {
+    public Object[] resolveConstructorParameters(Constructor<?> constructor, BeanRegistry beanRegistry) throws UnsatisfiedDependencyException {
         Parameter[] parameters = constructor.getParameters();
         Object[] params = new Object[parameters.length];
 
@@ -35,6 +48,8 @@ public class DelegatingConstructorParameterResolver implements ConstructorParame
                     if (result != null) break;
                 }
             }
+
+            if (result == null) throw new UnsatisfiedDependencyException(parameter);
 
             params[i] = result;
         }

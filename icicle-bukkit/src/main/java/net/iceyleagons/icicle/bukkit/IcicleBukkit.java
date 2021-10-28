@@ -5,6 +5,7 @@ import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.annotations.IcicleApplication;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
+import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -49,7 +50,7 @@ public class IcicleBukkit extends JavaPlugin {
 
                 bukkitApplication.start();
             }
-        } catch (ClassNotFoundException | CircularDependencyException | BeanCreationException e) {
+        } catch (ClassNotFoundException | CircularDependencyException | BeanCreationException | UnsatisfiedDependencyException e) {
             e.printStackTrace();
         }
     }

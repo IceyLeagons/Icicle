@@ -11,6 +11,15 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedList;
 import java.util.Stack;
 
+/**
+ * Default implementation of {@link DependencyTreeResolver}.
+ *
+ * @author TOTHTOMI
+ * @version 1.1.0
+ * @since Aug. 23, 2021
+ *
+ * @see DependencyTreeResolver
+ */
 public class DelegatingDependencyTreeResolver implements DependencyTreeResolver {
 
     private static final Logger logger = LoggerFactory.getLogger(DelegatingDependencyTreeResolver.class);
@@ -20,6 +29,14 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         this.beanRegistry = beanRegistry;
     }
 
+    /**
+     * Formats a human-friendly "graph" of the dependency circle.
+     *
+     * @param tree the dependencies that form a circle
+     * @param start the starting point of the circle
+     * @param end the ending point of the circle (the one that references the starting point --> making a circle)
+     * @return the formatted "graph" to use in {@link CircularDependencyException}
+     */
     private static String getCycleString(LinkedList<Class<?>> tree, Class<?> start, Class<?> end) {
         int startIndex = tree.indexOf(start);
         int endIndex = tree.indexOf(end);
@@ -39,6 +56,9 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         return stringBuilder.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException {
         logger.debug("Resolving dependency tree for bean-type: {}", currentBean.getName());
@@ -51,7 +71,7 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
 
         while (!stack.isEmpty()) {
             Class<?> bean = stack.pop();
-            if (beanRegistry.contains(bean)) continue; //making sure it's already registered to not spend time
+            if (beanRegistry.isRegistered(bean)) continue; //making sure it's already registered to not spend time
 
             Class<?>[] dependencies = BeanUtils.getResolvableConstructor(bean).getParameterTypes();
             for (Class<?> dependency : dependencies) {

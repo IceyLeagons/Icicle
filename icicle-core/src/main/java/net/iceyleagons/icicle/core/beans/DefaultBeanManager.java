@@ -19,6 +19,7 @@ import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingDependencyTree
 import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
+import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
@@ -36,6 +37,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
+/**
+ * Default implementation of {@link BeanManager}.
+ *
+ * @author TOTHTOMI
+ * @version 1.1.0
+ * @since Aug. 23, 2021
+ */
 public class DefaultBeanManager implements BeanManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultBeanManager.class);
@@ -71,6 +79,16 @@ public class DefaultBeanManager implements BeanManager {
         this.autoCreationAnnotationResolver = new MergedAnnotationResolver(AutoCreate.class, reflections);
     }
 
+    /**
+     * Helper method to retrieve and remove a specific sub-group of @{@link AutoCreate} from the "collective set" containing all of them
+     * from {@link MergedAnnotationResolver}.
+     *
+     * <b>WARNING!</b> To save memory all the sub-groups retrieved using the method will be deleted from the autoCreationTypes collection.
+     *
+     * @param annotation the annotation sub-group
+     * @param autoCreationTypes the "collective set" of all auto-create types.
+     * @return the resulting Set
+     */
     private static Set<Class<?>> getAndRemoveTypesAnnotatedWith(Class<? extends Annotation> annotation, Set<Class<?>> autoCreationTypes) {
         Iterator<Class<?>> iterator = autoCreationTypes.iterator(); //creating an iterator to avoid concurrent modification
         Set<Class<?>> result = new HashSet<>();
@@ -88,7 +106,23 @@ public class DefaultBeanManager implements BeanManager {
         return result;
     }
 
-    private void createConfigs(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException {
+    /**
+     * Creates and registers all the {@link Config}s.
+     * All the configs created are casted to {@link Configuration} and registered into the {@link net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment}
+     *
+     * @param autoCreationTypes the set of all the {@link AutoCreate} annotated types from {@link MergedAnnotationResolver}
+     *                          (this method calls {@link #getAndRemoveTypesAnnotatedWith(Class, Set)} with this parameter)
+     * @throws BeanCreationException if any other exception prevents the creation of a bean
+     * @throws CircularDependencyException if one of the beans' dependencies form a circle
+     * @throws UnsatisfiedDependencyException if a bean cannot be created due to missing dependencies
+     * @see Config
+     * @see AutoCreate
+     * @see MergedAnnotationResolver
+     * @see Configuration
+     * @see net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment
+     * @see #getAndRemoveTypesAnnotatedWith(Class, Set)
+     */
+    private void createConfigs(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
         Set<Class<?>> configs = getAndRemoveTypesAnnotatedWith(Config.class, autoCreationTypes);
 
         for (Class<?> config : configs) {
@@ -120,7 +154,22 @@ public class DefaultBeanManager implements BeanManager {
         this.application.getConfigurationEnvironment().updateValues();
     }
 
-    private void createAndRegisterMethodInterceptors(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException {
+    /**
+     * Creates and registers all the {@link MethodAdviceHandler}s.
+     * These are used by an implementation of {@link BeanProxyHandler}. ({@link ByteBuddyProxyHandler} by default)
+     *
+     * @param autoCreationTypes the set of all the {@link AutoCreate} annotated types from {@link MergedAnnotationResolver}
+     *                          (this method calls {@link #getAndRemoveTypesAnnotatedWith(Class, Set)} with this parameter)
+     * @throws BeanCreationException if any other exception prevents the creation of a bean
+     * @throws CircularDependencyException if one of the beans' dependencies form a circle
+     * @throws UnsatisfiedDependencyException if a bean cannot be created due to missing dependencies
+     * @see MethodAdviceHandler
+     * @see AutoCreate
+     * @see MergedAnnotationResolver
+     * @see #getAndRemoveTypesAnnotatedWith(Class, Set)
+     * @see BeanProxyHandler
+     */
+    private void createAndRegisterMethodInterceptors(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
         Set<Class<?>> interceptors = getAndRemoveTypesAnnotatedWith(MethodAdviceHandler.class, autoCreationTypes);
 
         for (Class<?> interceptor : interceptors) {
@@ -133,7 +182,20 @@ public class DefaultBeanManager implements BeanManager {
         }
     }
 
-    private void createAnnotationHandlers(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException {
+    /**
+     * Creates and registers all the {@link AnnotationHandler}s.
+     *
+     * @param autoCreationTypes the set of all the {@link AutoCreate} annotated types from {@link MergedAnnotationResolver}
+     *                          (this method calls {@link #getAndRemoveTypesAnnotatedWith(Class, Set)} with this parameter)
+     * @throws BeanCreationException if any other exception prevents the creation of a bean
+     * @throws CircularDependencyException if one of the beans' dependencies form a circle
+     * @throws UnsatisfiedDependencyException if a bean cannot be created due to missing dependencies
+     * @see AnnotationHandler
+     * @see AutoCreate
+     * @see MergedAnnotationResolver
+     * @see #getAndRemoveTypesAnnotatedWith(Class, Set) 
+     */
+    private void createAnnotationHandlers(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
         Set<Class<?>> handlers = getAndRemoveTypesAnnotatedWith(AnnotationHandler.class, autoCreationTypes);
 
         for (Class<?> handler : handlers) {
@@ -148,14 +210,18 @@ public class DefaultBeanManager implements BeanManager {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void scanAndCreateBeans() throws BeanCreationException, CircularDependencyException {
+    public void scanAndCreateBeans() throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
         Set<Class<?>> autoCreationTypes = this.autoCreationAnnotationResolver.getAllTypesAnnotated();
 
-        //First we want to create all the configurations because other beans may need them during construction
+        // The order down below is important! DO NOT CHANGE ORDER OF CALL!
+        // First we want to create all the configurations because other beans may need them during construction
         createConfigs(autoCreationTypes);
 
-        //Second we want to register all autowiring annotation handlers before creating beans
+        // Second we want to register all autowiring annotation handlers before creating beans
         createAnnotationHandlers(autoCreationTypes);
 
         createAndRegisterMethodInterceptors(autoCreationTypes);
@@ -165,28 +231,43 @@ public class DefaultBeanManager implements BeanManager {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BeanRegistry getBeanRegistry() {
         return this.beanRegistry;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DependencyTreeResolver getDependencyTreeResolver() {
         return this.dependencyTreeResolver;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ConstructorParameterResolver getConstructorParameterResolver() {
         return this.constructorParameterResolver;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Reflections getReflectionsInstance() {
         return this.reflections;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void createAndRegisterBean(Class<?> beanClass) throws BeanCreationException, CircularDependencyException {
+    public void createAndRegisterBean(Class<?> beanClass) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
         if (beanClass == String.class || beanClass.isPrimitive()) return;
 
         if (!this.beanRegistry.isRegistered(beanClass)) { //this is here because a class may have multiple auto-create annotations and also just a precaution
@@ -212,11 +293,22 @@ public class DefaultBeanManager implements BeanManager {
         }
     }
 
+    /**
+     * Helper method to call register the bean into the beanRegistry & also calling customAutoCreateAnnotationResolver.
+     *
+     * @param beanClass the type to register the bean as
+     * @param bean the bean
+     * @see BeanRegistry#registerBean(Class, Object) 
+     * @see CustomAutoCreateAnnotationResolver#onCreated(Object, Class)
+     */
     private void registerBean(Class<?> beanClass, Object bean) {
         this.beanRegistry.registerBean(beanClass, bean);
         this.customAutoCreateAnnotationResolver.onCreated(bean, beanClass);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void cleanUp() {
         this.autoCreationAnnotationResolver.cleanUp();

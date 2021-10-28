@@ -6,6 +6,7 @@ import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnviro
 import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironmentImpl;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
+import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ public abstract class AbstractIcicleApplication implements Application {
     }
 
     @Override
-    public void start() throws BeanCreationException, CircularDependencyException {
+    public void start() throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
         LOGGER.info("Booting Icicle application named: TODO");
         this.beanManager.scanAndCreateBeans();
     }
