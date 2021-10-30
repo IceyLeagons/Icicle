@@ -20,6 +20,7 @@ jobs:
         java-version: '16'
         distribution: 'adopt'
         cache: gradle
+        architecture: aarch64
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
