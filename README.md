@@ -3,7 +3,6 @@
 # [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7ac8f720a0804656af1515bb878efe1c)](https://app.codacy.com/gh/IceyLeagons/Icicle?utm_source=github.com&utm_medium=referral&utm_content=IceyLeagons/Icicle&utm_campaign=Badge_Grade) ![GitHub](https://img.shields.io/github/license/IceyLeagons/Icicle) ![Love](https://img.shields.io/badge/Made%20with-%E2%9D%A4-red)
 
 Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development.
-For embedding Icicle in a "third-party" environment please check our [Embedding Guide](https://github.com/IceyLeagons/iciclev2)
 
 # Features
 
