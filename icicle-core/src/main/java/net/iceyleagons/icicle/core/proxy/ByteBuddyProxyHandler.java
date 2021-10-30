@@ -39,11 +39,7 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
             builder = builder.visit(asmVisitorHandler.getAsmAdvice().on(asmVisitorHandler.getMatcher()));
         }
 
-        //for (MethodInterceptor interceptor : methodInterceptor) {
-        //    LOGGER.debug("Registering method interceptor {} to builder. ", interceptor.getClass().getName());
-        //    builder = builder.method(interceptor.getMethodDescripton()).intercept(interceptor.getImplementation());
-        //}
-        builder = builder.visit(Advice.to(MeasureAdvice.class).on(ElementMatchers.isAnnotatedWith(Measure.class)));
+        //builder = builder.visit(Advice.to(MeasureAdvice.class).on(ElementMatchers.isAnnotatedWith(Measure.class)));
 
         try {
             LOGGER.debug("Creating enhanced proxy class.");

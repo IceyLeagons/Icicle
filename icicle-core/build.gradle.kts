@@ -20,6 +20,10 @@ dependencies {
     shadow("net.bytebuddy:byte-buddy:1.11.15")
     shadow("net.bytebuddy:byte-buddy-agent:1.11.15")
 
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
+
+
     shadow("org.slf4j:slf4j-log4j12:1.7.32")
     shadow("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
 

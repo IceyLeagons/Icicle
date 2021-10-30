@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
  * Utility methods for the creating and autowiring of beans.
  *
  * @author TOTHTOMI
- * @version 1.0.0
+ * @version 1.1.0
  * @since Aug. 23, 2021
  */
 public final class BeanUtils {
@@ -34,6 +34,7 @@ public final class BeanUtils {
         try {
             constructor.setAccessible(true);
 
+
             Class<?>[] parameterTypes = constructor.getParameterTypes();
             Asserts.isTrue(arguments.length <= parameterTypes.length, "Cannot specify more arguments than constructor parameters!");
 
@@ -45,6 +46,11 @@ public final class BeanUtils {
                     continue;
                 }
                 argObjects[i] = arguments[i];
+            }
+
+            if (Kotlin.isKotlinReflectionPresent() && Kotlin.isKotlinType(constructor.getDeclaringClass())) {
+                //TODO are kotlin classes supported by ByteBuddy? (collectively: figure out how to enhance kotlin classes)
+                return Kotlin.instantiateKotlinClass(constructor, argObjects);
             }
 
             T value = beanProxyHandler == null ? constructor.newInstance(argObjects) : beanProxyHandler.createEnhancedBean(constructor, argObjects);
@@ -73,9 +79,18 @@ public final class BeanUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T> Constructor<T> getResolvableConstructor(Class<T> clazz) {
+        Constructor<T> kotlinConst = Kotlin.findPrimaryConstructor(clazz);
+        if (kotlinConst != null) return kotlinConst;
+
         Constructor<?>[] constructors = clazz.getConstructors();
 
         if (constructors.length == 1) return (Constructor<T>) constructors[0];
+        else if (constructors.length == 0) {
+            constructors = clazz.getDeclaredConstructors();
+            if (constructors.length == 1) {
+                return (Constructor<T>) constructors[0];
+            }
+        }
 
         try {
             return clazz.getDeclaredConstructor(); //attempting to grab an empty constructor

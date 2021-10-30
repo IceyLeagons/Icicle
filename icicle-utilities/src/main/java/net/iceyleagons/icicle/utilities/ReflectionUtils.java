@@ -35,6 +35,19 @@ public final class ReflectionUtils {
         return null;
     }
 
+    public static boolean isClassPresent(String className) {
+        return isClassPresent(className, ReflectionUtils.class.getClassLoader());
+    }
+
+    public static boolean isClassPresent(String className, ClassLoader classLoader) {
+        try {
+            Class.forName(className, false, classLoader);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     /**
      * Attempts to cast the supplied object to the required type.
      * If the object is instance of the required type it will get returned,
