@@ -1,6 +1,8 @@
 package net.iceyleagons.icicle.serialization;
 
 import net.iceyleagons.icicle.core.annotations.Internal;
+import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
+import net.iceyleagons.icicle.serialization.map.ObjectMapper;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 
 import java.io.File;

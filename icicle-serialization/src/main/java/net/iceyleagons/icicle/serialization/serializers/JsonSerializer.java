@@ -2,8 +2,7 @@ package net.iceyleagons.icicle.serialization.serializers;
 
 import lombok.AllArgsConstructor;
 import net.iceyleagons.icicle.serialization.AbstractSerializer;
-import net.iceyleagons.icicle.serialization.ObjectMapper;
-import net.iceyleagons.icicle.serialization.ObjectDescriptor;
+import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
 import net.iceyleagons.icicle.utilities.datastores.triple.Triple;
 import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
 import org.json.JSONArray;
@@ -12,6 +11,8 @@ import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.iceyleagons.icicle.serialization.map.MapperUtils.*;
 
 @AllArgsConstructor
 public class JsonSerializer extends AbstractSerializer {
@@ -31,22 +32,22 @@ public class JsonSerializer extends AbstractSerializer {
     private static ObjectDescriptor fromJSON(JSONObject jsonObject, Class<?> type) {
         ObjectDescriptor objectDescriptor = new ObjectDescriptor(type);
 
-        Tuple<Field[], Field[]> fields = ObjectMapper.getFields(type);
+        Tuple<Field[], Field[]> fields = getFields(type);
         Field[] valueArray = fields.getA();
         Field[] subObjectArray = fields.getB();
 
         for (Field field : valueArray) {
-            String key = ObjectMapper.getFieldKey(field);
+            String key = getFieldKey(field);
 
             if (!jsonObject.has(key)) {
                 throw new IllegalStateException("No field with key " + key + " found!");
             }
 
-            objectDescriptor.getValueFields().add(ObjectMapper.getFieldWithValue(field, jsonObject.get(key)));
+            objectDescriptor.getValueFields().add(getFieldWithValue(field, jsonObject.get(key)));
         }
 
         for (Field field : subObjectArray) {
-            String key = ObjectMapper.getFieldKey(field);
+            String key = getFieldKey(field);
 
             if (!jsonObject.has(key)) {
                 throw new IllegalStateException("No field with key " + key + " found!");
@@ -64,12 +65,12 @@ public class JsonSerializer extends AbstractSerializer {
                     }
                 }
 
-                objectDescriptor.getSubObjectArrays().add(ObjectMapper.getFieldWithValue(field, descriptors));
+                objectDescriptor.getSubObjectArrays().add(getFieldWithValue(field, descriptors));
                 continue;
             }
 
             if (value instanceof JSONObject) {
-                objectDescriptor.getSubObjects().add(ObjectMapper.getFieldWithValue(field, fromJSON((JSONObject) value, field.getType())));
+                objectDescriptor.getSubObjects().add(getFieldWithValue(field, fromJSON((JSONObject) value, field.getType())));
             }
         }
 

@@ -1,7 +1,7 @@
 package net.iceyleagons.icicle.database.sql;
 
 import lombok.RequiredArgsConstructor;
-import net.iceyleagons.icicle.serialization.ObjectDescriptor;
+import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
 import net.iceyleagons.icicle.utilities.datastores.triple.Triple;
 
 import java.lang.reflect.Field;

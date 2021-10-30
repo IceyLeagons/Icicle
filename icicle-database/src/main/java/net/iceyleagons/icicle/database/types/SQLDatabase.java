@@ -3,7 +3,7 @@ package net.iceyleagons.icicle.database.types;
 import net.iceyleagons.icicle.database.AbstractDatabase;
 import net.iceyleagons.icicle.database.DatabaseUtils;
 import net.iceyleagons.icicle.database.sql.SQLTableSchema;
-import net.iceyleagons.icicle.serialization.ObjectDescriptor;
+import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
 
 import java.util.Optional;
 import java.util.Set;

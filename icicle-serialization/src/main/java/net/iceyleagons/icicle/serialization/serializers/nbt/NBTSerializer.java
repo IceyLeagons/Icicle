@@ -2,7 +2,7 @@ package net.iceyleagons.icicle.serialization.serializers.nbt;
 
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.serialization.AbstractSerializer;
-import net.iceyleagons.icicle.serialization.ObjectDescriptor;
+import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
 import net.iceyleagons.icicle.utilities.datastores.triple.Triple;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.querz.nbt.io.NBTUtil;
