@@ -20,6 +20,7 @@ import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
+import net.iceyleagons.icicle.core.performance.ExecutionLog;
 import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
@@ -76,7 +77,9 @@ public class DefaultBeanManager implements BeanManager {
 
         this.constructorParameterResolver = new DelegatingConstructorParameterResolver(autowiringAnnotationResolver);
 
+        ExecutionLog.begin(application, "AutoCreate Ann. Res. Creation & Scanning", DefaultBeanManager.class);
         this.autoCreationAnnotationResolver = new MergedAnnotationResolver(AutoCreate.class, reflections);
+        ExecutionLog.end(application);
     }
 
     /**
@@ -123,9 +126,13 @@ public class DefaultBeanManager implements BeanManager {
      * @see #getAndRemoveTypesAnnotatedWith(Class, Set)
      */
     private void createConfigs(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
+        ExecutionLog.begin(application, "Creating configs", DefaultBeanManager.class);
         Set<Class<?>> configs = getAndRemoveTypesAnnotatedWith(Config.class, autoCreationTypes);
 
         for (Class<?> config : configs) {
+            Config annotation = config.getAnnotation(Config.class);
+            ExecutionLog.begin(application, "Creating config: " + annotation.value(), DefaultBeanManager.class);
+
             createAndRegisterBean(config);
             Object object = this.beanRegistry.getBeanNullable(config);
 
@@ -136,7 +143,7 @@ public class DefaultBeanManager implements BeanManager {
             }
 
             Configuration configuration = (Configuration) object;
-            Config annotation = config.getAnnotation(Config.class);
+
 
             configuration.setConfigFile(new AdvancedFile(new File(this.application.getConfigurationEnvironment().getConfigRootFolder(), annotation.value())));
 
@@ -149,9 +156,12 @@ public class DefaultBeanManager implements BeanManager {
 
             configuration.afterConstruct();
             this.application.getConfigurationEnvironment().addConfiguration(configuration);
+            ExecutionLog.end(application);
         }
 
         this.application.getConfigurationEnvironment().updateValues();
+
+        ExecutionLog.end(application);
     }
 
     /**
@@ -170,6 +180,7 @@ public class DefaultBeanManager implements BeanManager {
      * @see BeanProxyHandler
      */
     private void createAndRegisterMethodInterceptors(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
+        ExecutionLog.begin(application, "Creating method interceptors", DefaultBeanManager.class);
         Set<Class<?>> interceptors = getAndRemoveTypesAnnotatedWith(MethodAdviceHandler.class, autoCreationTypes);
 
         for (Class<?> interceptor : interceptors) {
@@ -180,6 +191,8 @@ public class DefaultBeanManager implements BeanManager {
                 this.beanProxyHandler.registerInterceptor((MethodAdviceHandlerTemplate) object);
             }
         }
+
+        ExecutionLog.end(application);
     }
 
     /**
@@ -196,6 +209,7 @@ public class DefaultBeanManager implements BeanManager {
      * @see #getAndRemoveTypesAnnotatedWith(Class, Set) 
      */
     private void createAnnotationHandlers(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
+        ExecutionLog.begin(application, "Creating annotation handlers", DefaultBeanManager.class);
         Set<Class<?>> handlers = getAndRemoveTypesAnnotatedWith(AnnotationHandler.class, autoCreationTypes);
 
         for (Class<?> handler : handlers) {
@@ -208,6 +222,8 @@ public class DefaultBeanManager implements BeanManager {
                 this.customAutoCreateAnnotationResolver.registerCustomAutoCreateAnnotationHandler((CustomAutoCreateAnnotationHandler) object);
             }
         }
+
+        ExecutionLog.end(application);
     }
 
     /**
@@ -215,7 +231,11 @@ public class DefaultBeanManager implements BeanManager {
      */
     @Override
     public void scanAndCreateBeans() throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
+        ExecutionLog.begin(application, "Bean scanning & creation", DefaultBeanManager.class);
+
+        ExecutionLog.begin(application, "Retrieving AutoCreate types", DefaultBeanManager.class);
         Set<Class<?>> autoCreationTypes = this.autoCreationAnnotationResolver.getAllTypesAnnotated();
+        ExecutionLog.end(application);
 
         // The order down below is important! DO NOT CHANGE ORDER OF CALL!
         // First we want to create all the configurations because other beans may need them during construction
@@ -226,9 +246,13 @@ public class DefaultBeanManager implements BeanManager {
 
         createAndRegisterMethodInterceptors(autoCreationTypes);
 
+        ExecutionLog.begin(application, "Creating non-exclusive beans", DefaultBeanManager.class);
         for (Class<?> autoCreationType : autoCreationTypes) {
             createAndRegisterBean(autoCreationType);
         }
+        ExecutionLog.end(application);
+
+        ExecutionLog.end(application);
     }
 
     /**

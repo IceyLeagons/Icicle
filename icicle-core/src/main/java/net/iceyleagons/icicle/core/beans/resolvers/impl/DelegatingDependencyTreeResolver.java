@@ -3,6 +3,7 @@ package net.iceyleagons.icicle.core.beans.resolvers.impl;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
+import net.iceyleagons.icicle.core.performance.ExecutionLog;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.utilities.ListUtils;
 import org.slf4j.Logger;
