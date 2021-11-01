@@ -32,7 +32,7 @@ icicle {
     name = "Serialization"
     version = project.version.toString()
     description = "Plenty of serialization options for all your saving/reading needs."
-    developers = listOf("TOTHTOMI", "Gabe")
+    developers = listOf("TOTHTOMI")
 }
 
 tasks.test {

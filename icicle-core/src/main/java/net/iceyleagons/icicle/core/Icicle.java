@@ -1,11 +1,10 @@
 package net.iceyleagons.icicle.core;
 
 
-import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
-import net.iceyleagons.icicle.core.performance.ExecutionLog;
+import net.iceyleagons.icicle.core.performance.PerformanceLog;
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import org.reflections.Reflections;
 
@@ -43,6 +42,6 @@ public class Icicle {
         abstractIcicleApplication.start();
 
 
-        System.out.println(ExecutionLog.dumpExecutionLog(abstractIcicleApplication));
+        System.out.println(PerformanceLog.dumpExecutionLog(abstractIcicleApplication));
     }
 }

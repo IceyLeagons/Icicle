@@ -4,26 +4,29 @@ import com.google.common.base.Strings;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.Icicle;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class ExecutionLog {
+/**
+ * @since Oct. 31, 2021
+ */
+public class PerformanceLog {
 
     private static final long MS_THRESHOLD = 300;
-    private static Map<Application, ExecutionRecord> currentNodes = new HashMap<>();
+    private static final Map<Application, PerformanceRecord> currentNodes = new ConcurrentHashMap<>(4);
 
     public static void begin(Application application, String name, Class<?> clazz) {
         if (!Icicle.PERFORMANCE_DEBUG) return;
-        ExecutionRecord currentNode = currentNodes.get(application);
+        PerformanceRecord currentNode = currentNodes.get(application);
 
-        ExecutionRecord executionRecord = ExecutionRecord.of(name, clazz);
+        PerformanceRecord executionRecord = PerformanceRecord.of(name, clazz);
         setParent(currentNode, executionRecord);
         currentNodes.put(application, executionRecord);
     }
 
     public static void end(Application application) {
         if (!Icicle.PERFORMANCE_DEBUG) return;
-        ExecutionRecord currentNode = currentNodes.get(application);
+        PerformanceRecord currentNode = currentNodes.get(application);
 
         if (currentNode == null) return;
         currentNode.setEndMs(System.currentTimeMillis());
@@ -41,19 +44,19 @@ public class ExecutionLog {
         return stringBuilder.toString();
     }
 
-    private static void dumpExecutionLog(ExecutionRecord record, int depth, StringBuilder sb) {
-        String warning = (depth > 1 && record.getExecutionTime() >= MS_THRESHOLD) ? "[!]" : "   ";
+    private static void dumpExecutionLog(PerformanceRecord record, int depth, StringBuilder sb) {
+        String warning = (depth > 0 && record.getExecutionTime() >= MS_THRESHOLD) ? "[!]" : "   ";
         String prefix = warning + Strings.repeat("\t", depth) + (depth != 0 ? " -> " : "");
 
         sb.append(prefix).append(record.toString()).append("\n");
 
         int d = depth + 1;
-        for (ExecutionRecord child : record.getChildren()) {
+        for (PerformanceRecord child : record.getChildren()) {
             dumpExecutionLog(child, d, sb);
         }
     }
 
-    private static void setParent(ExecutionRecord parent, ExecutionRecord child) {
+    private static void setParent(PerformanceRecord parent, PerformanceRecord child) {
         child.setParent(parent);
         if (parent != null) {
             parent.getChildren().add(child);

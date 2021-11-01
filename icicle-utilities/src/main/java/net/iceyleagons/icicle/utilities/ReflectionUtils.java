@@ -39,6 +39,20 @@ public final class ReflectionUtils {
         return isClassPresent(className, ReflectionUtils.class.getClassLoader());
     }
 
+    @Nullable
+    public static Field getField(Class<?> parent, String name, boolean setAccessible) {
+        try {
+            Field field = parent.getField(name);
+            if (setAccessible) {
+                field.setAccessible(true);
+            }
+
+            return field;
+        } catch (NoSuchFieldException ignored) {
+            return null;
+        }
+    }
+
     public static boolean isClassPresent(String className, ClassLoader classLoader) {
         try {
             Class.forName(className, false, classLoader);

@@ -7,7 +7,10 @@ import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnviro
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
-import net.iceyleagons.icicle.core.performance.ExecutionLog;
+import net.iceyleagons.icicle.core.performance.PerformanceLog;
+import net.iceyleagons.icicle.core.translations.LanguageProvider;
+import net.iceyleagons.icicle.core.translations.TranslationService;
+import net.iceyleagons.icicle.core.translations.TranslationStringProvider;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -25,7 +28,7 @@ public abstract class AbstractIcicleApplication implements Application {
     private final ConfigurationEnvironment configurationEnvironment;
 
     public AbstractIcicleApplication(String rootPackage) {
-        ExecutionLog.begin(this, "Application Creation", AbstractIcicleApplication.class);
+        PerformanceLog.begin(this, "Application Creation", AbstractIcicleApplication.class);
         this.reflections = new Reflections(rootPackage).merge(Icicle.ICICLE_REFLECTIONS);
         this.beanManager = new DefaultBeanManager(this);
 
@@ -34,16 +37,16 @@ public abstract class AbstractIcicleApplication implements Application {
         this.beanManager.getBeanRegistry().registerBean(Application.class, this); //registering self instance
         this.beanManager.getBeanRegistry().registerBean(ConfigurationEnvironment.class, configurationEnvironment);
 
-        ExecutionLog.end(this);
+        PerformanceLog.end(this);
     }
 
     @Override
     public void start() throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
         LOGGER.info("Booting Icicle application named: TODO");
 
-        ExecutionLog.begin(this, "Application start", AbstractIcicleApplication.class);
+        PerformanceLog.begin(this, "Application start", AbstractIcicleApplication.class);
         this.beanManager.scanAndCreateBeans();
-        ExecutionLog.end(this);
+        PerformanceLog.end(this);
     }
 
     @Override

@@ -17,7 +17,12 @@ public class TranslationService {
 
     private final Application application;
     private final Set<AbstractCodeFunction> codeFunctions;
-    private final TranslationStringProvider translationStringProvider = null; //TODO get from application
+
+    @Setter
+    private TranslationStringProvider translationStringProvider; // will require setting up with a setter from the application
+
+    @Setter
+    private LanguageProvider languageProvider = key -> "en"; // will require setting up with a setter from the application
 
     public TranslationService(Application application) {
         this.application = application;
@@ -29,7 +34,7 @@ public class TranslationService {
     }
 
     public String getTranslation(String key, String language, String defaultValue, Map<String, String> values) {
-        if (translationStringProvider == null) return "NO TRANSLATION PROVIDER SET UP!";
+        if (translationStringProvider == null) return defaultValue;
 
         String translation = translationStringProvider.get(key, language);
         String toParse = translation == null ? defaultValue : translation;
