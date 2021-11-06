@@ -13,7 +13,6 @@ import java.lang.reflect.Method;
 public interface CommandMiddlewareTemplate {
 
     /**
-     *
      * @param commandManager
      * @param commandManagerClass
      * @param method
@@ -24,7 +23,6 @@ public interface CommandMiddlewareTemplate {
                       Method method, CommandSender sender, TranslationService translationService) throws Exception;
 
     /**
-     *
      * @param commandManager
      * @param commandManagerClass
      * @param field

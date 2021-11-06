@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public final class DefaultConverters {
 
-    public static final Map<Class<?>, ValueConverter<?,?>> converters = new HashMap<>();
+    public static final Map<Class<?>, ValueConverter<?, ?>> converters = new HashMap<>();
 
     static {
         converters.put(UUID.class, new UUIDToStringConverter());

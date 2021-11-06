@@ -5,7 +5,6 @@ import net.iceyleagons.icicle.utilities.file.FileUtils
 import net.iceyleagons.icicle.utilities.file.FileZipper
 import java.io.File
 import java.nio.file.Files
-import java.util.*
 
 fun File.asAdvancedFile(): AdvancedFile = AdvancedFile(this, isDirectory)
 
@@ -24,7 +23,12 @@ fun File.compress(output: File = File(parent, "${nameWithoutExtension}_compresse
     return output
 }
 
-fun AdvancedFile.compress(output: File = File(file.parent, "${file.nameWithoutExtension}_compressed.${file.extension}")): File {
+fun AdvancedFile.compress(
+    output: File = File(
+        file.parent,
+        "${file.nameWithoutExtension}_compressed.${file.extension}"
+    )
+): File {
     FileZipper.compress(file, output)
     return output
 }
@@ -34,7 +38,12 @@ fun File.decompress(output: File = File(parent, "${nameWithoutExtension}_decompr
     return output
 }
 
-fun AdvancedFile.decompress(output: File = File(file.parent, "${file.nameWithoutExtension}_decompressed.${file.extension}")): File {
+fun AdvancedFile.decompress(
+    output: File = File(
+        file.parent,
+        "${file.nameWithoutExtension}_decompressed.${file.extension}"
+    )
+): File {
     FileZipper.decompress(file, output)
     return output
 }

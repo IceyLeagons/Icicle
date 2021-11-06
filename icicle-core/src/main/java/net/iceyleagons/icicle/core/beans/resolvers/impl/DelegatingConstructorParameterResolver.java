@@ -14,9 +14,8 @@ import java.lang.reflect.Parameter;
  *
  * @author TOTHTOMI
  * @version 1.1.0
- * @since Aug. 23, 2021
- *
  * @see ConstructorParameterResolver
+ * @since Aug. 23, 2021
  */
 public class DelegatingConstructorParameterResolver implements ConstructorParameterResolver {
 

@@ -12,6 +12,7 @@ public class BukkitApplication extends AbstractIcicleApplication {
 
     private final JavaPlugin javaPlugin;
     private final BukkitExecutionHandler executionHandler;
+
     public BukkitApplication(String rootPackage, JavaPlugin javaPlugin) {
         super(rootPackage);
         this.javaPlugin = javaPlugin;

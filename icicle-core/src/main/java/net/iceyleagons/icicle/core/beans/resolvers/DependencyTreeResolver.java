@@ -16,7 +16,7 @@ public interface DependencyTreeResolver {
 
     /**
      * Resolves the dependency tree from the passed bean.
-     *
+     * <p>
      * Returns a LinkedList of all bean classes, the supplied bean is in relation with in a reversed order:
      * The bean with the least dependency should be the first element of the linked list.
      *

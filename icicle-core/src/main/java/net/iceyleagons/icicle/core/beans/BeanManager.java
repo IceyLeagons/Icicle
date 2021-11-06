@@ -25,8 +25,8 @@ public interface BeanManager {
      * <b>WARNING!</b> Internal method: this method should only be called by an
      * {@link net.iceyleagons.icicle.core.Application} implementation, strictly at startup.
      *
-     * @throws BeanCreationException if any other exception prevents the creation of a bean
-     * @throws CircularDependencyException if one of the beans' dependencies form a circle
+     * @throws BeanCreationException          if any other exception prevents the creation of a bean
+     * @throws CircularDependencyException    if one of the beans' dependencies form a circle
      * @throws UnsatisfiedDependencyException if a bean cannot be created due to missing dependencies
      * @see Internal
      */
@@ -38,8 +38,8 @@ public interface BeanManager {
      * ({@link net.iceyleagons.icicle.core.annotations.AutoCreate} annotated types should never call this)
      *
      * @param beanClass the bean to create
-     * @throws BeanCreationException if any other exception prevents the creation of a bean
-     * @throws CircularDependencyException if one of the beans' dependencies form a circle
+     * @throws BeanCreationException          if any other exception prevents the creation of a bean
+     * @throws CircularDependencyException    if one of the beans' dependencies form a circle
      * @throws UnsatisfiedDependencyException if a bean cannot be created due to missing dependencies
      */
     void createAndRegisterBean(Class<?> beanClass) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException;

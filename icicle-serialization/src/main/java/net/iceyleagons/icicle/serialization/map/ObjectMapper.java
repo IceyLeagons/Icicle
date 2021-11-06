@@ -33,7 +33,6 @@ public class ObjectMapper {
     // TODO comment things --> more understandable code
 
 
-    
     public <T> T unMapObject(ObjectDescriptor objectDescriptor, Class<T> wantedType) {
         if (!objectDescriptor.getObjectType().equals(wantedType)) return null;
 

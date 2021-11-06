@@ -12,9 +12,9 @@ import java.lang.annotation.Target;
  * wiring is automatic (meaning no annotation needed) this annotation is only used for documentation ->
  * more understandable code (especially) for those, who are not familiar with the framework.
  *
+ * @author TOTHTOMI
  * @version 1.0.0
  * @since Oct. 31, 2021
- * @author TOTHTOMI
  */
 @Target(ElementType.CONSTRUCTOR)
 @Retention(RetentionPolicy.SOURCE)

@@ -16,28 +16,6 @@ public class IcicleBukkit extends JavaPlugin {
 
     public static final Map<JavaPlugin, BukkitApplication> RUNNING_APPLICATIONS = new HashMap<>();
 
-    @Override
-    public void onLoad() {
-        this.getLogger().info(Icicle.getLoadText());
-    }
-
-    @Override
-    public void onEnable() {
-        this.getLogger().info("Checking for updates....");
-        // TODO update checker
-
-        this.getLogger().info("Registering listeners...");
-        Bukkit.getPluginManager().registerEvents(new PluginStatusListener(), this);
-
-        this.getLogger().info("Icicle is now READY!");
-        this.getLogger().info("Waiting for Icicle-based plugins to be enabled...");
-    }
-
-    @Override
-    public void onDisable() {
-        cleanUp();
-    }
-
     public static void startNewApplication(JavaPlugin javaPlugin) {
         try {
             Class<?> clazz = Class.forName(javaPlugin.getDescription().getMain());
@@ -62,8 +40,30 @@ public class IcicleBukkit extends JavaPlugin {
     }
 
     public static void cleanUp() {
-        RUNNING_APPLICATIONS.forEach((j,app) -> {
+        RUNNING_APPLICATIONS.forEach((j, app) -> {
             app.shutdown();
         });
+    }
+
+    @Override
+    public void onLoad() {
+        this.getLogger().info(Icicle.getLoadText());
+    }
+
+    @Override
+    public void onEnable() {
+        this.getLogger().info("Checking for updates....");
+        // TODO update checker
+
+        this.getLogger().info("Registering listeners...");
+        Bukkit.getPluginManager().registerEvents(new PluginStatusListener(), this);
+
+        this.getLogger().info("Icicle is now READY!");
+        this.getLogger().info("Waiting for Icicle-based plugins to be enabled...");
+    }
+
+    @Override
+    public void onDisable() {
+        cleanUp();
     }
 }

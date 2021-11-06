@@ -1,28 +1,27 @@
 package net.iceyleagons.icicle.utilities.datastores.heap.impl;
 
 import lombok.Getter;
+import net.iceyleagons.icicle.utilities.ArrayUtils;
 import net.iceyleagons.icicle.utilities.Asserts;
-import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import net.iceyleagons.icicle.utilities.datastores.heap.Heap;
 import net.iceyleagons.icicle.utilities.datastores.heap.HeapItem;
+import net.iceyleagons.icicle.utilities.generic.GenericUtils;
+import net.iceyleagons.icicle.utilities.generic.acessors.OneTypeAccessor;
 
 import java.util.Objects;
 
-public class BinaryHeap<T extends HeapItem<T>> implements Heap<T> {
+public class BinaryHeap<T extends HeapItem<T>> extends OneTypeAccessor<T> implements Heap<T> {
 
     private T[] array;
-    private final Class<T> clazz;
 
     @Getter
     private int itemCount;
 
-    public BinaryHeap(Class<T> clazz, int heapSize) {
-        Asserts.notNull(clazz, "Class must not be null!");
+    public BinaryHeap(int heapSize) {
         Asserts.state(heapSize >= 0, "Heap size must be larger or equal to 0!");
 
         this.itemCount = 0;
-        this.clazz = clazz;
-        this.array = GenericUtils.createGenericArray(clazz, heapSize);
+        this.array = GenericUtils.createGenericArray(getATypeClass(), heapSize);
     }
 
     private void swapItems(T a, T b) {
@@ -75,9 +74,9 @@ public class BinaryHeap<T extends HeapItem<T>> implements Heap<T> {
     @Override
     public void add(T item) {
         if (itemCount + 1 >= array.length) {
-            T[] newArray = GenericUtils.createGenericArray(clazz, array.length + 10);
-            System.arraycopy(array, 0, newArray, 0, array.length);
-            this.array = newArray;
+            //T[] newArray = GenericUtils.createGenericArray(clazz, array.length + 10);
+            //System.arraycopy(array, 0, newArray, 0, array.length);
+            this.array = ArrayUtils.extendArray(array, 10);
         }
 
         item.setHeapIndex(itemCount);

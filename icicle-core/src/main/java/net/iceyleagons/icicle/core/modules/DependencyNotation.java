@@ -15,6 +15,17 @@ public class DependencyNotation {
     private final String name;
     private final Version version;
 
+    public static DependencyNotation fromString(String string) {
+        val splitDep = string.split(":");
+        if (splitDep.length == 2)
+            // No author, probably Icicle internals/standard libraries.
+            return of(null, splitDep[0], new Version(splitDep[1]));
+        else if (splitDep.length == 3)
+            return of(splitDep[0], splitDep[1], new Version(splitDep[2]));
+        else
+            throw new IllegalArgumentException("Given string is not a dependency notation.");
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof DependencyNotation))
@@ -28,16 +39,5 @@ public class DependencyNotation {
             return false;
 
         return dep.version.compareTo(version) >= 0;
-    }
-
-    public static DependencyNotation fromString(String string) {
-        val splitDep = string.split(":");
-        if (splitDep.length == 2)
-            // No author, probably Icicle internals/standard libraries.
-            return of(null, splitDep[0], new Version(splitDep[1]));
-        else if (splitDep.length == 3)
-            return of(splitDep[0], splitDep[1], new Version(splitDep[2]));
-        else
-            throw new IllegalArgumentException("Given string is not a dependency notation.");
     }
 }

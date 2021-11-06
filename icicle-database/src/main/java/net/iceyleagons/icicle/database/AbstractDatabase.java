@@ -1,8 +1,8 @@
 package net.iceyleagons.icicle.database;
 
 import lombok.Getter;
-import net.iceyleagons.icicle.serialization.map.ObjectMapper;
 import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
+import net.iceyleagons.icicle.serialization.map.ObjectMapper;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.generic.acessors.TwoTypeAccessor;
@@ -26,8 +26,11 @@ public abstract class AbstractDatabase<K, V> extends TwoTypeAccessor<K, V> imple
     }
 
     protected abstract void save(ObjectDescriptor objectDescriptor, K id);
+
     protected abstract Optional<ObjectDescriptor> findById(K id, Class<V> type);
+
     protected abstract Set<ObjectDescriptor> findAll(Class<V> type);
+
     protected abstract K generateNewId();
 
     @Override
@@ -45,7 +48,7 @@ public abstract class AbstractDatabase<K, V> extends TwoTypeAccessor<K, V> imple
     @Override
     public Optional<V> findById(K id) {
         final Optional<ObjectDescriptor> dbResult = this.findById(id, this.vClass);
-        return dbResult.isEmpty() ?  Optional.empty() : Optional.ofNullable(new ObjectMapper().unMapObject(dbResult.get(), this.vClass));
+        return dbResult.isEmpty() ? Optional.empty() : Optional.ofNullable(new ObjectMapper().unMapObject(dbResult.get(), this.vClass));
     }
 
     @Override

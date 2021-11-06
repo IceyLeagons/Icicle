@@ -10,7 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static net.iceyleagons.icicle.core.translations.code.CodeParserUtils.*;
@@ -27,8 +30,16 @@ public class CodeParser {
     private final Map<String, AbstractCodeFunction> dictionary = new HashMap<>();
     private final Map<String, String> values = new HashMap<>();
 
+    public CodeParser() {
+        this(new AbstractCodeFunction[0]);
+    }
+
+    public CodeParser(AbstractCodeFunction... codeFunctions) {
+        this.addFunctions(codeFunctions);
+    }
+
     public static Set<Class<?>> discoverCodeFunctions(Application application) {
-       return discoverCodeFunctions(application.getReflections());
+        return discoverCodeFunctions(application.getReflections());
     }
 
     public static Set<Class<?>> discoverCodeFunctions(Reflections reflections) {
@@ -49,14 +60,6 @@ public class CodeParser {
                 .filter(o -> o instanceof AbstractCodeFunction)
                 .map(c -> (AbstractCodeFunction) c)
                 .collect(Collectors.toSet());
-    }
-
-    public CodeParser() {
-        this(new AbstractCodeFunction[0]);
-    }
-
-    public CodeParser(AbstractCodeFunction... codeFunctions) {
-        this.addFunctions(codeFunctions);
     }
 
     public CodeParser addValues(Map<String, String> values) {

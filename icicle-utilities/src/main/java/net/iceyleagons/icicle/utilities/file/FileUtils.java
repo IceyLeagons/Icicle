@@ -21,6 +21,7 @@ import net.iceyleagons.icicle.utilities.Asserts;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -120,9 +121,9 @@ public final class FileUtils {
     /**
      * Appends the specified lines to the file using {@link FileWriter}.
      *
-     * @param file the file to append to
+     * @param file          the file to append to
      * @param linesToAppend the lines to append
-     * @throws IllegalStateException if an exception occurs during appending
+     * @throws IllegalStateException    if an exception occurs during appending
      * @throws IllegalArgumentException if the passed file is null or the lines are empty
      */
     public static void appendFile(File file, String... linesToAppend) throws IllegalStateException, IllegalArgumentException {
@@ -201,6 +202,11 @@ public final class FileUtils {
 
     @SneakyThrows
     public static void downloadTo(File file, String rawUrl) throws IllegalArgumentException {
+        downloadTo(file, rawUrl, "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
+    }
+
+    @SneakyThrows
+    public static void downloadTo(File file, String rawUrl, String userAgent) throws IllegalArgumentException {
         Asserts.notNull(file, "Destination file must not be null!");
         Asserts.notNull(rawUrl, "Download URL must not be null!");
 
@@ -208,15 +214,18 @@ public final class FileUtils {
             URL url = new URL(rawUrl);
 
             // TODO user agent
-            try (InputStream inputStream = url.openConnection().getInputStream()) {
-               try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-                   byte[] buffer = new byte[1024];
-                   int read;
+            URLConnection connection = url.openConnection();
+            connection.setRequestProperty("User-Agent", userAgent);
 
-                   while ((read = inputStream.read(buffer, 0, buffer.length)) >= 0) {
-                       fileOutputStream.write(buffer, 0, read);
-                   }
-               }
+            try (InputStream inputStream = connection.getInputStream()) {
+                try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+                    byte[] buffer = new byte[1024];
+                    int read;
+
+                    while ((read = inputStream.read(buffer, 0, buffer.length)) >= 0) {
+                        fileOutputStream.write(buffer, 0, read);
+                    }
+                }
             }
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Download URL must be a valid URL!", e);

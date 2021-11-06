@@ -18,11 +18,10 @@ public interface ConstructorParameterResolver {
     /**
      * Resolves the required parameters for bean-creation for the passed constructor.
      *
-     * @param constructor the constructor to use
+     * @param constructor  the constructor to use
      * @param beanRegistry the bean registry in charge
      * @return the array of parameters resolved (in the order of {@link Constructor#getParameterTypes()}
      * @throws UnsatisfiedDependencyException if a parameter's needs cannot be fulfilled.
-     *
      * @see BeanRegistry
      */
     Object[] resolveConstructorParameters(Constructor<?> constructor, BeanRegistry beanRegistry) throws UnsatisfiedDependencyException;

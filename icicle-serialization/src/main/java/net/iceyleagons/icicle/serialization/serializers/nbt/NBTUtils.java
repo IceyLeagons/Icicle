@@ -1,7 +1,5 @@
 package net.iceyleagons.icicle.serialization.serializers.nbt;
 
-import net.iceyleagons.icicle.serialization.SerializationConstants;
-import net.iceyleagons.icicle.utilities.StringUtils;
 import net.querz.nbt.tag.*;
 
 import java.util.List;

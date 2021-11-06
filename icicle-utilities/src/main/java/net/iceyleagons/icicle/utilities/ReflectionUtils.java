@@ -68,8 +68,8 @@ public final class ReflectionUtils {
      * if the object is not instance of the required type, null will be returned.
      *
      * @param required the required type to cast to
-     * @param object the object to cast
-     * @param <T> the type wanted
+     * @param object   the object to cast
+     * @param <T>      the type wanted
      * @return the casted object or null
      */
     @Nullable

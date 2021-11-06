@@ -18,9 +18,8 @@ public interface BeanRegistry {
      * Returns the bean for the supplied class or an empty optional.
      *
      * @param type the class of the wanted bean
-     * @param <T> type of the bean
+     * @param <T>  type of the bean
      * @return the Optional containing the bean (if exists) or empty
-     *
      * @see Optional
      */
     <T> Optional<T> getBean(Class<T> type);
@@ -29,11 +28,10 @@ public interface BeanRegistry {
      * Returns the bean for the supplied class or null.
      *
      * @param type the class of the wanted bean
-     * @param <T> type of the bean
+     * @param <T>  type of the bean
      * @return the bean (if exists) or null
      */
-    @Nullable
-    <T> T getBeanNullable(Class<T> type);
+    @Nullable <T> T getBeanNullable(Class<T> type);
 
     /**
      * Checks whether a bean instance has been registered for the supplied class.
@@ -46,7 +44,7 @@ public interface BeanRegistry {
     /**
      * Registers a bean with the specified class (type).
      *
-     * @param type the type to register the bean as
+     * @param type   the type to register the bean as
      * @param object the bean
      */
     void registerBean(Class<?> type, Object object);

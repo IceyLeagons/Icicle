@@ -12,22 +12,6 @@ import java.util.List;
 
 public class YamlSerializer extends AbstractSerializer {
 
-    @Override
-    @SneakyThrows
-    protected void serializeToFile(ObjectDescriptor objectDescriptor, AdvancedFile file) {
-        YamlFile yamlFile = new YamlFile(file.getFile());
-        yamlFile.createNewFile(true);
-
-        addFromDescriptor(objectDescriptor, yamlFile, null);
-        yamlFile.save();
-    }
-
-    @Override
-    protected ObjectDescriptor getFromFile(AdvancedFile file, Class<?> type) {
-        // TODO
-        return super.getFromFile(file, type);
-    }
-
     private static void addFromDescriptor(ObjectDescriptor objectDescriptor, YamlFile yamlFile, String root) {
         // Handling default Java types (String, int, long, etc.)
         for (Triple<String, Field, Object> valueField : objectDescriptor.getValueFields()) {
@@ -54,6 +38,22 @@ public class YamlSerializer extends AbstractSerializer {
                 addFromDescriptor(descriptor, yamlFile, key + count++);
             }
         }
+    }
+
+    @Override
+    @SneakyThrows
+    protected void serializeToFile(ObjectDescriptor objectDescriptor, AdvancedFile file) {
+        YamlFile yamlFile = new YamlFile(file.getFile());
+        yamlFile.createNewFile(true);
+
+        addFromDescriptor(objectDescriptor, yamlFile, null);
+        yamlFile.save();
+    }
+
+    @Override
+    protected ObjectDescriptor getFromFile(AdvancedFile file, Class<?> type) {
+        // TODO
+        return super.getFromFile(file, type);
     }
 
 }

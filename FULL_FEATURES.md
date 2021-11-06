@@ -1,4 +1,5 @@
 # Full Features
+
 The full feature list contains all the features across all of our official or officially accepted modules.
 
 To gain more information about the individual features, please check our developer wiki.
@@ -6,6 +7,7 @@ To gain more information about the individual features, please check our develop
 **WARNING** This list may be outdated at certain times! This list is **effective as of the 1st of November, 2021**
 
 ## Core
+
 - Beans (almost like in Spring)
     - Constructor auto-wiring (field auto-wiring is not supported)
     - Circular dependency handling
@@ -34,6 +36,7 @@ To gain more information about the individual features, please check our develop
     - [StringCode]() parser
 
 ## Serialization
+
 - ObjectMapper
     - Handles the objects themselves, converts them into an intermediate form: ObjectDescriptors
     - The actual serializers use ObjectDescriptors
@@ -46,6 +49,7 @@ To gain more information about the individual features, please check our develop
     - HOCON (planned)
 
 ## Utilities
+
 - Datastores
     - Heap
     - Tuple

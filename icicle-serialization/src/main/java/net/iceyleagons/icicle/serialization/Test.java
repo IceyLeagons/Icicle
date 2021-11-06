@@ -3,7 +3,6 @@ package net.iceyleagons.icicle.serialization;
 import lombok.EqualsAndHashCode;
 import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -37,12 +36,13 @@ public class Test {
         private final String name = "Test1";
         private final int id = 20;
         private final List<String> test = Arrays.asList("hello", "hello2");
-        private final String[] alias = new String[] { "t1", "tst1"};
+        private final String[] alias = new String[]{"t1", "tst1"};
 
         private final Test2 test2 = new Test2();
         private final Test2[] tests = new Test2[]{new Test2(), new Test2()};
 
-        public Test1() { }
+        public Test1() {
+        }
 
     }
 
@@ -51,6 +51,7 @@ public class Test {
         private final int id = 30;
         private final boolean asd = true;
 
-        public Test2() {}
+        public Test2() {
+        }
     }
 }

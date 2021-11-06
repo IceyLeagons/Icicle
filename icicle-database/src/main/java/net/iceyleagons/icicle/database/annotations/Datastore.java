@@ -1,6 +1,5 @@
 package net.iceyleagons.icicle.database.annotations;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 

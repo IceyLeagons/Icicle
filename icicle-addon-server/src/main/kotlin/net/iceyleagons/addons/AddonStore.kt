@@ -42,7 +42,10 @@ class AddonStore {
 
     fun getAddonsPage(perPage: Int, page: Int): List<AddonData> {
         val actualPerPage = perPage.coerceAtLeast(10).coerceAtMost(50)
-        return addons.subList((page * actualPerPage).coerceAtMost(addons.size), ((page + 1) * actualPerPage).coerceAtMost(addons.size))
+        return addons.subList(
+            (page * actualPerPage).coerceAtMost(addons.size),
+            ((page + 1) * actualPerPage).coerceAtMost(addons.size)
+        )
     }
 
     fun getAddonFromId(id: Int): AddonData? {

@@ -26,13 +26,15 @@ public final class MapperUtils {
 
     static boolean isCollectionComponentSubObject(Field field) {
         Class<?> collectionComponentType = GenericUtils.getGenericTypeClass(field, 0);
-        if (collectionComponentType == null) throw new IllegalStateException("Could not access type of Collection for field: " + field.getName());
+        if (collectionComponentType == null)
+            throw new IllegalStateException("Could not access type of Collection for field: " + field.getName());
 
         return isSubObject(collectionComponentType);
     }
 
     static Collection<Object> createCollectionFromField(Field field) {
-        if (!Collection.class.isAssignableFrom(field.getType())) throw new IllegalStateException("Attempted to create Collection for a field whose type is non Collection assignable!");
+        if (!Collection.class.isAssignableFrom(field.getType()))
+            throw new IllegalStateException("Attempted to create Collection for a field whose type is non Collection assignable!");
         final Class<?> type = field.getType();
 
         try {
@@ -69,7 +71,7 @@ public final class MapperUtils {
                 (field.isAnnotationPresent(Convert.class) || DefaultConverters.converters.containsKey(field.getType()));
     }
 
-    static Object convert(Object input, Class<?> converterClass, boolean serialize)  {
+    static Object convert(Object input, Class<?> converterClass, boolean serialize) {
         try {
             Constructor<?> constructor = converterClass.getDeclaredConstructor();
 
@@ -78,7 +80,7 @@ public final class MapperUtils {
                 throw new IllegalStateException("Converter must implement ValueConverter!");
             }
 
-            ValueConverter<?,?> converter = getConverterFrom(converterClass);
+            ValueConverter<?, ?> converter = getConverterFrom(converterClass);
             return convert(input, converter, serialize);
         } catch (NoSuchMethodException e) {
             throw new IllegalStateException("Converter must have 1 public empty constructor!", e);
@@ -89,7 +91,7 @@ public final class MapperUtils {
         return null;
     }
 
-    static Object convert(Object input, ValueConverter<?,?> converter, boolean serialize)  {
+    static Object convert(Object input, ValueConverter<?, ?> converter, boolean serialize) {
         if (converter == null) throw new IllegalStateException("Converter is null!");
 
         return serialize ? converter.convertObjectToSerializedField(input) : converter.convertObjectToObjectField(input);

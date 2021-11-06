@@ -3,9 +3,9 @@ package net.iceyleagons.icicle.utilities;
 /**
  * Utility methods for checking input.
  *
+ * @author TOTHTOMI
  * @version 1.0.0
  * @since Aug. 23, 2021
- * @author TOTHTOMI
  */
 public class Asserts {
 
@@ -14,7 +14,7 @@ public class Asserts {
      * with the supplied message.
      *
      * @param object the object to check
-     * @param msg the error message
+     * @param msg    the error message
      * @throws IllegalStateException if the object is null
      */
     public static void notNull(Object object, String msg) {
@@ -28,7 +28,7 @@ public class Asserts {
      * with the supplied message.
      *
      * @param array the array to check
-     * @param msg the error message
+     * @param msg   the error message
      * @throws IllegalStateException if the array is empty
      */
     public static void notEmpty(Object[] array, String msg) {
@@ -44,7 +44,7 @@ public class Asserts {
      * with the supplied message.
      *
      * @param array the array to check
-     * @param msg the error message
+     * @param msg   the error message
      * @throws IllegalStateException if the array has any null elements
      */
     public static void noNullElements(Object[] array, String msg) {
@@ -60,12 +60,12 @@ public class Asserts {
     /**
      * Checks whether the supplied expression is false, and if it is, an {@link IllegalArgumentException} will be thrown
      * with the supplied message.
-     *
+     * <p>
      * Basically the same as {@link #state(boolean, String)}, but this throws an
      * {@link IllegalArgumentException} rather than an {@link IllegalStateException}
      *
      * @param expression the expression to check
-     * @param msg the error message
+     * @param msg        the error message
      * @throws IllegalArgumentException if the expression is false
      */
     public static void isTrue(boolean expression, String msg) {
@@ -77,12 +77,12 @@ public class Asserts {
     /**
      * Checks whether the supplied expression is false, and if it is, an {@link IllegalStateException} will be thrown
      * with the supplied message.
-     *
+     * <p>
      * Basically the same as {@link #isTrue(boolean, String)}, but this throws an
      * {@link IllegalStateException} rather than an {@link IllegalArgumentException}
      *
      * @param expression the expression to check
-     * @param msg the error message
+     * @param msg        the error message
      * @throws IllegalStateException if the expression is false
      */
     public static void state(boolean expression, String msg) {

@@ -20,9 +20,9 @@ import java.io.UncheckedIOException;
 
 public class IcicleConfigTask extends DefaultTask {
 
+    private final DirectoryProperty outputDirectory;
     @Setter
     private IcicleAddonData data;
-    private final DirectoryProperty outputDirectory;
 
     public IcicleConfigTask() {
         ObjectFactory objectFactory = getProject().getObjects();

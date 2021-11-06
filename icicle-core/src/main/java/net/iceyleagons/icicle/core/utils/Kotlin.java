@@ -43,7 +43,8 @@ public final class Kotlin {
         Class<?> meta = null;
         try {
             meta = Class.forName("kotlin.Metadata", false, cl);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         return (Class<? extends Annotation>) meta;
     }

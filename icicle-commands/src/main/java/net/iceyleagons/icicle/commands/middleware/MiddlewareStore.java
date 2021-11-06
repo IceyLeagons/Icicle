@@ -18,6 +18,7 @@ public class MiddlewareStore {
         }
 
         middlewares.put(middlewareClass, commandMiddlewareTemplate);
+        System.out.println("Registered: " + middlewareClass.getName());
     }
 
     public CommandMiddlewareTemplate[] getMiddlewares() {

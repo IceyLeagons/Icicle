@@ -13,20 +13,6 @@ public class SQLTableSchema {
 
     private final Map<String, String> schema;
 
-    public String toSQLTableCreate(String tableName) {
-        StringBuilder stringBuilder = new StringBuilder("CREATE TABLE ");
-        stringBuilder.append(tableName).append(" (");
-
-        for (Map.Entry<String, String> stringStringEntry : schema.entrySet()) {
-            stringBuilder.append(stringStringEntry.getKey()).append(" ").append(stringStringEntry.getValue()).append(", ");
-        }
-
-        stringBuilder.replace(stringBuilder.length() - 2, stringBuilder.length(), ""); //removing the last ", "
-        stringBuilder.append(");");
-
-        return stringBuilder.toString();
-    }
-
     public static SQLTableSchema of(ObjectDescriptor objectDescriptor) {
         final Map<String, String> schema = new HashMap<>();
 
@@ -42,5 +28,19 @@ public class SQLTableSchema {
         }
 
         return new SQLTableSchema(schema);
+    }
+
+    public String toSQLTableCreate(String tableName) {
+        StringBuilder stringBuilder = new StringBuilder("CREATE TABLE ");
+        stringBuilder.append(tableName).append(" (");
+
+        for (Map.Entry<String, String> stringStringEntry : schema.entrySet()) {
+            stringBuilder.append(stringStringEntry.getKey()).append(" ").append(stringStringEntry.getValue()).append(", ");
+        }
+
+        stringBuilder.replace(stringBuilder.length() - 2, stringBuilder.length(), ""); //removing the last ", "
+        stringBuilder.append(");");
+
+        return stringBuilder.toString();
     }
 }

@@ -88,7 +88,7 @@ public class DefaultBeanManager implements BeanManager {
      *
      * <b>WARNING!</b> To save memory all the sub-groups retrieved using the method will be deleted from the autoCreationTypes collection.
      *
-     * @param annotation the annotation sub-group
+     * @param annotation        the annotation sub-group
      * @param autoCreationTypes the "collective set" of all auto-create types.
      * @return the resulting Set
      */
@@ -115,8 +115,8 @@ public class DefaultBeanManager implements BeanManager {
      *
      * @param autoCreationTypes the set of all the {@link AutoCreate} annotated types from {@link MergedAnnotationResolver}
      *                          (this method calls {@link #getAndRemoveTypesAnnotatedWith(Class, Set)} with this parameter)
-     * @throws BeanCreationException if any other exception prevents the creation of a bean
-     * @throws CircularDependencyException if one of the beans' dependencies form a circle
+     * @throws BeanCreationException          if any other exception prevents the creation of a bean
+     * @throws CircularDependencyException    if one of the beans' dependencies form a circle
      * @throws UnsatisfiedDependencyException if a bean cannot be created due to missing dependencies
      * @see Config
      * @see AutoCreate
@@ -170,8 +170,8 @@ public class DefaultBeanManager implements BeanManager {
      *
      * @param autoCreationTypes the set of all the {@link AutoCreate} annotated types from {@link MergedAnnotationResolver}
      *                          (this method calls {@link #getAndRemoveTypesAnnotatedWith(Class, Set)} with this parameter)
-     * @throws BeanCreationException if any other exception prevents the creation of a bean
-     * @throws CircularDependencyException if one of the beans' dependencies form a circle
+     * @throws BeanCreationException          if any other exception prevents the creation of a bean
+     * @throws CircularDependencyException    if one of the beans' dependencies form a circle
      * @throws UnsatisfiedDependencyException if a bean cannot be created due to missing dependencies
      * @see MethodAdviceHandler
      * @see AutoCreate
@@ -200,13 +200,13 @@ public class DefaultBeanManager implements BeanManager {
      *
      * @param autoCreationTypes the set of all the {@link AutoCreate} annotated types from {@link MergedAnnotationResolver}
      *                          (this method calls {@link #getAndRemoveTypesAnnotatedWith(Class, Set)} with this parameter)
-     * @throws BeanCreationException if any other exception prevents the creation of a bean
-     * @throws CircularDependencyException if one of the beans' dependencies form a circle
+     * @throws BeanCreationException          if any other exception prevents the creation of a bean
+     * @throws CircularDependencyException    if one of the beans' dependencies form a circle
      * @throws UnsatisfiedDependencyException if a bean cannot be created due to missing dependencies
      * @see AnnotationHandler
      * @see AutoCreate
      * @see MergedAnnotationResolver
-     * @see #getAndRemoveTypesAnnotatedWith(Class, Set) 
+     * @see #getAndRemoveTypesAnnotatedWith(Class, Set)
      */
     private void createAnnotationHandlers(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
         PerformanceLog.begin(application, "Creating annotation handlers", DefaultBeanManager.class);
@@ -321,8 +321,8 @@ public class DefaultBeanManager implements BeanManager {
      * Helper method to call register the bean into the beanRegistry & also calling customAutoCreateAnnotationResolver.
      *
      * @param beanClass the type to register the bean as
-     * @param bean the bean
-     * @see BeanRegistry#registerBean(Class, Object) 
+     * @param bean      the bean
+     * @see BeanRegistry#registerBean(Class, Object)
      * @see CustomAutoCreateAnnotationResolver#onCreated(Object, Class)
      */
     private void registerBean(Class<?> beanClass, Object bean) {

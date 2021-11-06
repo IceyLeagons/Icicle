@@ -16,9 +16,8 @@ import java.util.Stack;
  *
  * @author TOTHTOMI
  * @version 1.1.0
- * @since Aug. 23, 2021
- *
  * @see DependencyTreeResolver
+ * @since Aug. 23, 2021
  */
 public class DelegatingDependencyTreeResolver implements DependencyTreeResolver {
 
@@ -32,9 +31,9 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
     /**
      * Formats a human-friendly "graph" of the dependency circle.
      *
-     * @param tree the dependencies that form a circle
+     * @param tree  the dependencies that form a circle
      * @param start the starting point of the circle
-     * @param end the ending point of the circle (the one that references the starting point --> making a circle)
+     * @param end   the ending point of the circle (the one that references the starting point --> making a circle)
      * @return the formatted "graph" to use in {@link CircularDependencyException}
      */
     private static String getCycleString(LinkedList<Class<?>> tree, Class<?> start, Class<?> end) {

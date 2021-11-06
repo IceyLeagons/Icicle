@@ -3,16 +3,17 @@ package net.iceyleagons.icicle.utilities.generic;
 import com.google.common.reflect.TypeToken;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * Utility methods to make dealing with generic types easier!
  *
+ * @author TOTHTOMI
  * @version 1.0.0
  * @since Aug. 28, 2021
- * @author TOTHTOMI
  */
 public final class GenericUtils {
 

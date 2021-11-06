@@ -23,5 +23,6 @@ public @interface CommandMiddleware {
      */
     Class<?> replaces() default Nothing.class;
 
-    class Nothing { }
+    class Nothing {
+    }
 }

@@ -19,16 +19,6 @@ public class JsonSerializer extends AbstractSerializer {
 
     private boolean prettyPrint;
 
-    @Override
-    protected String serializeToString(ObjectDescriptor objectDescriptor) {
-        return buildFromDescriptor(objectDescriptor).toString(prettyPrint ? 2 : 0);
-    }
-
-    @Override
-    protected ObjectDescriptor getFromString(String string, Class<?> type) {
-        return fromJSON(new JSONObject(string), type);
-    }
-
     private static ObjectDescriptor fromJSON(JSONObject jsonObject, Class<?> type) {
         ObjectDescriptor objectDescriptor = new ObjectDescriptor(type);
 
@@ -109,5 +99,15 @@ public class JsonSerializer extends AbstractSerializer {
         }
 
         return jsonObject;
+    }
+
+    @Override
+    protected String serializeToString(ObjectDescriptor objectDescriptor) {
+        return buildFromDescriptor(objectDescriptor).toString(prettyPrint ? 2 : 0);
+    }
+
+    @Override
+    protected ObjectDescriptor getFromString(String string, Class<?> type) {
+        return fromJSON(new JSONObject(string), type);
     }
 }

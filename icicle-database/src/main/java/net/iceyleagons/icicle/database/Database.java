@@ -8,8 +8,10 @@ public interface Database<K, V> {
     void save(V object);
 
     Optional<V> findById(K id);
+
     Set<V> findAll();
 
     void deleteById(K id);
+
     void deleteAll();
 }

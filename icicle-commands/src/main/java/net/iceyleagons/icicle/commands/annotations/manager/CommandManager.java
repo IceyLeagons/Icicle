@@ -27,4 +27,12 @@ public @interface CommandManager {
      * @return the translation key to the permission error text.
      */
     String permissionError() default "";
+
+    /**
+     * This requires the translation system!
+     * If left empty, the system will use the default (hard-coded) message.
+     *
+     * @return the translation key to the player-only error text.
+     */
+    String playerOnly() default "";
 }

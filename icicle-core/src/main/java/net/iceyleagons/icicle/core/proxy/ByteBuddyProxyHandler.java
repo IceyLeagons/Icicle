@@ -2,12 +2,8 @@ package net.iceyleagons.icicle.core.proxy;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
-import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
-import net.bytebuddy.matcher.ElementMatchers;
-import net.iceyleagons.icicle.core.proxy.advices.MeasureAdvice;
-import net.iceyleagons.icicle.core.annotations.execution.Measure;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
 import org.slf4j.Logger;
@@ -22,11 +18,14 @@ import java.util.Set;
 public class ByteBuddyProxyHandler implements BeanProxyHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ByteBuddyProxyHandler.class);
-    private final Set<MethodAdviceHandlerTemplate> adviceHandlers = new HashSet<>();
 
     static {
+        System.out.println("[ByteBuddyProxyHandler] - Installing ByteBuddy Agent...");
         ByteBuddyAgent.install();
+        System.out.println("[ByteBuddyProxyHandler] - Success!");
     }
+
+    private final Set<MethodAdviceHandlerTemplate> adviceHandlers = new HashSet<>();
 
     @Override
     public <T> T createEnhancedBean(Constructor<T> constructor, Object[] arguments) throws BeanCreationException {

@@ -45,7 +45,7 @@ public final class WebUtils {
      * This will open a connection to the given {@link URL} and generate a string with line separators.
      * It uses a default User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
      *
-     * @param url the {@link URL}
+     * @param url   the {@link URL}
      * @param agent the user-agent to use
      * @return the read response, can be null!
      */

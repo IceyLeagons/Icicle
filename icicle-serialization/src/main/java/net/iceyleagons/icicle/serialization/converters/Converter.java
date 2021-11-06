@@ -10,4 +10,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(TYPE)
 @Retention(RUNTIME)
-public @interface Converter { }
+public @interface Converter {
+}

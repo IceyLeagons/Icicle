@@ -16,12 +16,9 @@
 package net.iceyleagons.icicle.utilities.file;
 
 import lombok.Getter;
-import lombok.SneakyThrows;
 import net.iceyleagons.icicle.utilities.Asserts;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
@@ -30,10 +27,10 @@ import java.util.Scanner;
  * so no need for complementary methods.
  *
  * <p>
- *     Please note, that this is just a wrapper class, therefore it does not contain the default {@link File} methods, for accessing them, please use:
- *     {@link #getFile()}
+ * Please note, that this is just a wrapper class, therefore it does not contain the default {@link File} methods, for accessing them, please use:
+ * {@link #getFile()}
  * </p>
- *
+ * <p>
  * Features:
  * <ul>
  *     <li>Automatic file/folder creation when constructing instance</li>
@@ -43,9 +40,9 @@ import java.util.Scanner;
  *     <li>Easy deletion (both for files and directories)</li>
  * </ul>
  *
+ * @author TOTHTOMI
  * @version 2.0.0
  * @since 1.0.0
- * @author TOTHTOMI
  */
 @Getter
 public class AdvancedFile {
@@ -64,12 +61,12 @@ public class AdvancedFile {
 
     /**
      * Creates a new {@link AdvancedFile} instance.
-     *
+     * <p>
      * The constructor is also, if does not exist, creates a new folder or file depending on what was provided in the constructor's
      * "folder" parameter. If this is a file that's created by the developers, the folder should be specified by them, however if the {@link AdvancedFile}
      * is created from mapping a folder for example, the folder parameter should be from {@link File#isDirectory()}
      *
-     * @param file the file to wrap
+     * @param file   the file to wrap
      * @param folder whether the file should be treated as a folder or not
      */
     public AdvancedFile(File file, boolean folder) {
@@ -94,11 +91,11 @@ public class AdvancedFile {
     /**
      * This method creates an exact copy of this file. Exact copy means:
      * creating a file in the specified destination with the current file's name and content.
-     *
+     * <p>
      * "ignore" is only used if the file is a folder, for information please see {@link #copyTo(AdvancedFile, String...)}
      *
      * @param destination the destination to copy to
-     * @param ignore the files to ignore
+     * @param ignore      the files to ignore
      * @return the resulting {@link AdvancedFile}, <b>Does not match original file</b>
      */
     public AdvancedFile makeExactCopy(File destination, String... ignore) {
@@ -136,7 +133,7 @@ public class AdvancedFile {
      * This method will basically create a new advanced file with the specified name, and the current file being the parent folder.
      * This method does not create the folder or file, that's handled in the {@link AdvancedFile} constructor!
      *
-     * @param name the fileName
+     * @param name   the fileName
      * @param folder whether the file is a folder or not
      * @return the resulting {@link AdvancedFile}
      */
@@ -151,7 +148,7 @@ public class AdvancedFile {
      * This method calls: {@link #copyTo(File, String...)}
      *
      * @param destination the destination to copy to
-     * @param ignore the file names to ignore in the root folder (only used when the file is a directory)
+     * @param ignore      the file names to ignore in the root folder (only used when the file is a directory)
      */
     public void copyTo(AdvancedFile destination, String... ignore) {
         copyTo(destination.getFile(), ignore);
@@ -160,13 +157,13 @@ public class AdvancedFile {
     /**
      * Copies this file to the specified destination file.
      * If this file is a directory the destination must be one as well!
-     *
+     * <p>
      * Ignore is only used if the file type is Directory.
      * When ignore is specified the file names specified in it will be ignored when copying. <b>NOTE </b> that ignoring only happens in the root folder,
      * this "blacklist" checking is not performed down the file tree!
      *
      * @param destination the destination to copy to
-     * @param ignore the file names to ignore in the root folder (only used when the file is a directory)
+     * @param ignore      the file names to ignore in the root folder (only used when the file is a directory)
      */
     public void copyTo(File destination, String... ignore) {
         Asserts.notNull(destination, "Destination must not be null!");
@@ -194,7 +191,11 @@ public class AdvancedFile {
         AdvancedFile copy = this.makeExactCopy(destination.getFile());
 
         if (this.folder) FileUtils.deleteFolder(this.file);
-        else this.file.delete();
+        else {
+            if (!this.file.delete())
+                throw new IllegalStateException("Could not delete file: " + file.getName());
+
+        }
 
         return copy;
     }
@@ -257,6 +258,22 @@ public class AdvancedFile {
         }
     }
 
+    public byte[] readByteContent() {
+        try (InputStream input = new FileInputStream(this.file)) {
+            return input.readAllBytes();
+        } catch (IOException e) {
+            throw new IllegalStateException("Error occurred when attempting to read byte content of file: " + file.getName(), e);
+        }
+    }
+
+    public void setByteContent(byte[] content) {
+        try (OutputStream out = new FileOutputStream(this.file)) {
+            out.write(content);
+            out.flush();
+        } catch (IOException e) {
+            throw new IllegalStateException("Error occurred when attempting to set byte content of file: " + file.getName(), e);
+        }
+    }
 
     public void compressSelf() {
         //TODO set byte content first or what

@@ -14,6 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface FlagOptional {
 
     String flag();
+
     String name();
 
 }

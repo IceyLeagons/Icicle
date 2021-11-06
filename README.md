@@ -8,17 +8,18 @@ Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin developm
 
 Icicle is so feature-rich, that we cannot list everything here, but to get an idea, here are the main features:
 
-- lightweight, easy-to-use design 
+- lightweight, easy-to-use design
 - Auto-wiring and beans (or in other words: Spring features in Spigot)
 - Easy configuration management
 
 # Modules
 
-Icicle is split into separate modules, which all add additional functionality to the core.
-These modules don't need to be downloaded: when the core reads the metadata of an Icicle-based project it
-will download and load the necessary Icicle modules for it automagically.
+Icicle is split into separate modules, which all add additional functionality to the core. These modules don't need to
+be downloaded: when the core reads the metadata of an Icicle-based project it will download and load the necessary
+Icicle modules for it automagically.
 
-Icicle currently has the following official modules (if the "Dependencies" column is empty, then the module can be used standalone):
+Icicle currently has the following official modules (if the "Dependencies" column is empty, then the module can be used
+standalone):
 
 | Name | Description | Version | Dependencies |
 |:----:|:-----------:|:-------:|:------------:|
@@ -36,11 +37,13 @@ Please read our wiki on GitBook, [here]().
 
 # Contributing
 
-Everyone is welcome to contribute to Icicle. If you want to do so, please start, by reading our [Contribution Guidelines]().
+Everyone is welcome to contribute to Icicle. If you want to do so, please start, by reading
+our [Contribution Guidelines]().
 
 # License
 
-Icicle is licensed under the permissive **MIT License**. You can read ours [here](https://github.com/IceyLeagons/Icicle/blob/master/LICENSE).
+Icicle is licensed under the permissive **MIT License**. You can read
+ours [here](https://github.com/IceyLeagons/Icicle/blob/master/LICENSE).
 
 # Supporters
 
@@ -49,8 +52,8 @@ Icicle is licensed under the permissive **MIT License**. You can read ours [here
 - GitBook happily hooked us up with their powerful documentation tool/service.
 - Check them out [here](https://www.gitbook.com/?utm_source=content&utm_medium=trademark&utm_campaign=iceyleagons)!
 
-
 <img src="https://user-images.githubusercontent.com/36101494/110478780-fd917800-80e4-11eb-9358-fcc8de4baa99.png" width="120">
 
-- This project is developed with JetBrains products. We have access to such tools with an [open source license](https://www.jetbrains.com/community/opensource).
+- This project is developed with JetBrains products. We have access to such tools with
+  an [open source license](https://www.jetbrains.com/community/opensource).
 - Check them out [here](https://jb.gg/OpenSource)!
