@@ -7,7 +7,8 @@ import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.MethodAdviceHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodAdviceHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.ConstructorParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.CustomAutoCreateAnnotationResolver;
@@ -24,6 +25,7 @@ import net.iceyleagons.icicle.core.performance.PerformanceLog;
 import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
+import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.reflections.Reflections;
@@ -179,16 +181,27 @@ public class DefaultBeanManager implements BeanManager {
      * @see #getAndRemoveTypesAnnotatedWith(Class, Set)
      * @see BeanProxyHandler
      */
-    private void createAndRegisterMethodInterceptors(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
+    private void createAndRegisterMethodInterceptorsAndAdvices(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
         PerformanceLog.begin(application, "Creating method interceptors", DefaultBeanManager.class);
-        Set<Class<?>> interceptors = getAndRemoveTypesAnnotatedWith(MethodAdviceHandler.class, autoCreationTypes);
+
+        Set<Class<?>> advices = getAndRemoveTypesAnnotatedWith(MethodAdviceHandler.class, autoCreationTypes);
+        Set<Class<?>> interceptors = getAndRemoveTypesAnnotatedWith(MethodInterceptionHandler.class, autoCreationTypes);
+
+        for (Class<?> advice : advices) {
+            createAndRegisterBean(advice);
+            Object object = this.beanRegistry.getBeanNullable(advice);
+
+            if (object instanceof MethodAdviceHandlerTemplate) {
+                this.beanProxyHandler.registerAdviceTemplate((MethodAdviceHandlerTemplate) object);
+            }
+        }
 
         for (Class<?> interceptor : interceptors) {
             createAndRegisterBean(interceptor);
-            Object object = this.beanRegistry.getBeanNullable(interceptor);
+            Object obj = this.beanRegistry.getBeanNullable(interceptor);
 
-            if (object instanceof MethodAdviceHandlerTemplate) {
-                this.beanProxyHandler.registerInterceptor((MethodAdviceHandlerTemplate) object);
+            if (obj instanceof MethodInterceptorHandlerTemplate) {
+                this.beanProxyHandler.registerInterceptorTemplate((MethodInterceptorHandlerTemplate) obj);
             }
         }
 
@@ -244,7 +257,7 @@ public class DefaultBeanManager implements BeanManager {
         // Second we want to register all autowiring annotation handlers before creating beans
         createAnnotationHandlers(autoCreationTypes);
 
-        createAndRegisterMethodInterceptors(autoCreationTypes);
+        createAndRegisterMethodInterceptorsAndAdvices(autoCreationTypes);
 
         PerformanceLog.begin(application, "Creating non-exclusive beans", DefaultBeanManager.class);
         for (Class<?> autoCreationType : autoCreationTypes) {

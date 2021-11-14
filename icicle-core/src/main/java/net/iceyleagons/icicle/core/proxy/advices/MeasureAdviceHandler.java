@@ -5,7 +5,7 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.iceyleagons.icicle.core.annotations.execution.Measure;
-import net.iceyleagons.icicle.core.annotations.handlers.MethodAdviceHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodAdviceHandler;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
 
 @MethodAdviceHandler

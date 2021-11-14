@@ -1,4 +1,4 @@
-package net.iceyleagons.icicle.core.annotations.handlers;
+package net.iceyleagons.icicle.core.annotations.handlers.proxy;
 
 import net.iceyleagons.icicle.core.annotations.AutoCreate;
 

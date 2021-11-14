@@ -6,7 +6,12 @@ import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 import net.iceyleagons.icicle.core.performance.PerformanceLog;
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
+import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import org.reflections.Reflections;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Main class of Icicle.
@@ -36,10 +41,12 @@ public class Icicle {
         AbstractIcicleApplication abstractIcicleApplication = new AbstractIcicleApplication("net.iceyleagons.icicle.core") {
             @Override
             public ExecutionHandler getExecutionHandler() {
-                return null;
+                return ExecutionUtils.debugHandler();
             }
         };
+
         abstractIcicleApplication.start();
+        abstractIcicleApplication.getBeanManager().getBeanRegistry().getBean(Test.class).ifPresent(t -> t.test());
 
 
         System.out.println(PerformanceLog.dumpExecutionLog(abstractIcicleApplication));

@@ -52,7 +52,10 @@ public class BukkitExecutionHandler implements ExecutionHandler {
 
         scheduler.runTaskTimer(this.javaPlugin, () -> {
             try {
-                completableFuture.complete(callable.call());
+                T obj = callable.call();
+
+                if (!completableFuture.isDone())
+                    completableFuture.complete(obj);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -97,7 +100,10 @@ public class BukkitExecutionHandler implements ExecutionHandler {
 
         scheduler.runTaskTimerAsynchronously(this.javaPlugin, () -> {
             try {
-                completableFuture.complete(callable.call());
+                T obj = callable.call();
+
+                if (!completableFuture.isDone())
+                    completableFuture.complete(obj);
             } catch (Exception e) {
                 e.printStackTrace();
             }

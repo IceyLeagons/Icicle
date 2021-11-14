@@ -8,6 +8,7 @@ import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 import net.iceyleagons.icicle.core.performance.PerformanceLog;
+import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ public abstract class AbstractIcicleApplication implements Application {
 
         this.beanManager.getBeanRegistry().registerBean(Application.class, this); //registering self instance
         this.beanManager.getBeanRegistry().registerBean(ConfigurationEnvironment.class, configurationEnvironment);
+        this.beanManager.getBeanRegistry().registerBean(ExecutionHandler.class, getExecutionHandler());
 
         PerformanceLog.end(this);
     }

@@ -2,46 +2,68 @@ package net.iceyleagons.icicle.core.proxy;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
+import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
+import net.bytebuddy.implementation.Implementation;
+import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.matcher.ElementMatchers;
+import net.iceyleagons.icicle.core.annotations.execution.Async;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
+import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
 public class ByteBuddyProxyHandler implements BeanProxyHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ByteBuddyProxyHandler.class);
+    private static Map<Class<?>, Class<?>> saved = new HashMap<>();
 
     static {
         System.out.println("[ByteBuddyProxyHandler] - Installing ByteBuddy Agent...");
         ByteBuddyAgent.install();
+
+        new AgentBuilder.Default()
+                .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
+                .with(AgentBuilder.InitializationStrategy.NoOp.INSTANCE)
+                .with(AgentBuilder.TypeStrategy.Default.REBASE)
+                .installOnByteBuddyAgent();
         System.out.println("[ByteBuddyProxyHandler] - Success!");
     }
 
     private final Set<MethodAdviceHandlerTemplate> adviceHandlers = new HashSet<>();
+    private final Set<MethodInterceptorHandlerTemplate> interceptorHandlers = new HashSet<>();
 
     @Override
     public <T> T createEnhancedBean(Constructor<T> constructor, Object[] arguments) throws BeanCreationException {
-        ByteBuddy byteBuddy = new ByteBuddy();
+        ByteBuddy byteBuddy = new ByteBuddy(); //.with(Implementation.Context.Disabled.Factory.INSTANCE);
         DynamicType.Builder<T> builder = byteBuddy
-                .redefine(constructor.getDeclaringClass());
+                .subclass(constructor.getDeclaringClass());
 
         for (MethodAdviceHandlerTemplate asmVisitorHandler : adviceHandlers) {
             LOGGER.debug("Registering method asm handler {} to builder. ", asmVisitorHandler.getClass().getName());
             builder = builder.visit(asmVisitorHandler.getAsmAdvice().on(asmVisitorHandler.getMatcher()));
         }
 
+        for (MethodInterceptorHandlerTemplate interceptor : interceptorHandlers) {
+            LOGGER.debug("Registering method interceptor handler {} to builder. ", interceptor.getClass().getName());
+            builder = builder.method(interceptor.getMatcher()).intercept(interceptor.getImplementation());
+        }
+
         //builder = builder.visit(Advice.to(MeasureAdvice.class).on(ElementMatchers.isAnnotatedWith(Measure.class)));
 
         try {
             LOGGER.debug("Creating enhanced proxy class.");
+
             return builder.make()
                     .load(constructor.getDeclaringClass().getClassLoader(), ClassReloadingStrategy.fromInstalledAgent())
                     .getLoaded().getDeclaredConstructor(constructor.getParameterTypes()).newInstance(arguments);
@@ -62,8 +84,14 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
     }
 
     @Override
-    public void registerInterceptor(MethodAdviceHandlerTemplate adviceHandler) {
+    public void registerAdviceTemplate(MethodAdviceHandlerTemplate adviceHandler) {
         if (this.adviceHandlers.contains(adviceHandler)) return;
         this.adviceHandlers.add(adviceHandler);
+    }
+
+    @Override
+    public void registerInterceptorTemplate(MethodInterceptorHandlerTemplate interceptorTemplate) {
+        if (this.interceptorHandlers.contains(interceptorTemplate)) return;
+        this.interceptorHandlers.add(interceptorTemplate);
     }
 }
