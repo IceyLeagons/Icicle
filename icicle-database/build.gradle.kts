@@ -3,7 +3,7 @@ plugins {
     id("net.iceyleagons.icicle-gradle") version "1.4-SNAPSHOT"
 }
 
-version = "1.0.0"
+version = "0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -33,6 +33,10 @@ icicle {
     version = project.version.toString()
     description = "Plenty of serialization options for all your saving/reading needs."
     developers = listOf("TOTHTOMI", "Gabe")
+
+    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
+    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
+    dependencies += "net.iceyleagons:icicle-addon-serialization:0.1-SNAPSHOT"
 }
 
 tasks.test {

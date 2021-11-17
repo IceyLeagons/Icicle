@@ -4,7 +4,6 @@ plugins {
     id("net.iceyleagons.icicle-gradle") version "1.4-SNAPSHOT"
 }
 
-group = "net.iceyleagons"
 version = "0.1-SNAPSHOT"
 
 repositories {
@@ -15,16 +14,17 @@ repositories {
 dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
-    shadow(kotlin("stdlib"))
+    implementation(kotlin("stdlib"))
 }
 
 icicle {
-    name = "Standard Kotlin"
+    name = "Minecraft Protocol"
 
-    dependencyNotation = "net.iceyleagons:icicle-addon-kotlin:$version"
-    description = "Contains standard methods/libraries for speeding up Kotlin development."
+    dependencyNotation = "net.iceyleagons:icicle-addon-protocol:$version"
+    description =
+        "Contains standard protocol libraries for use with Bukkit/Spigot servers, where base functions are just not enough."
     version = project.version.toString()
-    developers = listOf("Gabe")
+    developers = listOf("Gábe")
 
     dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
     dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"

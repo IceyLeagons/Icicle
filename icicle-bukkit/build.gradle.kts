@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "net.iceyleagons"
-version = "1.0.0"
+version = "0.1-SNAPSHOT"
 
 val spigotVersion = "1.17.1"
 
@@ -21,10 +21,14 @@ dependencies {
 }
 
 icicle {
-    name = "Icicle-Bukkit"
+    name = "Bukkit Commons"
+
+    dependencyNotation = "net.iceyleagons:icicle-addon-bukkit:$version"
     version = project.version.toString()
     description = "Implementation of the Icicle ecosystem for Bukkit (or Spigot)."
     developers = listOf("TOTHTOMI", "Gabe")
+
+    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
 }
 
 tasks.test {

@@ -189,28 +189,6 @@ public class IciclePlugin implements Plugin<Project> {
         });
     }
 
-    public MavenArtifactRepository iglooSnapshots(Project target) {
-        return target.getRepositories().maven(action -> {
-            action.setName("Igloo Snapshots");
-            try {
-                action.setUrl(new URI("https://mvn.iceyleagons.net/snapshots/"));
-            } catch (URISyntaxException e) {
-                throw new RuntimeException("URI creation failed.");
-            }
-        });
-    }
-
-    public MavenArtifactRepository iglooReleases(Project target) {
-        return target.getRepositories().maven(action -> {
-            action.setName("Igloo Releases");
-            try {
-                action.setUrl(new URI("https://mvn.iceyleagons.net/releases/"));
-            } catch (URISyntaxException e) {
-                throw new RuntimeException("URI creation failed.");
-            }
-        });
-    }
-
     @SneakyThrows
     private YamlMappingBuilder editPluginYml(File file) {
         var yamlBuilder = Yaml.createYamlMappingBuilder();

@@ -1,6 +1,10 @@
 package net.iceyleagons.addons
 
 import at.favre.lib.crypto.bcrypt.BCrypt
+import net.iceyleagons.addons.database.AddonData
+import net.iceyleagons.addons.database.AddonDataTable
+import net.iceyleagons.addons.database.ReducedAddonData
+import net.iceyleagons.addons.database.UploaderTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
@@ -9,7 +13,6 @@ import java.io.FileReader
 class AddonStore {
     private val pepper: String
     private val hasher = BCrypt.withDefaults()
-    private val verifier = BCrypt.verifyer(BCrypt.Version.VERSION_2A)
 
     private val debug1 = false
 
@@ -134,65 +137,8 @@ class AddonStore {
         }
     }
 
-    private infix fun String.same(other: String): Boolean =
-        verifier.verify((pepper + this).toCharArray(), other.toCharArray()).verified
-
     private fun String.hash(): String {
         return hasher.hashToString(12, (pepper + this).toCharArray())
-    }
-
-    private fun ResultRow.mapToAddonData(): AddonData {
-        val it = this
-        val id = it[AddonDataTable.id]
-        val name = it[AddonDataTable.name]
-        val type = it[AddonDataTable.type]
-        val tags = it[AddonDataTable.tags]
-        val title = it[AddonDataTable.title]
-        val desc = it[AddonDataTable.description]
-        val latest = it[AddonDataTable.latestVersion]
-        val dev = it[AddonDataTable.developer]
-        val download = it[AddonDataTable.downloadLink].replace("{version}", latest)
-        val website = it[AddonDataTable.website]
-        val minVer = it[AddonDataTable.minIcicleVersion]
-        val dep = it[AddonDataTable.dependencies]
-
-        return AddonData(
-            id = id,
-            name = name,
-            description = desc,
-            latestVersion = latest,
-            developer = dev,
-            downloadLink = download,
-            website = website,
-            minIcicleVersion = minVer,
-            dependencies = dep,
-            title = title,
-            tags = tags,
-            type = type
-        )
-    }
-
-    private fun ResultRow.mapToReducedAddonData(): ReducedAddonData {
-        val it = this
-        val id = it[AddonDataTable.id]
-        val name = it[AddonDataTable.name]
-        val type = it[AddonDataTable.type]
-        val tags = it[AddonDataTable.tags]
-        val title = it[AddonDataTable.title]
-        val description = it[AddonDataTable.description]
-        val developer = it[AddonDataTable.developer]
-        val website = it[AddonDataTable.website]
-
-        return ReducedAddonData(
-            id = id,
-            name = name,
-            title = title,
-            developer = developer,
-            description = description,
-            type = type,
-            tags = tags,
-            website = website
-        )
     }
 
     fun getAddonAmountByDeveloper(developer: String): Int {
@@ -247,7 +193,7 @@ class AddonStore {
             AddonDataTable.select {
                 AddonDataTable.developer like "%$developer%"
             }.limit(actualPerPage, page.coerceAtLeast(0).times(actualPerPage).toLong()).toList().map {
-                it.mapToReducedAddonData()
+                ReducedAddonData.mapToReducedAddonData(it)
             }
         }
     }
@@ -272,7 +218,7 @@ class AddonStore {
                     op
                 }
             }.limit(actualPerPage, page.coerceAtLeast(0).times(actualPerPage).toLong()).toList().map {
-                it.mapToReducedAddonData()
+                ReducedAddonData.mapToReducedAddonData(it)
             }
         }
     }
@@ -283,7 +229,7 @@ class AddonStore {
             AddonDataTable.select {
                 AddonDataTable.title like "%$title%"
             }.limit(actualPerPage, page.coerceAtLeast(0).times(actualPerPage).toLong()).toList().map {
-                it.mapToReducedAddonData()
+                ReducedAddonData.mapToReducedAddonData(it)
             }
         }
     }
@@ -294,7 +240,7 @@ class AddonStore {
             AddonDataTable.select {
                 AddonDataTable.type eq type
             }.limit(actualPerPage, page.coerceAtLeast(0).times(actualPerPage).toLong()).toList().map {
-                it.mapToReducedAddonData()
+                ReducedAddonData.mapToReducedAddonData(it)
             }
         }
     }
@@ -303,7 +249,7 @@ class AddonStore {
         val actualPerPage = perPage.coerceAtLeast(10).coerceAtMost(50)
         return transaction {
             AddonDataTable.selectAll().limit(actualPerPage, page.coerceAtLeast(0).times(actualPerPage).toLong()).map {
-                it.mapToReducedAddonData()
+                ReducedAddonData.mapToReducedAddonData(it)
             }
         }
     }
@@ -313,7 +259,7 @@ class AddonStore {
             return@transaction AddonDataTable.select {
                 AddonDataTable.id eq id
             }.toList().map {
-                it.mapToAddonData()
+                AddonData.mapToAddonData(it)
             }.getOrNull(0)
         }
     }
@@ -323,7 +269,7 @@ class AddonStore {
             return@transaction AddonDataTable.select {
                 AddonDataTable.name eq name
             }.toList().map {
-                it.mapToAddonData()
+                AddonData.mapToAddonData(it)
             }.getOrNull(0)
         }
     }

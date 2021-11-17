@@ -4,6 +4,7 @@ import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
 import io.javalin.core.compression.CompressionStrategy
 import io.javalin.http.util.NaiveRateLimit
+import net.iceyleagons.addons.database.AddonData
 import java.util.concurrent.TimeUnit
 
 class AddonServer {
@@ -29,14 +30,26 @@ class AddonServer {
 
                         val addons = addonStore.getAddonsPage(perPage, page)
                         if (addons.isEmpty())
-                            ctx.status(404)
+                            ctx.json(
+                                ExecutionMessage(
+                                    code = 404,
+                                    error = 1,
+                                    message = "No addons found."
+                                )
+                            )
                         else ctx.json(addons)
                     }
                     get("{name}") { ctx ->
                         NaiveRateLimit.requestPerTimeUnit(ctx, 30, TimeUnit.MINUTES)
                         val addon = addonStore.getAddon(ctx.pathParam("name"))
                         if (addon == null)
-                            ctx.status(404)
+                            ctx.json(
+                                ExecutionMessage(
+                                    code = 404,
+                                    error = 1,
+                                    message = "No addons found with the name ${ctx.pathParam("name")}."
+                                )
+                            )
                         else ctx.json(addon)
                     }
                     post { ctx ->
@@ -46,8 +59,22 @@ class AddonServer {
                         val authToken = ctx.header("Authorization")
 
                         if (authToken == null) {
-                            ctx.status(404)
+                            ctx.json(
+                                ExecutionMessage(
+                                    code = 400,
+                                    error = 1,
+                                    message = "No auth token provided. Apply for one on https://iceyleagons.net/icicle/"
+                                )
+                            )
                             return@post
+                        } else if (!authToken.contains("Token ")) {
+                            ctx.json(
+                                ExecutionMessage(
+                                    code = 400,
+                                    error = 1,
+                                    message = "Invalid auth token given. Correct format is: \"Token <token>\""
+                                )
+                            )
                         }
 
                         val result = addonStore.tryUploadAddon(addonData, authToken.removePrefix("Token "))
@@ -147,14 +174,26 @@ class AddonServer {
                             NaiveRateLimit.requestPerTimeUnit(ctx, 30, TimeUnit.MINUTES)
                             val addon = addonStore.getAddon(ctx.pathParam("name"))
                             if (addon == null)
-                                ctx.status(404)
+                                ctx.json(
+                                    ExecutionMessage(
+                                        code = 404,
+                                        error = 1,
+                                        message = "No addons found with the name ${ctx.pathParam("name")}."
+                                    )
+                                )
                             else ctx.json(addon)
                         }
                         get("id/{id}") { ctx ->
                             NaiveRateLimit.requestPerTimeUnit(ctx, 50, TimeUnit.MINUTES)
                             val addon = addonStore.getAddonFromId(ctx.pathParam("id").toInt())
                             if (addon == null)
-                                ctx.status(404)
+                                ctx.json(
+                                    ExecutionMessage(
+                                        code = 404,
+                                        error = 1,
+                                        message = "No addons found with the id ${ctx.pathParam("id")}."
+                                    )
+                                )
                             else ctx.json(addon)
                         }
                         get("all") { ctx ->
@@ -164,7 +203,13 @@ class AddonServer {
 
                             val addons = addonStore.getAddonsPage(perPage, page)
                             if (addons.isEmpty())
-                                ctx.status(404)
+                                ctx.json(
+                                    ExecutionMessage(
+                                        code = 404,
+                                        error = 1,
+                                        message = "No addons found."
+                                    )
+                                )
                             else ctx.json(addons)
                         }
                     }
