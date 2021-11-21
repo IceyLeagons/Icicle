@@ -1,8 +1,8 @@
 package net.iceyleagons.icicle.database;
 
 import lombok.Getter;
-import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
-import net.iceyleagons.icicle.serialization.map.ObjectMapper;
+import old.map.ObjectDescriptor;
+import old.map.ObjectMapper;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.generic.acessors.TwoTypeAccessor;

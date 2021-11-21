@@ -5,6 +5,7 @@ import net.iceyleagons.icicle.core.annotations.Service;
 import net.iceyleagons.icicle.core.annotations.execution.Async;
 import net.iceyleagons.icicle.core.annotations.execution.Measure;
 import net.iceyleagons.icicle.core.annotations.execution.extra.After;
+import net.iceyleagons.icicle.core.annotations.execution.extra.Periodically;
 
 import java.util.concurrent.TimeUnit;
 

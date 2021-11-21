@@ -1,113 +1,125 @@
 package net.iceyleagons.icicle.serialization.serializers;
 
-import lombok.AllArgsConstructor;
-import net.iceyleagons.icicle.serialization.AbstractSerializer;
-import net.iceyleagons.icicle.serialization.map.ObjectDescriptor;
-import net.iceyleagons.icicle.utilities.datastores.triple.Triple;
-import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
+import lombok.SneakyThrows;
+import net.iceyleagons.icicle.serialization.MappedObject;
+import net.iceyleagons.icicle.serialization.ObjectMapper;
+import net.iceyleagons.icicle.serialization.ObjectValue;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
-import static net.iceyleagons.icicle.serialization.map.MapperUtils.*;
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Nov. 21, 2021
+ */
+public class JsonSerializer extends ObjectMapper {
 
-@AllArgsConstructor
-public class JsonSerializer extends AbstractSerializer {
+    private final int identFactor;
 
-    private boolean prettyPrint;
+    public JsonSerializer(int identFactor) {
+        super();
+        this.identFactor = identFactor;
+    }
 
-    private static ObjectDescriptor fromJSON(JSONObject jsonObject, Class<?> type) {
-        ObjectDescriptor objectDescriptor = new ObjectDescriptor(type);
+    @SneakyThrows
+    public <T> T convertFromString(String input, Class<T> wantedType) {
+        JSONObject jsonObject = new JSONObject(input);
+        MappedObject mappedObject = new MappedObject(wantedType);
 
-        Tuple<Field[], Field[]> fields = getFields(type);
-        Field[] valueArray = fields.getA();
-        Field[] subObjectArray = fields.getB();
+        fromJson(jsonObject, mappedObject, wantedType);
 
-        for (Field field : valueArray) {
-            String key = getFieldKey(field);
+        return super.demapObject(mappedObject, wantedType);
+    }
 
-            if (!jsonObject.has(key)) {
-                throw new IllegalStateException("No field with key " + key + " found!");
-            }
+    public String convertToString(Object object) {
+        MappedObject mapped = super.mapObject(object);
+        JSONObject root = new JSONObject();
+        toJson(mapped, root);
 
-            objectDescriptor.getValueFields().add(getFieldWithValue(field, jsonObject.get(key)));
-        }
+        return root.toString(identFactor);
+    }
 
-        for (Field field : subObjectArray) {
-            String key = getFieldKey(field);
+    private void fromJson(JSONObject value, MappedObject root, Class<?> javaType) {
+        for (Field declaredField : javaType.getDeclaredFields()) {
+            Class<?> fieldType = declaredField.getType();
+            String key = ObjectMapper.getName(declaredField);
 
-            if (!jsonObject.has(key)) {
-                throw new IllegalStateException("No field with key " + key + " found!");
-            }
+            if (ObjectValue.isValuePrimitiveOrString(fieldType)) {
+                root.addValue(new ObjectValue(fieldType, declaredField, value.get(key)));
+            } else if (ObjectValue.isCollection(fieldType) || ObjectValue.isArray(fieldType)) {
+                JSONArray jsonArray = value.getJSONArray(key);
+                Object[] array = new Object[jsonArray.length()];
 
-            Object value = jsonObject.get(key);
-
-            if (value instanceof JSONArray) {
-                List<ObjectDescriptor> descriptors = new ArrayList<>();
-                JSONArray array = (JSONArray) value;
-
-                for (Object o : array) {
+                int i = 0;
+                for (Object o : jsonArray) {
                     if (o instanceof JSONObject) {
-                        descriptors.add(fromJSON((JSONObject) o, field.getType()));
+                        MappedObject mapped = new MappedObject(fieldType);
+                        fromJson((JSONObject) o, mapped, fieldType.arrayType());
+
+                        array[i++] = mapped;
+                        continue;
                     }
+
+                    array[i++] = o;
                 }
 
-                objectDescriptor.getSubObjectArrays().add(getFieldWithValue(field, descriptors));
-                continue;
-            }
+                root.addValue(new ObjectValue(fieldType.arrayType(), declaredField, array));
+            } else if (ObjectValue.isMap(fieldType)) {
+                throw new IllegalStateException("Not implemented value type: " + fieldType.getName());
+            } else if (ObjectValue.isSubObject(fieldType)) {
+                JSONObject obj = value.getJSONObject(key);
+                MappedObject mapped = new MappedObject(fieldType);
 
-            if (value instanceof JSONObject) {
-                objectDescriptor.getSubObjects().add(getFieldWithValue(field, fromJSON((JSONObject) value, field.getType())));
+                fromJson(obj, mapped, fieldType);
+
+                root.addValue(new ObjectValue(fieldType, declaredField, mapped));
+            } else {
+                throw new IllegalStateException("Unsupported value type: " + fieldType.getName());
             }
         }
-
-        return objectDescriptor;
     }
 
-    private static JSONObject buildFromDescriptor(ObjectDescriptor objectDescriptor) {
-        JSONObject jsonObject = new JSONObject();
-
-        // Handling default Java types (String, int, long, etc.)
-        for (Triple<String, Field, Object> valueField : objectDescriptor.getValueFields()) {
-            String key = valueField.getA();
-            Object value = valueField.getC();
-
-            jsonObject.put(key, value);
+    private void toJson(MappedObject mapped, JSONObject root) {
+        for (ObjectValue ov : mapped.getValues()) {
+            toJson(ov, root);
         }
+    }
 
-        // Handling sub-object non-array types
-        for (Triple<String, Field, ObjectDescriptor> subObject : objectDescriptor.getSubObjects()) {
-            String key = subObject.getA();
-            ObjectDescriptor subDescriptor = subObject.getC();
-
-            jsonObject.put(key, buildFromDescriptor(subDescriptor));
-        }
-
-        // Handling sub-object array types
-        for (Triple<String, Field, List<ObjectDescriptor>> subObjectArray : objectDescriptor.getSubObjectArrays()) {
+    private void toJson(ObjectValue value, JSONObject root) {
+        if (value.isValuePrimitiveOrString()) {
+            root.put(value.getKey(), value.getValue());
+        } else if (value.isArray() || value.isCollection()) {
+            //We test for collection, because when mapping we convert collections into arrays for easier work later on
+            Object array = value.getValue();
             JSONArray jsonArray = new JSONArray();
-            String key = subObjectArray.getA();
 
-            for (ObjectDescriptor descriptor : subObjectArray.getC()) {
-                jsonArray.put(buildFromDescriptor(descriptor));
+            for (int i = 0; i < Array.getLength(array); i++) {
+                Object o = Array.get(array, i);
+
+                if (o instanceof MappedObject) {
+                    JSONObject mojson = new JSONObject();
+                    MappedObject mo = (MappedObject) o;
+
+                    toJson(mo, mojson);
+                    jsonArray.put(mojson);
+
+                    continue;
+                }
+
+                jsonArray.put(o);
             }
-
-            jsonObject.put(key, jsonArray);
+            root.put(value.getKey(), jsonArray);
+        } else if (value.isMap()) {
+            throw new IllegalStateException("Not implemented value type: " + value.getJavaType().getName());
+        } else if (value.isSubObject()) {
+            JSONObject sub = new JSONObject();
+            toJson((MappedObject) value.getValue(), sub);
+            root.put(value.getKey(), sub);
+        } else {
+            throw new IllegalStateException("Unsupported value type: " + value.getJavaType().getName());
         }
-
-        return jsonObject;
-    }
-
-    @Override
-    protected String serializeToString(ObjectDescriptor objectDescriptor) {
-        return buildFromDescriptor(objectDescriptor).toString(prettyPrint ? 2 : 0);
-    }
-
-    @Override
-    protected ObjectDescriptor getFromString(String string, Class<?> type) {
-        return fromJSON(new JSONObject(string), type);
     }
 }
