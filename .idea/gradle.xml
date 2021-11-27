@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/icicle-database" />
             <option value="$PROJECT_DIR$/icicle-gradle" />
             <option value="$PROJECT_DIR$/icicle-kotlin" />
+            <option value="$PROJECT_DIR$/icicle-protocol" />
             <option value="$PROJECT_DIR$/icicle-serialization" />
             <option value="$PROJECT_DIR$/icicle-utilities" />
           </set>

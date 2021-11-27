@@ -1,17 +1,63 @@
 package net.iceyleagons.icicle.database;
 
-import java.util.Optional;
-import java.util.Set;
+import net.iceyleagons.icicle.database.transaction.Outcome;
+import net.iceyleagons.icicle.database.transaction.Transaction;
 
-public interface Database<K, V> {
+import java.util.ArrayList;
+import java.util.List;
 
-    void save(V object);
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Nov. 26, 2021
+ */
+public interface Database<T,I> {
 
-    Optional<V> findById(K id);
+    DatabaseDriver driver = null;
 
-    Set<V> findAll();
+    // Fast access --> not transactional, in a sense that rollback is not supported
+    default List<T> retrieveAll() {
+        Outcome<T,I> t = startTransaction().retrieveAll().commit();
+        return new ArrayList<>(t.getRetrieved().values());
+    }
 
-    void deleteById(K id);
+    default T retrieve(I id) {
+        Outcome<T,I> t = startTransaction().retrieve(id).commit();
+        return t.getRetrieved().get(id);
+    }
 
-    void deleteAll();
+    /**
+     *
+     * @param object
+     * @return the same object with the ID field filled out
+     */
+    default T save(T object) {
+        Outcome<T,I> t = startTransaction().save(object).commit();
+        return t.getRetrieved().values().stream().findFirst().orElse(null);
+    }
+
+    /**
+     *
+     * @param objects
+     * @return the same objects with the ID field filled out
+     */
+    default List<T> saveAll(T... objects) {
+        Outcome<T,I> t = startTransaction().saveAll(objects).commit();
+        return t.getRetrieved().values().stream().toList();
+    }
+
+    default void delete(T object) {
+        startTransaction().delete(object).commit();
+    }
+
+    default void deleteWithId(I id) {
+        startTransaction().deleteWithId(id).commit();
+    }
+
+    Transaction<T, I> startTransaction();
+
+    String getName();
+
+    void changeDriver(DatabaseDriver driver);
+    DatabaseDriver getDriver();
 }

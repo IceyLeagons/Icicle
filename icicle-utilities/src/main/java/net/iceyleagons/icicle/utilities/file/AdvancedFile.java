@@ -244,18 +244,7 @@ public class AdvancedFile {
      * @return the resulting {@link String}
      */
     public String getContent(boolean appendLineSeparator) {
-        try (Scanner scanner = new Scanner(file, StandardCharsets.UTF_8)) {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            while (scanner.hasNextLine()) {
-                stringBuilder.append(scanner.nextLine());
-                if (appendLineSeparator) stringBuilder.append(System.lineSeparator());
-            }
-
-            return stringBuilder.toString();
-        } catch (IOException e) {
-            throw new IllegalStateException("Error occurred when attempting to read content of file: " + file.getName(), e);
-        }
+        return FileUtils.getContent(this.file, appendLineSeparator);
     }
 
     public byte[] readByteContent() {

@@ -6,6 +6,7 @@ import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.Service;
 import net.iceyleagons.icicle.core.translations.code.CodeParser;
 import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
+import net.iceyleagons.icicle.core.translations.impl.ConstantLanguageProvider;
 
 import java.util.Collections;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class TranslationService {
     private TranslationStringProvider translationStringProvider; // will require setting up with a setter from the application
 
     @Setter
-    private LanguageProvider languageProvider = key -> "en"; // will require setting up with a setter from the application
+    private LanguageProvider languageProvider = new ConstantLanguageProvider("en"); // will require setting up with a setter from the application
 
     public TranslationService(Application application) {
         this.application = application;

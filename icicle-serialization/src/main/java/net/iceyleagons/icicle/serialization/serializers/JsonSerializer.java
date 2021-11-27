@@ -9,6 +9,10 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.util.AbstractMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
@@ -44,6 +48,7 @@ public class JsonSerializer extends ObjectMapper {
 
     private void fromJson(JSONObject value, MappedObject root, Class<?> javaType) {
         for (Field declaredField : javaType.getDeclaredFields()) {
+            if (shouldIgnore(declaredField)) continue;
             Class<?> fieldType = declaredField.getType();
             String key = ObjectMapper.getName(declaredField);
 
@@ -68,7 +73,7 @@ public class JsonSerializer extends ObjectMapper {
 
                 root.addValue(new ObjectValue(fieldType.arrayType(), declaredField, array));
             } else if (ObjectValue.isMap(fieldType)) {
-                throw new IllegalStateException("Not implemented value type: " + fieldType.getName());
+                //TODO figure out
             } else if (ObjectValue.isSubObject(fieldType)) {
                 JSONObject obj = value.getJSONObject(key);
                 MappedObject mapped = new MappedObject(fieldType);
@@ -113,7 +118,29 @@ public class JsonSerializer extends ObjectMapper {
             }
             root.put(value.getKey(), jsonArray);
         } else if (value.isMap()) {
-            throw new IllegalStateException("Not implemented value type: " + value.getJavaType().getName());
+            Object array = value.getValue();
+            JSONObject obj = new JSONObject();
+
+            for (int i = 0; i < Array.getLength(array); i++) {
+                Object o = Array.get(array, i);
+                if (o instanceof Map.Entry) {
+                    Map.Entry<?,?> entry = (Map.Entry<?,?>) o;
+                    Object entryKey = entry.getKey();
+                    Object entryValue = entry.getValue();
+
+                    Object val;
+                    if (ObjectValue.isValuePrimitiveOrString(entryValue.getClass())) {
+                        val = entryValue;
+                    } else {
+                        val = new JSONObject();
+                        toJson((MappedObject) entryValue, (JSONObject) val);
+                    }
+
+
+                    obj.put(entryKey.toString(), val);
+                }
+            }
+            root.put(value.getKey(), obj);
         } else if (value.isSubObject()) {
             JSONObject sub = new JSONObject();
             toJson((MappedObject) value.getValue(), sub);

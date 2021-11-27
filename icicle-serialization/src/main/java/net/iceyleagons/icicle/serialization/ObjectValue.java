@@ -50,7 +50,6 @@ public class ObjectValue {
         return isSubObject(this.javaType);
     }
 
-
     public static boolean isValuePrimitiveOrString(Class<?> type) {
         return type.isPrimitive() || type.equals(String.class);
     }
@@ -70,6 +69,8 @@ public class ObjectValue {
     public static boolean isSubObject(Class<?> type) {
         if (type.equals(MappedObject.class)) return true;
 
+        // We check for types like this due to arrays. We could check with conventional stuff (#isArray(), etc.), but because primitives and objects can also be used
+        // (int[], Integer[]), we rather do it this way to save space in code, and make the code more readable.
         String typeName = type.getTypeName();
         return !containsIgnoresCase(typeName, "string") &&
                 !containsIgnoresCase(typeName, "int") &&

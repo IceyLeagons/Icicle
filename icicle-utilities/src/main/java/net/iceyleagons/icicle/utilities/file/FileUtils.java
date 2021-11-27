@@ -22,12 +22,10 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Utility methods regarding files.
@@ -229,6 +227,21 @@ public final class FileUtils {
             }
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Download URL must be a valid URL!", e);
+        }
+    }
+
+    public static String getContent(File file, boolean appendLineSeparator) {
+        try (Scanner scanner = new Scanner(file, StandardCharsets.UTF_8)) {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while (scanner.hasNextLine()) {
+                stringBuilder.append(scanner.nextLine());
+                if (appendLineSeparator) stringBuilder.append(System.lineSeparator());
+            }
+
+            return stringBuilder.toString();
+        } catch (IOException e) {
+            throw new IllegalStateException("Error occurred when attempting to read content of file: " + file.getName(), e);
         }
     }
 }

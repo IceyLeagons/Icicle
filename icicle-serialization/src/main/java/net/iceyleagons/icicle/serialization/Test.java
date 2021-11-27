@@ -1,10 +1,19 @@
 package net.iceyleagons.icicle.serialization;
 
 import lombok.EqualsAndHashCode;
+import net.iceyleagons.icicle.core.AbstractIcicleApplication;
+import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
+import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
+import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
+import net.iceyleagons.icicle.core.utils.ExecutionHandler;
+import net.iceyleagons.icicle.serialization.annotations.Convert;
+import net.iceyleagons.icicle.serialization.converters.builtin.UUIDConverter;
 import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author TOTHTOMI
@@ -13,17 +22,26 @@ import java.util.List;
  */
 public class Test {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws BeanCreationException, UnsatisfiedDependencyException, CircularDependencyException {
         JsonSerializer json = new JsonSerializer(2);
 
-        Test1 orig = new Test1();
-        String serialized = json.convertToString(orig);
-        Test1 deser = json.convertFromString(serialized, Test1.class);
+        MapTest orig = new MapTest();
+        String c = json.convertToString(orig);
+        System.out.println(c);
 
-        System.out.println(serialized);
-        System.out.println();
-        System.out.println("Match: " + orig.equals(deser));
+
         //System.out.println(new JsonSerializer().convertToString(new Test1()));
+    }
+
+    @EqualsAndHashCode
+    static class MapTest {
+        private final String test = "Hello";
+        private final String[] test2 = new String[]{"Hello1", "Hello2"};
+        private final Map<String, String> test3 = Map.of("hello", "hello value", "next-key", "next-key value");
+        private final Map<String, Test2> test4 = Map.of("first", new Test2(), "second", new Test2());
+
+        @Convert(UUIDConverter.class)
+        private final UUID uuid = UUID.randomUUID();
     }
 
     @EqualsAndHashCode

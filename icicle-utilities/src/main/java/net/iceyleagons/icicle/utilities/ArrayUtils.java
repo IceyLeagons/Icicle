@@ -2,6 +2,8 @@ package net.iceyleagons.icicle.utilities;
 
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 
+import java.util.Arrays;
+
 /**
  * Utility class for arrayss.
  *
@@ -22,12 +24,16 @@ public final class ArrayUtils {
     }
 
     @SuppressWarnings("unchecked")
+    public static <T> T[] ignoreFirst(int toIgnore, T[] source) {
+        return Arrays.copyOfRange(source, toIgnore, source.length);
+    }
+
+    public static <T> T[] ignoreLast(int toIgnore, T[] source) {
+        return Arrays.copyOfRange(source, 0, source.length - toIgnore);
+    }
+
+    @SuppressWarnings("unchecked")
     public static <T> T[] extendArray(T[] source, int additionalSpace) {
-        if (additionalSpace == 0) return source;
-
-        final T[] result = (T[]) GenericUtils.createGenericArray(source.getClass().getComponentType(), source.length + additionalSpace);
-        System.arraycopy(source, 0, result, 0, source.length);
-
-        return result;
+        return Arrays.copyOf(source, source.length + additionalSpace);
     }
 }
