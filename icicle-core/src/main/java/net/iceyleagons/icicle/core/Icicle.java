@@ -9,10 +9,6 @@ import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import org.reflections.Reflections;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
-
 /**
  * Main class of Icicle.
  *
@@ -47,7 +43,8 @@ public class Icicle {
 
         abstractIcicleApplication.start();
         abstractIcicleApplication.getBeanManager().getBeanRegistry().getBean(Test.class).ifPresent(t -> t.test());
-
+        abstractIcicleApplication.getBeanManager().getBeanRegistry().getBean(Test.Test2.class).ifPresent(t -> System.out.println(t.asd()));
+        abstractIcicleApplication.getBeanManager().getBeanRegistry().getBean(Test.Test2.class).ifPresent(t -> System.out.println(t.asd()));
 
         System.out.println(PerformanceLog.dumpExecutionLog(abstractIcicleApplication));
     }

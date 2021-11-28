@@ -19,8 +19,6 @@ import lombok.Getter;
 import net.iceyleagons.icicle.utilities.Asserts;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 
 /**
  * A wrapper record (class) for Java's regular {@link File}, however with many useful extra operations in house,

@@ -8,6 +8,7 @@ package net.iceyleagons.icicle.serialization.serializers;
 public interface StringSerializer {
 
     String serializeToString(Object object);
+
     <T> T deSerializeFromString(String input, Class<T> wantedType);
 
 }

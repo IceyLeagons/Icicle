@@ -19,8 +19,10 @@ import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 @MethodInterceptionHandler
 public class AsyncHandler implements MethodInterceptorHandlerTemplate {
 
+    private final ExecutionHandler executionHandler;
+
     public AsyncHandler(ExecutionHandler executionHandler) {
-        AsyncDelegation.setupHandler(executionHandler);
+        this.executionHandler = executionHandler;
     }
 
     @Override
@@ -30,6 +32,6 @@ public class AsyncHandler implements MethodInterceptorHandlerTemplate {
 
     @Override
     public Implementation getImplementation() {
-        return MethodDelegation.to(new AsyncDelegation());
+        return MethodDelegation.to(new AsyncDelegation(this.executionHandler));
     }
 }

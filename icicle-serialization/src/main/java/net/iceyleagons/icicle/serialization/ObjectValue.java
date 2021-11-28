@@ -30,26 +30,6 @@ public class ObjectValue {
         this.value = value;
     }
 
-    public boolean isValuePrimitiveOrString() {
-        return isValuePrimitiveOrString(this.javaType);
-    }
-
-    public boolean isArray() {
-        return isArray(this.javaType);
-    }
-
-    public boolean isCollection() {
-        return isCollection(this.javaType);
-    }
-
-    public boolean isMap() {
-        return isMap(this.javaType);
-    }
-
-    public boolean isSubObject() {
-        return isSubObject(this.javaType);
-    }
-
     public static boolean isValuePrimitiveOrString(Class<?> type) {
         return type.isPrimitive() || type.equals(String.class);
     }
@@ -81,5 +61,25 @@ public class ObjectValue {
                 !containsIgnoresCase(typeName, "short") &&
                 !containsIgnoresCase(typeName, "byte") &&
                 !containsIgnoresCase(typeName, "char");
+    }
+
+    public boolean isValuePrimitiveOrString() {
+        return isValuePrimitiveOrString(this.javaType);
+    }
+
+    public boolean isArray() {
+        return isArray(this.javaType);
+    }
+
+    public boolean isCollection() {
+        return isCollection(this.javaType);
+    }
+
+    public boolean isMap() {
+        return isMap(this.javaType);
+    }
+
+    public boolean isSubObject() {
+        return isSubObject(this.javaType);
     }
 }

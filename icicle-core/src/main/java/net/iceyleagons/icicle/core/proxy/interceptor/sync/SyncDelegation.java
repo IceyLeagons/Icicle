@@ -1,5 +1,6 @@
 package net.iceyleagons.icicle.core.proxy.interceptor.sync;
 
+import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.SuperCall;
@@ -16,12 +17,10 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0.0
  * @since Nov. 13, 2021
  */
+@RequiredArgsConstructor
 public class SyncDelegation {
 
-    public static ExecutionHandler executionHandler = null;
-    public static void setupHandler(ExecutionHandler handler) {
-        executionHandler = handler;
-    }
+    private final ExecutionHandler executionHandler;
 
     @RuntimeType
     public Object run(@SuperCall Callable<?> callable, @Origin Method method) {

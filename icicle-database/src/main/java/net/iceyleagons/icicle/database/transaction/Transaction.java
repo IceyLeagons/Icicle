@@ -16,8 +16,10 @@ public interface Transaction<T, I> {
     Transaction<T, I> saveAll(T... objects);
 
     Transaction<T, I> delete(T object);
+
     Transaction<T, I> deleteWithId(I id);
 
     Outcome<T, I> commit();
+
     Outcome<T, I> rollback();
 }

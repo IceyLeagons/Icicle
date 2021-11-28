@@ -2,6 +2,7 @@ package net.iceyleagons.icicle.core.beans;
 
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.AutoCreate;
+import net.iceyleagons.icicle.core.annotations.Bean;
 import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
 import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
@@ -35,10 +36,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Default implementation of {@link BeanManager}.
@@ -70,6 +70,9 @@ public class DefaultBeanManager implements BeanManager {
         this.reflections = application.getReflections();
 
         this.beanRegistry = new DelegatingBeanRegistry();
+        this.beanRegistry.registerBean(BeanRegistry.class, beanRegistry);
+        this.beanRegistry.registerBean(DelegatingBeanRegistry.class, beanRegistry);
+
         this.dependencyTreeResolver = new DelegatingDependencyTreeResolver(this.beanRegistry);
 
         this.beanProxyHandler = new ByteBuddyProxyHandler();
@@ -315,6 +318,7 @@ public class DefaultBeanManager implements BeanManager {
             if (constructor.getParameterTypes().length == 0) {
                 Object bean = BeanUtils.instantiateClass(constructor, this.beanProxyHandler);
                 this.registerBean(beanClass, bean);
+                callBeanMethodsInsideBean(beanClass, bean);
                 return;
             } else {
                 LinkedList<Class<?>> dependencies = this.dependencyTreeResolver.resolveDependencyTree(beanClass);
@@ -326,7 +330,20 @@ public class DefaultBeanManager implements BeanManager {
             }
 
             Object[] parameters = this.constructorParameterResolver.resolveConstructorParameters(constructor, getBeanRegistry());
-            this.registerBean(beanClass, BeanUtils.instantiateClass(constructor, this.beanProxyHandler, parameters));
+            Object bean = BeanUtils.instantiateClass(constructor, this.beanProxyHandler, parameters);
+
+            this.registerBean(beanClass, bean);
+            callBeanMethodsInsideBean(beanClass, bean);
+        }
+    }
+
+    private void callBeanMethodsInsideBean(Class<?> beanClass, Object bean) {
+        for (Method method : Arrays.stream(beanClass.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(Bean.class)).peek(m -> m.setAccessible(true)).toList()) {
+            try {
+                method.invoke(bean); // BeanDelegation (in proxy) will take care of registration, we just need to invoke it once, to register it
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new IllegalStateException("Could not invoke @Bean method inside bean: " + beanClass.getName(), e);
+            }
         }
     }
 

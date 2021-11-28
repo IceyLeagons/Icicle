@@ -1,11 +1,9 @@
 package net.iceyleagons.icicle.serialization;
 
 import lombok.EqualsAndHashCode;
-import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
-import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.serialization.annotations.Convert;
 import net.iceyleagons.icicle.serialization.converters.builtin.UUIDConverter;
 import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
@@ -56,7 +54,7 @@ public class Test {
     @EqualsAndHashCode
     static class Test2 {
         private final String test2 = "This is test2";
-        private final int[] array = new int[]{1,2,3};
+        private final int[] array = new int[]{1, 2, 3};
     }
 
 }

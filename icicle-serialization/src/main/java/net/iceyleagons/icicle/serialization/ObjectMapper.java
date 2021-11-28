@@ -21,15 +21,54 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unchecked")
 public class ObjectMapper {
 
-    private Map<Class<?>, ValueConverter<?,?>> converters = new HashMap<>();
+    private Map<Class<?>, ValueConverter<?, ?>> converters = new HashMap<>();
+
+    public static boolean shouldConvert(Field field) {
+        return field.isAnnotationPresent(Convert.class);
+    }
+
+    public static boolean isSupportedCollection(Class<?> t) {
+        return t.equals(List.class) || t.equals(Collection.class) || t.equals(ArrayList.class) || t.equals(Set.class) || t.equals(HashSet.class);
+    }
+
+    public static Map<Object, Object> createMapFromType(Class<?> t) {
+        if (t.equals(HashMap.class) || t.equals(Map.class)) {
+            return new HashMap<>();
+        } else if (t.equals(ConcurrentHashMap.class)) {
+            return new ConcurrentHashMap<>();
+        } else {
+            throw new IllegalStateException("Unsupported type for map (deserialization): " + t.getName());
+        }
+    }
+
+    public static Object createCollectionFromType(Class<?> t) {
+        if (t.equals(List.class) || t.equals(Collection.class) || t.equals(ArrayList.class)) {
+            return new ArrayList<>();
+        } else if (t.equals(Set.class) || t.equals(HashSet.class)) {
+            return new HashSet<>();
+        } else {
+            throw new IllegalStateException("Unsupported type for collection (deserialization): " + t.getName());
+        }
+    }
+
+    public static boolean shouldIgnore(Field field) {
+        return Modifier.isTransient(field.getModifiers()) || field.isAnnotationPresent(SerializeIgnore.class);
+    }
+
+    public static String getName(Field field) {
+        return field.isAnnotationPresent(SerializedName.class) ? field.getAnnotation(SerializedName.class).value() : field.getName().toLowerCase();
+    }
 
     @SneakyThrows
     protected <T> T demapObject(MappedObject mappedObject, Class<T> wantedType) {
         final Class<?> type = mappedObject.getJavaType();
-        if (!wantedType.isAssignableFrom(type)) throw new IllegalArgumentException("Wanted type is not assignable from the mapped object!");
+        if (!wantedType.isAssignableFrom(type))
+            throw new IllegalArgumentException("Wanted type is not assignable from the mapped object!");
 
-        Constructor<?> constructor = BeanUtils.getResolvableConstructor(type);;
-        if (constructor.getParameterTypes().length != 0) throw new IllegalStateException("Object must have an empty constructor!");
+        Constructor<?> constructor = BeanUtils.getResolvableConstructor(type);
+        ;
+        if (constructor.getParameterTypes().length != 0)
+            throw new IllegalStateException("Object must have an empty constructor!");
 
         Object object = constructor.newInstance();
 
@@ -71,7 +110,6 @@ public class ObjectMapper {
         return wantedType.cast(object);
     }
 
-    
     protected MappedObject mapObject(Object object) {
         final Class<?> type = object.getClass();
         final MappedObject mappedObject = new MappedObject(type);
@@ -102,10 +140,10 @@ public class ObjectMapper {
 
                 result = new ObjectValue(fieldType, declaredField, collArray);
             } else if (ObjectValue.isMap(fieldType)) {
-                Map<?,?> map = ReflectionUtils.get(declaredField, object, Map.class);
+                Map<?, ?> map = ReflectionUtils.get(declaredField, object, Map.class);
 
                 assert map != null;
-                Set<Map.Entry<?,?>> values = new HashSet<>(map.size());
+                Set<Map.Entry<?, ?>> values = new HashSet<>(map.size());
 
                 for (Map.Entry<?, ?> entry : map.entrySet()) {
                     Object value = entry.getValue();
@@ -122,7 +160,7 @@ public class ObjectMapper {
                     values.add(new AbstractMap.SimpleEntry<>(entry.getKey(), mapObject(value)));
                 }
 
-                result = new ObjectValue(fieldType, declaredField, values.toArray(Map.Entry<?,?>[]::new));
+                result = new ObjectValue(fieldType, declaredField, values.toArray(Map.Entry<?, ?>[]::new));
             } else if (ObjectValue.isSubObject(fieldType)) {
                 Object value = ReflectionUtils.get(declaredField, object, Object.class);
                 result = new ObjectValue(fieldType, declaredField, value != null ? mapObject(value) : null);
@@ -156,48 +194,12 @@ public class ObjectMapper {
             }
         }
 
-        ValueConverter<Object,Object> converter = (ValueConverter<Object,Object> ) converters.get(converterClass);
+        ValueConverter<Object, Object> converter = (ValueConverter<Object, Object>) converters.get(converterClass);
 
         try {
             return serialize ? converter.serialize(input) : converter.fromSerialized(input);
         } catch (Exception e) {
             throw new IllegalStateException("Could not convert field.", e);
         }
-    }
-
-    public static boolean shouldConvert(Field field) {
-        return field.isAnnotationPresent(Convert.class);
-    }
-
-    public static boolean isSupportedCollection(Class<?> t) {
-        return t.equals(List.class) || t.equals(Collection.class) || t.equals(ArrayList.class) || t.equals(Set.class) || t.equals(HashSet.class);
-    }
-
-    public static Map<Object,Object> createMapFromType(Class<?> t) {
-        if (t.equals(HashMap.class) || t.equals(Map.class)) {
-            return new HashMap<>();
-        } else if (t.equals(ConcurrentHashMap.class)) {
-            return new ConcurrentHashMap<>();
-        } else {
-            throw new IllegalStateException("Unsupported type for map (deserialization): " + t.getName());
-        }
-    }
-
-    public static Object createCollectionFromType(Class<?> t) {
-        if (t.equals(List.class) || t.equals(Collection.class) || t.equals(ArrayList.class)) {
-            return new ArrayList<>();
-        } else if (t.equals(Set.class) || t.equals(HashSet.class)) {
-            return new HashSet<>();
-        } else {
-            throw new IllegalStateException("Unsupported type for collection (deserialization): " + t.getName());
-        }
-    }
-
-    public static boolean shouldIgnore(Field field) {
-        return Modifier.isTransient(field.getModifiers()) || field.isAnnotationPresent(SerializeIgnore.class);
-    }
-
-    public static String getName(Field field) {
-        return field.isAnnotationPresent(SerializedName.class) ? field.getAnnotation(SerializedName.class).value() : field.getName().toLowerCase();
     }
 }

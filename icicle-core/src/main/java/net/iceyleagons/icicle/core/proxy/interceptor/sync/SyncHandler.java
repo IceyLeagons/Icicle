@@ -8,7 +8,6 @@ import net.bytebuddy.matcher.ElementMatchers;
 import net.iceyleagons.icicle.core.annotations.execution.Async;
 import net.iceyleagons.icicle.core.annotations.execution.Sync;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;
-import net.iceyleagons.icicle.core.proxy.interceptor.async.AsyncDelegation;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 
@@ -20,8 +19,10 @@ import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 @MethodInterceptionHandler
 public class SyncHandler implements MethodInterceptorHandlerTemplate {
 
+    private final ExecutionHandler executionHandler;
+
     public SyncHandler(ExecutionHandler executionHandler) {
-        SyncDelegation.setupHandler(executionHandler);
+        this.executionHandler = executionHandler;
     }
 
     @Override
@@ -31,6 +32,6 @@ public class SyncHandler implements MethodInterceptorHandlerTemplate {
 
     @Override
     public Implementation getImplementation() {
-        return MethodDelegation.to(new SyncDelegation());
+        return MethodDelegation.to(new SyncDelegation(this.executionHandler));
     }
 }

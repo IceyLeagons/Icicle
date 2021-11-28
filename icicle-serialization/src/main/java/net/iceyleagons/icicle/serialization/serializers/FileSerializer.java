@@ -10,6 +10,7 @@ import java.io.File;
 public interface FileSerializer {
 
     void serializeToFile(File file, Object object);
+
     <T> T deSerializeFromFile(File file, Class<T> wantedType);
 
 }

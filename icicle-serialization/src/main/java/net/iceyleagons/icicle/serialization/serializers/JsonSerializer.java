@@ -9,10 +9,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.AbstractMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author TOTHTOMI
@@ -124,7 +121,7 @@ public class JsonSerializer extends ObjectMapper {
             for (int i = 0; i < Array.getLength(array); i++) {
                 Object o = Array.get(array, i);
                 if (o instanceof Map.Entry) {
-                    Map.Entry<?,?> entry = (Map.Entry<?,?>) o;
+                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>) o;
                     Object entryKey = entry.getKey();
                     Object entryValue = entry.getValue();
 

@@ -16,4 +16,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @version 1.0.0
  * @since Nov. 13, 2021
  */
-public @interface MethodInterceptionHandler { }
+public @interface MethodInterceptionHandler {
+}
