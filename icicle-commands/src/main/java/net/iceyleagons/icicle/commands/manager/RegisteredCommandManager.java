@@ -1,120 +1,101 @@
 package net.iceyleagons.icicle.commands.manager;
 
+import com.google.common.base.Strings;
 import lombok.Getter;
+import net.iceyleagons.icicle.commands.CommandInjectionException;
 import net.iceyleagons.icicle.commands.CommandService;
-import net.iceyleagons.icicle.commands.annotations.Alias;
 import net.iceyleagons.icicle.commands.annotations.Command;
-import net.iceyleagons.icicle.commands.annotations.GetterCommand;
-import net.iceyleagons.icicle.commands.annotations.SetterCommand;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
+import net.iceyleagons.icicle.commands.annotations.meta.Alias;
+import net.iceyleagons.icicle.commands.command.CommandNotFoundException;
+import net.iceyleagons.icicle.commands.command.RegisteredCommand;
 import net.iceyleagons.icicle.core.Application;
-import net.iceyleagons.icicle.core.performance.PerformanceLog;
+import net.iceyleagons.icicle.core.translations.TranslationService;
+import net.iceyleagons.icicle.utilities.ArrayUtils;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
-public class RegisteredCommandManager {
+public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
 
     private final Application application;
     private final CommandService commandService;
     private final CommandManager commandManager;
+    private final CommandRegistry commandRegistry;
     private final Class<?> clazz;
     private final Object origin;
 
-    private final Map<String, RegisteredCommand> commands = new HashMap<>();
-
-    public RegisteredCommandManager(Application application, CommandService commandService, CommandManager commandManager, Class<?> clazz, Object origin) {
+    public RegisteredCommandManager(Application application, CommandService commandService, CommandManager commandManager, Class<?> clazz, Object origin) throws CommandInjectionException {
         this.application = application;
+        this.commandRegistry = new CommandRegistry(this);
         this.commandService = commandService;
         this.commandManager = commandManager;
         this.clazz = clazz;
         this.origin = origin;
 
-        scanCommands();
+        scanForCommands();
+        this.getCommandService().getInjector().injectCommand(commandManager.value().toLowerCase(), this, this, null, null, null, null, Arrays.asList(clazz.isAnnotationPresent(Alias.class) ? clazz.getAnnotation(Alias.class).value() : new String[0]));
     }
 
-    private static RegisteredCommand createFieldCommand(Field field) {
-        Class<?>[] paramTypes = new Class[1];
-        paramTypes[0] = field.getType();
+    private void scanForCommands() throws CommandInjectionException {
+        for (Method declaredMethod : this.clazz.getDeclaredMethods()) {
+            if (!declaredMethod.isAnnotationPresent(Command.class)) continue;
 
-        String command = getMainCommandName(field);
-        String[] aliases = getAliases(field);
-
-        return new RegisteredCommand(paramTypes, command, aliases);
+            commandRegistry.registerCommand(declaredMethod, origin);
+        }
     }
 
-    private static RegisteredCommand createMethodCommand(Method method) {
-        Class<?>[] paramTypes = method.getParameterTypes();
-
-        String command = getMainCommandName(method);
-        String[] aliases = getAliases(method);
-
-        return new RegisteredCommand(paramTypes, command, aliases);
+    private String handleCommand(RegisteredCommand toExecute, String[] args) throws Exception {
+        return toExecute.execute(new String[0]);
     }
 
-    private static String getMainCommandName(Method method) {
-        String val = method.getAnnotation(Command.class).value();
-        return (val.isEmpty() ? method.getName() : val).toLowerCase();
-    }
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String label, @NotNull String[] args) {
+        final TranslationService translationService = commandService.getTranslationService();
+        final String cmd = command.getName().toLowerCase();
+        if (!cmd.equalsIgnoreCase(this.commandManager.value())) return true;
 
-    private static String getMainCommandName(Field field) {
-        String val = field.getAnnotation(Command.class).value();
-        return (val.isEmpty() ? field.getName() : val).toLowerCase();
-    }
+        try {
+            if (args.length < 1) {
+                sender.sendMessage("Specify subcommand!");
+                return true;
+            }
 
-    private static String[] getAliases(Method method) {
-        return method.isAnnotationPresent(Alias.class) ? method.getAnnotation(Alias.class).value() : new String[0];
-    }
+            RegisteredCommand registeredCommand = this.commandRegistry.getCommand(args[0].toLowerCase());
+            String[] newArgs = ArrayUtils.ignoreFirst(1, args);
 
-    private static String[] getAliases(Field field) {
-        return field.isAnnotationPresent(Alias.class) ? field.getAnnotation(Alias.class).value() : new String[0];
-    }
+            String response = handleCommand(registeredCommand, newArgs);
+            if (registeredCommand.isSuppliesTranslationKey()) {
+                response = translationService.getTranslation(response, translationService.getLanguageProvider().getLanguage(sender), "");
+            }
 
-    private void scanCommands() {
-        PerformanceLog.begin(this.application, "Scanning & Registering commands", RegisteredCommandManager.class);
-        handleSubCommands();
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', response));
+        } catch (CommandNotFoundException e) {
+            String errorMsgKey = Strings.emptyToNull(commandManager.notFound());
+            String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cCommand &b{cmd} &cnot found!",
+                    Map.of("cmd", e.getCommand(), "sender", sender.getName()));
 
-        for (Method commandMethod : getCommandMethods()) {
-            PerformanceLog.begin(this.application, "Registering command from method: " + commandMethod.getName(), RegisteredCommandManager.class);
-
-            RegisteredCommand registeredCommand = createMethodCommand(commandMethod);
-
-            PerformanceLog.end(this.application);
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        } catch (Exception e) {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', e.getMessage()));
+            return true;
         }
 
-        for (Field commandField : getCommandFields()) {
-            PerformanceLog.begin(this.application, "Registering command from field: " + commandField.getName(), RegisteredCommandManager.class);
-
-            RegisteredCommand registeredCommand = createFieldCommand(commandField);
-
-
-            PerformanceLog.end(this.application);
-        }
-
-        PerformanceLog.end(this.application);
+        return true;
     }
 
-    private Set<Method> getCommandMethods() {
-        return Arrays.stream(clazz.getDeclaredMethods())
-                .filter(m -> m.isAnnotationPresent(Command.class))
-                .peek(m -> m.setAccessible(true))
-                .collect(Collectors.toSet());
-    }
-
-    private Set<Field> getCommandFields() {
-        return Arrays.stream(clazz.getDeclaredFields())
-                .filter(f -> f.isAnnotationPresent(GetterCommand.class) || f.isAnnotationPresent(SetterCommand.class))
-                .peek(f -> f.setAccessible(true))
-                .collect(Collectors.toSet());
-    }
-
-    private void handleSubCommands() {
-        // TODO later (removed @SubCommandManager until then)
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String alias, @NotNull String[] args) {
+        return null;
     }
 }

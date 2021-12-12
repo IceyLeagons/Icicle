@@ -35,7 +35,7 @@ public class CommandManagerAnnotationHandler implements CustomAutoCreateAnnotati
     }
 
     @Override
-    public void onCreated(Object bean, Class<?> type) {
+    public void onCreated(Object bean, Class<?> type) throws Exception {
         PerformanceLog.begin(application, "Creating CommandManager", CommandManagerAnnotationHandler.class);
 
         RegisteredCommandManager registeredCommandManager =

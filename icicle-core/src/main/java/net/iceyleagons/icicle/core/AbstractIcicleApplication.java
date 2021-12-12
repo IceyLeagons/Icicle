@@ -21,14 +21,16 @@ public abstract class AbstractIcicleApplication implements Application {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIcicleApplication.class);
 
     private final Reflections reflections;
+    private final ExecutionHandler executionHandler;
 
     private final BeanManager beanManager;
     private final ConfigurationEnvironment configurationEnvironment;
 
-    public AbstractIcicleApplication(String rootPackage) {
+    public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler) {
         PerformanceLog.begin(this, "Application Creation", AbstractIcicleApplication.class);
         this.reflections = new Reflections(rootPackage).merge(Icicle.ICICLE_REFLECTIONS);
         this.beanManager = new DefaultBeanManager(this);
+        this.executionHandler = executionHandler;
 
         this.configurationEnvironment = new ConfigurationEnvironmentImpl(new AdvancedFile(new File("configs"), true).getFile()); //TODO once Bukkit API is present
 
@@ -40,7 +42,7 @@ public abstract class AbstractIcicleApplication implements Application {
     }
 
     @Override
-    public void start() throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
+    public void start() throws Exception {
         LOGGER.info("Booting Icicle application named: TODO");
 
         PerformanceLog.begin(this, "Application start", AbstractIcicleApplication.class);
@@ -68,5 +70,10 @@ public abstract class AbstractIcicleApplication implements Application {
     @Override
     public Reflections getReflections() {
         return this.reflections;
+    }
+
+    @Override
+    public ExecutionHandler getExecutionHandler() {
+        return this.executionHandler;
     }
 }

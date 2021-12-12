@@ -130,7 +130,7 @@ public class DefaultBeanManager implements BeanManager {
      * @see net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment
      * @see #getAndRemoveTypesAnnotatedWith(Class, Set)
      */
-    private void createConfigs(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
+    private void createConfigs(Set<Class<?>> autoCreationTypes) throws Exception {
         PerformanceLog.begin(application, "Creating configs", DefaultBeanManager.class);
         Set<Class<?>> configs = getAndRemoveTypesAnnotatedWith(Config.class, autoCreationTypes);
 
@@ -184,7 +184,7 @@ public class DefaultBeanManager implements BeanManager {
      * @see #getAndRemoveTypesAnnotatedWith(Class, Set)
      * @see BeanProxyHandler
      */
-    private void createAndRegisterMethodInterceptorsAndAdvices(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
+    private void createAndRegisterMethodInterceptorsAndAdvices(Set<Class<?>> autoCreationTypes) throws Exception {
         PerformanceLog.begin(application, "Creating method interceptors", DefaultBeanManager.class);
 
         Set<Class<?>> advices = getAndRemoveTypesAnnotatedWith(MethodAdviceHandler.class, autoCreationTypes);
@@ -224,7 +224,7 @@ public class DefaultBeanManager implements BeanManager {
      * @see MergedAnnotationResolver
      * @see #getAndRemoveTypesAnnotatedWith(Class, Set)
      */
-    private void createAnnotationHandlers(Set<Class<?>> autoCreationTypes) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
+    private void createAnnotationHandlers(Set<Class<?>> autoCreationTypes) throws Exception {
         PerformanceLog.begin(application, "Creating annotation handlers", DefaultBeanManager.class);
         Set<Class<?>> handlers = getAndRemoveTypesAnnotatedWith(AnnotationHandler.class, autoCreationTypes);
 
@@ -246,7 +246,7 @@ public class DefaultBeanManager implements BeanManager {
      * {@inheritDoc}
      */
     @Override
-    public void scanAndCreateBeans() throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
+    public void scanAndCreateBeans() throws Exception {
         PerformanceLog.begin(application, "Bean scanning & creation", DefaultBeanManager.class);
 
         PerformanceLog.begin(application, "Retrieving AutoCreate types", DefaultBeanManager.class);
@@ -307,7 +307,7 @@ public class DefaultBeanManager implements BeanManager {
      * {@inheritDoc}
      */
     @Override
-    public void createAndRegisterBean(Class<?> beanClass) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException {
+    public void createAndRegisterBean(Class<?> beanClass) throws Exception {
         if (beanClass == String.class || beanClass.isPrimitive()) return;
 
         if (!this.beanRegistry.isRegistered(beanClass)) { //this is here because a class may have multiple auto-create annotations and also just a precaution
@@ -355,7 +355,7 @@ public class DefaultBeanManager implements BeanManager {
      * @see BeanRegistry#registerBean(Class, Object)
      * @see CustomAutoCreateAnnotationResolver#onCreated(Object, Class)
      */
-    private void registerBean(Class<?> beanClass, Object bean) {
+    private void registerBean(Class<?> beanClass, Object bean) throws Exception {
         this.beanRegistry.registerBean(beanClass, bean);
         this.customAutoCreateAnnotationResolver.onCreated(bean, beanClass);
     }

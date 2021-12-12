@@ -1,4 +1,4 @@
-package net.iceyleagons.icicle.commands.annotations;
+package net.iceyleagons.icicle.commands.annotations.meta;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

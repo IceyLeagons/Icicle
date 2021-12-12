@@ -60,7 +60,7 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
      */
     @Override
     public LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException {
-        logger.debug("Resolving dependency tree for bean-type: {}", currentBean.getName());
+        logger.info("Resolving dependency tree for bean-type: {}", currentBean.getName());
 
         LinkedList<Class<?>> tree = new LinkedList<>();
         Stack<Class<?>> stack = new Stack<>();
@@ -74,8 +74,8 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
 
             Class<?>[] dependencies = BeanUtils.getResolvableConstructor(bean).getParameterTypes();
             for (Class<?> dependency : dependencies) {
-                if (tree.contains(dependency)) {
-                    logger.debug("Circular dependency found!");
+                if (tree.contains(dependency) && !beanRegistry.isRegistered(dependency)) {
+                    logger.info("Circular dependency found!");
                     throw new CircularDependencyException(getCycleString(tree, dependency, bean));
                 }
 

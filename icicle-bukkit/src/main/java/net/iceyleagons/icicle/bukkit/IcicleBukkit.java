@@ -1,22 +1,27 @@
 package net.iceyleagons.icicle.bukkit;
 
+import lombok.SneakyThrows;
 import net.iceyleagons.icicle.bukkit.listeners.PluginStatusListener;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.annotations.IcicleApplication;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
+import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+@IcicleApplication("net.iceyleagons.icicle.bukkit")
 public class IcicleBukkit extends JavaPlugin {
 
     public static final Map<JavaPlugin, BukkitApplication> RUNNING_APPLICATIONS = new HashMap<>();
 
     public static void startNewApplication(JavaPlugin javaPlugin) {
+        System.out.println("Called for: " + javaPlugin.getName());
         try {
             Class<?> clazz = Class.forName(javaPlugin.getDescription().getMain());
 
@@ -28,7 +33,7 @@ public class IcicleBukkit extends JavaPlugin {
 
                 bukkitApplication.start();
             }
-        } catch (ClassNotFoundException | CircularDependencyException | BeanCreationException | UnsatisfiedDependencyException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -50,6 +55,7 @@ public class IcicleBukkit extends JavaPlugin {
         this.getLogger().info(Icicle.getLoadText());
     }
 
+    @SneakyThrows
     @Override
     public void onEnable() {
         this.getLogger().info("Checking for updates....");
@@ -60,6 +66,8 @@ public class IcicleBukkit extends JavaPlugin {
 
         this.getLogger().info("Icicle is now READY!");
         this.getLogger().info("Waiting for Icicle-based plugins to be enabled...");
+
+        //startNewApplication(this);
     }
 
     @Override

@@ -7,6 +7,7 @@ import net.iceyleagons.icicle.core.annotations.Service;
 import net.iceyleagons.icicle.core.translations.code.CodeParser;
 import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
 import net.iceyleagons.icicle.core.translations.impl.ConstantLanguageProvider;
+import org.reflections.Reflections;
 
 import java.util.Collections;
 import java.util.Map;
@@ -35,9 +36,7 @@ public class TranslationService {
     }
 
     public String getTranslation(String key, String language, String defaultValue, Map<String, String> values) {
-        if (translationStringProvider == null) return defaultValue;
-
-        String translation = translationStringProvider.get(key, language);
+        String translation = translationStringProvider == null ? defaultValue : translationStringProvider.get(key, language);
         String toParse = translation == null ? defaultValue : translation;
 
         return getNewParser().addValues(values).parseCode(toParse);
@@ -45,5 +44,14 @@ public class TranslationService {
 
     private CodeParser getNewParser() {
         return new CodeParser(codeFunctions.toArray(AbstractCodeFunction[]::new));
+    }
+
+    public static void main(String[] args) {
+        AbstractCodeFunction[] func = CodeParser.createFunctionInstances(CodeParser.discoverCodeFunctions(new Reflections("net.iceyleagons.icicle.core.translations"))).toArray(AbstractCodeFunction[]::new);
+        CodeParser codeParser = new CodeParser(func);
+
+        System.out.println(codeParser.addValues( Map.of("cmd", "test")).parseCode("&cCommand &b {cmd} &cnot found!"));
+
+
     }
 }

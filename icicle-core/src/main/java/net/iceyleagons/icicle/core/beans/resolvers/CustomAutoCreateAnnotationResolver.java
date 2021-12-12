@@ -6,6 +6,6 @@ public interface CustomAutoCreateAnnotationResolver {
 
     void registerCustomAutoCreateAnnotationHandler(CustomAutoCreateAnnotationHandler handler);
 
-    void onCreated(Object bean, Class<?> type);
+    void onCreated(Object bean, Class<?> type) throws Exception;
 
 }

@@ -10,6 +10,6 @@ public interface CustomAutoCreateAnnotationHandler {
     @NotNull
     Set<Class<? extends Annotation>> getSupportedAnnotations();
 
-    void onCreated(Object bean, Class<?> type);
+    void onCreated(Object bean, Class<?> type) throws Exception;
 
 }

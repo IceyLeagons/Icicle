@@ -11,21 +11,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class BukkitApplication extends AbstractIcicleApplication {
 
     private final JavaPlugin javaPlugin;
-    private final BukkitExecutionHandler executionHandler;
 
     public BukkitApplication(String rootPackage, JavaPlugin javaPlugin) {
-        super(rootPackage);
+        super(rootPackage, new BukkitExecutionHandler(javaPlugin));
         this.javaPlugin = javaPlugin;
-        this.executionHandler = new BukkitExecutionHandler(javaPlugin);
+
 
         super.getBeanManager().getBeanRegistry().registerBean(BukkitApplication.class, this);
         super.getBeanManager().getBeanRegistry().registerBean(Plugin.class, javaPlugin);
         super.getBeanManager().getBeanRegistry().registerBean(JavaPlugin.class, javaPlugin);
         super.getBeanManager().getBeanRegistry().registerBean(PluginManager.class, Bukkit.getPluginManager());
-    }
-
-    @Override
-    public ExecutionHandler getExecutionHandler() {
-        return this.executionHandler;
     }
 }

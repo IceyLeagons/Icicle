@@ -35,4 +35,6 @@ public @interface CommandManager {
      * @return the translation key to the player-only error text.
      */
     String playerOnly() default "";
+
+    String notFound() default "";
 }

@@ -1,6 +1,7 @@
 package net.iceyleagons.icicle.commands;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -18,14 +19,17 @@ import java.util.List;
 /**
  * @since Nov. 1, 2021
  */
+@RequiredArgsConstructor
 public class CommandInjector {
 
-    public static void injectCommand(@NonNull String command, @NonNull CommandExecutor commandExecutor, @NonNull JavaPlugin plugin) throws CommandInjectionException {
-        injectCommand(command, commandExecutor, null, null, null, plugin);
+    private final JavaPlugin javaPlugin;
+
+    public void injectCommand(@NonNull String command, @NonNull CommandExecutor commandExecutor) throws CommandInjectionException {
+        injectCommand(command, commandExecutor, null, null, null);
     }
 
-    public static void injectCommand(@NonNull String command, @NonNull CommandExecutor commandExecutor, TabCompleter tabCompleter, String usage, String description, @NonNull JavaPlugin plugin) throws CommandInjectionException {
-        injectCommand(command, commandExecutor, tabCompleter, usage, description, null, null, Collections.emptyList(), plugin);
+    public void injectCommand(@NonNull String command, @NonNull CommandExecutor commandExecutor, TabCompleter tabCompleter, String usage, String description) throws CommandInjectionException {
+        injectCommand(command, commandExecutor, tabCompleter, usage, description, null, null, Collections.emptyList());
     }
 
     /**
@@ -41,12 +45,12 @@ public class CommandInjector {
      * @param aliases           aliases for the command (optional)
      * @throws CommandInjectionException if errors happen during the injection
      */
-    public static void injectCommand(@NonNull String command, @NonNull CommandExecutor commandExecutor,
+    public void injectCommand(@NonNull String command, @NonNull CommandExecutor commandExecutor,
                                      TabCompleter tabCompleter, String usage, String description,
                                      String permission, String permissionMessage,
-                                     List<String> aliases, @NonNull JavaPlugin plugin) throws CommandInjectionException {
+                                     List<String> aliases) throws CommandInjectionException {
         try {
-            final Field bukkitCommandMap = ReflectionUtils.getField(plugin.getServer().getClass(), "commandMap", true);
+            final Field bukkitCommandMap = ReflectionUtils.getField(Bukkit.getServer().getClass(), "commandMap", true);
             if (bukkitCommandMap == null) throw new CommandInjectionException(command, "CommandMap is unavailable");
 
             CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
@@ -54,7 +58,7 @@ public class CommandInjector {
             Constructor<PluginCommand> c = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
             c.setAccessible(true);
 
-            PluginCommand pluginCommand = c.newInstance(command, plugin);
+            PluginCommand pluginCommand = c.newInstance(command, javaPlugin);
             if (tabCompleter != null) pluginCommand.setTabCompleter(tabCompleter);
             if (usage != null) pluginCommand.setUsage(usage);
             if (aliases != null) pluginCommand.setAliases(aliases);

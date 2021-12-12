@@ -31,7 +31,7 @@ public interface BeanManager {
      * @see Internal
      */
     @Internal
-    void scanAndCreateBeans() throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException;
+    void scanAndCreateBeans() throws Exception;
 
     /**
      * This method can be used if we want to create, auto-wire and register, etc. a bean after startup.
@@ -42,7 +42,7 @@ public interface BeanManager {
      * @throws CircularDependencyException    if one of the beans' dependencies form a circle
      * @throws UnsatisfiedDependencyException if a bean cannot be created due to missing dependencies
      */
-    void createAndRegisterBean(Class<?> beanClass) throws BeanCreationException, CircularDependencyException, UnsatisfiedDependencyException;
+    void createAndRegisterBean(Class<?> beanClass) throws Exception;
 
     /**
      * Cleans up the bean manager.

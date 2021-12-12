@@ -33,19 +33,10 @@ public class Icicle {
         return String.format("Loading Icicle v%s. %s", ICICLE_VERSION, getCopyrightText());
     }
 
-    public static void main(String[] args) throws BeanCreationException, UnsatisfiedDependencyException, CircularDependencyException {
-        AbstractIcicleApplication abstractIcicleApplication = new AbstractIcicleApplication("net.iceyleagons.icicle.core") {
-            @Override
-            public ExecutionHandler getExecutionHandler() {
-                return ExecutionUtils.debugHandler();
-            }
-        };
+    public static void main(String[] args) throws Exception {
+        AbstractIcicleApplication abstractIcicleApplication = new AbstractIcicleApplication("net.iceyleagons.icicle.core", ExecutionUtils.debugHandler()) {};
 
         abstractIcicleApplication.start();
-        abstractIcicleApplication.getBeanManager().getBeanRegistry().getBean(Test.class).ifPresent(t -> t.test());
-        abstractIcicleApplication.getBeanManager().getBeanRegistry().getBean(Test.Test2.class).ifPresent(t -> System.out.println(t.asd()));
-        abstractIcicleApplication.getBeanManager().getBeanRegistry().getBean(Test.Test2.class).ifPresent(t -> System.out.println(t.asd()));
-
         System.out.println(PerformanceLog.dumpExecutionLog(abstractIcicleApplication));
     }
 }

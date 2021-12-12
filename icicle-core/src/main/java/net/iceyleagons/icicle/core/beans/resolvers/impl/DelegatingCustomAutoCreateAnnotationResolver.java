@@ -19,7 +19,7 @@ public class DelegatingCustomAutoCreateAnnotationResolver implements CustomAutoC
     }
 
     @Override
-    public void onCreated(Object bean, Class<?> type) {
+    public void onCreated(Object bean, Class<?> type) throws Exception {
         for (Annotation annotation : type.getAnnotations()) {
             Class<? extends Annotation> annotationType = annotation.annotationType();
 

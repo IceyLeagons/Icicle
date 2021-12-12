@@ -10,6 +10,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(METHOD)
 public @interface Command {
 
-    String value() default "";
+    String value();
+    boolean returnsTranslationKey() default true;
 
 }

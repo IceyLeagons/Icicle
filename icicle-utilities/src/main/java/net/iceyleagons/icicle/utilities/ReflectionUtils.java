@@ -42,7 +42,7 @@ public final class ReflectionUtils {
     @Nullable
     public static Field getField(Class<?> parent, String name, boolean setAccessible) {
         try {
-            Field field = parent.getField(name);
+            Field field = parent.getDeclaredField(name);
             if (setAccessible) {
                 field.setAccessible(true);
             }
