@@ -17,8 +17,8 @@
         </processorPath>
         <module name="icicle.icicle-core.main" />
         <module name="icicle.icicle-commands.main" />
-        <module name="icicle.icicle-utilities.main" />
         <module name="icicle.icicle-serialization.main" />
+        <module name="icicle.icicle-utilities.main" />
         <module name="icicle.icicle-bukkit.main" />
         <module name="icicle.icicle-database.main" />
       </profile>
@@ -27,6 +27,9 @@
       <module name="icicle.icicle-gui" target="16" />
       <module name="icicle.icicle-gui.main" target="16" />
       <module name="icicle.icicle-gui.test" target="16" />
+      <module name="icicle.icicle-pathing" target="16" />
+      <module name="icicle.icicle-pathing.main" target="16" />
+      <module name="icicle.icicle-pathing.test" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>

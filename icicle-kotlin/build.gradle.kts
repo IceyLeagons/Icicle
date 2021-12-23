@@ -1,7 +1,7 @@
 plugins {
     java
     kotlin("jvm") version "1.6.0"
-    id("net.iceyleagons.icicle-gradle") version "1.4-SNAPSHOT"
+    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
 }
 
 group = "net.iceyleagons"

@@ -21,7 +21,6 @@ public class IcicleBukkit extends JavaPlugin {
     public static final Map<JavaPlugin, BukkitApplication> RUNNING_APPLICATIONS = new HashMap<>();
 
     public static void startNewApplication(JavaPlugin javaPlugin) {
-        System.out.println("Called for: " + javaPlugin.getName());
         try {
             Class<?> clazz = Class.forName(javaPlugin.getDescription().getMain());
 

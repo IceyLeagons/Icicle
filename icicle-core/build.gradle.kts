@@ -1,6 +1,6 @@
 plugins {
     java
-    id("net.iceyleagons.icicle-gradle") version "1.4-SNAPSHOT"
+    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
 }
 
 group = "net.iceyleagons"
@@ -25,7 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
 
 
-    shadow("org.slf4j:slf4j-log4j12:1.7.32")
+    shadow("ch.qos.logback:logback-core:1.2.9")
     shadow("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
 
     lombok()
