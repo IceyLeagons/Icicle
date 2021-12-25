@@ -1,10 +1,47 @@
-<img src="https://user-images.githubusercontent.com/36101494/111905318-4e8d5e80-8a4b-11eb-8e9c-666b3f3d49a3.png" width="725" />
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/36101494/111905318-4e8d5e80-8a4b-11eb-8e9c-666b3f3d49a3.png" width="725" />
+  <div id="links">
+    <a href="#">
+      <img src="https://api.codacy.com/project/badge/Grade/7ac8f720a0804656af1515bb878efe1c" />
+    </a>
+    <a href="">
+      <img src="https://img.shields.io/github/license/IceyLeagons/Icicle" />
+    </a>
+    <a href="">
+      <img src="https://img.shields.io/badge/Made%20with-%E2%9D%A4-red">
+    </a>
+    <a href="https://discord.iceyleagons.net/">
+      <img alt="Discord" src="https://img.shields.io/badge/discord-IceyLeagons-738bd7.svg?style=square" />
+    </a>
+    <a href="https://discord.iceyleagons.net/">
+      <img alt="Discord Online" src="https://img.shields.io/discord/489789322300620801.svg" />
+    </a>
+  </div>
+  <br>
+  <div id="description">
+    Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development.
+  </div>
+  <div id="links">
+    <a href="https://docs.iceyleagons.net/icicle/welcome-to-icicle/icicle-workspace-setup">Getting Started</a>
+    |
+    <a href="https://icicle.iceyleagons.net">Website</a>
+    |
+    <a href="https://https://github.com/IceyLeagons/Icicle/">JavaDoc</a>
+    |
+    <a href="https://docs.iceyleagons.net/icicle">Documentation</a>
+    |
+    <a href="https://github.com/dzikoysk/reposilite/releases">Releases</a>
+ </div>
+ <br><br>
+ <strong>
+  ⛔ This framework is in heavy development, prepare for seeing bad code and bugs. ⛔<br>
+   Until the framework's first release please do not contribute or create issues!
+ </strong>
+</div>
 
-# [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7ac8f720a0804656af1515bb878efe1c)](https://app.codacy.com/gh/IceyLeagons/Icicle?utm_source=github.com&utm_medium=referral&utm_content=IceyLeagons/Icicle&utm_campaign=Badge_Grade) ![GitHub](https://img.shields.io/github/license/IceyLeagons/Icicle) ![Love](https://img.shields.io/badge/Made%20with-%E2%9D%A4-red)
 
-Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development.
 
-# Features
+## Features
 
 Icicle is so feature-rich, that we cannot list everything here, but to get an idea, here are the main features:
 
@@ -12,7 +49,7 @@ Icicle is so feature-rich, that we cannot list everything here, but to get an id
 - Auto-wiring and beans (or in other words: Spring features in Spigot)
 - Easy configuration management
 
-# Modules
+## Modules
 
 Icicle is split into separate modules, which all add additional functionality to the core. These modules don't need to
 be downloaded: when the core reads the metadata of an Icicle-based project it will download and load the necessary
@@ -27,25 +64,27 @@ standalone):
 | icicle-gradle | Our Gradle plugin to create Icicle-based projects easily. | 1.0.0 | - |
 | icicle-serialization | This module contains everything you need for serializing objects. | 1.0.0-beta | icicle-core, icicle-utilities |
 | icicle-database | This module is used to interact with many database engines with a common interface. | 0.0.1 | icicle-core, icicle-utilities, icicle-serialization |
-| icicle-spigot | Implementation of Icicle for Spigot environments | planned | icicle-core |
+| icicle-bukkit | Implementation of Icicle for Bukkit environments | 1.0.0-beta | icicle-core, icicle-utilities |
+| icicle-protocol | Features for messing with the Minecraft protocol & packets | 0.0.1 | icicle-core, icicle-utilities |
+| icicle-nms | Wrapping of NMS and CraftBukkit | 0.0.1 | icicle-core, icicle-utilities |
 | icicle-kotlin | Utilities for Kotlin to speed up your workflow even more! | planned | N/A |
 | icicle-utilities | Utility classes containing useful methods for development. | 1.0.0 | - |
 
-# Installation & Setup
+## Installation & Setup
 
 Please read our wiki on GitBook, [here]().
 
-# Contributing
+## Contributing
 
 Everyone is welcome to contribute to Icicle. If you want to do so, please start, by reading
 our [Contribution Guidelines]().
 
-# License
+## License
 
 Icicle is licensed under the permissive **MIT License**. You can read
 ours [here](https://github.com/IceyLeagons/Icicle/blob/master/LICENSE).
 
-# Supporters
+## Supporters
 
 <img src="https://user-images.githubusercontent.com/36101494/110477295-47795e80-80e3-11eb-9c3e-bf57776e3680.png" width="280">
 
