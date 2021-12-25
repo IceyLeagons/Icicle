@@ -1,8 +1,8 @@
 <div align="center">
   <img src="https://user-images.githubusercontent.com/36101494/111905318-4e8d5e80-8a4b-11eb-8e9c-666b3f3d49a3.png" width="725" />
   <div id="links">
-    <a href="#">
-      <img src="https://api.codacy.com/project/badge/Grade/7ac8f720a0804656af1515bb878efe1c" />
+    <a href="https://www.codacy.com/gh/IceyLeagons/Icicle/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=IceyLeagons/Icicle&amp;utm_campaign=Badge_Grade">
+      <img src="https://app.codacy.com/project/badge/Grade/5b12166b807048cebf3dd5e94a45e4e3" />
     </a>
     <a href="">
       <img src="https://img.shields.io/github/license/IceyLeagons/Icicle" />
