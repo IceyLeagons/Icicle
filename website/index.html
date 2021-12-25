@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Charsets, Compatibility, Responsive -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Generic Meta -->
+    <title>Icicle Framework</title>
+
+    <meta name="description" content=
+            "Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development.
+             It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form."
+    />
+
+    <meta name="keywords" content="Spigot,Bukkit,Plugin,Development,Framework,Easy,Light-weight,free,open source" />
+    <meta name="author" content="IceyLeagons" />
+
+    <meta name="application-name" content="Icicle Framework">
+    <meta name="theme-color" content="#3e9ce3">
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144.png"> <!-- TODO: replace -->
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png"> <!-- TODO: replace -->
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32"> <!-- TODO: replace -->
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16"> <!-- TODO: replace -->
+
+    <!-- Pinned Website Icon (after Windows 8) -->
+    <meta name="msapplication-TileColor" content="#3e9ce3">
+    <meta name="msapplication-TileImage" content="mstile-144x144.png"> <!-- TODO: replace -->
+
+    <!-- Twitter Stuff -->
+    <!-- https://cards-dev.twitter.com/validator -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:description" content=
+            "Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development.
+             It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form."
+    />
+    <meta name="twitter:title" content="Make your dev life easier with Icicle" />
+    <meta name="twitter:image" content="image.png"/> <!-- TODO: Social Image -->
+
+    <!-- OG Stuff (aka. other social media) -->
+    <meta property="og:title" content="Icicle Framework" />
+    <meta property="og:description" content=
+            "Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development.
+             It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="image.png" /> <!-- TODO: Social Image -->
+
+    <!-- Links -->
+    <link rel="canonical" href="/" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" />
+    <link rel="stylesheet" href="assets/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="assets/css/comparison.css" type="text/css" />
+    <link rel="stylesheet" href="assets/css/navbar.css" type="text/css" />
+    <link href="https://fonts.cdnfonts.com/css/open-sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/img-comparison-slider@7/dist/styles.css"/>
+</head>
+<body class="black">
+    <nav class="navbar">
+        <div class="row between-xs">
+            <div class="col-xs-3 col-lg-3">
+                <img src="assets/imgs/black_no_subtitle.png" class="logo" alt="logo"/>
+            </div>
+            <div class="col-xs-1 col-lg-4"></div>
+            <div class="col-xs-8 col-lg-5" style="margin-top: 1.3rem; text-align: center;">
+                <!-- TODO: make this sh*t responsive -->
+                <a href="https://github.com/IceyLeagons/iciclev2" class="nav-link nav-link-collapse">Source</a>
+                <a href="https://docs.iceyleagons.net/icicle/" class="nav-link nav-link-collapse">Documentation</a>
+                <a href="#" class="nav-link nav-link-collapse">JavaDoc</a>
+                <a href="https://mvn.iceyleagons.net/" class="nav-link nav-link-collapse">Maven/Gradle</a>
+                <a href="https://discord.iceyleagons.net/" class="nav-link nav-link-collapse">Discord</a>
+                <a href="javascript:void(0)" class="nav-resp-collapse nav-link" onclick="toggleNav();">&#9776;</a>
+            </div>
+        </div>
+        <div class="nav-collapsed" id="responsive-nav-menu">
+            <a href="https://github.com/IceyLeagons/iciclev2" class="nav-link" onclick="toggleNav();">Source</a>
+            <a href="https://docs.iceyleagons.net/icicle/" class="nav-link" onclick="toggleNav();">Documentation</a>
+            <a href="#" class="nav-link" onclick="toggleNav();">JavaDoc</a>
+            <a href="https://mvn.iceyleagons.net/" class="nav-link" onclick="toggleNav();">Maven/Gradle</a>
+            <a href="https://discord.iceyleagons.net/" class="nav-link" onclick="toggleNav();">Discord</a>
+        </div>
+
+        <script type="text/javascript">
+            function toggleNav() {
+                document.getElementById("responsive-nav-menu").classList.toggle("visible");
+            }
+        </script>
+    </nav>
+    <section class="hero" style="margin-top: 3rem;">
+        <div class="row center-xs">
+            <div class="col-xs-6">
+                <div class="box">
+                    <h1 class="title">Icicle</h1>
+                    <h2 class="subtitle">The only plugin framework, you will ever need.</h2>
+                </div>
+                <div class="row start-xs" style="margin-top: 3rem;">
+                    <!-- TODO: Replace GitBook URLs once the actual, up-to-date documentation is done -->
+
+                    <div class="col-xs-12 col-md-4 mt">
+                        <div class="row center-xs">
+                            <a href="https://docs.iceyleagons.net/icicle/" class="button">
+                                Why Icicle?
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4 mt">
+                        <div class="row center-xs">
+                            <a href="https://github.com/IceyLeagons/iciclev2" class="button" target="_blank">
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4 mt">
+                        <div class="row center-xs">
+                            <a href="https://docs.iceyleagons.net/icicle/" class="button">
+                                Getting Started
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="features">
+        <div class="row center-xs">
+            <div class="col-xs-6">
+                <h1 class="title2">Features</h1>
+                <small>* Some features are only available by installing the separate modules.</small><br>
+                <small>** Some features are still in development, therefore may not be available for the public, or they may be buggy.</small>
+            </div>
+        </div>
+        <div class="row center-xs">
+            <div class="col-xs-10">
+                <div class="feature-list">
+                    <div class="feature">
+                        <i class="fa-solid fa-syringe icon"></i>
+                        <h1 class="feature-title">Dependency Injection</h1>
+                        <p class="description">
+                            Are you used to using dependency injection in Spring, or just like it?
+                            Well, we've made our own from scratch, so you don't have to give that up.
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <i class="fa-solid fa-sliders icon"></i>
+                        <h1 class="feature-title">Configurations</h1>
+                        <p class="description">
+                            Easy-to-use configuration system out of the box.<br>
+                            You don't have to deal with making a multi-config system with reloading etc.
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <i class="fa-solid fa-language icon"></i>
+                        <h1 class="feature-title">Translation System</h1>
+                        <p class="description">
+                            Multi lingual projects made easy, with a highly customizable localization system.
+                            We even provide geolocation and a special code parser for even more solutions.
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <img src="assets/imgs/kotlin.svg" class="icon kotlin" alt="Kotlin Icon" />
+                        <h1 class="feature-title">Kotlin Support</h1>
+                        <p class="description">
+                            Icicle not only supports Kotlin in its core, but also in many of the separate modules we provide.
+                            We even have a dedicated one just for the juicy Kotlin-only gadgets!
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <i class="fa-solid fa-terminal icon"></i>
+                        <h1 class="feature-title">Innovative Commands</h1>
+                        <p class="description">
+                            Commands are the main way you interact with a plugin, so it has to be done right.<br>
+                            Icicle provides a very intuitive, easy-to-use, annotation-based system.
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <i class="fa-solid fa-network-wired icon"></i>
+                        <h1 class="feature-title">Protocol</h1>
+                        <p class="description">
+                            Make an impact on people, with a unique experience achieved with packets.
+                            Choose our pre-defined presets, or build your own with our custom protocol library!
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <i class="fa-solid fa-database icon"></i>
+                        <h1 class="feature-title">Database Interface</h1>
+                        <p class="description">
+                            Provide a wide variety of database-types for the server owners to choose from.
+                            Interact with SQL, NoSQL and file-based database solutions easily with our lightweight database handler!
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <i class="fa-solid fa-toolbox icon"></i>
+                        <h1 class="feature-title">Utilities</h1>
+                        <p class="description">
+                            Icicle's utility classes are also available for use.
+                            They contain tools & solutions, that you don't have to copy from StackOverflow again.
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <i class="fa-solid fa-code icon"></i>
+                        <h1 class="feature-title">Dev Tools</h1>
+                        <p class="description">
+                            Assist your development with Icicle, and use our custom developer tools for<br> Gradle and IntelliJ.
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <i class="fa-solid fa-box icon"></i>
+                        <h1 class="feature-title">Module-based</h1>
+                        <p class="description">
+                            Icicle only downloads/updates/loads modules (dependencies), that are truly required for the projects, therefore saving precious space and making it lightweight.
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <i class="fa-solid fa-infinity icon"></i>
+                        <h1 class="feature-title">Much More</h1>
+                        <p class="description">
+                            The list just goes on. The possibilities are truly endless, especially with a whole community behind it.<br>
+                            Join and be part of this community!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="demo">
+        <div class="row center-xs">
+            <div class="col-xs-6">
+                <h1 class="title2">Don't believe us?</h1>
+                <h2>Experience it yourself! (And yes, it actually works)</h2>
+            </div>
+        </div>
+        <div class="row center-xs">
+            <div class="col-xs-6">
+                <h2>Creating Configs</h2>
+                <img-comparison-slider class="comp-slider" style="margin-left: 1rem;">
+                    <figure slot="first" class="before">
+                        <img slot="first" width="110%" src="assets/imgs/compare/config-vanilla.png" />
+                        <figcaption>Vanilla</figcaption>
+                    </figure>
+                    <figure slot="second" class="after">
+                        <img slot="second" width="110%" src="assets/imgs/compare/config-icicle.png" />
+                        <figcaption>With Icicle</figcaption>
+                    </figure>
+
+                </img-comparison-slider>
+            </div>
+            <div class="col-xs-6">
+                <h2>Creating Commands</h2>
+                <img-comparison-slider class="comp-slider" style="margin-right: 1rem;">
+                    <img slot="first" width="110%" src="assets/imgs/compare/config-vanilla.png" />
+                    <img slot="second" width="110%" src="assets/imgs/compare/config-icicle.png" />
+                </img-comparison-slider>
+            </div>
+        </div>
+    </section>
+    <section class="review">
+        <div class="row center-xs">
+            <div class="col-xs-6">
+                <h1 class="title2">What others said</h1>
+            </div>
+        </div>
+        <div class="row center-xs">
+            <div class="col-xs-6">
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="footer-content">
+            Copyright &copy; 2021 IceyLeagons
+        </div>
+    </footer>
+
+    <script defer src="https://unpkg.com/img-comparison-slider@7/dist/index.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SC44ZYPS6Y"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-SC44ZYPS6Y');
+    </script>
+</body>
+</html>

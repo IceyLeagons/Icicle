@@ -1,0 +1,62 @@
+.navbar {
+    position: fixed;
+    z-index: 20;
+
+    top: 0px;
+    left: 0px;
+
+    width: 100%;
+    height: var(--nav-height);
+    background-color: var(--card-color);
+
+    border-bottom: solid 5px #b7b7b7;
+}
+
+.navbar .logo {
+    width: 250px;
+}
+
+.navbar .nav-link {
+    color: var(--text-color);
+    margin: 1rem;
+    text-decoration: none;
+    text-align: center;
+}
+
+.navbar .nav-link:hover {
+    color: #3e9ce3;
+}
+
+.navbar .nav-resp-collapse {
+    display: none;
+    color: var(--text-color);
+    margin: 1rem;
+    text-decoration: none;
+    text-align: center;
+}
+
+.navbar .nav-collapsed {
+    display: none;
+    flex-direction: column;
+    background: #fff;
+    z-index: 999;
+}
+
+@media screen and (max-width: 870px) {
+    .navbar .nav-collapsed.visible {
+        display: flex;
+    }
+
+    .navbar .nav-resp-collapse {
+        position: absolute;
+        display: unset;
+
+        top: .5rem;
+        right: 1rem;
+
+    }
+
+    .navbar .nav-link-collapse {
+        display: none;
+    }
+}

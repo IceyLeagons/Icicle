@@ -1,0 +1,172 @@
+/*
+ TODO: Convert this to be compatible with more browsers.
+ TODO: Minify this
+ */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+
+    font-family: 'Open Sans', sans-serif;
+}
+
+html {
+    --card-color: #fff;
+    --text-color: black;
+    --hero-button-text: white;
+    --bg-color: #f8f8f8;
+
+    --nav-height: 70px;
+}
+
+body {
+    background-color: var(--bg-color);
+}
+
+.hero {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+    color: var(--text-color);
+
+    margin-top: var(--nav-height);
+
+    background: var(--card-color) url("../imgs/blur.png") no-repeat fixed center center;
+    background-size: cover;
+
+    border-bottom: solid 5px #b7b7b7;
+}
+
+.hero .box {
+    padding: 2px;
+    border-radius: 10px;
+    background: rgba(222, 222, 222, 0.2);
+}
+
+.title {
+    font-size: 3.5rem;
+}
+
+.title2 {
+    font-size: 3rem;
+}
+
+.subtitle {
+    margin-top: -.7rem;
+    font-size: 1.6rem;
+}
+
+.mt {
+    margin-top: 1rem;
+}
+
+.button {
+    text-align: center;
+    font-size: 1.4rem;
+    text-decoration: none;
+    color: var(--hero-button-text);
+
+    background: rgba(0, 0, 0, 0.7);
+
+    width: 160px;
+
+    border-radius: 10px;
+    padding: 1rem;
+
+    transition: .4s;
+}
+
+.button:hover {
+    cursor: pointer;
+    transform: translateY(-3px);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.feature-list {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.feature {
+    margin: 1rem;
+    text-align: center;
+
+    padding: 2rem;
+    border-radius: 10px;
+    background: var(--card-color);
+    color: var(--text-color);
+
+    width: 220px;
+    height: 330px;
+
+    filter: drop-shadow(0px 1px 4px #000);
+    transition: .3s;
+}
+
+.feature:hover {
+    cursor: pointer;
+    transform: translateY(-10px);
+    color: #3e9ce3;
+}
+
+.feature:hover .kotlin {
+    filter: invert(67%) sepia(38%) saturate(4944%) hue-rotate(180deg) brightness(93%) contrast(90%);
+}
+
+.feature .icon {
+    font-size: 4rem;
+    width: 4rem;
+}
+
+.demo {
+    margin-top: 2rem;
+    height: 100vh;
+    color: var(--text-color);
+}
+
+
+.review {
+    border-top: solid 5px #b7b7b7;
+    background: var(--card-color) url("../imgs/blur.png") no-repeat fixed center center;
+    color: var(--text-color);
+    background-size: cover;
+    height: 60vh;
+}
+
+.review .quote {
+    background: rgba(0, 0, 0, 0.7);
+
+    padding: 1rem;
+    border-radius: 15px;
+    width: 100%;
+    height: 150px;
+
+    color: var(--hero-button-text);
+}
+
+.review .quote .author .name {
+    font-size: 1.5rem;
+}
+.review .quote .author .job {
+    font-size: .8rem;
+}
+
+.footer {
+    background: rgba(0, 0, 0, 0.3) url("../imgs/blur.png") no-repeat fixed center center;
+    background-size: cover;
+    height: 30px;
+}
+
+.footer .footer-content {
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+
+    vertical-align: middle;
+    text-align: center;
+}
