@@ -8,7 +8,6 @@ import net.iceyleagons.icicle.commands.annotations.meta.Alias;
 import net.iceyleagons.icicle.commands.command.CommandNotFoundException;
 import net.iceyleagons.icicle.commands.command.RegisteredCommand;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
@@ -27,6 +26,11 @@ public class CommandRegistry {
     private final Map<String, RegisteredCommand> commands = new ConcurrentHashMap<>();
     @Getter
     private final Map<String, RegisteredCommandManager> subCommands = new ConcurrentHashMap<>();
+
+    private static String[] getAliases(Method method) {
+        String[] aliases = method.isAnnotationPresent(Alias.class) ? method.getAnnotation(Alias.class).value() : new String[0];
+        return Arrays.stream(aliases).map(String::toLowerCase).toArray(String[]::new);
+    }
 
     public void registerCommand(Method method, Object origin) throws CommandInjectionException {
         if (!method.isAnnotationPresent(Command.class)) return;
@@ -49,10 +53,5 @@ public class CommandRegistry {
 
         if (!commands.containsKey(lower)) throw new CommandNotFoundException(cmd);
         return commands.get(lower);
-    }
-
-    private static String[] getAliases(Method method) {
-        String[] aliases = method.isAnnotationPresent(Alias.class) ? method.getAnnotation(Alias.class).value() : new String[0];
-        return Arrays.stream(aliases).map(String::toLowerCase).toArray(String[]::new);
     }
 }

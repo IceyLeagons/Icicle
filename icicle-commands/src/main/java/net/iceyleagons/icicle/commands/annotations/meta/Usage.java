@@ -15,6 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Usage {
 
     String key();
+
     String defaultValue();
 
 }

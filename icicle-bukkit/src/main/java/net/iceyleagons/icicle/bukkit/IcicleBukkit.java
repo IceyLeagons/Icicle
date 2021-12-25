@@ -4,14 +4,9 @@ import lombok.SneakyThrows;
 import net.iceyleagons.icicle.bukkit.listeners.PluginStatusListener;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.annotations.IcicleApplication;
-import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
-import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
-import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
-import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 

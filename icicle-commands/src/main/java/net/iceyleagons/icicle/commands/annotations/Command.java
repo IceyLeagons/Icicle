@@ -11,6 +11,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Command {
 
     String value();
+
     boolean returnsTranslationKey() default true;
 
 }

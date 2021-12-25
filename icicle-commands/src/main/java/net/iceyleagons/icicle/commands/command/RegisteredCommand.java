@@ -3,14 +3,11 @@ package net.iceyleagons.icicle.commands.command;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import net.iceyleagons.icicle.commands.annotations.meta.Description;
 import net.iceyleagons.icicle.commands.annotations.meta.Usage;
-import net.iceyleagons.icicle.commands.annotations.params.FlagOptional;
 import net.iceyleagons.icicle.commands.annotations.params.Optional;
 import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
 import net.iceyleagons.icicle.commands.params.CommandParameterResolverTemplate;
-import net.iceyleagons.icicle.core.annotations.Internal;
 import net.iceyleagons.icicle.utilities.ArrayUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -18,11 +15,8 @@ import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -63,7 +57,8 @@ public class RegisteredCommand implements TabCompleter {
 
         for (Parameter param : method.getParameters()) {
             Class<?> paramType = param.getType();
-            if (paramType.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.params.CommandSender.class)) continue;
+            if (paramType.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.params.CommandSender.class))
+                continue;
             sb.append(" ");
 
             boolean opt = paramType.isAnnotationPresent(Optional.class);

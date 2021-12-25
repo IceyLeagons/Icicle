@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * This class contains utility methods regarding java Reflections.
@@ -51,6 +52,32 @@ public final class ReflectionUtils {
         } catch (NoSuchFieldException ignored) {
             return null;
         }
+    }
+
+    @Nullable
+    public static Method getMethod(Class<?> parent, String name, boolean setAccessible, Class<?>... paramTypes) {
+        try {
+            Method method = parent.getDeclaredMethod(name, paramTypes);
+            if (setAccessible) {
+                method.setAccessible(true);
+            }
+
+            return method;
+        } catch (NoSuchMethodException ignored) {
+            return null;
+        }
+    }
+
+    @Nullable
+    public static <T> T execute(Method method, Object parent, Class<T> returnType, Object... params) {
+        try {
+            method.setAccessible(true);
+            return castIfNecessary(returnType, method.invoke(parent, params));
+        } catch (Exception e) {
+            LOGGER.warn("Could not execute method ({}) inside {}", method.getName(), parent.getClass().getName(), e);
+        }
+
+        return null;
     }
 
     public static boolean isClassPresent(String className, ClassLoader classLoader) {

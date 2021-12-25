@@ -5,16 +5,22 @@ plugins {
 }
 
 version = "0.1-SNAPSHOT"
+val spigotVersion = "1.17.1"
 
 repositories {
     mavenCentral()
+    spigot()
     jitpack()
 }
 
 dependencies {
+    lombok()
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
+    implementation(project(":icicle-nms"))
+    implementation("io.netty:netty-all:4.1.72.Final")
     implementation(kotlin("stdlib"))
+    spigotApi(spigotVersion)
 }
 
 icicle {
@@ -28,4 +34,5 @@ icicle {
 
     dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
     dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
+    dependencies += "net.iceyleagons:icicle-addon-nms:0.1-SNAPSHOT"
 }

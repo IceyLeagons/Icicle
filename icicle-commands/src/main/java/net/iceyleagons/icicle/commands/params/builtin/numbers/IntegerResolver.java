@@ -19,11 +19,6 @@ import java.util.List;
 @CommandParamResolver({int.class, Integer.class})
 public class IntegerResolver implements CommandParameterResolverTemplate {
 
-    @Override
-    public Object resolveParameter(Class<?> type, RegisteredCommandManager manager, String arg, CommandSender commandSender) {
-        return isInt(arg) ? Integer.parseInt(arg) : null;
-    }
-
     private static boolean isInt(String arg) {
         try {
             Integer.parseInt(arg);
@@ -31,6 +26,11 @@ public class IntegerResolver implements CommandParameterResolverTemplate {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    @Override
+    public Object resolveParameter(Class<?> type, RegisteredCommandManager manager, String arg, CommandSender commandSender) {
+        return isInt(arg) ? Integer.parseInt(arg) : null;
     }
 
     @Nullable

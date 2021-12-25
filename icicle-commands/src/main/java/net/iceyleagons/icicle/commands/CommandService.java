@@ -30,7 +30,7 @@ public class CommandService {
     private final TranslationService translationService;
     private final CommandInjector injector;
     private final Set<RegisteredCommandManager> commandManagers = new HashSet<>();
-    private final Map<Class<?>,CommandParameterResolverTemplate> paramResolvers = new HashMap<>();
+    private final Map<Class<?>, CommandParameterResolverTemplate> paramResolvers = new HashMap<>();
 
     @Autowired
     public CommandService(Application application, JavaPlugin javaPlugin, TranslationService translationService) {

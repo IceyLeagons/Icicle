@@ -31,6 +31,15 @@ public class TranslationService {
         this.codeFunctions = CodeParser.createFunctionInstances(CodeParser.discoverCodeFunctions(application));
     }
 
+    public static void main(String[] args) {
+        AbstractCodeFunction[] func = CodeParser.createFunctionInstances(CodeParser.discoverCodeFunctions(new Reflections("net.iceyleagons.icicle.core.translations"))).toArray(AbstractCodeFunction[]::new);
+        CodeParser codeParser = new CodeParser(func);
+
+        System.out.println(codeParser.addValues(Map.of("cmd", "test")).parseCode("&cCommand &b {cmd} &cnot found!"));
+
+
+    }
+
     public String getTranslation(String key, String language, String defaultValue) {
         return getTranslation(key, language, defaultValue, Collections.emptyMap());
     }
@@ -44,14 +53,5 @@ public class TranslationService {
 
     private CodeParser getNewParser() {
         return new CodeParser(codeFunctions.toArray(AbstractCodeFunction[]::new));
-    }
-
-    public static void main(String[] args) {
-        AbstractCodeFunction[] func = CodeParser.createFunctionInstances(CodeParser.discoverCodeFunctions(new Reflections("net.iceyleagons.icicle.core.translations"))).toArray(AbstractCodeFunction[]::new);
-        CodeParser codeParser = new CodeParser(func);
-
-        System.out.println(codeParser.addValues( Map.of("cmd", "test")).parseCode("&cCommand &b {cmd} &cnot found!"));
-
-
     }
 }

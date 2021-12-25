@@ -174,7 +174,8 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
             if (args.length > 1 && commandRegistry.getCommands().containsKey(args[0])) {
                 try {
                     return commandRegistry.getCommand(args[0]).onTabComplete(sender, command, alias, ArrayUtils.ignoreFirst(1, args));
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }
 

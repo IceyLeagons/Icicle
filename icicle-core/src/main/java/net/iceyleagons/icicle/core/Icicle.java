@@ -1,11 +1,7 @@
 package net.iceyleagons.icicle.core;
 
 
-import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
-import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
-import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 import net.iceyleagons.icicle.core.performance.PerformanceLog;
-import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import org.reflections.Reflections;
 
@@ -34,7 +30,8 @@ public class Icicle {
     }
 
     public static void main(String[] args) throws Exception {
-        AbstractIcicleApplication abstractIcicleApplication = new AbstractIcicleApplication("net.iceyleagons.icicle.core", ExecutionUtils.debugHandler()) {};
+        AbstractIcicleApplication abstractIcicleApplication = new AbstractIcicleApplication("net.iceyleagons.icicle.core", ExecutionUtils.debugHandler()) {
+        };
 
         abstractIcicleApplication.start();
         System.out.println(PerformanceLog.dumpExecutionLog(abstractIcicleApplication));

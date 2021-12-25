@@ -1,8 +1,8 @@
 package net.iceyleagons.icicle.commands.middleware.impl;
 
 import com.google.common.base.Strings;
-import net.iceyleagons.icicle.commands.annotations.meta.PlayerOnly;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
+import net.iceyleagons.icicle.commands.annotations.meta.PlayerOnly;
 import net.iceyleagons.icicle.commands.middleware.CommandMiddleware;
 import net.iceyleagons.icicle.commands.middleware.CommandMiddlewareTemplate;
 import net.iceyleagons.icicle.core.translations.TranslationService;
