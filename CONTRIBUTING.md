@@ -30,6 +30,8 @@ starting work on the contribution.
 Most pull requests are happily accepted, but larger changes may have an impact on the maintainability of the project,
 and require more consideration.
 
+Our project uses the [gitmoji](https://gitmoji.dev/) standard for commit messages, please apply the respective emoji to your commit message as well!
+
 ### Pull Request Process (checklist)
 
 1. Ensure that your code is clean of unused imports, dependencies and so on.
@@ -37,5 +39,5 @@ and require more consideration.
    versioning scheme we use is [SemVer](http://semver.org/).
 3. Please write proper JavaDoc for your additions. If your changes alter interactions with the framework (ex.:
    deprecation, method refactoring, etc.), then edit the respective GitBook page, and do a pull request there as well.
-3. You may merge the Pull Request in once you have the sign-off of two other developers, or if you do not have
+4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you do not have
    permission to do that, you may request the second reviewer to merge it for you.
