@@ -30,7 +30,7 @@
     |
     <a href="https://docs.iceyleagons.net/icicle">Documentation</a>
     |
-    <a href="https://github.com/dzikoysk/reposilite/releases">Releases</a>
+    <a href="https://github.com/IceyLeagons/Icicle/releases">Releases</a> <!-- Yeah clear trace of where the idea came from, shoutout to Reposilite, great software! -->
  </div>
  <br><br>
  <strong>
