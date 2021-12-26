@@ -22,31 +22,42 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.configuration.environment;
+package net.iceyleagons.icicle.core.maven;
 
-import net.iceyleagons.icicle.core.annotations.lang.Internal;
-import net.iceyleagons.icicle.core.configuration.Configuration;
+import lombok.NonNull;
+import net.iceyleagons.icicle.core.annotations.lang.Experimental;
+import net.iceyleagons.icicle.utilities.AdvancedClass;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.Optional;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
-public interface ConfigurationEnvironment {
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Dec. 26, 2021
+ */
+@Experimental
+public class AdvancedClassLoader {
 
-    void addConfiguration(Configuration configuration);
+    private static final AdvancedClass<?> clazz;
 
-    void updateValues();
+    static {
+        clazz = new AdvancedClass<>(URLClassLoader.class);
+        clazz.preDiscoverMethod("addURL", "addURL", URL.class);
+    }
 
-    Optional<Object> getProperty(String path);
+    private final URLClassLoader loader;
+    public AdvancedClassLoader(URLClassLoader origin) {
+        this.loader = origin;
+    }
 
-    <T> Optional<T> getProperty(String path, Class<T> type);
+    public void addUrl(@NonNull URL url) {
+        clazz.executeMethod("addURL", loader, Void.class, url);
+    }
 
-    Collection<Configuration> getConfigurations();
-
-    Configuration getConfiguration(Class<?> declaringType);
-
-    File getConfigRootFolder();
-
-    @Internal
-    void cleanUp();
+    public void loadLibrary(@NonNull File file) throws MalformedURLException {
+        this.addUrl(file.toURI().toURL());
+    }
 }

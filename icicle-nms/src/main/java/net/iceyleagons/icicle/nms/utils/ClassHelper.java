@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.nms.utils;
 
+import net.iceyleagons.icicle.utilities.AdvancedClass;
 import org.bukkit.Bukkit;
 
 import java.util.logging.Logger;

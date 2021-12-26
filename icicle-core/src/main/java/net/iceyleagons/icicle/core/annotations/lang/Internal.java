@@ -22,31 +22,20 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.configuration.environment;
+package net.iceyleagons.icicle.core.annotations.lang;
 
-import net.iceyleagons.icicle.core.annotations.lang.Internal;
-import net.iceyleagons.icicle.core.configuration.Configuration;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.Optional;
-
-public interface ConfigurationEnvironment {
-
-    void addConfiguration(Configuration configuration);
-
-    void updateValues();
-
-    Optional<Object> getProperty(String path);
-
-    <T> Optional<T> getProperty(String path, Class<T> type);
-
-    Collection<Configuration> getConfigurations();
-
-    Configuration getConfiguration(Class<?> declaringType);
-
-    File getConfigRootFolder();
-
-    @Internal
-    void cleanUp();
+/**
+ * Targets marked with this annotation are meant for internal use only, therefore calling them outside the library
+ * may cause significant issues.
+ * <p>
+ * Generally this annotation will not be used on every internal method, only on methods that can be accessed publicly.
+ */
+@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
+@Retention(RetentionPolicy.SOURCE)
+public @interface Internal {
 }

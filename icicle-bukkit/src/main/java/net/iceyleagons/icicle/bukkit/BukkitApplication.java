@@ -41,10 +41,10 @@ public class BukkitApplication extends AbstractIcicleApplication {
         this.javaPlugin = javaPlugin;
 
 
-        super.getBeanManager().getBeanRegistry().registerBean(Server.class, javaPlugin.getServer());
+        //super.getBeanManager().getBeanRegistry().registerBean(Server.class, javaPlugin.getServer()); //removed due to the introduction of GlobalBeanRegistry
         super.getBeanManager().getBeanRegistry().registerBean(BukkitApplication.class, this);
         super.getBeanManager().getBeanRegistry().registerBean(Plugin.class, javaPlugin);
         super.getBeanManager().getBeanRegistry().registerBean(JavaPlugin.class, javaPlugin);
-        super.getBeanManager().getBeanRegistry().registerBean(PluginManager.class, Bukkit.getPluginManager());
+        //super.getBeanManager().getBeanRegistry().registerBean(PluginManager.class, Bukkit.getPluginManager()); //removed due to the introduction of GlobalBeanRegistry
     }
 }

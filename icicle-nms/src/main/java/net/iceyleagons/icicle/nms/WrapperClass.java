@@ -25,7 +25,7 @@
 package net.iceyleagons.icicle.nms;
 
 import lombok.Getter;
-import net.iceyleagons.icicle.nms.utils.AdvancedClass;
+import net.iceyleagons.icicle.utilities.AdvancedClass;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

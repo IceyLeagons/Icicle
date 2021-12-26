@@ -22,31 +22,22 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.configuration.environment;
+package net.iceyleagons.icicle.core.annotations.lang;
 
-import net.iceyleagons.icicle.core.annotations.lang.Internal;
-import net.iceyleagons.icicle.core.configuration.Configuration;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.Optional;
-
-public interface ConfigurationEnvironment {
-
-    void addConfiguration(Configuration configuration);
-
-    void updateValues();
-
-    Optional<Object> getProperty(String path);
-
-    <T> Optional<T> getProperty(String path, Class<T> type);
-
-    Collection<Configuration> getConfigurations();
-
-    Configuration getConfiguration(Class<?> declaringType);
-
-    File getConfigRootFolder();
-
-    @Internal
-    void cleanUp();
+/**
+ * Annotation used to mark something as experimental, which means that it is either not tested or has to ability to bug out.
+ * Features marked with this annotation may be removed or may not be further developed.
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Dec. 26, 2021
+ */
+@Retention(RetentionPolicy.SOURCE)
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PACKAGE, ElementType.ANNOTATION_TYPE, ElementType.FIELD})
+public @interface Experimental {
 }

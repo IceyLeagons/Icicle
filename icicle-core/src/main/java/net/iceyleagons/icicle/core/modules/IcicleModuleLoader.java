@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.modules;
 
+import net.iceyleagons.icicle.core.annotations.lang.Experimental;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.slf4j.Logger;
@@ -40,6 +41,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+@Experimental
 public class IcicleModuleLoader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IcicleModuleLoader.class);
@@ -62,7 +64,7 @@ public class IcicleModuleLoader {
         for (String dependency : dependencies) {
             if (!moduleClassLoaders.containsKey(dependency)) {
                 //The module has not been loaded --> we need to reach out to API, so we can confirm it's valid, then download and load it!
-                //TODO
+                //TODO when API is done&online
             }
         }
     }
@@ -75,16 +77,18 @@ public class IcicleModuleLoader {
                 LOGGER.warn("Could not load module from file {} due to {}", file.getPath(), e);
             }
 
-        List<DependencyNotation> dependencyNotations = loadedModules.stream().map(ModuleMetadata::getDependencyNotation).collect(Collectors.toUnmodifiableList());
+        final List<DependencyNotation> dependencyNotations = loadedModules.stream().map(ModuleMetadata::getDependencyNotation).toList();
 
-        for (ModuleMetadata loadedModule : loadedModules)
-            if (dependencyNotations.containsAll(loadedModule.getDependencies()))
+        for (ModuleMetadata loadedModule : loadedModules) {
+            if (dependencyNotations.containsAll(loadedModule.getDependencies())) {
                 try {
                     ClassLoader classLoader = URLClassLoader.newInstance(new URL[]{loadedModule.getBaseFile().toURI().toURL()}, getClass().getClassLoader());
                     moduleClassLoaders.put(loadedModule.getName(), classLoader);
                 } catch (MalformedURLException e) {
                     LOGGER.warn("Could not load module from file {} due to {}", loadedModule.getBaseFile().getPath(), e);
                 }
+            }
+        }
     }
 
     public ModuleMetadata loadModule(File file) throws MalformedURLException {

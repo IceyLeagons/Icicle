@@ -22,20 +22,37 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations;
+package net.iceyleagons.icicle.core.maven;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Targets marked with this annotation are meant for internal use only, therefore calling them outside the library
- * may cause significant issues.
- * <p>
- * Generally this annotation will not be used on every internal method, only on methods that can be accessed publicly.
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Dec. 26, 2021
  */
-@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
-@Retention(RetentionPolicy.SOURCE)
-public @interface Internal {
+@Data
+@RequiredArgsConstructor
+public class MavenDependency {
+
+    private final String groupId;
+    private final String artifactId;
+    private final String version;
+    private final String repository;
+
+    public String getName() {
+        return getArtifactId() + "-" + getVersion();
+    }
+
+    public String getRequestUrl() {
+        String repo = this.repository;
+
+        if (!repo.endsWith("/")) {
+            repo += "/";
+        }
+        repo += "%s/%s/%s/%s-%s.jar";
+
+        return String.format(repo, this.groupId.replace(".", "/"), this.artifactId, this.version, this.artifactId, this.version);
+    }
 }

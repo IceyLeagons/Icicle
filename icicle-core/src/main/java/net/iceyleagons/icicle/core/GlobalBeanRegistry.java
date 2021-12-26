@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.beans;
+package net.iceyleagons.icicle.core;
 
-import net.iceyleagons.icicle.core.GlobalBeanRegistry;
+import net.iceyleagons.icicle.core.annotations.lang.Experimental;
+import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import org.slf4j.Logger;
@@ -35,31 +36,36 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Default implementation of {@link BeanRegistry}.
- *
  * @author TOTHTOMI
- * @version 1.1.0
- * @since Aug. 23, 2021
+ * @version 1.0.0
+ * @since Dec. 26, 2021
  */
-public class DelegatingBeanRegistry implements BeanRegistry {
+@Experimental
+public class GlobalBeanRegistry implements BeanRegistry {
 
-    private static final Logger logger = LoggerFactory.getLogger(DelegatingBeanRegistry.class);
-    private final Map<Class<?>, Object> beans = new ConcurrentHashMap<>();
-    private final BeanRegistry globalRegistry = GlobalBeanRegistry.INSTANCE; // introduced so we can save more memory
+    public static final GlobalBeanRegistry INSTANCE = new GlobalBeanRegistry();
+
+    private static boolean registered = false;
+    private static final Logger logger = LoggerFactory.getLogger(GlobalBeanRegistry.class);
+    private static final Map<Class<?>, Object> beans = new ConcurrentHashMap<>();
+
+    public static void registerService(Class<?> service, Object provider) {
+        INSTANCE.registerBean(service, provider);
+    }
+
+    public GlobalBeanRegistry() {
+        if (registered) {
+            throw new UnsupportedOperationException("An instance of GlobalBeanRegistry has already been created!");
+        }
+        registered = true;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public <T> Optional<T> getBean(Class<T> type) {
-        Optional<T> opt = beans.containsKey(type) ? Optional.ofNullable(ReflectionUtils.castIfNecessary(type, beans.get(type))) : Optional.empty();
-        if (opt.isEmpty()) {
-            if (globalRegistry.isRegistered(type)) {
-                opt = globalRegistry.getBean(type);
-            }
-        }
-
-        return opt;
+        return beans.containsKey(type) ? Optional.ofNullable(ReflectionUtils.castIfNecessary(type, beans.get(type))) : Optional.empty();
     }
 
     /**
@@ -67,7 +73,7 @@ public class DelegatingBeanRegistry implements BeanRegistry {
      */
     @Override
     public <T> T getBeanNullable(Class<T> type) {
-        return getBean(type).orElse(null); //this.beans.containsKey(type) ? ReflectionUtils.castIfNecessary(type, this.beans.get(type)) : null;
+        return beans.containsKey(type) ? ReflectionUtils.castIfNecessary(type, beans.get(type)) : null;
     }
 
     /**
@@ -75,7 +81,7 @@ public class DelegatingBeanRegistry implements BeanRegistry {
      */
     @Override
     public boolean isRegistered(Class<?> type) {
-        return this.beans.containsKey(type);
+        return beans.containsKey(type);
     }
 
     /**
@@ -108,7 +114,7 @@ public class DelegatingBeanRegistry implements BeanRegistry {
     @Override
     public void unregisterBean(Class<?> type) {
         logger.debug("Unregistering bean of type {}", type.getName());
-        this.beans.remove(type);
+        beans.remove(type);
     }
 
     /**

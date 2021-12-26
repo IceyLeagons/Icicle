@@ -26,10 +26,14 @@ package net.iceyleagons.icicle.bukkit;
 
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.bukkit.listeners.PluginStatusListener;
+import net.iceyleagons.icicle.core.GlobalBeanRegistry;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.annotations.IcicleApplication;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,11 +70,16 @@ public class IcicleBukkit extends JavaPlugin {
         RUNNING_APPLICATIONS.forEach((j, app) -> {
             app.shutdown();
         });
+        GlobalBeanRegistry.INSTANCE.cleanUp();
     }
 
     @Override
     public void onLoad() {
         this.getLogger().info(Icicle.getLoadText());
+
+        GlobalBeanRegistry.registerService(Server.class, Bukkit.getServer());
+        GlobalBeanRegistry.registerService(PluginManager.class, Bukkit.getPluginManager());
+        GlobalBeanRegistry.registerService(BukkitScheduler.class, Bukkit.getScheduler());
     }
 
     @SneakyThrows

@@ -29,6 +29,8 @@ import net.iceyleagons.icicle.core.performance.PerformanceLog;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import org.reflections.Reflections;
 
+import java.net.URLClassLoader;
+
 /**
  * Main class of Icicle.
  *
@@ -42,7 +44,8 @@ public class Icicle {
 
     public static final boolean PERFORMANCE_DEBUG = true;
 
-    public static final ClassLoader[] ICICLE_CLASS_LOADERS = new ClassLoader[]{Icicle.class.getClassLoader()};
+    public static final ClassLoader ICICLE_CLASS_LOADER = Icicle.class.getClassLoader();
+    public static final ClassLoader[] ICICLE_CLASS_LOADERS = new ClassLoader[]{ICICLE_CLASS_LOADER};
     public static final Reflections ICICLE_REFLECTIONS = new Reflections("net.iceyleagons.icicle", ICICLE_CLASS_LOADERS);
 
     public static String getCopyrightText() {

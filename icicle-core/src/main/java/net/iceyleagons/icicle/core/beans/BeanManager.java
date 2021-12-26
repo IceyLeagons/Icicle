@@ -24,7 +24,7 @@
 
 package net.iceyleagons.icicle.core.beans;
 
-import net.iceyleagons.icicle.core.annotations.Internal;
+import net.iceyleagons.icicle.core.annotations.lang.Internal;
 import net.iceyleagons.icicle.core.beans.resolvers.ConstructorParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;

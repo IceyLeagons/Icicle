@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms.utils;
+package net.iceyleagons.icicle.utilities;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

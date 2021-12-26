@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations;
+package net.iceyleagons.icicle.core.annotations.lang;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

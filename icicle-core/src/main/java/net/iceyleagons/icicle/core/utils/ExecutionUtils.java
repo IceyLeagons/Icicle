@@ -24,7 +24,7 @@
 
 package net.iceyleagons.icicle.core.utils;
 
-import net.iceyleagons.icicle.core.annotations.Internal;
+import net.iceyleagons.icicle.core.annotations.lang.Internal;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
