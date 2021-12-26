@@ -1,6 +1,9 @@
 <div align="center">
   <img src="https://user-images.githubusercontent.com/36101494/111905318-4e8d5e80-8a4b-11eb-8e9c-666b3f3d49a3.png" width="725" />
   <div id="links">
+    <a href="https://github.com/IceyLeagons/Icicle/actions/workflows/gradle.yml">
+      <img src="https://github.com/IceyLeagons/Icicle/actions/workflows/gradle.yml/badge.svg?branch=master" />
+    </a>
     <a href="https://www.codacy.com/gh/IceyLeagons/Icicle/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=IceyLeagons/Icicle&amp;utm_campaign=Badge_Grade">
       <img src="https://app.codacy.com/project/badge/Grade/5b12166b807048cebf3dd5e94a45e4e3" />
     </a>
