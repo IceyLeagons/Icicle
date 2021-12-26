@@ -122,10 +122,22 @@ body {
 
 .demo {
     margin-top: 2rem;
-    height: 100vh;
+    height: 103vh;
     color: var(--text-color);
 }
 
+.feature .banner {
+    background-color: brown;
+    position: absolute;
+    top: 6%;
+    color: white !important;
+    border-radius: 1px;
+    right: -9%;
+    width: 50%;
+    transform: rotateZ(35deg);
+
+    //border: solid 1px black;
+}
 
 .review {
     border-top: solid 5px #b7b7b7;
