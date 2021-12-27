@@ -107,7 +107,7 @@ public class NMSHandler {
             clazz.preDiscoverMethod(key, wrapping.value(), paramTypes);
 
             suppliers.put(declaredMethod, (params) -> {
-                Object obj = clazz.executeMethod(wrapping.value(), origin, Object.class, params);
+                Object obj = clazz.executeMethod(key, origin, Object.class, params);
                 if (obj.getClass().isAssignableFrom(declaredMethod.getReturnType())) {
                     return declaredMethod.getReturnType().cast(obj);
                 }
