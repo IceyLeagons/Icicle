@@ -22,25 +22,22 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms.player;
+package net.iceyleagons.icicle.nms;
 
-import net.iceyleagons.icicle.nms.annotations.NMSWrap;
-import net.iceyleagons.icicle.nms.annotations.Wrapping;
-import net.iceyleagons.icicle.nms.utils.ClassHelper;
-import net.iceyleagons.icicle.nms.WrapType;
-import net.iceyleagons.icicle.nms.WrapperClass;
+import net.iceyleagons.icicle.nms.player.WrappedEntityPlayer;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 23, 2021
+ * @since Dec. 27, 2021
  */
-@NMSWrap("PlayerConnection")
-public interface WrappedPlayerConnection {
+public class Test {
 
-    @Wrapping(value = "networkManager", isField = true)
-    Object getNetworkManager();
+    public static void main(String[] args) {
+        NMSHandler handler = new NMSHandler(null);
 
-    @Wrapping(value = "sendPacket", paramTypes = {"{nms}.Packet"})
-    void sendPacket(Object packet);
+        WrappedEntityPlayer wrappedEntityPlayer = handler.wrap(null, WrappedEntityPlayer.class);
+        wrappedEntityPlayer.getNetworkManager().getChannel().close();
+    }
+
 }

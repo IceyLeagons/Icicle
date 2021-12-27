@@ -24,8 +24,7 @@
 
 package net.iceyleagons.icicle.core.beans;
 
-import net.iceyleagons.icicle.core.annotations.lang.Experimental;
-import net.iceyleagons.icicle.core.annotations.lang.Internal;
+import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;

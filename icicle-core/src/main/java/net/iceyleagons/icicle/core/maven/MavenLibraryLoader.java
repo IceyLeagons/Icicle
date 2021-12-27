@@ -26,8 +26,8 @@ package net.iceyleagons.icicle.core.maven;
 
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.Icicle;
-import net.iceyleagons.icicle.core.annotations.lang.Experimental;
-import net.iceyleagons.icicle.core.annotations.lang.Internal;
+import net.iceyleagons.icicle.utilities.lang.Experimental;
+import net.iceyleagons.icicle.utilities.lang.Internal;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.iceyleagons.icicle.utilities.file.FileUtils;
 
@@ -56,6 +56,10 @@ public class MavenLibraryLoader {
 
     public static void load(String groupId, String artifactId, String version, String repo) {
         load(new MavenDependency(groupId, artifactId, version, repo));
+    }
+
+    public static void load(String url) {
+
     }
 
     @SneakyThrows

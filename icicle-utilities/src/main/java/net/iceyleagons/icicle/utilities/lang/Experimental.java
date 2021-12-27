@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations.lang;
+package net.iceyleagons.icicle.utilities.lang;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -30,12 +30,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Targets marked with this annotation are meant for internal use only, therefore calling them outside the library
- * may cause significant issues.
- * <p>
- * Generally this annotation will not be used on every internal method, only on methods that can be accessed publicly.
+ * Annotation used to mark something as experimental, which means that it is either not tested or has to ability to bug out.
+ * Features marked with this annotation may be removed or may not be further developed.
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Dec. 26, 2021
  */
-@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
-public @interface Internal {
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PACKAGE, ElementType.ANNOTATION_TYPE, ElementType.FIELD})
+public @interface Experimental {
 }

@@ -24,7 +24,7 @@
 
 package net.iceyleagons.icicle.core.modules;
 
-import net.iceyleagons.icicle.core.annotations.lang.Experimental;
+import net.iceyleagons.icicle.utilities.lang.Experimental;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.slf4j.Logger;
@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 @Experimental
 public class IcicleModuleLoader {

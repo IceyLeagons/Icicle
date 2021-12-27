@@ -22,25 +22,15 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations.lang;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package net.iceyleagons.icicle.nms;
 
 /**
- * Annotation used to mark constructors as being auto wired, this is not a functional annotation, it's only used in documentation.
- * <p>
- * Since Icicle does not support field auto-wiring, and because the constructor auto
- * wiring is automatic (meaning no annotation needed) this annotation is only used for documentation ->
- * more understandable code (especially) for those, who are not familiar with the framework.
- *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Oct. 31, 2021
+ * @since Dec. 27, 2021
  */
-@Target(ElementType.CONSTRUCTOR)
-@Retention(RetentionPolicy.SOURCE)
-public @interface Autowired {
+public interface WrapSupplier<T> {
+
+    T supply(Object[] params);
+
 }

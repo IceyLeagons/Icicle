@@ -22,25 +22,38 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms.player;
+package net.iceyleagons.icicle.nms;
 
+import net.iceyleagons.icicle.nms.annotations.CraftWrap;
 import net.iceyleagons.icicle.nms.annotations.NMSWrap;
 import net.iceyleagons.icicle.nms.annotations.Wrapping;
 import net.iceyleagons.icicle.nms.utils.ClassHelper;
-import net.iceyleagons.icicle.nms.WrapType;
-import net.iceyleagons.icicle.nms.WrapperClass;
+import net.iceyleagons.icicle.utilities.AdvancedClass;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 23, 2021
+ * @since Dec. 27, 2021
  */
-@NMSWrap("PlayerConnection")
-public interface WrappedPlayerConnection {
+public final class NMSHelper {
 
-    @Wrapping(value = "networkManager", isField = true)
-    Object getNetworkManager();
+    public static String getKeyForMapping(Wrapping wrapping) {
+        if (wrapping.isField()) {
+            return wrapping.value();
+        }
 
-    @Wrapping(value = "sendPacket", paramTypes = {"{nms}.Packet"})
-    void sendPacket(Object packet);
+        Class<?>[] paramTypes = wrapping.paramTypes();
+        return paramTypes.length == 0 ? wrapping.value() : wrapping.value() + paramTypes.length;
+    }
+
+    public static AdvancedClass<?> getWrapClass(Class<?> toWrap) {
+        AdvancedClass<?> clazz = null;
+        if (toWrap.isAnnotationPresent(NMSWrap.class)) {
+            clazz = ClassHelper.from(toWrap.getAnnotation(NMSWrap.class));
+        } else if (toWrap.isAnnotationPresent(CraftWrap.class)) {
+            clazz = ClassHelper.from(toWrap.getAnnotation(CraftWrap.class));
+        }
+
+        return clazz;
+    }
 }

@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.proxy;
 
+import net.bytebuddy.ByteBuddy;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
@@ -40,4 +41,6 @@ public interface BeanProxyHandler {
     void registerAdviceTemplate(MethodAdviceHandlerTemplate adviceHandler);
 
     void registerInterceptorTemplate(MethodInterceptorHandlerTemplate interceptorTemplate);
+
+    ByteBuddy getProxy();
 }

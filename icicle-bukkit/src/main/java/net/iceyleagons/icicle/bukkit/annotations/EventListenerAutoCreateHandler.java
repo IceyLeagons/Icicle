@@ -24,7 +24,7 @@
 
 package net.iceyleagons.icicle.bukkit.annotations;
 
-import net.iceyleagons.icicle.core.annotations.lang.Autowired;
+import net.iceyleagons.icicle.utilities.lang.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import org.bukkit.event.Listener;

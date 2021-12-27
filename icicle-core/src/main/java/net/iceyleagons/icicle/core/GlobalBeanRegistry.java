@@ -24,7 +24,7 @@
 
 package net.iceyleagons.icicle.core;
 
-import net.iceyleagons.icicle.core.annotations.lang.Experimental;
+import net.iceyleagons.icicle.utilities.lang.Experimental;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;

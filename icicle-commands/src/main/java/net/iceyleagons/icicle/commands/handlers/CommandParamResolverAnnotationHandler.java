@@ -28,7 +28,7 @@ import net.iceyleagons.icicle.commands.CommandService;
 import net.iceyleagons.icicle.commands.annotations.CommandParamResolver;
 import net.iceyleagons.icicle.commands.params.CommandParameterResolverTemplate;
 import net.iceyleagons.icicle.core.Application;
-import net.iceyleagons.icicle.core.annotations.lang.Autowired;
+import net.iceyleagons.icicle.utilities.lang.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.core.performance.PerformanceLog;

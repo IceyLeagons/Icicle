@@ -24,29 +24,23 @@
 
 package net.iceyleagons.icicle.nms.player;
 
-import net.iceyleagons.icicle.nms.WrapType;
-import net.iceyleagons.icicle.nms.WrapperClass;
+import net.iceyleagons.icicle.nms.annotations.NMSWrap;
+import net.iceyleagons.icicle.nms.annotations.Wrapping;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 23, 2021
  */
-public class WrappedEntityPlayer extends WrapperClass {
+@NMSWrap("EntityPlayer")
+public interface WrappedEntityPlayer {
 
-    public WrappedEntityPlayer(Object origin) {
-        super("EntityPlayer", WrapType.NMS, origin);
-    }
+    @Wrapping(value = "networkManager", isField = true)
+    WrappedNetworkManager getNetworkManager();
 
-    public WrappedNetworkManager getNetworkManager() {
-        return new WrappedNetworkManager(super.getFieldValue("networkManager", Object.class));
-    }
+    @Wrapping(value = "ping", isField = true)
+    Integer getPing();
 
-    public Integer getPing() {
-        return getFieldValue("ping", Integer.class);
-    }
-
-    public WrappedPlayerConnection getPlayerConnection() {
-        return new WrappedPlayerConnection(getFieldValue("playerConnection", Object.class));
-    }
+    @Wrapping(value = "playerConnection", isField = true)
+    WrappedPlayerConnection getPlayerConnection();
 }

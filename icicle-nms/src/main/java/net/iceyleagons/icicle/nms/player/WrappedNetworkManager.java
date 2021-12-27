@@ -27,6 +27,8 @@ package net.iceyleagons.icicle.nms.player;
 import io.netty.channel.Channel;
 import net.iceyleagons.icicle.nms.WrapType;
 import net.iceyleagons.icicle.nms.WrapperClass;
+import net.iceyleagons.icicle.nms.annotations.NMSWrap;
+import net.iceyleagons.icicle.nms.annotations.Wrapping;
 
 
 /**
@@ -34,13 +36,9 @@ import net.iceyleagons.icicle.nms.WrapperClass;
  * @version 1.0.0
  * @since Dec. 23, 2021
  */
-public class WrappedNetworkManager extends WrapperClass {
+@NMSWrap("NetworkManager")
+public interface WrappedNetworkManager{
 
-    public WrappedNetworkManager(Object origin) {
-        super("NetworkManager", WrapType.NMS, origin);
-    }
-
-    public Channel getChannel() {
-        return getFieldValue("channel", Channel.class);
-    }
+    @Wrapping(value = "channel", isField = true)
+    Channel getChannel();
 }

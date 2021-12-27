@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.utilities;
 
+import net.iceyleagons.icicle.utilities.lang.Utility;
+
 /**
  * Utility methods for checking input.
  *
@@ -31,6 +33,7 @@ package net.iceyleagons.icicle.utilities;
  * @version 1.0.0
  * @since Aug. 23, 2021
  */
+@Utility
 public class Asserts {
 
     /**

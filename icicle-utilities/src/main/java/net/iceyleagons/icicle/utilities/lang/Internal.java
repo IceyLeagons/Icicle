@@ -22,25 +22,20 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms.player;
+package net.iceyleagons.icicle.utilities.lang;
 
-import net.iceyleagons.icicle.nms.annotations.NMSWrap;
-import net.iceyleagons.icicle.nms.annotations.Wrapping;
-import net.iceyleagons.icicle.nms.utils.ClassHelper;
-import net.iceyleagons.icicle.nms.WrapType;
-import net.iceyleagons.icicle.nms.WrapperClass;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * @author TOTHTOMI
- * @version 1.0.0
- * @since Dec. 23, 2021
+ * Targets marked with this annotation are meant for internal use only, therefore calling them outside the library
+ * may cause significant issues.
+ * <p>
+ * Generally this annotation will not be used on every internal method, only on methods that can be accessed publicly.
  */
-@NMSWrap("PlayerConnection")
-public interface WrappedPlayerConnection {
-
-    @Wrapping(value = "networkManager", isField = true)
-    Object getNetworkManager();
-
-    @Wrapping(value = "sendPacket", paramTypes = {"{nms}.Packet"})
-    void sendPacket(Object packet);
+@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
+@Retention(RetentionPolicy.SOURCE)
+public @interface Internal {
 }

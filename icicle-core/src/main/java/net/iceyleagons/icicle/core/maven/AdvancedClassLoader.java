@@ -25,7 +25,7 @@
 package net.iceyleagons.icicle.core.maven;
 
 import lombok.NonNull;
-import net.iceyleagons.icicle.core.annotations.lang.Experimental;
+import net.iceyleagons.icicle.utilities.lang.Experimental;
 import net.iceyleagons.icicle.utilities.AdvancedClass;
 
 import java.io.File;

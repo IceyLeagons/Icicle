@@ -29,7 +29,7 @@ import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
 import net.iceyleagons.icicle.commands.middleware.MiddlewareStore;
 import net.iceyleagons.icicle.commands.params.CommandParameterResolverTemplate;
 import net.iceyleagons.icicle.core.Application;
-import net.iceyleagons.icicle.core.annotations.lang.Autowired;
+import net.iceyleagons.icicle.utilities.lang.Autowired;
 import net.iceyleagons.icicle.core.annotations.Service;
 import net.iceyleagons.icicle.core.translations.TranslationService;
 import net.iceyleagons.icicle.core.utils.Defaults;

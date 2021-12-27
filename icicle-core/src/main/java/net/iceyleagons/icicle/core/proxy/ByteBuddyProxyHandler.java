@@ -41,7 +41,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class ByteBuddyProxyHandler implements BeanProxyHandler {
+public class ByteBuddyProxyHandler implements BeanProxyHandler<ByteBuddy> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ByteBuddyProxyHandler.class);
 
@@ -59,10 +59,11 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
 
     private final Set<MethodAdviceHandlerTemplate> adviceHandlers = new HashSet<>();
     private final Set<MethodInterceptorHandlerTemplate> interceptorHandlers = new HashSet<>();
+    private final ByteBuddy byteBuddy = new ByteBuddy();
 
     @Override
     public <T> T createEnhancedBean(Constructor<T> constructor, Object[] arguments) throws BeanCreationException {
-        ByteBuddy byteBuddy = new ByteBuddy(); //.with(Implementation.Context.Disabled.Factory.INSTANCE);
+         //.with(Implementation.Context.Disabled.Factory.INSTANCE);
         DynamicType.Builder<T> builder = byteBuddy
                 .subclass(constructor.getDeclaringClass());
 
@@ -110,5 +111,10 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
     public void registerInterceptorTemplate(MethodInterceptorHandlerTemplate interceptorTemplate) {
         if (this.interceptorHandlers.contains(interceptorTemplate)) return;
         this.interceptorHandlers.add(interceptorTemplate);
+    }
+
+    @Override
+    public ByteBuddy getProxy() {
+        return this.byteBuddy;
     }
 }

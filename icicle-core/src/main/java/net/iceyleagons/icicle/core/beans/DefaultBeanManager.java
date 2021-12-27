@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.beans;
 
+import net.bytebuddy.ByteBuddy;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.AutoCreate;
 import net.iceyleagons.icicle.core.annotations.Bean;
@@ -325,6 +326,11 @@ public class DefaultBeanManager implements BeanManager {
     @Override
     public Reflections getReflectionsInstance() {
         return this.reflections;
+    }
+
+    @Override
+    public BeanProxyHandler getProxyHandler() {
+        return this.beanProxyHandler;
     }
 
     /**

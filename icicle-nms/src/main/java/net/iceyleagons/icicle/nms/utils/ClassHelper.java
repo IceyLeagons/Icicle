@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.nms.utils;
 
+import net.iceyleagons.icicle.nms.annotations.CraftWrap;
+import net.iceyleagons.icicle.nms.annotations.NMSWrap;
 import net.iceyleagons.icicle.utilities.AdvancedClass;
 import org.bukkit.Bukkit;
 
@@ -46,6 +48,10 @@ public class ClassHelper {
         mcString = "net.minecraft.server." + version + ".";
     }
 
+    public static Class<?> parse(String name) {
+        return getClass(name.replaceAll("\\{nms\\}", mcString).replaceAll("\\{cb\\}", cbString));
+    }
+
     public static AdvancedClass<?> getBukkitClass(String name) {
         return new AdvancedClass<>(getClass(cbString + name));
     }
@@ -55,11 +61,23 @@ public class ClassHelper {
     }
 
     public static Class<?> getClass(String name) {
+        if (name == null || name.isEmpty()) {
+            return null;
+        }
+
         try {
             return Class.forName(name);
         } catch (ClassNotFoundException e) {
             logger.warning("Class " + name + " was not found due to: " + e.getMessage());
             return null;
         }
+    }
+
+    public static AdvancedClass<?> from(CraftWrap craftWrap) {
+        return getBukkitClass(craftWrap.value());
+    }
+
+    public static AdvancedClass<?> from(NMSWrap nmsWrap) {
+        return getNMSClass(nmsWrap.value());
     }
 }

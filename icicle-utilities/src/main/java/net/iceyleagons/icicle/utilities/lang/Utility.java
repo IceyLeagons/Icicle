@@ -22,25 +22,25 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms.player;
+package net.iceyleagons.icicle.utilities.lang;
 
-import net.iceyleagons.icicle.nms.annotations.NMSWrap;
-import net.iceyleagons.icicle.nms.annotations.Wrapping;
-import net.iceyleagons.icicle.nms.utils.ClassHelper;
-import net.iceyleagons.icicle.nms.WrapType;
-import net.iceyleagons.icicle.nms.WrapperClass;
+import java.lang.annotation.*;
 
 /**
+ * This annotation shall only be used on classes.
+ *
+ * Classes that are annotated with it must only contain static methods & fields,
+ * additionally they must contain at least one public static method (or field respectively).
+ *
+ * Classes that are annotated with @Utility should also have no public constructors, or must throw
+ * {@link UnsupportedOperationException} with the message: "This class is marked as utility, and does not support instantiation".
+ *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 23, 2021
+ * @since Dec. 26, 2021
  */
-@NMSWrap("PlayerConnection")
-public interface WrappedPlayerConnection {
-
-    @Wrapping(value = "networkManager", isField = true)
-    Object getNetworkManager();
-
-    @Wrapping(value = "sendPacket", paramTypes = {"{nms}.Packet"})
-    void sendPacket(Object packet);
+@Documented
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.SOURCE)
+public @interface Utility {
 }

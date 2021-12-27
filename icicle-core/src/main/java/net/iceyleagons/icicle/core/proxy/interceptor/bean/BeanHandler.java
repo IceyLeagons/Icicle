@@ -29,7 +29,7 @@ import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
-import net.iceyleagons.icicle.core.annotations.lang.Autowired;
+import net.iceyleagons.icicle.utilities.lang.Autowired;
 import net.iceyleagons.icicle.core.annotations.Bean;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;

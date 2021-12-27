@@ -25,7 +25,7 @@
 package net.iceyleagons.icicle.core.annotations;
 
 import lombok.Getter;
-import net.iceyleagons.icicle.core.annotations.lang.Internal;
+import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.reflections.Reflections;
 
 import java.lang.annotation.Annotation;

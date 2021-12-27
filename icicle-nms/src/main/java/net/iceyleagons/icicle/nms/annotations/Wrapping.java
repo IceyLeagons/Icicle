@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations.lang;
+package net.iceyleagons.icicle.nms.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -30,14 +30,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to mark something as experimental, which means that it is either not tested or has to ability to bug out.
- * Features marked with this annotation may be removed or may not be further developed.
- *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 26, 2021
+ * @since Dec. 27, 2021
  */
-@Retention(RetentionPolicy.SOURCE)
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PACKAGE, ElementType.ANNOTATION_TYPE, ElementType.FIELD})
-public @interface Experimental {
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Wrapping {
+
+    String value();
+
+    boolean isField() default false;
+    String[] paramTypes() default {};
 }

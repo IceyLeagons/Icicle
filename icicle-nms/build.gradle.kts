@@ -41,6 +41,7 @@ dependencies {
     // https://mvnrepository.com/artifact/io.netty/netty-all
     implementation("io.netty:netty-all:4.1.72.Final")
 
+    implementation("net.bytebuddy:byte-buddy:1.11.15")
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
     spigotApi(spigotVersion)

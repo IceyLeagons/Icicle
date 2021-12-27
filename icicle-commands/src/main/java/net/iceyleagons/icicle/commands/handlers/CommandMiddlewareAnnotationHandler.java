@@ -27,7 +27,7 @@ package net.iceyleagons.icicle.commands.handlers;
 import net.iceyleagons.icicle.commands.CommandService;
 import net.iceyleagons.icicle.commands.middleware.CommandMiddleware;
 import net.iceyleagons.icicle.commands.middleware.CommandMiddlewareTemplate;
-import net.iceyleagons.icicle.core.annotations.lang.Autowired;
+import net.iceyleagons.icicle.utilities.lang.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import org.jetbrains.annotations.NotNull;
