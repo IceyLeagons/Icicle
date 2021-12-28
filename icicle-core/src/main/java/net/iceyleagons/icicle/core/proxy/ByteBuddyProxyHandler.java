@@ -41,7 +41,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class ByteBuddyProxyHandler implements BeanProxyHandler<ByteBuddy> {
+public class ByteBuddyProxyHandler implements BeanProxyHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ByteBuddyProxyHandler.class);
 

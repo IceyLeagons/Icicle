@@ -39,11 +39,18 @@ repositories {
 }
 
 dependencies {
+    implementation("io.netty:netty-all:4.1.72.Final")
     shadow(project(":icicle-core"))
     shadow(project(":icicle-commands"))
+    shadow(project(":icicle-nms"))
     implementation(project(":icicle-utilities"))
     spigotApi(spigotVersion)
     lombok()
+}
+
+icicle {
+    isModifyPluginYml = false
+
 }
 
 tasks.test {

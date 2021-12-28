@@ -45,7 +45,7 @@ public class ClassHelper {
     static {
         String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
         cbString = "org.bukkit.craftbukkit." + version + ".";
-        mcString = "net.minecraft.server." + version + ".";
+        mcString = "net.minecraft."; //.server."; //Not needed at least in 1.18??? + version + ".";
     }
 
     public static Class<?> parse(String name) {
@@ -68,7 +68,8 @@ public class ClassHelper {
         try {
             return Class.forName(name);
         } catch (ClassNotFoundException e) {
-            logger.warning("Class " + name + " was not found due to: " + e.getMessage());
+            logger.warning("Class " + name + " was not found due to: ");
+            e.printStackTrace();
             return null;
         }
     }

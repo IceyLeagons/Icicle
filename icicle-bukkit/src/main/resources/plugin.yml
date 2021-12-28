@@ -8,5 +8,3 @@ authors:
   - TOTHTOMI
   - Gabe
 main: net.iceyleagons.icicle.bukkit.IcicleBukkit
-depend:
-  - Icicle

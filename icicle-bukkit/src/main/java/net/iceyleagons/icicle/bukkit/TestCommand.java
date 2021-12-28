@@ -29,6 +29,11 @@ import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.meta.PlayerOnly;
 import net.iceyleagons.icicle.commands.annotations.params.CommandSender;
 import net.iceyleagons.icicle.commands.annotations.params.Optional;
+import net.iceyleagons.icicle.core.Application;
+import net.iceyleagons.icicle.nms.NMSHandler;
+import net.iceyleagons.icicle.nms.player.WrappedCraftPlayer;
+import net.iceyleagons.icicle.nms.player.WrappedEntityPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -39,6 +44,11 @@ import org.bukkit.entity.Player;
 @CommandManager("test")
 public class TestCommand {
 
+    private final NMSHandler handler;
+    public TestCommand(Application application) {
+        this.handler = new NMSHandler(application);
+    }
+
     @Command(value = "one", returnsTranslationKey = false)
     public String asd() {
         return "Executed!";
@@ -47,6 +57,11 @@ public class TestCommand {
     @PlayerOnly
     @Command(value = "two", returnsTranslationKey = false)
     public String asd2(@CommandSender Player player) {
+        WrappedCraftPlayer craftPlayer = handler.wrap(player, WrappedCraftPlayer.class);
+        //craftPlayer.getHandle().enterCombat();
+        System.out.println(craftPlayer.getHandle().getPlayerConnection().getNetworkManager().getChannel());
+
+
         return "Executed2 sender: " + player.getName();
     }
 

@@ -42,7 +42,7 @@ public final class NMSHelper {
             return wrapping.value();
         }
 
-        Class<?>[] paramTypes = wrapping.paramTypes();
+        String[] paramTypes = wrapping.paramTypes();
         return paramTypes.length == 0 ? wrapping.value() : wrapping.value() + paramTypes.length;
     }
 

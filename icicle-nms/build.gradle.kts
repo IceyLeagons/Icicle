@@ -44,6 +44,7 @@ dependencies {
     implementation("net.bytebuddy:byte-buddy:1.11.15")
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
+
     spigotApi(spigotVersion)
 }
 

@@ -34,10 +34,6 @@ import net.iceyleagons.icicle.nms.player.WrappedEntityPlayer;
 public class Test {
 
     public static void main(String[] args) {
-        NMSHandler handler = new NMSHandler(null);
-
-        WrappedEntityPlayer wrappedEntityPlayer = handler.wrap(null, WrappedEntityPlayer.class);
-        wrappedEntityPlayer.getNetworkManager().getChannel().close();
     }
 
 }

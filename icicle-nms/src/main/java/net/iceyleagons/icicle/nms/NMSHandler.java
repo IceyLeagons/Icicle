@@ -35,8 +35,11 @@ import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.iceyleagons.icicle.core.Application;
+import net.iceyleagons.icicle.nms.annotations.CraftWrap;
+import net.iceyleagons.icicle.nms.annotations.NMSWrap;
 import net.iceyleagons.icicle.nms.annotations.Wrapping;
 import net.iceyleagons.icicle.nms.utils.ClassHelper;
+import net.iceyleagons.icicle.nms.utils.MethodDelegator;
 import net.iceyleagons.icicle.utilities.AdvancedClass;
 
 import java.io.IOException;
@@ -66,6 +69,11 @@ public class NMSHandler {
 
     @SneakyThrows
     public <T> T wrap(Object origin, Class<T> toWrap) {
+        // TODO create version check:
+        //      Main interfaces would have the methods implemented but no @Wrapping, instead they would write @Version(value = {"version1", "version"}, wrapping = ThisInterface.class) on the class.
+        //      The handler then would get the wrapping class and use that in the for loop (would be -> wrapping.getDeclaredMethods()).
+        //      This way the correct @Wrapping annotated methods will be used.
+        
         if (toWrap == null || !toWrap.isInterface()) {
             throw new IllegalArgumentException("toWrap must be an interface!");
         }
@@ -82,15 +90,21 @@ public class NMSHandler {
             Wrapping wrapping = declaredMethod.getAnnotation(Wrapping.class);
 
             if (wrapping.isField()) {
-                suppliers.put(declaredMethod, (params) -> {
-                    Object obj = clazz.getFieldValue(wrapping.value(), origin, Object.class);
+                WrapSupplier<Object> supplier = new WrapSupplier<>(origin, wrapping) {
+                    @Override
+                    public Object supply(Object[] params) {
+                        Object obj = clazz.getFieldValue(this.getWrapping().value(), this.getOrigin(), Object.class);
+                        if (obj == null) return null;
 
-                    if (obj.getClass().isAssignableFrom(declaredMethod.getReturnType())) {
-                        return declaredMethod.getReturnType().cast(obj);
+                        if (obj.getClass().isAssignableFrom(declaredMethod.getReturnType())) {
+                            return declaredMethod.getReturnType().cast(obj);
+                        }
+
+                        return (declaredMethod.getReturnType().isAnnotationPresent(NMSWrap.class) || declaredMethod.getReturnType().isAnnotationPresent(CraftWrap.class))
+                                ? wrap(obj, declaredMethod.getReturnType()) : obj;
                     }
-
-                    return wrap(obj, declaredMethod.getReturnType());
-                });
+                };
+                suppliers.put(declaredMethod, supplier);
                 continue;
             }
 
@@ -103,17 +117,23 @@ public class NMSHandler {
                 String raw = rawTypes[i];
                 paramTypes[i] = ClassHelper.parse(raw);
             }
-
             clazz.preDiscoverMethod(key, wrapping.value(), paramTypes);
 
-            suppliers.put(declaredMethod, (params) -> {
-                Object obj = clazz.executeMethod(key, origin, Object.class, params);
-                if (obj.getClass().isAssignableFrom(declaredMethod.getReturnType())) {
-                    return declaredMethod.getReturnType().cast(obj);
-                }
+            WrapSupplier<Object> supplier = new WrapSupplier<Object>(origin, wrapping) {
+                @Override
+                public Object supply(Object[] params) {
+                    Object obj = clazz.executeMethod(key, getOrigin(), Object.class, params);
+                    if (obj == null) return null;
 
-                return wrap(obj, declaredMethod.getReturnType());
-            });
+                    if (obj.getClass().isAssignableFrom(declaredMethod.getReturnType())) {
+                        return declaredMethod.getReturnType().cast(obj);
+                    }
+
+                    return (declaredMethod.getReturnType().isAnnotationPresent(NMSWrap.class) || declaredMethod.getReturnType().isAnnotationPresent(CraftWrap.class))
+                            ? wrap(obj, declaredMethod.getReturnType()) : obj;
+                }
+            };
+            suppliers.put(declaredMethod, supplier);
         }
 
         return createObject(toWrap, suppliers);
@@ -136,17 +156,8 @@ public class NMSHandler {
         }
 
         return builder.make()
-                .load(clazz.getDeclaringClass().getClassLoader(), ClassReloadingStrategy.fromInstalledAgent())
+                .load(clazz.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent())
                 .getLoaded().getDeclaredConstructor().newInstance();
     }
 
-    @RequiredArgsConstructor
-    static class MethodDelegator {
-        private final WrapSupplier<Object> supplier;
-
-        @RuntimeType
-        Object foo(@Advice.AllArguments Object[] args) {
-            return supplier.supply(args);
-        }
-    }
 }

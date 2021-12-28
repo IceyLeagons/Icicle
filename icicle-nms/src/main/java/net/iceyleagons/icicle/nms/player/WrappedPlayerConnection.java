@@ -35,12 +35,12 @@ import net.iceyleagons.icicle.nms.WrapperClass;
  * @version 1.0.0
  * @since Dec. 23, 2021
  */
-@NMSWrap("PlayerConnection")
+@NMSWrap("server.network.PlayerConnection")
 public interface WrappedPlayerConnection {
 
-    @Wrapping(value = "networkManager", isField = true)
-    Object getNetworkManager();
+    @Wrapping(value = "a", isField = true)
+    WrappedNetworkManager getNetworkManager();
 
-    @Wrapping(value = "sendPacket", paramTypes = {"{nms}.Packet"})
+    @Wrapping(value = "a", paramTypes = {"{nms}network.protocol.Packet"})
     void sendPacket(Object packet);
 }

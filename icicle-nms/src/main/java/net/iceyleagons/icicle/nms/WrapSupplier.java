@@ -24,13 +24,25 @@
 
 package net.iceyleagons.icicle.nms;
 
+import lombok.Getter;
+import net.iceyleagons.icicle.nms.annotations.Wrapping;
+
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 27, 2021
  */
-public interface WrapSupplier<T> {
+@Getter
+public abstract class WrapSupplier<T> {
 
-    T supply(Object[] params);
+    private final Object origin;
+    private final Wrapping wrapping;
+
+    public WrapSupplier(Object origin, Wrapping wrapping) {
+        this.origin = origin;
+        this.wrapping = wrapping;
+    }
+
+    public abstract T supply(Object[] params);
 
 }

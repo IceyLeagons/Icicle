@@ -146,9 +146,6 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String label, @NotNull String[] args) {
         final TranslationService translationService = commandService.getTranslationService();
         final String cmd = command.getName().toLowerCase();
-        commandService.getParamResolvers().forEach((s, s1) -> {
-            System.out.println(s.getName() + " --> " + s1.toString());
-        });
         if (!cmd.equalsIgnoreCase(this.commandManager.value())) return true;
 
         try {
@@ -179,6 +176,7 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
 
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
         } catch (Exception e) {
+            e.printStackTrace();
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.RED + e.getMessage()));
             return true;
         }

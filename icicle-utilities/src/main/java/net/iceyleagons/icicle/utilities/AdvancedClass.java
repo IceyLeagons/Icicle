@@ -51,9 +51,14 @@ public class AdvancedClass<T> {
             return fieldCache.get(name);
         }
 
-        Field field = ReflectionUtils.getField(clazz, name, true);
-        fieldCache.put(name, field);
-        return field;
+        try {
+            Field field = ReflectionUtils.getField(clazz, name, true);
+            fieldCache.put(name, field);
+            return field;
+        } catch (NullPointerException e) {
+
+        }
+        return null;
     }
 
     public void preDiscoverMethod(String as, String name, Class<?>... paramTypes) {

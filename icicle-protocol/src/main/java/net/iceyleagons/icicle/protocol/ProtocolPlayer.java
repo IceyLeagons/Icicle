@@ -74,7 +74,7 @@ public class ProtocolPlayer {
         if (injected) return;
 
         this.injected = true;
-        Channel channel = craftPlayer.getHandle().getNetworkManager().getChannel();
+        Channel channel = craftPlayer.getHandle().getPlayerConnection().getNetworkManager().getChannel();
         ChannelPipeline pipeline = channel.pipeline();
 
         channels.put(this.player, channel);

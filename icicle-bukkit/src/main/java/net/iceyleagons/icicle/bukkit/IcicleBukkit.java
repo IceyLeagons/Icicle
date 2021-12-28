@@ -77,9 +77,9 @@ public class IcicleBukkit extends JavaPlugin {
     public void onLoad() {
         this.getLogger().info(Icicle.getLoadText());
 
-        GlobalBeanRegistry.registerService(Server.class, Bukkit.getServer());
-        GlobalBeanRegistry.registerService(PluginManager.class, Bukkit.getPluginManager());
-        GlobalBeanRegistry.registerService(BukkitScheduler.class, Bukkit.getScheduler());
+        //GlobalBeanRegistry.registerService(Server.class, Bukkit.getServer());
+        //GlobalBeanRegistry.registerService(PluginManager.class, Bukkit.getPluginManager());
+        //GlobalBeanRegistry.registerService(BukkitScheduler.class, Bukkit.getScheduler());
     }
 
     @SneakyThrows

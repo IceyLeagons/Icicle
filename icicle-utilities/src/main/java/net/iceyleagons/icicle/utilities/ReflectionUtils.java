@@ -44,7 +44,7 @@ public final class ReflectionUtils {
             field.setAccessible(true);
             field.set(parent, value);
         } catch (Exception e) {
-            LOGGER.warn("Could not set field ({}) value inside {}", field.getName(), parent.getClass().getName(), e);
+            throw new IllegalStateException(String.format("Could not set field (%s) value inside %s", field.getName(), parent.getClass().getName()), e);
         }
     }
 
@@ -54,10 +54,9 @@ public final class ReflectionUtils {
             field.setAccessible(true);
             return castIfNecessary(wantedType, field.get(parent));
         } catch (Exception e) {
-            LOGGER.warn("Could not get field ({}) value inside {}", field.getName(), parent.getClass().getName(), e);
+            throw new IllegalStateException(String.format("Could not get field (%s) value inside %s", field.getName(), parent.getClass().getName()), e);
         }
 
-        return null;
     }
 
     public static boolean isClassPresent(String className) {
@@ -74,7 +73,7 @@ public final class ReflectionUtils {
 
             return field;
         } catch (NoSuchFieldException ignored) {
-            return null;
+            throw new IllegalStateException("No field named " + name + " found in " + parent.getName());
         }
     }
 
@@ -88,7 +87,7 @@ public final class ReflectionUtils {
 
             return method;
         } catch (NoSuchMethodException ignored) {
-            return null;
+            throw new IllegalStateException("No method named " + name + " found in " + parent.getName());
         }
     }
 

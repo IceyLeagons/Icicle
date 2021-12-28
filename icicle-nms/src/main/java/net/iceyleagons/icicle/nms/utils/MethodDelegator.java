@@ -22,25 +22,29 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms.player;
+package net.iceyleagons.icicle.nms.utils;
 
-import net.iceyleagons.icicle.nms.annotations.CraftWrap;
-import net.iceyleagons.icicle.nms.annotations.Wrapping;
+import lombok.RequiredArgsConstructor;
+import net.bytebuddy.implementation.bind.annotation.AllArguments;
+import net.bytebuddy.implementation.bind.annotation.RuntimeType;
+import net.iceyleagons.icicle.nms.WrapSupplier;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 23, 2021
+ * @since Dec. 28, 2021
  */
-@CraftWrap("entity.CraftPlayer")
-public interface WrappedCraftPlayer {
+@RequiredArgsConstructor
+public class MethodDelegator {
+    private final WrapSupplier<Object> supplier;
 
-    @Wrapping("showDemoScreen")
-    void showDemoScreen();
+    @RuntimeType
+    public Object foo(@AllArguments Object[] args) {
+        return supplier.supply(args);
+    }
 
-    @Wrapping("updatePlayerListHeaderFooter")
-    void updatePlayerListHeaderFooter();
-
-    @Wrapping("getHandle")
-    WrappedEntityPlayer getHandle();
+    @RuntimeType
+    public Object foo() {
+        return supplier.supply(new Object[0]);
+    }
 }
