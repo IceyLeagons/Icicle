@@ -56,6 +56,14 @@ public class CommandRegistry {
         return Arrays.stream(aliases).map(String::toLowerCase).toArray(String[]::new);
     }
 
+    public void registerSubCommand(RegisteredCommandManager manager, String... aliases) {
+        if (!manager.getCommandManager().isSubCommand()) return;
+        subCommands.put(manager.getCommandManager().value(), manager);
+        for (String alias : aliases) {
+            subCommands.put(alias, manager);
+        }
+    }
+
     public void registerCommand(Method method, Object origin) throws CommandInjectionException {
         if (!method.isAnnotationPresent(Command.class)) return;
 
@@ -70,6 +78,13 @@ public class CommandRegistry {
         for (String allCommandName : command.getAllCommandNames()) {
             commands.put(allCommandName.toLowerCase(), command);
         }
+    }
+
+    public RegisteredCommandManager getSubCommand(String cmd) throws CommandNotFoundException {
+        String lower = cmd.toLowerCase();
+
+        if (!subCommands.containsKey(lower)) throw new CommandNotFoundException(cmd);
+        return subCommands.get(lower);
     }
 
     public RegisteredCommand getCommand(String cmd) throws CommandNotFoundException {

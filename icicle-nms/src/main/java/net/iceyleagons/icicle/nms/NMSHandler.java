@@ -73,7 +73,7 @@ public class NMSHandler {
         //      Main interfaces would have the methods implemented but no @Wrapping, instead they would write @Version(value = {"version1", "version"}, wrapping = ThisInterface.class) on the class.
         //      The handler then would get the wrapping class and use that in the for loop (would be -> wrapping.getDeclaredMethods()).
         //      This way the correct @Wrapping annotated methods will be used.
-        
+
         if (toWrap == null || !toWrap.isInterface()) {
             throw new IllegalArgumentException("toWrap must be an interface!");
         }

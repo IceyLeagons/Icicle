@@ -30,6 +30,7 @@ import net.iceyleagons.icicle.commands.CommandInjectionException;
 import net.iceyleagons.icicle.commands.CommandService;
 import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
+import net.iceyleagons.icicle.commands.annotations.manager.SubCommand;
 import net.iceyleagons.icicle.commands.annotations.meta.Alias;
 import net.iceyleagons.icicle.commands.annotations.meta.Usage;
 import net.iceyleagons.icicle.commands.annotations.params.FlagOptional;
@@ -49,6 +50,7 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
@@ -64,6 +66,10 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
     private final Object origin;
 
     public RegisteredCommandManager(Application application, CommandService commandService, CommandManager commandManager, Class<?> clazz, Object origin) throws CommandInjectionException {
+        this(application, commandService, commandManager, clazz, origin, false);
+    }
+
+    public RegisteredCommandManager(Application application, CommandService commandService, CommandManager commandManager, Class<?> clazz, Object origin, boolean subCommand) throws CommandInjectionException {
         this.application = application;
         this.commandRegistry = new CommandRegistry(this);
         this.commandService = commandService;
@@ -72,7 +78,9 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
         this.origin = origin;
 
         scanForCommands();
-        this.getCommandService().getInjector().injectCommand(commandManager.value().toLowerCase(), this, this, null, null, null, null, Arrays.asList(clazz.isAnnotationPresent(Alias.class) ? clazz.getAnnotation(Alias.class).value() : new String[0]));
+        if (!subCommand) {
+            this.getCommandService().getInjector().injectCommand(commandManager.value().toLowerCase(), this, this, null, null, null, null, Arrays.asList(clazz.isAnnotationPresent(Alias.class) ? clazz.getAnnotation(Alias.class).value() : new String[0]));
+        }
     }
 
     private void scanForCommands() throws CommandInjectionException {
@@ -81,6 +89,18 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
 
             commandRegistry.registerCommand(declaredMethod, origin);
         }
+        for (SubCommand subCommand : this.clazz.getAnnotationsByType(SubCommand.class)) {
+            Class<?> clazz = subCommand.value();
+            Object sc = application.getBeanManager().getBeanRegistry().getBeanNullable(clazz);
+            application.getBeanManager().getBeanRegistry().unregisterBean(clazz);
+
+            if (!(sc instanceof RegisteredCommandManager)) {
+                throw new IllegalStateException("Annotation value: " + clazz.getName() + " points to a non existing SubCommand manager in " + this.clazz.getName() + " .");
+            }
+
+            commandRegistry.registerSubCommand((RegisteredCommandManager) sc);
+        }
+
     }
 
     private Object[] getParams(Parameter[] parameters, String[] args, CommandSender commandSender) throws IllegalArgumentException {
@@ -142,10 +162,33 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
         }
     }
 
+    private boolean handleCommand(RegisteredCommand registeredCommand, TranslationService translationService, CommandSender sender, String[] args) throws Exception {
+        for (CommandMiddlewareTemplate middleware : commandService.getMiddlewareStore().getMiddlewares()) {
+            if (!middleware.onCommand(this.commandManager, this.clazz, args[0].toLowerCase(), registeredCommand.getMethod(), sender, this.commandService.getTranslationService())) {
+                return true;
+            }
+        }
+
+        String[] newArgs = ArrayUtils.ignoreFirst(1, args);
+
+        String response = handleCommand(registeredCommand, newArgs, sender);
+        if (registeredCommand.isSuppliesTranslationKey()) {
+            response = translationService.getTranslation(response, translationService.getLanguageProvider().getLanguage(sender), "");
+        }
+
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', response));
+        return true;
+    }
+
+    private boolean handleSubCommand(RegisteredCommandManager manager, @NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String label, @NotNull String[] args) {
+        String[] newArgs = ArrayUtils.ignoreFirst(1, args);
+        return manager.onCommand(sender, command, manager.getCommandManager().value(), newArgs);
+    }
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String label, @NotNull String[] args) {
         final TranslationService translationService = commandService.getTranslationService();
-        final String cmd = command.getName().toLowerCase();
+        final String cmd = label.toLowerCase();
         if (!cmd.equalsIgnoreCase(this.commandManager.value())) return true;
 
         try {
@@ -155,26 +198,18 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
             }
 
             RegisteredCommand registeredCommand = this.commandRegistry.getCommand(args[0].toLowerCase());
-            for (CommandMiddlewareTemplate middleware : commandService.getMiddlewareStore().getMiddlewares()) {
-                if (!middleware.onCommand(this.commandManager, this.clazz, args[0].toLowerCase(), registeredCommand.getMethod(), sender, this.commandService.getTranslationService())) {
-                    return true;
-                }
-            }
-
-            String[] newArgs = ArrayUtils.ignoreFirst(1, args);
-
-            String response = handleCommand(registeredCommand, newArgs, sender);
-            if (registeredCommand.isSuppliesTranslationKey()) {
-                response = translationService.getTranslation(response, translationService.getLanguageProvider().getLanguage(sender), "");
-            }
-
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', response));
+            return handleCommand(registeredCommand, translationService, sender, args);
         } catch (CommandNotFoundException e) {
-            String errorMsgKey = Strings.emptyToNull(commandManager.notFound());
-            String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cCommand &b{cmd} &cnot found!",
-                    Map.of("cmd", e.getCommand(), "sender", sender.getName()));
+            try {
+                RegisteredCommandManager registeredCommand = this.commandRegistry.getSubCommand(args[0].toLowerCase());
+                handleSubCommand(registeredCommand, sender, command, label, args);
+            } catch (CommandNotFoundException e2) {
+                String errorMsgKey = Strings.emptyToNull(commandManager.notFound());
+                String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cCommand &b{cmd} &cnot found!",
+                        Map.of("cmd", e.getCommand(), "sender", sender.getName()));
 
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+            }
         } catch (Exception e) {
             e.printStackTrace();
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.RED + e.getMessage()));
