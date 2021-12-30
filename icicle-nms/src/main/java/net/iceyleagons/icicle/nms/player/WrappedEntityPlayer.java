@@ -24,8 +24,8 @@
 
 package net.iceyleagons.icicle.nms.player;
 
+import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
 import net.iceyleagons.icicle.nms.annotations.NMSWrap;
-import net.iceyleagons.icicle.nms.annotations.Wrapping;
 
 /**
  * @author TOTHTOMI
@@ -41,6 +41,6 @@ public interface WrappedEntityPlayer {
     //@Wrapping(value = "ping", isField = true) TODO?? not found in 1.18
     //Integer getPing();
 
-    @Wrapping(value = "b", isField = true)
+    @FieldWrapping(value = "b")
     WrappedPlayerConnection getPlayerConnection();
 }

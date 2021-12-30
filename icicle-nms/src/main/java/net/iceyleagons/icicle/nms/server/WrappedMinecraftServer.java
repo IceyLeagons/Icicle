@@ -24,8 +24,8 @@
 
 package net.iceyleagons.icicle.nms.server;
 
+import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
 import net.iceyleagons.icicle.nms.annotations.NMSWrap;
-import net.iceyleagons.icicle.nms.annotations.Wrapping;
 
 /**
  * @author TOTHTOMI
@@ -35,7 +35,7 @@ import net.iceyleagons.icicle.nms.annotations.Wrapping;
 @NMSWrap("server.MinecraftServer")
 public interface WrappedMinecraftServer {
 
-    @Wrapping(value = "recentTps", isField = true)
+    @FieldWrapping(value = "recentTps")
     double[] getRecentTps();
 
     default double getTpsLastMinute() {

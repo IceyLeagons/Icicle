@@ -27,6 +27,7 @@ package net.iceyleagons.icicle.nms.player;
 import io.netty.channel.Channel;
 import net.iceyleagons.icicle.nms.WrapType;
 import net.iceyleagons.icicle.nms.WrapperClass;
+import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
 import net.iceyleagons.icicle.nms.annotations.NMSWrap;
 import net.iceyleagons.icicle.nms.annotations.Wrapping;
 
@@ -39,6 +40,6 @@ import net.iceyleagons.icicle.nms.annotations.Wrapping;
 @NMSWrap("network.NetworkManager")
 public interface WrappedNetworkManager{
 
-    @Wrapping(value = "k", isField = true)
+    @FieldWrapping(value = "k")
     Channel getChannel();
 }

@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.nms.player;
 
+import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
 import net.iceyleagons.icicle.nms.annotations.NMSWrap;
 import net.iceyleagons.icicle.nms.annotations.Wrapping;
 import net.iceyleagons.icicle.nms.utils.ClassHelper;
@@ -38,7 +39,7 @@ import net.iceyleagons.icicle.nms.WrapperClass;
 @NMSWrap("server.network.PlayerConnection")
 public interface WrappedPlayerConnection {
 
-    @Wrapping(value = "a", isField = true)
+    @FieldWrapping(value = "a")
     WrappedNetworkManager getNetworkManager();
 
     @Wrapping(value = "a", paramTypes = {"{nms}network.protocol.Packet"})
