@@ -36,8 +36,9 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Wrapping {
+public @interface FieldWrapping {
 
     String value();
-    String[] paramTypes() default {};
+
+    boolean isSetter() default false;
 }

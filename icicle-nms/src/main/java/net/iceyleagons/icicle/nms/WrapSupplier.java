@@ -25,7 +25,6 @@
 package net.iceyleagons.icicle.nms;
 
 import lombok.Getter;
-import net.iceyleagons.icicle.nms.annotations.Wrapping;
 
 /**
  * @author TOTHTOMI
@@ -36,11 +35,9 @@ import net.iceyleagons.icicle.nms.annotations.Wrapping;
 public abstract class WrapSupplier<T> {
 
     private final Object origin;
-    private final Wrapping wrapping;
 
-    public WrapSupplier(Object origin, Wrapping wrapping) {
+    public WrapSupplier(Object origin) {
         this.origin = origin;
-        this.wrapping = wrapping;
     }
 
     public abstract T supply(Object[] params);

@@ -38,13 +38,14 @@ import java.util.logging.Logger;
  */
 public class ClassHelper {
 
+    public static final String VERSION;
     private static final String cbString;
     private static final String mcString;
     private static final Logger logger = Logger.getLogger("ClassHelper");
 
     static {
-        String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-        cbString = "org.bukkit.craftbukkit." + version + ".";
+        VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        cbString = "org.bukkit.craftbukkit." + VERSION + ".";
         mcString = "net.minecraft."; //.server."; //Not needed at least in 1.18??? + version + ".";
     }
 

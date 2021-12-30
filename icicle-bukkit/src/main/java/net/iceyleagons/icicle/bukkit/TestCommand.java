@@ -32,8 +32,6 @@ import net.iceyleagons.icicle.commands.annotations.params.Optional;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.nms.NMSHandler;
 import net.iceyleagons.icicle.nms.player.WrappedCraftPlayer;
-import net.iceyleagons.icicle.nms.player.WrappedEntityPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**

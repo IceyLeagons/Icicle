@@ -24,26 +24,18 @@
 
 package net.iceyleagons.icicle.nms;
 
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
-import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.iceyleagons.icicle.core.Application;
-import net.iceyleagons.icicle.nms.annotations.CraftWrap;
-import net.iceyleagons.icicle.nms.annotations.NMSWrap;
-import net.iceyleagons.icicle.nms.annotations.Wrapping;
+import net.iceyleagons.icicle.nms.annotations.*;
 import net.iceyleagons.icicle.nms.utils.ClassHelper;
 import net.iceyleagons.icicle.nms.utils.MethodDelegator;
 import net.iceyleagons.icicle.utilities.AdvancedClass;
 
-import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -59,87 +51,66 @@ import static net.iceyleagons.icicle.nms.NMSHelper.getWrapClass;
  */
 public class NMSHandler {
 
-    private final Application application;
     private final ByteBuddy byteBuddy;
 
     public NMSHandler(Application application) {
-        this.application = application;
         this.byteBuddy = application.getBeanManager().getProxyHandler().getProxy();
     }
 
     @SneakyThrows
     public <T> T wrap(Object origin, Class<T> toWrap) {
-        // TODO create version check:
-        //      Main interfaces would have the methods implemented but no @Wrapping, instead they would write @Version(value = {"version1", "version"}, wrapping = ThisInterface.class) on the class.
-        //      The handler then would get the wrapping class and use that in the for loop (would be -> wrapping.getDeclaredMethods()).
-        //      This way the correct @Wrapping annotated methods will be used.
-
         if (toWrap == null || !toWrap.isInterface()) {
             throw new IllegalArgumentException("toWrap must be an interface!");
         }
 
-        AdvancedClass<?> clazz = getWrapClass(toWrap);
+        final AdvancedClass<?> clazz = getWrapClass(toWrap);
         if (clazz == null) {
             throw new IllegalStateException("Could not create wrap for: "  + toWrap.getName() + " , because the to-be-wrapped class is not found!");
         }
 
-        Map<Method, WrapSupplier<Object>> suppliers = new HashMap<>();
+        final Map<Method, WrapSupplier<Object>> suppliers = new HashMap<>();
+        final Method[] methods = getMethodsForCorrectVersion(toWrap);
 
-        for (Method declaredMethod : toWrap.getDeclaredMethods()) {
-            if (!declaredMethod.isAnnotationPresent(Wrapping.class)) continue;
-            Wrapping wrapping = declaredMethod.getAnnotation(Wrapping.class);
-
-            if (wrapping.isField()) {
-                WrapSupplier<Object> supplier = new WrapSupplier<>(origin, wrapping) {
-                    @Override
-                    public Object supply(Object[] params) {
-                        Object obj = clazz.getFieldValue(this.getWrapping().value(), this.getOrigin(), Object.class);
-                        if (obj == null) return null;
-
-                        if (obj.getClass().isAssignableFrom(declaredMethod.getReturnType())) {
-                            return declaredMethod.getReturnType().cast(obj);
-                        }
-
-                        return (declaredMethod.getReturnType().isAnnotationPresent(NMSWrap.class) || declaredMethod.getReturnType().isAnnotationPresent(CraftWrap.class))
-                                ? wrap(obj, declaredMethod.getReturnType()) : obj;
-                    }
-                };
-                suppliers.put(declaredMethod, supplier);
-                continue;
+        for (Method declaredMethod : methods) {
+            if (declaredMethod.isAnnotationPresent(Wrapping.class)) {
+                Wrapping wrapping = declaredMethod.getAnnotation(Wrapping.class);
+                suppliers.put(declaredMethod, handleMethodWrapping(origin, wrapping, clazz, declaredMethod));
+            } else if (declaredMethod.isAnnotationPresent(FieldWrapping.class)) {
+                FieldWrapping wrapping = declaredMethod.getAnnotation(FieldWrapping.class);
+                suppliers.put(declaredMethod, handleFieldWrapping(origin, wrapping, clazz, declaredMethod));
             }
-
-            String key = getKeyForMapping(wrapping);
-
-            String[] rawTypes = wrapping.paramTypes();
-            Class<?>[] paramTypes = new Class<?>[rawTypes.length];
-
-            for (int i = 0; i < rawTypes.length; i++) {
-                String raw = rawTypes[i];
-                paramTypes[i] = ClassHelper.parse(raw);
-            }
-            clazz.preDiscoverMethod(key, wrapping.value(), paramTypes);
-
-            WrapSupplier<Object> supplier = new WrapSupplier<Object>(origin, wrapping) {
-                @Override
-                public Object supply(Object[] params) {
-                    Object obj = clazz.executeMethod(key, getOrigin(), Object.class, params);
-                    if (obj == null) return null;
-
-                    if (obj.getClass().isAssignableFrom(declaredMethod.getReturnType())) {
-                        return declaredMethod.getReturnType().cast(obj);
-                    }
-
-                    return (declaredMethod.getReturnType().isAnnotationPresent(NMSWrap.class) || declaredMethod.getReturnType().isAnnotationPresent(CraftWrap.class))
-                            ? wrap(obj, declaredMethod.getReturnType()) : obj;
-                }
-            };
-            suppliers.put(declaredMethod, supplier);
         }
 
         return createObject(toWrap, suppliers);
     }
 
+    private Method[] getMethodsForCorrectVersion(Class<?> root) {
+        if (!root.isAnnotationPresent(Version.class)) {
+            return root.getDeclaredMethods();
+        }
 
+        Class<?> wrapper = null;
+        final String version = ClassHelper.VERSION;
+
+        for (Version v : root.getAnnotationsByType(Version.class)) {
+            for (String s : v.versions()) {
+                if (s.equals(version)) {
+                    wrapper = v.wrapper();
+                    break;
+                }
+            }
+        }
+
+        if (wrapper == null) {
+            throw new IllegalStateException("Could not find matching wrapper of " + root.getName() + " for version: " + version);
+        }
+
+        if (!wrapper.isInterface()) {
+            throw new IllegalStateException("Found wrapper of " + root.getName() + " for version " + version + " is not an interface!");
+        }
+
+        return wrapper.getDeclaredMethods();
+    }
 
     private <T> T createObject(Class<T> clazz, Map<Method, WrapSupplier<Object>> suppliers) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         DynamicType.Builder<T> builder = byteBuddy.subclass(clazz);
@@ -147,7 +118,7 @@ public class NMSHandler {
             Method method = methodWrapSupplierEntry.getKey();
             WrapSupplier<Object> supplier = methodWrapSupplierEntry.getValue();
 
-            if (method.getAnnotation(Wrapping.class).isField()) {
+            if (method.isAnnotationPresent(FieldWrapping.class)) {
                 builder = builder.define(method).intercept(FixedValue.value(supplier.supply(null)));
                 continue;
             }
@@ -160,4 +131,84 @@ public class NMSHandler {
                 .getLoaded().getDeclaredConstructor().newInstance();
     }
 
+    private String getProperNameForVersion(Method method, String current) {
+        if (!method.isAnnotationPresent(Alternative.class)) {
+            return current;
+        }
+
+        final String version = ClassHelper.VERSION;
+        String alt = null;
+
+        for (Alternative alternative : method.getAnnotationsByType(Alternative.class)) {
+            if (alternative.version().equals(version)) {
+                alt = alternative.value();
+                break;
+            }
+        }
+
+        if (alt == null || alt.isEmpty()) {
+            throw new IllegalStateException("Invalid alternative mapping for method: " + method.getName() + " for version: " + version + " (null or empty)");
+        }
+
+        return alt;
+    }
+
+    private WrapSupplier<Object> handleFieldWrapping(Object origin, FieldWrapping wrapping, AdvancedClass<?> clazz, Method declaredMethod) {
+        final String name = getProperNameForVersion(declaredMethod, wrapping.value());
+        if (wrapping.isSetter()) {
+            if (declaredMethod.getParameterTypes().length != 1) {
+                throw new IllegalStateException("Setter @FieldWrapping must have exactly one parameter!");
+            }
+
+            return new WrapSupplier<>(origin) {
+                @Override
+                public Object supply(Object[] params) {
+                    clazz.setFieldValue(name, this.getOrigin(), params[0]);
+                    return null;
+                }
+            };
+        }
+
+        return new WrapSupplier<>(origin) {
+            @Override
+            public Object supply(Object[] params) {
+                Object obj = clazz.getFieldValue(name, this.getOrigin(), Object.class);
+                if (obj == null) return null;
+
+                return handleReturn(obj, declaredMethod);
+            }
+        };
+    }
+
+    private WrapSupplier<Object> handleMethodWrapping(Object origin, Wrapping wrapping, AdvancedClass<?> clazz, Method declaredMethod) {
+        final String key = getKeyForMapping(wrapping);
+        final String name = getProperNameForVersion(declaredMethod, wrapping.value());
+
+        final String[] rawTypes = wrapping.paramTypes();
+        final Class<?>[] paramTypes = new Class<?>[rawTypes.length];
+
+        for (int i = 0; i < rawTypes.length; i++) {
+            String raw = rawTypes[i];
+            paramTypes[i] = ClassHelper.parse(raw);
+        }
+        clazz.preDiscoverMethod(key, name, paramTypes);
+
+        return new WrapSupplier<>(origin) {
+            @Override
+            public Object supply(Object[] params) {
+                Object obj = clazz.executeMethod(key, getOrigin(), Object.class, params);
+                return handleReturn(obj, declaredMethod);
+            }
+        };
+    }
+
+    private Object handleReturn(Object obj, Method declaredMethod) {
+        if (obj == null) return null;
+        if (obj.getClass().isAssignableFrom(declaredMethod.getReturnType())) {
+            return declaredMethod.getReturnType().cast(obj);
+        }
+
+        return (declaredMethod.getReturnType().isAnnotationPresent(NMSWrap.class) || declaredMethod.getReturnType().isAnnotationPresent(CraftWrap.class))
+                ? wrap(obj, declaredMethod.getReturnType()) : obj;
+    }
 }

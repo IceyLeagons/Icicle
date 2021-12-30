@@ -24,20 +24,17 @@
 
 package net.iceyleagons.icicle.nms.annotations;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 27, 2021
+ * @since Dec. 30, 2021
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Wrapping {
+public @interface Versions {
 
-    String value();
-    String[] paramTypes() default {};
+    Version[] value();
+
 }

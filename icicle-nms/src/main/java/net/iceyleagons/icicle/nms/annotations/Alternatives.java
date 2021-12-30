@@ -32,12 +32,12 @@ import java.lang.annotation.Target;
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 27, 2021
+ * @since Dec. 30, 2021
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Wrapping {
+public @interface Alternatives {
 
-    String value();
-    String[] paramTypes() default {};
+    Alternative[] value();
+
 }
