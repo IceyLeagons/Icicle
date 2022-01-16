@@ -25,10 +25,15 @@
 package net.iceyleagons.icicle.nms;
 
 import net.iceyleagons.icicle.nms.annotations.CraftWrap;
+import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
 import net.iceyleagons.icicle.nms.annotations.NMSWrap;
 import net.iceyleagons.icicle.nms.annotations.Wrapping;
+import net.iceyleagons.icicle.nms.annotations.constructor.Constructor;
+import net.iceyleagons.icicle.nms.annotations.constructor.Constructors;
 import net.iceyleagons.icicle.nms.utils.ClassHelper;
 import net.iceyleagons.icicle.utilities.AdvancedClass;
+
+import java.util.Arrays;
 
 /**
  * @author TOTHTOMI
@@ -38,12 +43,14 @@ import net.iceyleagons.icicle.utilities.AdvancedClass;
 public final class NMSHelper {
 
     public static String getKeyForMapping(Wrapping wrapping) {
-        if (wrapping.isField()) {
-            return wrapping.value();
-        }
-
         String[] paramTypes = wrapping.paramTypes();
         return paramTypes.length == 0 ? wrapping.value() : wrapping.value() + paramTypes.length;
+    }
+
+    public static Class<?>[] getParameterClasses(Constructor constructor) {
+        return Arrays.stream(constructor.paramTypeClasses())
+                .map(ClassHelper::parse)
+                .toArray(Class<?>[]::new);
     }
 
     public static AdvancedClass<?> getWrapClass(Class<?> toWrap) {

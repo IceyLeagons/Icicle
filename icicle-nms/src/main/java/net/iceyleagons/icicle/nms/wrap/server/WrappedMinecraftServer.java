@@ -22,21 +22,31 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms.annotations;
+package net.iceyleagons.icicle.nms.wrap.server;
 
-import java.lang.annotation.*;
+import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
+import net.iceyleagons.icicle.nms.annotations.NMSWrap;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 30, 2021
+ * @since Dec. 28, 2021
  */
-@Target(ElementType.TYPE)
-@Repeatable(Versions.class)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Version {
+@NMSWrap("server.MinecraftServer")
+public interface WrappedMinecraftServer {
 
-    String[] versions();
-    Class<?> wrapper();
+    @FieldWrapping(value = "recentTps")
+    double[] getRecentTps();
 
+    default double getTpsLastMinute() {
+        return getRecentTps()[0];
+    }
+
+    default double getTpsLastFiveMinutes() {
+        return getRecentTps()[1];
+    }
+
+    default double getTpsLastFifteenMinutes() {
+        return getRecentTps()[2];
+    }
 }

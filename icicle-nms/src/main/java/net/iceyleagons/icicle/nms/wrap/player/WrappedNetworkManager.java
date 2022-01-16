@@ -22,25 +22,21 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms.player;
+package net.iceyleagons.icicle.nms.wrap.player;
 
-import net.iceyleagons.icicle.nms.annotations.CraftWrap;
-import net.iceyleagons.icicle.nms.annotations.Wrapping;
+import io.netty.channel.Channel;
+import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
+import net.iceyleagons.icicle.nms.annotations.NMSWrap;
+
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 23, 2021
  */
-@CraftWrap("entity.CraftPlayer")
-public interface WrappedCraftPlayer {
+@NMSWrap("network.NetworkManager")
+public interface WrappedNetworkManager{
 
-    @Wrapping("showDemoScreen")
-    void showDemoScreen();
-
-    @Wrapping("updatePlayerListHeaderFooter")
-    void updatePlayerListHeaderFooter();
-
-    @Wrapping("getHandle")
-    WrappedEntityPlayer getHandle();
+    @FieldWrapping(value = "k")
+    Channel getChannel();
 }

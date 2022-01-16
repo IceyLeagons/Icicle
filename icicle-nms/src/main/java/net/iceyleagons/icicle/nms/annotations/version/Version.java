@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +22,21 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms;
+package net.iceyleagons.icicle.nms.annotations.version;
 
-import net.iceyleagons.icicle.nms.player.WrappedEntityPlayer;
+import java.lang.annotation.*;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 27, 2021
+ * @since Dec. 30, 2021
  */
-public class Test {
+@Target(ElementType.TYPE)
+@Repeatable(Versions.class)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Version {
 
-    public static void main(String[] args) {
-    }
+    String[] versions();
+    Class<?> wrapper();
 
 }

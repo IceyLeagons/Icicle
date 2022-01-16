@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,21 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms.player;
+package net.iceyleagons.icicle.nms.annotations.constructor;
 
-import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
-import net.iceyleagons.icicle.nms.annotations.NMSWrap;
-import net.iceyleagons.icicle.nms.annotations.Wrapping;
-import net.iceyleagons.icicle.nms.utils.ClassHelper;
-import net.iceyleagons.icicle.nms.WrapType;
-import net.iceyleagons.icicle.nms.WrapperClass;
+import java.lang.annotation.*;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 23, 2021
+ * @since Jan. 16, 2022
  */
-@NMSWrap("server.network.PlayerConnection")
-public interface WrappedPlayerConnection {
+@Target(ElementType.TYPE)
+@Repeatable(Constructors.class)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Constructor {
 
-    @FieldWrapping(value = "a")
-    WrappedNetworkManager getNetworkManager();
+    int id();
+    String[] paramTypeClasses();
 
-    @Wrapping(value = "a", paramTypes = {"{nms}network.protocol.Packet"})
-    void sendPacket(Object packet);
 }

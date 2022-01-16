@@ -22,31 +22,25 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms.server;
+package net.iceyleagons.icicle.nms.wrap.player;
 
-import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
-import net.iceyleagons.icicle.nms.annotations.NMSWrap;
+import net.iceyleagons.icicle.nms.annotations.CraftWrap;
+import net.iceyleagons.icicle.nms.annotations.Wrapping;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 28, 2021
+ * @since Dec. 23, 2021
  */
-@NMSWrap("server.MinecraftServer")
-public interface WrappedMinecraftServer {
+@CraftWrap("entity.CraftPlayer")
+public interface WrappedCraftPlayer {
 
-    @FieldWrapping(value = "recentTps")
-    double[] getRecentTps();
+    @Wrapping("showDemoScreen")
+    void showDemoScreen();
 
-    default double getTpsLastMinute() {
-        return getRecentTps()[0];
-    }
+    @Wrapping("updatePlayerListHeaderFooter")
+    void updatePlayerListHeaderFooter();
 
-    default double getTpsLastFiveMinutes() {
-        return getRecentTps()[1];
-    }
-
-    default double getTpsLastFifteenMinutes() {
-        return getRecentTps()[2];
-    }
+    @Wrapping("getHandle")
+    WrappedEntityPlayer getHandle();
 }

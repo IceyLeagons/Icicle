@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,22 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.bukkit;
+package net.iceyleagons.icicle.nms.annotations.constructor;
 
-import net.iceyleagons.icicle.commands.annotations.Command;
-import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
-import net.iceyleagons.icicle.commands.annotations.meta.PlayerOnly;
-import net.iceyleagons.icicle.commands.annotations.params.CommandSender;
-import net.iceyleagons.icicle.commands.annotations.params.Optional;
-import org.bukkit.entity.Player;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 12, 2021
+ * @since Jan. 16, 2022
  */
-@CommandManager("test")
-public class TestCommand {
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Constructors {
 
-    @PlayerOnly
-    @Command(value = "four", returnsTranslationKey = false)
-    public String asd2(@CommandSender Player player, String arg, @Optional Player argOpt) {
-        return "Executed2 sender: " + player.getName() + " | arg: " + arg + " opt: " + argOpt;
-    }
+    Constructor[] value();
+
 }

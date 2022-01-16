@@ -22,24 +22,25 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms.player;
+package net.iceyleagons.icicle.nms.wrap.player;
 
-import io.netty.channel.Channel;
-import net.iceyleagons.icicle.nms.WrapType;
-import net.iceyleagons.icicle.nms.WrapperClass;
 import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
 import net.iceyleagons.icicle.nms.annotations.NMSWrap;
-import net.iceyleagons.icicle.nms.annotations.Wrapping;
-
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 23, 2021
  */
-@NMSWrap("network.NetworkManager")
-public interface WrappedNetworkManager{
+@NMSWrap("server.level.EntityPlayer")
+public interface WrappedEntityPlayer {
 
-    @FieldWrapping(value = "k")
-    Channel getChannel();
+    //@Wrapping(value = "networkManager", isField = true) TODO?? not found in 1.18
+    //WrappedNetworkManager getNetworkManager();
+
+    //@Wrapping(value = "ping", isField = true) TODO?? not found in 1.18
+    //Integer getPing();
+
+    @FieldWrapping(value = "b")
+    WrappedPlayerConnection getPlayerConnection();
 }

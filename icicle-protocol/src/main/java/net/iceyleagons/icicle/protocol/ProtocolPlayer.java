@@ -29,7 +29,7 @@ import io.netty.channel.ChannelPipeline;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import net.iceyleagons.icicle.nms.NMSHandler;
-import net.iceyleagons.icicle.nms.player.WrappedCraftPlayer;
+import net.iceyleagons.icicle.nms.wrap.player.WrappedCraftPlayer;
 import net.iceyleagons.icicle.protocol.event.PacketContainer;
 import net.iceyleagons.icicle.protocol.event.impl.OutBoundPacketEvent;
 import net.iceyleagons.icicle.protocol.handler.InBoundPacketHandler;
@@ -56,7 +56,7 @@ public class ProtocolPlayer {
 
     public ProtocolPlayer(Player player, NMSHandler handler) {
         this.player = player;
-        this.craftPlayer = handler.wrap(player, WrappedCraftPlayer.class);
+        this.craftPlayer = handler.wrapFromOrigin(player, WrappedCraftPlayer.class);
         this.injected = false;
     }
 

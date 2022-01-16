@@ -32,6 +32,9 @@ import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.nms.annotations.*;
+import net.iceyleagons.icicle.nms.annotations.constructor.Constructor;
+import net.iceyleagons.icicle.nms.annotations.version.alt.Alternative;
+import net.iceyleagons.icicle.nms.annotations.version.Version;
 import net.iceyleagons.icicle.nms.utils.ClassHelper;
 import net.iceyleagons.icicle.nms.utils.MethodDelegator;
 import net.iceyleagons.icicle.utilities.AdvancedClass;
@@ -41,8 +44,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.iceyleagons.icicle.nms.NMSHelper.getKeyForMapping;
-import static net.iceyleagons.icicle.nms.NMSHelper.getWrapClass;
+import static net.iceyleagons.icicle.nms.NMSHelper.*;
 
 /**
  * @author TOTHTOMI
@@ -58,7 +60,29 @@ public class NMSHandler {
     }
 
     @SneakyThrows
-    public <T> T wrap(Object origin, Class<T> toWrap) {
+    public <T> T wrap(Class<T> toWrap, int constructorId, Object... params) {
+        Constructor[] constructors = toWrap.getAnnotationsByType(Constructor.class);
+        Constructor constructorToUse = null;
+
+        for (Constructor constructor : constructors) {
+            if (constructor.id() == constructorId) {
+                constructorToUse = constructor;
+                break;
+            }
+        }
+
+        if (constructorToUse == null) {
+            throw new IllegalStateException("Constructor with id " + constructorId + " not found!");
+        }
+
+        final AdvancedClass<?> clazz = getWrapClass(toWrap);
+        Object origin = clazz.getClazz().getDeclaredConstructor(getParameterClasses(constructorToUse)).newInstance(params);
+
+        return wrapFromOrigin(origin, toWrap);
+    }
+
+    @SneakyThrows
+    public <T> T wrapFromOrigin(Object origin, Class<T> toWrap) {
         if (toWrap == null || !toWrap.isInterface()) {
             throw new IllegalArgumentException("toWrap must be an interface!");
         }
@@ -209,6 +233,6 @@ public class NMSHandler {
         }
 
         return (declaredMethod.getReturnType().isAnnotationPresent(NMSWrap.class) || declaredMethod.getReturnType().isAnnotationPresent(CraftWrap.class))
-                ? wrap(obj, declaredMethod.getReturnType()) : obj;
+                ? wrapFromOrigin(obj, declaredMethod.getReturnType()) : obj;
     }
 }
