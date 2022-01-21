@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,32 +22,19 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.nms;
+package net.iceyleagons.icicle.nms.annotations;
 
-import lombok.Getter;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 27, 2021
+ * @since Jan. 21, 2022
  */
-@Getter
-public abstract class WrapSupplier<T> {
-
-    private final Object origin;
-
-    public WrapSupplier(Object origin) {
-        this.origin = origin;
-    }
-
-    public abstract T supply(Object[] params);
-
-    public static WrapSupplier<Object> createOriginSupplier(Object origin) {
-        return new WrapSupplier<>(origin) {
-            @Override
-            public Object supply(Object[] params) {
-                return this.getOrigin();
-            }
-        };
-    }
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface OriginGetter {
 }

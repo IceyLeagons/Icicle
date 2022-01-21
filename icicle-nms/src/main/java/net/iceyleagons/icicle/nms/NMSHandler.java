@@ -102,6 +102,8 @@ public class NMSHandler {
             } else if (declaredMethod.isAnnotationPresent(FieldWrapping.class)) {
                 FieldWrapping wrapping = declaredMethod.getAnnotation(FieldWrapping.class);
                 suppliers.put(declaredMethod, handleFieldWrapping(origin, wrapping, clazz, declaredMethod));
+            } else if (declaredMethod.isAnnotationPresent(OriginGetter.class)) {
+                suppliers.put(declaredMethod, WrapSupplier.createOriginSupplier(origin));
             }
         }
 
