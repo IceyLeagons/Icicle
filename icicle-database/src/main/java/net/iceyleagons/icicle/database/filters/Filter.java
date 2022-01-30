@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,18 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.database.drivers;
+package net.iceyleagons.icicle.database.filters;
+
+import net.iceyleagons.icicle.database.Schema;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 27, 2021
+ * @since Jan. 26, 2022
  */
-public class AbstractLoginSQLDriver extends AbstractSQLDriver {
+public interface Filter {
+
+    boolean doesApplyTo(Object object, Schema<?> schema);
+    String sql(Schema<?> schema);
+
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +22,47 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.database.transaction;
+package net.iceyleagons.icicle.database;
 
 import lombok.Getter;
+import net.iceyleagons.icicle.database.filters.Filter;
+import net.iceyleagons.icicle.utilities.generic.acessors.OneTypeAccessor;
+import net.iceyleagons.icicle.utilities.lang.Experimental;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 26, 2021
+ * @since Jan. 26, 2022
  */
 @Getter
-public class Outcome<T, I> {
+@Experimental
+public class Repository<T> extends OneTypeAccessor<T> {
 
-    public static final int STATUS_OK = 0;
-    public static final int STATUS_CONFLICT = 1; // Just preserved atm
-    public static final int STATUS_QUERY_ERROR = 2; //problems with the query (ex.: malformed query)
-    public static final int STATUS_DB_ERROR = 3; //database problems (ex.: could not save an entry in the session)
-    public static final int STATUS_CONNECTION_ERROR = 4; //database connection errors (lost connection, etc.)
+    private final DatabaseConnector connector;
+    private final Schema<T> schema;
 
-    private final Transaction<T, I> session = null;
-    private int statusCode;
-    private int affectedEntries;
-    private Map<I, T> retrieved = new ConcurrentHashMap<>();
-    private Map<T, I> saved = new ConcurrentHashMap<>(); //used for retrieving IDs
+    public Repository(DatabaseConnector connector) {
+        this.schema = Schema.of(super.getATypeClass());
+        this.connector = connector;
+    }
 
-    public I getIdForSavedObject(T object) {
-        return saved.get(object);
+    public void save(T toSave) {
+    }
+
+    public Set<T> findAll() {
+        return null;
+    }
+
+    public Optional<T> findOne(Filter... filters) {
+        return null;
+    }
+
+    public Set<T> findMany(Filter... filters) {
+        if (filters.length == 0) return findAll();
+
+        return null;
     }
 }

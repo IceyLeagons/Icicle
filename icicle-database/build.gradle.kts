@@ -42,6 +42,11 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.32")
     implementation("org.jetbrains:annotations:20.1.0")
 
+    // https://mvnrepository.com/artifact/org.mongodb/mongodb-driver
+    implementation("org.mongodb:mongodb-driver:3.12.10")
+    shadow("ca.krasnay:sqlbuilder:1.2")
+
+
     // File handling APIs
     shadow("org.json:json:20210307")
     shadow("com.github.Querz:NBT:6.1")

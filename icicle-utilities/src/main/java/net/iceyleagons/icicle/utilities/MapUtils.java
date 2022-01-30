@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,19 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.database;
+package net.iceyleagons.icicle.utilities;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 27, 2021
+ * @since Jan. 29, 2022
  */
-public class Dummy {
+public final class MapUtils {
+
+    public static <A,B> Map<B, A> swapKeyValues(Map<A, B> input) {
+        return input.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+    }
 }

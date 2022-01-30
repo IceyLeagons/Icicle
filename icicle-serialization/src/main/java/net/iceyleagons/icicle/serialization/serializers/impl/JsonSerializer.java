@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization.serializers;
+package net.iceyleagons.icicle.serialization.serializers.impl;
 
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.serialization.MappedObject;
@@ -51,20 +51,26 @@ public class JsonSerializer extends ObjectMapper {
 
     @SneakyThrows
     public <T> T convertFromString(String input, Class<T> wantedType) {
-        JSONObject jsonObject = new JSONObject(input);
-        MappedObject mappedObject = new MappedObject(wantedType);
+        return fromJsonObject(new JSONObject(input), wantedType);
+    }
 
-        fromJson(jsonObject, mappedObject, wantedType);
+    public <T> T fromJsonObject(JSONObject object, Class<T> wantedType) {
+        MappedObject mappedObject = new MappedObject(wantedType);
+        fromJson(object, mappedObject, wantedType);
 
         return super.demapObject(mappedObject, wantedType);
     }
 
-    public String convertToString(Object object) {
-        MappedObject mapped = super.mapObject(object);
+    public JSONObject toJsonObject(Object obj) {
+        MappedObject mapped = super.mapObject(obj);
         JSONObject root = new JSONObject();
         toJson(mapped, root);
 
-        return root.toString(identFactor);
+        return root;
+    }
+
+    public String convertToString(Object object) {
+        return toJsonObject(object).toString(identFactor);
     }
 
     private void fromJson(JSONObject value, MappedObject root, Class<?> javaType) {

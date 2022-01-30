@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,28 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.database.drivers;
+package net.iceyleagons.icicle.database.filters;
 
-import net.iceyleagons.icicle.database.DatabaseDriver;
-
-import java.sql.Connection;
+import net.iceyleagons.icicle.database.Schema;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 27, 2021
+ * @since Jan. 29, 2022
  */
-public abstract class AbstractSQLDriver implements DatabaseDriver {
+public final class Filters {
 
-    @Override
-    public Connection connect(String url) throws UnsupportedOperationException {
-        return null;
-    }
+    public static Filter id(Object wantedId) {
+        return new Filter() {
+            @Override
+            public boolean doesApplyTo(Object object, Schema<?> schema) {
+                return schema.idEquals(object, wantedId);
+            }
 
-    @Override
-    public boolean supportsNativeRollback() {
-        return false;
+            @Override
+            public String sql(Schema<?> schema) {
+                return String.format("%s = `%s`", schema.getIdKey(), wantedId.toString());
+            }
+        };
     }
 }

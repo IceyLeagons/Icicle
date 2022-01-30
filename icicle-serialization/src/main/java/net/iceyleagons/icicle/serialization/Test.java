@@ -30,7 +30,7 @@ import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 import net.iceyleagons.icicle.serialization.annotations.Convert;
 import net.iceyleagons.icicle.serialization.converters.builtin.UUIDConverter;
-import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
+import net.iceyleagons.icicle.serialization.serializers.impl.JsonSerializer;
 
 import java.util.Arrays;
 import java.util.List;

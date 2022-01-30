@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,16 +24,34 @@
 
 package net.iceyleagons.icicle.database;
 
+import net.iceyleagons.icicle.database.filters.Filter;
+
 import java.sql.Connection;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 26, 2021
+ * @since Jan. 26, 2022
  */
-public interface DatabaseDriver {
+public interface DatabaseConnector<T> {
 
-    Connection connect(final String url) throws UnsupportedOperationException;
+    boolean isSql();
+    void buildDatabase(Schema<T> schema);
 
-    boolean supportsNativeRollback();
+    void connect() throws IllegalStateException; // TODO replace with DBError
+    void disconnect() throws IllegalStateException;  // TODO replace with DBError
+
+    void save(T toSave);
+
+    Set<T> findAll();
+
+    Optional<T> findOne(Filter... filters);
+
+    Set<T> findMany(Filter... filters);
+
+    default Connection getConnection() {
+        throw new IllegalStateException("Database is not an SQL database!");
+    }
 }
