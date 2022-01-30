@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+- name: 💬 Discord server
+  url: https://discord.iceyleagons.net/
+  about: Chat with devs and community
+- name: 🌐Website
+  url: https://icicle.iceyleagons.net/
+  about: Icicle website
