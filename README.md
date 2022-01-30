@@ -19,6 +19,9 @@
     <a href="https://discord.iceyleagons.net/">
       <img alt="Discord Online" src="https://img.shields.io/discord/489789322300620801.svg" />
     </a>
+    <a href="https://github.com/IceyLeagons/Icicle/CODE_OF_CONDUCT.md/">
+      <img alt="Contributor Covenant" src="https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg" />
+    </a>
   </div>
   <br>
   <div id="description">
