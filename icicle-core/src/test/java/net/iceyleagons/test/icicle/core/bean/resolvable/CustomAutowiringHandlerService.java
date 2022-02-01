@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,23 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.beans.resolvers;
+package net.iceyleagons.test.icicle.core.bean.resolvable;
 
-import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
-import org.jetbrains.annotations.Nullable;
+import net.iceyleagons.icicle.core.annotations.Service;
 
-import java.lang.annotation.Annotation;
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Feb. 01, 2022
+ */
+@Service
+public class CustomAutowiringHandlerService {
 
-public interface AutowiringAnnotationResolver {
+    public String asd;
+    public String should;
 
-    @Nullable <T> T getValueForAnnotation(Class<? extends Annotation> annotationType, Annotation annotation, Class<T> wantedType);
-
-    void registerAutowiringAnnotationHandler(AutowiringAnnotationHandler handler);
-    boolean has(Class<?> type);
+    public CustomAutowiringHandlerService(@TestAutowiring("should") String should, @TestAutowiring("asd") String asd) {
+        this.should = should;
+        this.asd = asd;
+    }
 }

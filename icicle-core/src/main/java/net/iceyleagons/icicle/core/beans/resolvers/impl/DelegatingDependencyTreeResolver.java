@@ -24,14 +24,20 @@
 
 package net.iceyleagons.icicle.core.beans.resolvers.impl;
 
+import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
+import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
+import net.iceyleagons.icicle.core.beans.resolvers.CustomAutoCreateAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
+import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.utilities.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -47,9 +53,13 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
 
     private static final Logger logger = LoggerFactory.getLogger(DelegatingDependencyTreeResolver.class);
     private final BeanRegistry beanRegistry;
+    private final AutowiringAnnotationResolver autowiringAnnotationResolver;
+    private final MergedAnnotationResolver autoCreateResolver;
 
-    public DelegatingDependencyTreeResolver(BeanRegistry beanRegistry) {
+    public DelegatingDependencyTreeResolver(BeanRegistry beanRegistry, AutowiringAnnotationResolver autowiringAnnotationResolver, MergedAnnotationResolver autoCreateResolver) {
         this.beanRegistry = beanRegistry;
+        this.autoCreateResolver = autoCreateResolver;
+        this.autowiringAnnotationResolver = autowiringAnnotationResolver;
     }
 
     /**
@@ -83,7 +93,7 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
      * {@inheritDoc}
      */
     @Override
-    public LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException {
+    public LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException, UnsatisfiedDependencyException {
         logger.info("Resolving dependency tree for bean-type: {}", currentBean.getName());
 
         LinkedList<Class<?>> tree = new LinkedList<>();
@@ -96,11 +106,22 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
             Class<?> bean = stack.pop();
             if (beanRegistry.isRegistered(bean)) continue; //making sure it's already registered to not spend time
 
-            Class<?>[] dependencies = BeanUtils.getResolvableConstructor(bean).getParameterTypes();
-            for (Class<?> dependency : dependencies) {
-                if (tree.contains(dependency) && !beanRegistry.isRegistered(dependency)) {
-                    logger.info("Circular dependency found!");
-                    throw new CircularDependencyException(getCycleString(tree, dependency, bean));
+            Parameter[] dependencies = BeanUtils.getResolvableConstructor(bean).getParameters();
+            x: for (Parameter param : dependencies) {
+                Class<?> dependency = param.getType();
+                for (Annotation annotation : param.getAnnotations()) {
+                     if (autowiringAnnotationResolver.has(annotation.annotationType())) {
+                        continue x;
+                    }
+                }
+
+                if (!beanRegistry.isRegistered(dependency)) {
+                    if (tree.contains(dependency)) {
+                        logger.info("Circular dependency found!");
+                        throw new CircularDependencyException(getCycleString(tree, dependency, bean));
+                    } else if (!this.autoCreateResolver.isAnnotated(dependency)) {
+                        throw new UnsatisfiedDependencyException(param);
+                    }
                 }
 
                 tree.add(dependency);

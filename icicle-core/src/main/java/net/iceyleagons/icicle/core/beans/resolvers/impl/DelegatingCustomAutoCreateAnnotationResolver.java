@@ -52,4 +52,9 @@ public class DelegatingCustomAutoCreateAnnotationResolver implements CustomAutoC
             }
         }
     }
+
+    @Override
+    public boolean has(Class<?> type) {
+        return handlers.containsKey(type);
+    }
 }

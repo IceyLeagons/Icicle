@@ -43,6 +43,11 @@ public class DelegatingAutowiringAnnotationResolver implements AutowiringAnnotat
     }
 
     @Override
+    public boolean has(Class<?> type) {
+        return handlers.containsKey(type);
+    }
+
+    @Override
     public <T> T getValueForAnnotation(Class<? extends Annotation> annotationType, Annotation annotation, Class<T> wantedType) {
         return handlers.containsKey(annotationType) ? handlers.get(annotationType).getValueForAnnotation(annotation, wantedType) : null;
     }

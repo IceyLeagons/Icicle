@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,32 +22,28 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.beans.resolvers;
+package net.iceyleagons.test.icicle.core.bean.unsatisfied;
 
+import net.iceyleagons.icicle.core.AbstractIcicleApplication;
+import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
-
-import java.util.LinkedList;
+import net.iceyleagons.icicle.core.utils.ExecutionUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 /**
- * DependencyTreeResolvers are responsible for catching circular-dependency problems and returning the bean classes in
- * reverse order, so when creating the beans the one with the least amount of dependencies will be created first, then so on.
- *
  * @author TOTHTOMI
- * @version 1.1.0
- * @since Aug. 23, 2021
+ * @version 1.0.0
+ * @since Feb. 01, 2022
  */
-public interface DependencyTreeResolver {
+public class UnsatisfiedDependencyTest {
 
-    /**
-     * Resolves the dependency tree from the passed bean.
-     * <p>
-     * Returns a LinkedList of all bean classes, the supplied bean is in relation with in a reversed order:
-     * The bean with the least dependency should be the first element of the linked list.
-     *
-     * @param currentBean the bean to start from
-     * @return the dependency tree
-     * @throws CircularDependencyException if the dependencies in the tree form a circle somewhere
-     */
-    LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException, UnsatisfiedDependencyException;
+    @Test
+    @DisplayName("Circular dependency")
+    public void testCircularDependency() {
+        Application app = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.unsatisfied", ExecutionUtils.debugHandler()) {};
+        Assertions.assertThrows(UnsatisfiedDependencyException.class, app::start);
+    }
 }

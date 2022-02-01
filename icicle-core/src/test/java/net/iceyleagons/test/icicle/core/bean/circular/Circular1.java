@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,21 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.beans.resolvers;
+package net.iceyleagons.test.icicle.core.bean.circular;
 
-import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
-import org.jetbrains.annotations.Nullable;
+import net.iceyleagons.icicle.core.annotations.Service;
 
-import java.lang.annotation.Annotation;
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Feb. 01, 2022
+ */
+@Service
+public class Circular1 {
 
-public interface AutowiringAnnotationResolver {
+    private final Circular2 circular2;
 
-    @Nullable <T> T getValueForAnnotation(Class<? extends Annotation> annotationType, Annotation annotation, Class<T> wantedType);
-
-    void registerAutowiringAnnotationHandler(AutowiringAnnotationHandler handler);
-    boolean has(Class<?> type);
+    public Circular1(Circular2 circular2) {
+        this.circular2 = circular2;
+    }
 }

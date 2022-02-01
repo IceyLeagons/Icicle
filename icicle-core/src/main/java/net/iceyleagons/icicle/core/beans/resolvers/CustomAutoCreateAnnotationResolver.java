@@ -32,4 +32,5 @@ public interface CustomAutoCreateAnnotationResolver {
 
     void onCreated(Object bean, Class<?> type) throws Exception;
 
+    boolean has(Class<?> type);
 }

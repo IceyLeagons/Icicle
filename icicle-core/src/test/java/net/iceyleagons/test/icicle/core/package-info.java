@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,12 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.beans.resolvers;
-
-import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
-import org.jetbrains.annotations.Nullable;
-
-import java.lang.annotation.Annotation;
-
-public interface AutowiringAnnotationResolver {
-
-    @Nullable <T> T getValueForAnnotation(Class<? extends Annotation> annotationType, Annotation annotation, Class<T> wantedType);
-
-    void registerAutowiringAnnotationHandler(AutowiringAnnotationHandler handler);
-    boolean has(Class<?> type);
-}
+/**
+ * Package is net.iceyleagons.test instead of net.iceyleagons.icicle because the entire net.iceyleagons.icicle package is scanned for beans,
+ * and here we do test for circular dependency etc., so we don't want to prevent other tests from failing
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Feb. 01, 2022
+ */
+package net.iceyleagons.test.icicle.core;
