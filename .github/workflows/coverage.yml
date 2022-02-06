@@ -26,7 +26,7 @@ jobs:
       - name: Generate Report
         run: ./gradlew test
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v2.1.0
         with:
           files: ./icicle-core/build/reports/jacoco/icicle-core-report.xml
           fail_ci_if_error: false
