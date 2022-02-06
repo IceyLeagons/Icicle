@@ -24,6 +24,7 @@
 
 plugins {
     java
+    jacoco
     id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
 }
 
@@ -65,6 +66,88 @@ icicle {
     developers = listOf("TOTHTOMI", "Gabe")
 }
 
-tasks.test {
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+tasks.withType<Test> {
+    testLogging {
+        events(
+            org.gradle.api.tasks.testing.logging.TestLogEvent.STARTED,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
+        )
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+        showStandardStreams = true
+    }
+
     useJUnitPlatform()
+
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2)
+        .takeIf { it > 0 }
+        ?: 1
+}
+
+
+tasks.test {
+    extensions.configure(JacocoTaskExtension::class) {
+        setDestinationFile(file("$buildDir/jacoco/jacoco.exec"))
+    }
+
+    finalizedBy("jacocoTestReport")
+}
+
+tasks.jacocoTestReport {
+    reports {
+        html.required.set(false)
+        csv.required.set(false)
+        xml.required.set(true)
+        xml.outputLocation.set(file("./build/reports/jacoco/icicle-core-report.xml"))
+    }
+
+    executionData(fileTree(project.buildDir).include("jacoco/*.exec"))
+    finalizedBy("jacocoTestCoverageVerification")
+}
+
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.0".toBigDecimal()
+            }
+        }
+        rule {
+            enabled = true
+            element = "CLASS"
+            limit {
+                counter = "BRANCH"
+                value = "COVEREDRATIO"
+                minimum = "0.0".toBigDecimal()
+            }
+            limit {
+                counter = "LINE"
+                value = "COVEREDRATIO"
+                minimum = "0.0".toBigDecimal()
+            }
+            excludes = listOf()
+        }
+    }
+}
+
+val testCoverage by tasks.registering {
+    group = "verification"
+    description = "Runs the unit tests with coverage"
+
+    dependsOn(
+        ":test",
+        ":jacocoTestReport",
+        ":jacocoTestCoverageVerification"
+    )
+
+    tasks["jacocoTestReport"].mustRunAfter(tasks["test"])
+    tasks["jacocoTestCoverageVerification"].mustRunAfter(tasks["jacocoTestReport"])
 }

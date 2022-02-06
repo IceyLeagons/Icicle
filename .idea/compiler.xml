@@ -32,6 +32,8 @@
       <module name="icicle.icicle-pathing" target="16" />
       <module name="icicle.icicle-pathing.main" target="16" />
       <module name="icicle.icicle-pathing.test" target="16" />
+      <module name="icicle.main" target="16" />
+      <module name="icicle.test" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>
