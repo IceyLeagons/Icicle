@@ -23,8 +23,6 @@ jobs:
           architecture: aarch64
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Check with Gradle
-        run: ./gradlew check
       - name: Generate Report
         run: ./gradlew test
       - name: Upload coverage to Codecov
