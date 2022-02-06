@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: [self-hosted, linux]
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Set up JDK 16
