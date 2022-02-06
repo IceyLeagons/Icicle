@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,33 +22,12 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.utilities;
-
-import java.util.Locale;
-
-public class StringUtils {
-
-    public static boolean containsIgnoresCase(String inside, String toContain) {
-        return inside.toLowerCase(Locale.ROOT).contains(toContain.toLowerCase(Locale.ROOT));
-    }
-
-    public static String toCamelCase(String input) {
-        return toCamelCase(input, ' ');
-    }
-
-    public static String toCamelCase(String input, char delimiter) {
-        StringBuilder sb = new StringBuilder();
-        boolean convertLow = false;
-
-        for (char c : input.toCharArray()) {
-            if (c == delimiter) convertLow = false;
-            else if (convertLow) sb.append(Character.toLowerCase(c));
-            else {
-                sb.append(delimiter).append(Character.toUpperCase(c));
-                convertLow = true;
-            }
-        }
-
-        return sb.substring(1);
-    }
-}
+/**
+ * Package is net.iceyleagons.test instead of net.iceyleagons.icicle because the entire net.iceyleagons.icicle package is scanned for beans,
+ * and here we do test for circular dependency etc., so we don't want to prevent other tests from failing
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Feb. 05, 2022
+ */
+package net.iceyleagons.test.icicle.utilities;

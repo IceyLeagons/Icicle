@@ -28,7 +28,9 @@ import lombok.SneakyThrows;
 import net.iceyleagons.icicle.bukkit.listeners.PluginStatusListener;
 import net.iceyleagons.icicle.core.GlobalBeanRegistry;
 import net.iceyleagons.icicle.core.Icicle;
+import net.iceyleagons.icicle.core.annotations.AutoCreate;
 import net.iceyleagons.icicle.core.annotations.IcicleApplication;
+import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
@@ -45,6 +47,7 @@ public class IcicleBukkit extends JavaPlugin {
 
     public static void startNewApplication(JavaPlugin javaPlugin) {
         try {
+            System.out.println("Starting");
             Class<?> clazz = Class.forName(javaPlugin.getDescription().getMain());
 
             if (clazz.isAnnotationPresent(IcicleApplication.class)) {
@@ -77,6 +80,7 @@ public class IcicleBukkit extends JavaPlugin {
     public void onLoad() {
         this.getLogger().info(Icicle.getLoadText());
 
+
         //GlobalBeanRegistry.registerService(Server.class, Bukkit.getServer());
         //GlobalBeanRegistry.registerService(PluginManager.class, Bukkit.getPluginManager());
         //GlobalBeanRegistry.registerService(BukkitScheduler.class, Bukkit.getScheduler());
@@ -87,6 +91,14 @@ public class IcicleBukkit extends JavaPlugin {
     public void onEnable() {
         this.getLogger().info("Checking for updates....");
         // TODO update checker
+        System.out.println("Loading");
+        MavenLibraryLoader.load("net.iceyleagons", "icicle-commands", "1.0-SNAPSHOT", "https://mvn.iceyleagons.net/snapshots/");
+        try {
+            System.out.println(Class.forName("net.iceyleagons.icicle.commands.CommandService"));
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         this.getLogger().info("Registering listeners...");
         Bukkit.getPluginManager().registerEvents(new PluginStatusListener(), this);

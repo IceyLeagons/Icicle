@@ -24,7 +24,6 @@
 
 package net.iceyleagons.icicle.core.beans;
 
-import net.bytebuddy.ByteBuddy;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.AutoCreate;
 import net.iceyleagons.icicle.core.annotations.Bean;

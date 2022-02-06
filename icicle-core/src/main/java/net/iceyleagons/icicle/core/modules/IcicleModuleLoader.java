@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.modules;
 
+import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
 import net.iceyleagons.icicle.utilities.lang.Experimental;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
@@ -34,10 +35,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Experimental
@@ -49,7 +47,7 @@ public class IcicleModuleLoader {
 
     //This map keeps track of all loaded modules' classloaders, so when a plugin is dependent on the module
     //its reflections can use that ClassLoader as well
-    private final Map<String, ClassLoader> moduleClassLoaders = new ConcurrentHashMap<>();
+    private final Set<DependencyNotation> loadedDependencies = new HashSet<>();
     private final List<ModuleMetadata> loadedModules = new ArrayList<>();
 
     public IcicleModuleLoader(AdvancedFile folder) {
@@ -57,15 +55,6 @@ public class IcicleModuleLoader {
 
         this.modulesFolder = folder;
         loadModulesInFolder();
-    }
-
-    public void downloadAndLoadDependencies(String... dependencies) {
-        for (String dependency : dependencies) {
-            if (!moduleClassLoaders.containsKey(dependency)) {
-                //The module has not been loaded --> we need to reach out to API, so we can confirm it's valid, then download and load it!
-                //TODO when API is done&online
-            }
-        }
     }
 
     public void loadModulesInFolder() {
@@ -78,15 +67,19 @@ public class IcicleModuleLoader {
 
         final List<DependencyNotation> dependencyNotations = loadedModules.stream().map(ModuleMetadata::getDependencyNotation).toList();
 
-        for (ModuleMetadata loadedModule : loadedModules) {
-            if (dependencyNotations.containsAll(loadedModule.getDependencies())) {
-                try {
-                    ClassLoader classLoader = URLClassLoader.newInstance(new URL[]{loadedModule.getBaseFile().toURI().toURL()}, getClass().getClassLoader());
-                    moduleClassLoaders.put(loadedModule.getName(), classLoader);
-                } catch (MalformedURLException e) {
-                    LOGGER.warn("Could not load module from file {} due to {}", loadedModule.getBaseFile().getPath(), e);
-                }
+        for (DependencyNotation dependencyNotation : dependencyNotations) {
+            if (loadedDependencies.contains(dependencyNotation)) continue;
+
+            String groupId = dependencyNotation.getAuthor(); // Is this correct ?
+            String artifactId = dependencyNotation.getName(); // Is this correct ?
+            String version = dependencyNotation.getVersion().toString();
+
+            if (groupId == null) {
+                MavenLibraryLoader.load("net.iceyleagons", artifactId, version, "https://mvn.iceyleagons.net/");
+                continue;
             }
+
+            MavenLibraryLoader.load(groupId, artifactId, version); // Using central maven
         }
     }
 
@@ -94,14 +87,6 @@ public class IcicleModuleLoader {
         Asserts.notNull(file, "Module file must not be null!");
         Asserts.state(file.exists(), "Module file does not exist!");
         Asserts.isTrue(file.getName().endsWith(".jar"), "Module file is not a jar!");
-
-        // String name = file.getName(); //maybe replace it with moduleData.getName()???
-
         return ModuleMetadata.fromFile(file);
-        //TODO do stuff with module metadata
-
-        // TODO: Load the class in later...
-        /*ClassLoader classLoader = URLClassLoader.newInstance(new URL[]{file.toURI().toURL()}, getClass().getClassLoader());
-        moduleClassLoaders.put(name, classLoader);*/
     }
 }

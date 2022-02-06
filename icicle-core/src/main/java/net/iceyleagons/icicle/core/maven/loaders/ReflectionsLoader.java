@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.maven;
+package net.iceyleagons.icicle.core.maven.loaders;
 
 import lombok.NonNull;
-import net.iceyleagons.icicle.utilities.lang.Experimental;
+import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.utilities.AdvancedClass;
 
 import java.io.File;
@@ -36,28 +36,39 @@ import java.net.URLClassLoader;
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 26, 2021
+ * @since Feb. 06, 2022
  */
-@Experimental
-public class AdvancedClassLoader {
+@RequiredArgsConstructor
+public class ReflectionsLoader implements AdvancedClassLoader {
 
-    private static final AdvancedClass<?> clazz;
-
+    private static AdvancedClass<?> clazz;
     static {
-        clazz = new AdvancedClass<>(URLClassLoader.class);
-        clazz.preDiscoverMethod("addURL", "addURL", URL.class);
+        try {
+            clazz = new AdvancedClass<>(URLClassLoader.class);
+            clazz.preDiscoverMethod("addURL", "addURL", URL.class);
+        } catch (Exception e) {
+            clazz = null;
+        }
     }
 
-    private final URLClassLoader loader;
-    public AdvancedClassLoader(URLClassLoader origin) {
-        this.loader = origin;
+    public static boolean isSupported() {
+        return clazz != null;
     }
 
+    private final URLClassLoader origin;
+
+    @Override
     public void addUrl(@NonNull URL url) {
-        clazz.executeMethod("addURL", loader, Void.class, url);
+        clazz.executeMethod("addURL", origin, Void.class, url);
     }
 
+    @Override
     public void loadLibrary(@NonNull File file) throws MalformedURLException {
         this.addUrl(file.toURI().toURL());
+    }
+
+    @Override
+    public URLClassLoader getOrigin() {
+        return this.origin;
     }
 }

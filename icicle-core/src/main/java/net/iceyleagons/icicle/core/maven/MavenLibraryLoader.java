@@ -26,10 +26,13 @@ package net.iceyleagons.icicle.core.maven;
 
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.Icicle;
+import net.iceyleagons.icicle.core.annotations.AutoCreate;
+import net.iceyleagons.icicle.core.maven.loaders.AdvancedClassLoader;
 import net.iceyleagons.icicle.utilities.lang.Experimental;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.iceyleagons.icicle.utilities.file.FileUtils;
+import org.reflections.Reflections;
 
 import java.io.File;
 import java.net.URLClassLoader;
@@ -43,7 +46,7 @@ import java.net.URLClassLoader;
 @Experimental
 public class MavenLibraryLoader {
 
-    private static final AdvancedClassLoader acl = new AdvancedClassLoader((URLClassLoader) Icicle.ICICLE_CLASS_LOADER);
+    private static final AdvancedClassLoader acl = AdvancedClassLoaders.get((URLClassLoader) Icicle.ICICLE_CLASS_LOADER);
     public static final AdvancedFile ICICLE_LIB_FOLDER;
 
     static {
@@ -58,10 +61,6 @@ public class MavenLibraryLoader {
         load(new MavenDependency(groupId, artifactId, version, repo));
     }
 
-    public static void load(String url) {
-
-    }
-
     @SneakyThrows
     public static void load(MavenDependency dependency) {
         File f = ICICLE_LIB_FOLDER.getChild(dependency.getName() + ".jar");
@@ -72,5 +71,7 @@ public class MavenLibraryLoader {
         }
 
         acl.loadLibrary(f);
+        Icicle.ICICLE_REFLECTIONS.merge(new Reflections(acl.getOrigin()));
+        Icicle.ICICLE_REFLECTIONS.expandSuperTypes();
     }
 }

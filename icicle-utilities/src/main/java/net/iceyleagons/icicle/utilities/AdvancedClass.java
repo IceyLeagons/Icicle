@@ -42,8 +42,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AdvancedClass<T> {
 
     private final Class<T> clazz;
+    private final boolean forceAccessible;
     private final Map<String, Field> fieldCache = new ConcurrentHashMap<>();
     private final Map<String, Method> methodCache = new ConcurrentHashMap<>();
+
+    public AdvancedClass(Class<T> clazz) {
+        this(clazz, true);
+    }
 
     public Field getField(String name) {
         if (fieldCache.containsKey(name)) {
@@ -51,7 +56,7 @@ public class AdvancedClass<T> {
         }
 
         try {
-            Field field = ReflectionUtils.getField(clazz, name, true);
+            Field field = ReflectionUtils.getField(clazz, name, forceAccessible);
             fieldCache.put(name, field);
             return field;
         } catch (NullPointerException e) {
@@ -62,7 +67,7 @@ public class AdvancedClass<T> {
 
     public void preDiscoverMethod(String as, String name, Class<?>... paramTypes) {
         if (methodCache.containsKey(as)) return;
-        methodCache.put(as, ReflectionUtils.getMethod(clazz, name, true, paramTypes));
+        methodCache.put(as, ReflectionUtils.getMethod(clazz, name, forceAccessible, paramTypes));
     }
 
     public Method getMethod(String name, Class<?>... paramTypes) {
@@ -70,7 +75,7 @@ public class AdvancedClass<T> {
             return methodCache.get(name);
         }
 
-        Method method = ReflectionUtils.getMethod(clazz, name, true, paramTypes);
+        Method method = ReflectionUtils.getMethod(clazz, name, forceAccessible, paramTypes);
         methodCache.put(name, method);
         return method;
     }

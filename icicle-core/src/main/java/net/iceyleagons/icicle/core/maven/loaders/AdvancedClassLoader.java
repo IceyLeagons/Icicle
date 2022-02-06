@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,33 +22,24 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.utilities;
+package net.iceyleagons.icicle.core.maven.loaders;
 
-import java.util.Locale;
+import lombok.NonNull;
 
-public class StringUtils {
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
-    public static boolean containsIgnoresCase(String inside, String toContain) {
-        return inside.toLowerCase(Locale.ROOT).contains(toContain.toLowerCase(Locale.ROOT));
-    }
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Feb. 06, 2022
+ */
+public interface AdvancedClassLoader {
 
-    public static String toCamelCase(String input) {
-        return toCamelCase(input, ' ');
-    }
+    void addUrl(@NonNull URL url);
+    void loadLibrary(@NonNull File file) throws MalformedURLException;
+    URLClassLoader getOrigin();
 
-    public static String toCamelCase(String input, char delimiter) {
-        StringBuilder sb = new StringBuilder();
-        boolean convertLow = false;
-
-        for (char c : input.toCharArray()) {
-            if (c == delimiter) convertLow = false;
-            else if (convertLow) sb.append(Character.toLowerCase(c));
-            else {
-                sb.append(delimiter).append(Character.toUpperCase(c));
-                convertLow = true;
-            }
-        }
-
-        return sb.substring(1);
-    }
 }

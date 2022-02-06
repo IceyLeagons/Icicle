@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.utils;
 
+import lombok.Getter;
 import lombok.NonNull;
 
 /**
@@ -31,14 +32,24 @@ import lombok.NonNull;
  * https://gist.github.com/brianguertin/ada4b65c6d1c4f6d3eee3c12b6ce021b
  */
 public class Version implements Comparable<Version> {
+
     @NonNull
     public final int[] numbers;
+    @Getter
+    private final String version;
 
     public Version(@NonNull String version) {
+        this.version = version;
+
         final String split[] = version.split("-")[0].split("\\.");
         numbers = new int[split.length];
         for (int i = 0; i < split.length; i++)
             numbers[i] = Integer.parseInt(split[i]);
+    }
+
+    @Override
+    public String toString() {
+        return getVersion();
     }
 
     @Override

@@ -55,7 +55,6 @@ public abstract class AbstractCodeFunction {
     }
 
     protected boolean isInteger(String str) {
-        System.out.println("Checking int for: " + str);
         try {
             Integer.parseInt(str);
             return true;

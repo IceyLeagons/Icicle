@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,33 +22,37 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.utilities;
+package net.iceyleagons.test.icicle.utilities;
 
-import java.util.Locale;
+import net.iceyleagons.icicle.utilities.ListUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-public class StringUtils {
+import java.util.Arrays;
+import java.util.List;
 
-    public static boolean containsIgnoresCase(String inside, String toContain) {
-        return inside.toLowerCase(Locale.ROOT).contains(toContain.toLowerCase(Locale.ROOT));
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Feb. 05, 2022
+ */
+public class ListUtilsTest {
+
+    @Test
+    @DisplayName("Test mergeLists")
+    public void mergeLists() {
+        List<String> a = Arrays.asList("one", "two");
+        List<String> b = Arrays.asList("three", "four");
+        List<String> ab = Arrays.asList("one", "two", "three", "four");
+
+        Assertions.assertLinesMatch(ab, ListUtils.mergeLists(a, b));
     }
 
-    public static String toCamelCase(String input) {
-        return toCamelCase(input, ' ');
-    }
-
-    public static String toCamelCase(String input, char delimiter) {
-        StringBuilder sb = new StringBuilder();
-        boolean convertLow = false;
-
-        for (char c : input.toCharArray()) {
-            if (c == delimiter) convertLow = false;
-            else if (convertLow) sb.append(Character.toLowerCase(c));
-            else {
-                sb.append(delimiter).append(Character.toUpperCase(c));
-                convertLow = true;
-            }
-        }
-
-        return sb.substring(1);
+    @Test
+    @DisplayName("Test reverseList")
+    public void reverseList() {
+        List<String> a = Arrays.asList("one", "two", "three");
+        Assertions.assertLinesMatch(Arrays.asList("three", "two", "one"), ListUtils.reverseList(a));
     }
 }
