@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.bukkit;
 
+import lombok.Getter;
 import net.iceyleagons.icicle.bukkit.impl.BukkitExecutionHandler;
 import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 import org.bukkit.Bukkit;
@@ -32,6 +33,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+@Getter
 public class BukkitApplication extends AbstractIcicleApplication {
 
     private final JavaPlugin javaPlugin;

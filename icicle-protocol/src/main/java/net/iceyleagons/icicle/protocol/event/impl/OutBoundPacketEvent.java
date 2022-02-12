@@ -28,7 +28,6 @@ import lombok.Getter;
 import net.iceyleagons.icicle.protocol.ProtocolPlayer;
 import net.iceyleagons.icicle.protocol.event.PacketContainer;
 import net.iceyleagons.icicle.protocol.event.PacketEvent;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,13 +47,13 @@ public class OutBoundPacketEvent extends PacketEvent {
         this.customPacket = custom;
     }
 
-    @NotNull
-    @Override
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return handlerList;
     }
 
-    public static HandlerList getHandlerList() {
+    @NotNull
+    @Override
+    public HandlerList getHandlers() {
         return handlerList;
     }
 }

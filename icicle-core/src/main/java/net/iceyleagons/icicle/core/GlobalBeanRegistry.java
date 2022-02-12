@@ -24,10 +24,10 @@
 
 package net.iceyleagons.icicle.core;
 
-import net.iceyleagons.icicle.utilities.lang.Experimental;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
+import net.iceyleagons.icicle.utilities.lang.Experimental;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,20 +44,19 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GlobalBeanRegistry implements BeanRegistry {
 
     public static final GlobalBeanRegistry INSTANCE = new GlobalBeanRegistry();
-
-    private static boolean registered = false;
     private static final Logger logger = LoggerFactory.getLogger(GlobalBeanRegistry.class);
     private static final Map<Class<?>, Object> beans = new ConcurrentHashMap<>();
-
-    public static void registerService(Class<?> service, Object provider) {
-        INSTANCE.registerBean(service, provider);
-    }
+    private static boolean registered = false;
 
     public GlobalBeanRegistry() {
         if (registered) {
             throw new UnsupportedOperationException("An instance of GlobalBeanRegistry has already been created!");
         }
         registered = true;
+    }
+
+    public static void registerService(Class<?> service, Object provider) {
+        INSTANCE.registerBean(service, provider);
     }
 
     /**

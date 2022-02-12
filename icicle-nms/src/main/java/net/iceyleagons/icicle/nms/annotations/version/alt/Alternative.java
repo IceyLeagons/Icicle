@@ -37,6 +37,7 @@ import java.lang.annotation.*;
 public @interface Alternative {
 
     String version();
+
     String value();
 
 }

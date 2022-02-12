@@ -41,6 +41,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface CommandManager {
 
     String value();
+
     boolean isSubCommand() default false;
 
     String description() default "";

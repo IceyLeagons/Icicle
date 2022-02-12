@@ -42,7 +42,8 @@ public class CircularDependencyTest {
     @Test
     @DisplayName("Circular dependency")
     public void testCircularDependency() {
-        Application app = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.circular", ExecutionUtils.debugHandler()) {};
+        Application app = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.circular", ExecutionUtils.debugHandler()) {
+        };
         Assertions.assertThrows(CircularDependencyException.class, app::start);
     }
 }

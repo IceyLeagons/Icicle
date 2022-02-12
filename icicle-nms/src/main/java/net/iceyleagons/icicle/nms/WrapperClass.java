@@ -51,16 +51,16 @@ public abstract class WrapperClass {
         this.origin = origin;
     }
 
-    protected void preDiscoverMethod(String as, String name, Class<?>... paramTypes) {
-        clazz.preDiscoverMethod(as, name, paramTypes);
-    }
-
     protected static AdvancedClass<?> getExtraClass(String name, WrapType wrapType) {
         if (!cache.containsKey(name)) {
             cache.put(name, wrapType.getClazzProvider().get(name));
         }
 
         return cache.get(name);
+    }
+
+    protected void preDiscoverMethod(String as, String name, Class<?>... paramTypes) {
+        clazz.preDiscoverMethod(as, name, paramTypes);
     }
 
     protected <A> A executeMethod(String name, Class<A> returnType, Object... params) {

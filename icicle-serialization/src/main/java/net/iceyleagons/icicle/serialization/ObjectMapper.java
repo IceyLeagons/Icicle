@@ -90,7 +90,6 @@ public class ObjectMapper {
             throw new IllegalArgumentException("Wanted type is not assignable from the mapped object!");
 
         Constructor<?> constructor = BeanUtils.getResolvableConstructor(type);
-        ;
         if (constructor.getParameterTypes().length != 0)
             throw new IllegalStateException("Object must have an empty constructor!");
 

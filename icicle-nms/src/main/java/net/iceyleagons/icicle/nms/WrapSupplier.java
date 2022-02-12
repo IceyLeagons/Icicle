@@ -40,8 +40,6 @@ public abstract class WrapSupplier<T> {
         this.origin = origin;
     }
 
-    public abstract T supply(Object[] params);
-
     public static WrapSupplier<Object> createOriginSupplier(Object origin) {
         return new WrapSupplier<>(origin) {
             @Override
@@ -50,4 +48,6 @@ public abstract class WrapSupplier<T> {
             }
         };
     }
+
+    public abstract T supply(Object[] params);
 }

@@ -37,6 +37,7 @@ import java.lang.annotation.*;
 public @interface Version {
 
     String[] versions();
+
     Class<?> wrapper();
 
 }

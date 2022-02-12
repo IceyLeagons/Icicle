@@ -24,8 +24,8 @@
 
 package net.iceyleagons.icicle.core.configuration.environment;
 
-import net.iceyleagons.icicle.utilities.lang.Internal;
 import net.iceyleagons.icicle.core.configuration.Configuration;
+import net.iceyleagons.icicle.utilities.lang.Internal;
 
 import java.io.File;
 import java.util.Collection;

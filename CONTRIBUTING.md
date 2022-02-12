@@ -30,7 +30,8 @@ starting work on the contribution.
 Most pull requests are happily accepted, but larger changes may have an impact on the maintainability of the project,
 and require more consideration.
 
-Our project uses the [gitmoji](https://gitmoji.dev/) standard for commit messages, please apply the respective emoji to your commit message as well!
+Our project uses the [gitmoji](https://gitmoji.dev/) standard for commit messages, please apply the respective emoji to
+your commit message as well!
 
 ### Pull Request Process (checklist)
 

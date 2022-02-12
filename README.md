@@ -45,8 +45,6 @@
  </strong>
 </div>
 
-
-
 ## Features
 
 Icicle is so feature-rich, that we cannot list everything here, but to get an idea, here are the main features:

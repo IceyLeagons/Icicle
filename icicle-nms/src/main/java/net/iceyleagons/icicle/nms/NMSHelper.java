@@ -25,11 +25,9 @@
 package net.iceyleagons.icicle.nms;
 
 import net.iceyleagons.icicle.nms.annotations.CraftWrap;
-import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
 import net.iceyleagons.icicle.nms.annotations.NMSWrap;
 import net.iceyleagons.icicle.nms.annotations.Wrapping;
 import net.iceyleagons.icicle.nms.annotations.constructor.Constructor;
-import net.iceyleagons.icicle.nms.annotations.constructor.Constructors;
 import net.iceyleagons.icicle.nms.utils.ClassHelper;
 import net.iceyleagons.icicle.utilities.AdvancedClass;
 

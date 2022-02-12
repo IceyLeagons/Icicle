@@ -37,6 +37,7 @@ import java.lang.annotation.*;
 public @interface Constructor {
 
     int id();
+
     String[] paramTypeClasses();
 
 }

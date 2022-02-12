@@ -42,6 +42,7 @@ import java.net.URLClassLoader;
 public class ReflectionsLoader implements AdvancedClassLoader {
 
     private static AdvancedClass<?> clazz;
+
     static {
         try {
             clazz = new AdvancedClass<>(URLClassLoader.class);
@@ -51,11 +52,11 @@ public class ReflectionsLoader implements AdvancedClassLoader {
         }
     }
 
+    private final URLClassLoader origin;
+
     public static boolean isSupported() {
         return clazz != null;
     }
-
-    private final URLClassLoader origin;
 
     @Override
     public void addUrl(@NonNull URL url) {

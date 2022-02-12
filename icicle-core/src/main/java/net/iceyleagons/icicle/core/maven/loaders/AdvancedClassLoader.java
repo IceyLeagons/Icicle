@@ -39,7 +39,9 @@ import java.net.URLClassLoader;
 public interface AdvancedClassLoader {
 
     void addUrl(@NonNull URL url);
+
     void loadLibrary(@NonNull File file) throws MalformedURLException;
+
     URLClassLoader getOrigin();
 
 }

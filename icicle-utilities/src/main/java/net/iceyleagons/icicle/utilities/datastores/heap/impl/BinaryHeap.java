@@ -48,6 +48,10 @@ public class BinaryHeap<T extends HeapItem<T>> extends OneTypeAccessor<T> implem
         this.array = GenericUtils.createGenericArray(getATypeClass(), heapSize);
     }
 
+    public BinaryHeap() {
+        this(1024);
+    }
+
     private void swapItems(T a, T b) {
         array[a.getHeapIndex()] = b;
         array[b.getHeapIndex()] = a;
@@ -57,32 +61,17 @@ public class BinaryHeap<T extends HeapItem<T>> extends OneTypeAccessor<T> implem
         b.setHeapIndex(ai);
     }
 
-    private void sortUpward(T item) {
-        int pi = (item.getHeapIndex() - 1) / 2;
-
-        while (true) {
-            T parent = array[pi];
-            if (item.compareTo(parent) > 0) {
-                swapItems(item, parent);
-            } else break;
-
-            pi = (item.getHeapIndex() - 1) / 2;
-        }
-    }
-
     private void sortDownward(T item) {
         while (true) {
-            int left = item.getHeapIndex() * 2 + 1;
-            int right = item.getHeapIndex() * 2 + 2;
+            int left = (item.getHeapIndex() << 1) + 1;
+            int right = (item.getHeapIndex() << 1) + 2;
             int swap;
 
             if (left < itemCount) {
                 swap = left;
 
-                if (right < itemCount) {
-                    if (array[left].compareTo(array[right]) < 0) {
-                        swap = right;
-                    }
+                if (right < itemCount && (array[left].compareTo(array[right]) < 0)) {
+                    swap = right;
                 }
 
                 if (item.compareTo(array[swap]) < 0) {
@@ -100,13 +89,13 @@ public class BinaryHeap<T extends HeapItem<T>> extends OneTypeAccessor<T> implem
         if (itemCount + 1 >= array.length) {
             //T[] newArray = GenericUtils.createGenericArray(clazz, array.length + 10);
             //System.arraycopy(array, 0, newArray, 0, array.length);
-            this.array = ArrayUtils.extendArray(array, 10);
+            this.array = ArrayUtils.extendArray(array, itemCount << 1);
         }
 
         item.setHeapIndex(itemCount);
         array[itemCount] = item;
 
-        sortUpward(item);
+        update(item);
 
         itemCount += 1;
     }
@@ -124,7 +113,16 @@ public class BinaryHeap<T extends HeapItem<T>> extends OneTypeAccessor<T> implem
      */
     @Override
     public void update(T item) {
-        sortUpward(item);
+        int pi = item.getHeapIndex() - 1 < 0 ? 0 : (item.getHeapIndex() - 1) >>> 1;
+
+        while (true) {
+            T parent = array[pi];
+            if (item.compareTo(parent) > 0) {
+                swapItems(item, parent);
+            } else break;
+
+            pi = item.getHeapIndex() - 1 < 0 ? 0 : (item.getHeapIndex() - 1) >>> 1;
+        }
     }
 
     /**

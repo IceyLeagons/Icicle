@@ -136,7 +136,7 @@ body {
     width: 50%;
     transform: rotateZ(35deg);
 
-    //border: solid 1px black;
+/ / border: solid 1 px black;
 }
 
 .review {
@@ -161,6 +161,7 @@ body {
 .review .quote .author .name {
     font-size: 1.5rem;
 }
+
 .review .quote .author .job {
     font-size: .8rem;
 }

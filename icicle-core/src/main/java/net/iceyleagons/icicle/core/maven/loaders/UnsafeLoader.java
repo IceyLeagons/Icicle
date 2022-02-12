@@ -25,7 +25,6 @@
 package net.iceyleagons.icicle.core.maven.loaders;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import sun.misc.Unsafe;
 
 import java.io.File;
@@ -43,6 +42,9 @@ import java.util.Collection;
 public class UnsafeLoader implements AdvancedClassLoader {
 
     private static Unsafe unsafe;
+    private final Collection<URL> unopenedURLs;
+    private final Collection<URL> pathURLs;
+    private final URLClassLoader origin;
 
     static {
         try {
@@ -53,21 +55,6 @@ public class UnsafeLoader implements AdvancedClassLoader {
             unsafe = null;
         }
     }
-
-    public static boolean isSupported() {
-        return unsafe != null;
-    }
-
-    private static Object getField(final Class<?> clazz, final Object object, final String name) throws NoSuchFieldException {
-        Field f = clazz.getDeclaredField(name);
-        long o = unsafe.objectFieldOffset(f);
-        return unsafe.getObject(object, o);
-    }
-
-    private final Collection<URL> unopenedURLs;
-    private final Collection<URL> pathURLs;
-    private final URLClassLoader origin;
-
     @SuppressWarnings("unchecked")
     public UnsafeLoader(URLClassLoader origin) {
         this.origin = origin;
@@ -85,6 +72,16 @@ public class UnsafeLoader implements AdvancedClassLoader {
 
         this.unopenedURLs = unopenedURLs;
         this.pathURLs = pathURLs;
+    }
+
+    public static boolean isSupported() {
+        return unsafe != null;
+    }
+
+    private static Object getField(final Class<?> clazz, final Object object, final String name) throws NoSuchFieldException {
+        Field f = clazz.getDeclaredField(name);
+        long o = unsafe.objectFieldOffset(f);
+        return unsafe.getObject(object, o);
     }
 
     @Override

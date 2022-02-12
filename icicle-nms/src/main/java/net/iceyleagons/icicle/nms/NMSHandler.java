@@ -33,8 +33,8 @@ import net.bytebuddy.implementation.MethodDelegation;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.nms.annotations.*;
 import net.iceyleagons.icicle.nms.annotations.constructor.Constructor;
-import net.iceyleagons.icicle.nms.annotations.version.alt.Alternative;
 import net.iceyleagons.icicle.nms.annotations.version.Version;
+import net.iceyleagons.icicle.nms.annotations.version.alt.Alternative;
 import net.iceyleagons.icicle.nms.utils.ClassHelper;
 import net.iceyleagons.icicle.nms.utils.MethodDelegator;
 import net.iceyleagons.icicle.utilities.AdvancedClass;
@@ -89,7 +89,7 @@ public class NMSHandler {
 
         final AdvancedClass<?> clazz = getWrapClass(toWrap);
         if (clazz == null) {
-            throw new IllegalStateException("Could not create wrap for: "  + toWrap.getName() + " , because the to-be-wrapped class is not found!");
+            throw new IllegalStateException("Could not create wrap for: " + toWrap.getName() + " , because the to-be-wrapped class is not found!");
         }
 
         final Map<Method, WrapSupplier<Object>> suppliers = new HashMap<>();

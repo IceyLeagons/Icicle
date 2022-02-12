@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  */
 public final class MapUtils {
 
-    public static <A,B> Map<B, A> swapKeyValues(Map<A, B> input) {
+    public static <A, B> Map<B, A> swapKeyValues(Map<A, B> input) {
         return input.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
     }
 }

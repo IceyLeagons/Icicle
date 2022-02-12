@@ -43,13 +43,13 @@ public class InBoundPacketEvent extends PacketEvent {
         super(player, packetContainer);
     }
 
-    @NotNull
-    @Override
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return handlerList;
     }
 
-    public static HandlerList getHandlerList() {
+    @NotNull
+    @Override
+    public HandlerList getHandlers() {
         return handlerList;
     }
 }

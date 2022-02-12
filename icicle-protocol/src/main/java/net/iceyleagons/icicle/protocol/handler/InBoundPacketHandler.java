@@ -32,7 +32,6 @@ import net.iceyleagons.icicle.protocol.ProtocolPlayer;
 import net.iceyleagons.icicle.protocol.event.PacketContainer;
 import net.iceyleagons.icicle.protocol.event.impl.InBoundPacketEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 /**
  * @author TOTHTOMI
@@ -50,9 +49,10 @@ public class InBoundPacketHandler extends ChannelInboundHandlerAdapter {
             ctx.fireChannelRead(msg);
         }
     }
+
     private boolean canProceed(ChannelHandlerContext ctx, Object msg) {
-        if(!ByteBuf.class.isAssignableFrom(msg.getClass())) return true;
-        ByteBuf data = ((ByteBuf) msg).copy();
+        if (!ByteBuf.class.isAssignableFrom(msg.getClass())) return true;
+        // ByteBuf data = ((ByteBuf) msg).copy();
 
         PacketContainer packetContainer = new PacketContainer(msg);
         InBoundPacketEvent event = new InBoundPacketEvent(this.player, packetContainer);

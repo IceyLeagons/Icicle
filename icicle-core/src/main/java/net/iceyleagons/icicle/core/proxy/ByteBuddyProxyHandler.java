@@ -45,8 +45,12 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ByteBuddyProxyHandler.class);
 
-    static {
-        System.out.println("[ByteBuddyProxyHandler] - Installing ByteBuddy Agent...");
+    private final Set<MethodAdviceHandlerTemplate> adviceHandlers = new HashSet<>();
+    private final Set<MethodInterceptorHandlerTemplate> interceptorHandlers = new HashSet<>();
+    private final ByteBuddy byteBuddy = new ByteBuddy();
+
+    public static void installBuddyAgent() {
+        System.out.println("[Icicle] - Installing ByteBuddy Agent...");
         ByteBuddyAgent.install();
 
         new AgentBuilder.Default()
@@ -54,16 +58,12 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
                 .with(AgentBuilder.InitializationStrategy.NoOp.INSTANCE)
                 .with(AgentBuilder.TypeStrategy.Default.REBASE)
                 .installOnByteBuddyAgent();
-        System.out.println("[ByteBuddyProxyHandler] - Success!");
+        System.out.println("[Icicle] - Success!");
     }
-
-    private final Set<MethodAdviceHandlerTemplate> adviceHandlers = new HashSet<>();
-    private final Set<MethodInterceptorHandlerTemplate> interceptorHandlers = new HashSet<>();
-    private final ByteBuddy byteBuddy = new ByteBuddy();
 
     @Override
     public <T> T createEnhancedBean(Constructor<T> constructor, Object[] arguments) throws BeanCreationException {
-         //.with(Implementation.Context.Disabled.Factory.INSTANCE);
+        //.with(Implementation.Context.Disabled.Factory.INSTANCE);
         DynamicType.Builder<T> builder = byteBuddy
                 .subclass(constructor.getDeclaringClass());
 

@@ -24,18 +24,7 @@
 
 package net.iceyleagons.icicle.serialization.serializers.impl;
 
-import net.iceyleagons.icicle.serialization.MappedObject;
-import net.iceyleagons.icicle.serialization.ObjectMapper;
-import net.iceyleagons.icicle.serialization.ObjectValue;
 import org.bson.Document;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author TOTHTOMI
@@ -57,7 +46,6 @@ public class BsonSerializer extends JsonSerializer {
         document.putAll(super.toJsonObject(obj).toMap()); // Very lazy way, could probably optimize this and leave out json
         return document;
     }
-
 
 
     // Once deserialization is figured out, uncomment this and use it instead of the "lazy method", also testing required for this:

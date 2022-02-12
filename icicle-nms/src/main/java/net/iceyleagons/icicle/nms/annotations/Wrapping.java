@@ -39,5 +39,6 @@ import java.lang.annotation.Target;
 public @interface Wrapping {
 
     String value();
+
     String[] paramTypes() default {};
 }

@@ -26,12 +26,11 @@ package net.iceyleagons.icicle.core.maven;
 
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.Icicle;
-import net.iceyleagons.icicle.core.annotations.AutoCreate;
 import net.iceyleagons.icicle.core.maven.loaders.AdvancedClassLoader;
-import net.iceyleagons.icicle.utilities.lang.Experimental;
-import net.iceyleagons.icicle.utilities.lang.Internal;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.iceyleagons.icicle.utilities.file.FileUtils;
+import net.iceyleagons.icicle.utilities.lang.Experimental;
+import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.reflections.Reflections;
 
 import java.io.File;
@@ -46,15 +45,17 @@ import java.net.URLClassLoader;
 @Experimental
 public class MavenLibraryLoader {
 
-    private static final AdvancedClassLoader acl = AdvancedClassLoaders.get((URLClassLoader) Icicle.ICICLE_CLASS_LOADER);
     public static final AdvancedFile ICICLE_LIB_FOLDER;
+    public static final String MAVEN_CENTRAL_REPO = "https://repo1.maven.org/maven2";
+    public static final String MAVEN_JITPACK = "https://jitpack.io";
+    private static final AdvancedClassLoader acl = AdvancedClassLoaders.get((URLClassLoader) Icicle.ICICLE_CLASS_LOADER);
 
     static {
         ICICLE_LIB_FOLDER = new AdvancedFile(new File("icicleLibs"), true);
     }
 
     public static void load(String groupId, String artifactId, String version) {
-        load(groupId, artifactId, version, "https://repo1.maven.org/maven2"); //central maven
+        load(groupId, artifactId, version, MAVEN_CENTRAL_REPO); //central maven
     }
 
     public static void load(String groupId, String artifactId, String version, String repo) {

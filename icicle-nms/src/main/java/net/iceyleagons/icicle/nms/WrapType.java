@@ -26,8 +26,8 @@ package net.iceyleagons.icicle.nms;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.iceyleagons.icicle.utilities.AdvancedClass;
 import net.iceyleagons.icicle.nms.utils.ClassHelper;
+import net.iceyleagons.icicle.utilities.AdvancedClass;
 
 /**
  * @author TOTHTOMI

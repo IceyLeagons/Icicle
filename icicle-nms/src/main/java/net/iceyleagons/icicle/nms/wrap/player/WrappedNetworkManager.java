@@ -35,7 +35,7 @@ import net.iceyleagons.icicle.nms.annotations.NMSWrap;
  * @since Dec. 23, 2021
  */
 @NMSWrap("network.NetworkManager")
-public interface WrappedNetworkManager{
+public interface WrappedNetworkManager {
 
     @FieldWrapping(value = "k")
     Channel getChannel();

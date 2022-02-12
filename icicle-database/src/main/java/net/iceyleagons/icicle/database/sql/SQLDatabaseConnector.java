@@ -28,8 +28,8 @@ import ca.krasnay.sqlbuilder.SelectBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.database.DatabaseConnector;
-import net.iceyleagons.icicle.database.filters.Filter;
 import net.iceyleagons.icicle.database.Schema;
+import net.iceyleagons.icicle.database.filters.Filter;
 import net.iceyleagons.icicle.database.filters.Filters;
 import net.iceyleagons.icicle.serialization.serializers.impl.PreparedStatementFiller;
 

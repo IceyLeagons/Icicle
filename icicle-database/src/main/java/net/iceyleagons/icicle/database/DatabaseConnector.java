@@ -38,9 +38,11 @@ import java.util.Set;
 public interface DatabaseConnector<T> {
 
     boolean isSql();
+
     void buildDatabase(Schema<T> schema);
 
     void connect() throws IllegalStateException; // TODO replace with DBError
+
     void disconnect() throws IllegalStateException;  // TODO replace with DBError
 
     void save(T toSave);

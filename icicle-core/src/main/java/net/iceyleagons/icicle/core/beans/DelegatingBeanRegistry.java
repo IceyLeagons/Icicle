@@ -53,10 +53,8 @@ public class DelegatingBeanRegistry implements BeanRegistry {
     @Override
     public <T> Optional<T> getBean(Class<T> type) {
         Optional<T> opt = beans.containsKey(type) ? Optional.ofNullable(ReflectionUtils.castIfNecessary(type, beans.get(type))) : Optional.empty();
-        if (opt.isEmpty()) {
-            if (globalRegistry.isRegistered(type)) {
-                opt = globalRegistry.getBean(type);
-            }
+        if (opt.isEmpty() && globalRegistry.isRegistered(type)) {
+            opt = globalRegistry.getBean(type);
         }
 
         return opt;
@@ -87,7 +85,7 @@ public class DelegatingBeanRegistry implements BeanRegistry {
 
         if (!isRegistered(type)) {
             beans.put(type, object);
-            logger.info("Registered bean of type: {}", type.getName());
+            logger.debug("Registered bean of type: {}", type.getName());
             return;
         }
 

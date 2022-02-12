@@ -40,7 +40,7 @@ import java.util.Set;
  */
 @AnnotationHandler
 public class TestAutowiringHandler implements AutowiringAnnotationHandler {
-    
+
     @Override
     public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
         return Collections.singleton(TestAutowiring.class);

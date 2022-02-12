@@ -31,7 +31,6 @@ import net.iceyleagons.icicle.core.annotations.Service;
 import net.iceyleagons.icicle.core.translations.code.CodeParser;
 import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
 import net.iceyleagons.icicle.core.translations.impl.ConstantLanguageProvider;
-import org.reflections.Reflections;
 
 import java.util.Collections;
 import java.util.Map;

@@ -24,7 +24,6 @@
 
 package net.iceyleagons.icicle.protocol.event;
 
-import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

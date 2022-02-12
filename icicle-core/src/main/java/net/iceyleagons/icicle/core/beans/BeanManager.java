@@ -24,13 +24,13 @@
 
 package net.iceyleagons.icicle.core.beans;
 
-import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
-import net.iceyleagons.icicle.utilities.lang.Internal;
 import net.iceyleagons.icicle.core.beans.resolvers.ConstructorParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
+import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
+import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.reflections.Reflections;
 
 /**

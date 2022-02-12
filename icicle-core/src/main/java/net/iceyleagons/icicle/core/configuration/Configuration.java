@@ -24,8 +24,8 @@
 
 package net.iceyleagons.icicle.core.configuration;
 
-import net.iceyleagons.icicle.utilities.lang.Internal;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
+import net.iceyleagons.icicle.utilities.lang.Internal;
 
 import java.util.Map;
 import java.util.Set;

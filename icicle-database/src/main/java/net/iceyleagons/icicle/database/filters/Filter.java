@@ -34,6 +34,7 @@ import net.iceyleagons.icicle.database.Schema;
 public interface Filter {
 
     boolean doesApplyTo(Object object, Schema<?> schema);
+
     String sql(Schema<?> schema);
 
 }

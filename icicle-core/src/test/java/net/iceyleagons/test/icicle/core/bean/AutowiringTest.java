@@ -27,10 +27,10 @@ package net.iceyleagons.test.icicle.core.bean;
 import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
+import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import net.iceyleagons.test.icicle.core.bean.resolvable.CustomAutowiringHandlerService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.DependantConstructorService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.EmptyConstructorService;
-import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -49,7 +49,8 @@ public class AutowiringTest {
 
     @BeforeAll
     public static void setupIcicle() {
-        application = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.resolvable", ExecutionUtils.debugHandler()) {};
+        application = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.resolvable", ExecutionUtils.debugHandler()) {
+        };
         registry = application.getBeanManager().getBeanRegistry();
         Assertions.assertDoesNotThrow(application::start);
     }

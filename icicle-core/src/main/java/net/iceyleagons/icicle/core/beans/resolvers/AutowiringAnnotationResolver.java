@@ -34,5 +34,6 @@ public interface AutowiringAnnotationResolver {
     @Nullable <T> T getValueForAnnotation(Class<? extends Annotation> annotationType, Annotation annotation, Class<T> wantedType);
 
     void registerAutowiringAnnotationHandler(AutowiringAnnotationHandler handler);
+
     boolean has(Class<?> type);
 }

@@ -50,7 +50,6 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
@@ -121,7 +120,8 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
             } else if (param.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.params.CommandSender.class)) {
                 params[i] = param.getType().isInstance(commandSender) ? param.getType().cast(commandSender) : null;
             } else if (param.isAnnotationPresent(FlagOptional.class)) {
-
+                // TODO
+                throw new IllegalStateException("FlagOptionals are currently not supported.");
             } else if (param.isAnnotationPresent(Optional.class)) {
                 if (argsCounter < args.length) {
                     params[i] = this.commandService.resolveParameter(param.getType(), this, args[argsCounter++], commandSender);
@@ -180,7 +180,7 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
         return true;
     }
 
-    private boolean handleSubCommand(RegisteredCommandManager manager, @NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String label, @NotNull String[] args) {
+    private boolean handleSubCommand(RegisteredCommandManager manager, @NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String[] args) {
         String[] newArgs = ArrayUtils.ignoreFirst(1, args);
         return manager.onCommand(sender, command, manager.getCommandManager().value(), newArgs);
     }
@@ -202,7 +202,7 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
         } catch (CommandNotFoundException e) {
             try {
                 RegisteredCommandManager registeredCommand = this.commandRegistry.getSubCommand(args[0].toLowerCase());
-                handleSubCommand(registeredCommand, sender, command, label, args);
+                handleSubCommand(registeredCommand, sender, command, args);
             } catch (CommandNotFoundException e2) {
                 String errorMsgKey = Strings.emptyToNull(commandManager.notFound());
                 String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cCommand &b{cmd} &cnot found!",

@@ -26,7 +26,6 @@ package net.iceyleagons.test.icicle.core.bean.unsatisfied;
 
 import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 import net.iceyleagons.icicle.core.Application;
-import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import org.junit.jupiter.api.Assertions;
@@ -43,7 +42,8 @@ public class UnsatisfiedDependencyTest {
     @Test
     @DisplayName("Circular dependency")
     public void testCircularDependency() {
-        Application app = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.unsatisfied", ExecutionUtils.debugHandler()) {};
+        Application app = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.unsatisfied", ExecutionUtils.debugHandler()) {
+        };
         Assertions.assertThrows(UnsatisfiedDependencyException.class, app::start);
     }
 }

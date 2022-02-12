@@ -28,10 +28,10 @@ import java.lang.annotation.*;
 
 /**
  * This annotation shall only be used on classes.
- *
+ * <p>
  * Classes that are annotated with it must only contain static methods & fields,
  * additionally they must contain at least one public static method (or field respectively).
- *
+ * <p>
  * Classes that are annotated with @Utility should also have no public constructors, or must throw
  * {@link UnsupportedOperationException} with the message: "This class is marked as utility, and does not support instantiation".
  *

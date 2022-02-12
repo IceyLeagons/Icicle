@@ -27,7 +27,6 @@ package net.iceyleagons.icicle.core.beans.resolvers.impl;
 import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
-import net.iceyleagons.icicle.core.beans.resolvers.CustomAutoCreateAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
@@ -94,7 +93,7 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
      */
     @Override
     public LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException, UnsatisfiedDependencyException {
-        logger.info("Resolving dependency tree for bean-type: {}", currentBean.getName());
+        logger.debug("Resolving dependency tree for bean-type: {}", currentBean.getName());
 
         LinkedList<Class<?>> tree = new LinkedList<>();
         Stack<Class<?>> stack = new Stack<>();
@@ -107,17 +106,18 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
             if (beanRegistry.isRegistered(bean)) continue; //making sure it's already registered to not spend time
 
             Parameter[] dependencies = BeanUtils.getResolvableConstructor(bean).getParameters();
-            x: for (Parameter param : dependencies) {
+            x:
+            for (Parameter param : dependencies) {
                 Class<?> dependency = param.getType();
                 for (Annotation annotation : param.getAnnotations()) {
-                     if (autowiringAnnotationResolver.has(annotation.annotationType())) {
+                    if (autowiringAnnotationResolver.has(annotation.annotationType())) {
                         continue x;
                     }
                 }
 
                 if (!beanRegistry.isRegistered(dependency)) {
                     if (tree.contains(dependency)) {
-                        logger.info("Circular dependency found!");
+                        logger.warn("Circular dependency found!");
                         throw new CircularDependencyException(getCycleString(tree, dependency, bean));
                     } else if (!this.autoCreateResolver.isAnnotated(dependency)) {
                         throw new UnsatisfiedDependencyException(param);

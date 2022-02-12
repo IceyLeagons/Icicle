@@ -77,10 +77,4 @@ public class TranslationTest {
         Assertions.assertEquals(expected1, result1);
         Assertions.assertEquals(expected2, result2);
     }
-
-    @Test
-    @DisplayName("Code test 2")
-    public void codeTestCase2() {
-
-    }
 }

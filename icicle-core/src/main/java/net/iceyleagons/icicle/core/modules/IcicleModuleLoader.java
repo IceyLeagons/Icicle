@@ -25,18 +25,15 @@
 package net.iceyleagons.icicle.core.modules;
 
 import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
-import net.iceyleagons.icicle.utilities.lang.Experimental;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
+import net.iceyleagons.icicle.utilities.lang.Experimental;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Experimental
 public class IcicleModuleLoader {
