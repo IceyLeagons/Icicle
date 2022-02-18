@@ -33,7 +33,7 @@ import java.nio.file.Files
 fun File.asAdvancedFile(): AdvancedFile = AdvancedFile(this, isDirectory)
 
 fun File.createIfDoesNotExist(ignoreErrors: Boolean = true) =
-    if (isDirectory) FileUtils.createFolderIfNotExists(this, ignoreErrors)
+    if (isDirectory) FileUtils.createDirectoryIfNotExists(this, ignoreErrors)
     else FileUtils.createFileIfNotExists(this, ignoreErrors)
 
 fun File.isZipped(): Boolean =

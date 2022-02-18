@@ -25,6 +25,7 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 /**
@@ -43,10 +44,10 @@ public final class FileUtils {
      * @return the name of the file
      * @throws IllegalArgumentException if the supplied file is null
      */
-    public static String getFileNameWithoutExtension(File file) throws IllegalStateException {
+    public static String getFileNameWithoutExtension(Path file) throws IllegalStateException {
         Asserts.notNull(file, "File must not be null!");
 
-        return file.getName().replaceFirst("[.][^.]+$", "");
+        return file.getFileName().toString().replaceFirst("[.][^.]+$", "");
     }
 
     /**
@@ -68,16 +69,15 @@ public final class FileUtils {
      * @throws IllegalStateException    if file creation fails and ignoreErrors is set to false
      * @throws IllegalArgumentException if the file is null
      */
-    public static void createFileIfNotExists(File file, boolean ignoreErrors) throws IllegalStateException, IllegalArgumentException {
+    public static void createFileIfNotExists(Path file, boolean ignoreErrors) throws IllegalStateException, IllegalArgumentException {
         Asserts.notNull(file, "File must not be null!");
 
-        if (!file.exists()) {
+        if (!Files.exists(file)) {
             try {
-                if (!file.createNewFile() && !ignoreErrors)
-                    throw new IllegalStateException("Could not create file " + file.getName());
+                Files.createFile(file);
             } catch (IOException e) {
                 if (!ignoreErrors)
-                    throw new IllegalStateException("Could not create file " + file.getName(), e);
+                    throw new IllegalStateException("Could not create file " + file, e);
             }
         }
     }
@@ -88,14 +88,22 @@ public final class FileUtils {
      *
      * @param file the folder to delete
      */
-    @SneakyThrows
-    public static void deleteFolder(File file) {
-        if (!file.isDirectory()) return;
+    public static void deleteDirectory(Path file) {
+        if (!Files.isDirectory(file)) return;
 
-        Files.walk(file.toPath())
-                .sorted(Comparator.reverseOrder())
-                .map(Path::toFile)
-                .forEach(File::delete);
+        try {
+            Files.walk(file)
+                    .sorted(Comparator.reverseOrder())
+                    .forEach(f -> {
+                        try {
+                            Files.deleteIfExists(f);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not delete directory: " + file);
+        }
     }
 
     /**
@@ -107,12 +115,16 @@ public final class FileUtils {
      * @throws IllegalStateException    if file creation fails and ignoreErrors is set to false
      * @throws IllegalArgumentException if the file is null
      */
-    public static void createFolderIfNotExists(File file, boolean ignoreErrors) throws IllegalStateException, IllegalArgumentException {
+    public static void createDirectoryIfNotExists(Path file, boolean ignoreErrors) throws IllegalStateException, IllegalArgumentException {
         Asserts.notNull(file, "File must not be null!");
 
-        if (!file.exists()) {
-            if (!file.mkdirs() && !ignoreErrors)
-                throw new IllegalStateException("Could not create file " + file.getName());
+        if (!Files.exists(file)) {
+            try {
+                Files.createDirectory(file);
+            } catch (IOException e) {
+                if (!ignoreErrors)
+                    throw new IllegalStateException("Could not create directory " + file, e);
+            }
         }
     }
 
@@ -124,14 +136,14 @@ public final class FileUtils {
      * @throws IllegalStateException    if an exception occurs during appending
      * @throws IllegalArgumentException if the passed file is null or the lines are empty
      */
-    public static void appendFile(File file, String... linesToAppend) throws IllegalStateException, IllegalArgumentException {
+    public static void appendFile(Path file, String... linesToAppend) throws IllegalStateException, IllegalArgumentException {
         Asserts.notNull(file, "File must not be null!");
         Asserts.notEmpty(linesToAppend, "LinesToAppend must not be empty!");
 
         FileUtils.createFileIfNotExists(file, false);
 
-        try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.append(String.join(System.lineSeparator(), linesToAppend));
+        try {
+            Files.write(file, Arrays.asList(linesToAppend), StandardOpenOption.APPEND);
         } catch (IOException e) {
             throw new IllegalStateException("Error occurred while writing file content.", e);
         }
@@ -147,25 +159,28 @@ public final class FileUtils {
      * @throws IllegalStateException    if something happens during copying
      * @throws IllegalArgumentException if one of the files is null
      */
-    public static void copyFolder(File source, File destination, String... ignore) throws IllegalStateException, IllegalArgumentException {
+    public static void copyDirectory(Path source, Path destination, String... ignore) throws IllegalStateException, IllegalArgumentException {
         Asserts.notNull(source, "Source file must not be null!");
         Asserts.notNull(destination, "Destination must not be null!");
+        Asserts.state(Files.isDirectory(source), "Source must be a directory!");
 
-        FileUtils.createFolderIfNotExists(source, false);
-        FileUtils.createFolderIfNotExists(destination, false);
+        FileUtils.createDirectoryIfNotExists(source, false);
+        FileUtils.createDirectoryIfNotExists(destination, false);
         List<String> blacklist = Arrays.asList(ignore);
 
-        for (File f : Objects.requireNonNull(source.listFiles())) {
-            if (f.canRead() && !blacklist.contains(f.getName())) {
-                File copyFile = new File(destination, f.getName());
-
-                if (f.isDirectory()) {
-                    FileUtils.copyFolder(f, copyFile);
-                    continue;
+        try {
+            Files.list(source).forEachOrdered(f -> {
+                if (Files.isReadable(f) && !blacklist.contains(f.getFileName().toString())) {
+                    Path copy = destination.resolve(f.getFileName());
+                    if (Files.isDirectory(f)) {
+                        copyDirectory(f, copy);
+                    } else {
+                        copyFile(f, copy);
+                    }
                 }
-
-                FileUtils.copyFileContent(f, copyFile);
-            }
+            });
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not copy directory " + source, e);
         }
     }
 
@@ -177,34 +192,27 @@ public final class FileUtils {
      * @throws IllegalStateException    if something happens during copying
      * @throws IllegalArgumentException if one of the files is null
      */
-    public static void copyFileContent(File source, File destination) throws IllegalStateException, IllegalArgumentException {
+    public static void copyFile(Path source, Path destination) throws IllegalStateException, IllegalArgumentException {
         Asserts.notNull(source, "Source file must not be null!");
         Asserts.notNull(destination, "Destination must not be null!");
 
         FileUtils.createFileIfNotExists(source, false);
         FileUtils.createFileIfNotExists(destination, false);
 
-        try (FileInputStream fileInputStream = new FileInputStream(source)) {
-            try (FileOutputStream fileOutputStream = new FileOutputStream(destination)) {
-                byte[] buffer = new byte[1024];
-                int length;
-
-                while ((length = fileInputStream.read(buffer)) > 0) {
-                    fileOutputStream.write(buffer, 0, length);
-                }
-            }
+        try {
+            Files.copy(source, destination);
         } catch (IOException e) {
-            throw new IllegalStateException("Error occurred while copying file content.", e);
+            throw new IllegalStateException("Error occurred while copying file: " + source, e);
         }
     }
 
     @SneakyThrows
-    public static void downloadTo(File file, String rawUrl) throws IllegalArgumentException {
+    public static void downloadTo(Path file, String rawUrl) throws IllegalArgumentException {
         downloadTo(file, rawUrl, "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
     }
 
     @SneakyThrows
-    public static void downloadTo(File file, String rawUrl, String userAgent) throws IllegalArgumentException {
+    public static void downloadTo(Path file, String rawUrl, String userAgent) throws IllegalArgumentException {
         Asserts.notNull(file, "Destination file must not be null!");
         Asserts.notNull(rawUrl, "Download URL must not be null!");
 
@@ -216,12 +224,12 @@ public final class FileUtils {
             connection.setRequestProperty("User-Agent", userAgent);
 
             try (InputStream inputStream = connection.getInputStream()) {
-                try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+                try (OutputStream outputStream = Files.newOutputStream(file)) {
                     byte[] buffer = new byte[1024];
                     int read;
 
                     while ((read = inputStream.read(buffer, 0, buffer.length)) >= 0) {
-                        fileOutputStream.write(buffer, 0, read);
+                        outputStream.write(buffer, 0, read);
                     }
                 }
             }
@@ -230,7 +238,23 @@ public final class FileUtils {
         }
     }
 
-    public static String getContent(File file, boolean appendLineSeparator) {
+    public static byte[] getContent(Path file) {
+        try {
+            return Files.readAllBytes(file);
+        } catch (IOException e) {
+            throw new IllegalStateException("Error occurred when attempting to read content of file: " + file, e);
+        }
+    }
+
+    public static void setContent(Path file, byte[] content) {
+        try {
+            Files.write(file, content, StandardOpenOption.WRITE);
+        } catch (IOException e) {
+            throw new IllegalStateException("Error occurred when attempting to set content of file: " + file, e);
+        }
+    }
+
+    public static String getContent(Path file, boolean appendLineSeparator) {
         try (Scanner scanner = new Scanner(file, StandardCharsets.UTF_8)) {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -241,7 +265,16 @@ public final class FileUtils {
 
             return stringBuilder.toString();
         } catch (IOException e) {
-            throw new IllegalStateException("Error occurred when attempting to read content of file: " + file.getName(), e);
+            throw new IllegalStateException("Error occurred when attempting to read content of file: " + file, e);
+        }
+    }
+
+    public static void setContent(Path file, String content) {
+        Asserts.state(!Files.isDirectory(file), "Cannot set content of directories!");
+        try {
+            Files.writeString(file, content, StandardOpenOption.WRITE);
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not set content of file: " + file, e);
         }
     }
 }

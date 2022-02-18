@@ -30,7 +30,7 @@ import java.io.File
 class KotlinMain {
     fun doSomeStuff() {
         val newFile = File("newFolder").asAdvancedFile()
-        if (newFile.isFolder) {
+        if (newFile.isDirectory) {
             val file = if ("this.txt" !in newFile)
                 newFile.createOrGetChild("this.txt")
             else newFile["this.txt"]

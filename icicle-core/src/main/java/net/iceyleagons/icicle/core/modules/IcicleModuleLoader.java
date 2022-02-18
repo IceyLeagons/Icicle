@@ -48,7 +48,7 @@ public class IcicleModuleLoader {
     private final List<ModuleMetadata> loadedModules = new ArrayList<>();
 
     public IcicleModuleLoader(AdvancedFile folder) {
-        Asserts.state(folder.isFolder(), "Folder must be a folder!");
+        Asserts.state(folder.isDirectory(), "Folder must be a folder!");
 
         this.modulesFolder = folder;
         loadModulesInFolder();

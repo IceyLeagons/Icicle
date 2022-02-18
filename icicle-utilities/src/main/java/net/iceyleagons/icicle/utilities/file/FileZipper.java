@@ -17,6 +17,8 @@
 package net.iceyleagons.icicle.utilities.file;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -30,13 +32,13 @@ public final class FileZipper {
      * @param output the output
      * @throws IOException if something happens during the compression process.
      */
-    public static void compress(File file, File output) throws IOException {
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            try (FileOutputStream fileOutputStream = new FileOutputStream(output)) {
-                try (GZIPOutputStream gzipOutputStream = new GZIPOutputStream(fileOutputStream)) {
+    public static void compress(Path file, Path output) throws IOException {
+        try (InputStream inputStream = Files.newInputStream(file)) {
+            try (OutputStream outputStream = Files.newOutputStream(output)) {
+                try (GZIPOutputStream gzipOutputStream = new GZIPOutputStream(outputStream)) {
                     byte[] buffer = new byte[1024];
                     int len;
-                    while ((len = fileInputStream.read(buffer)) != -1) {
+                    while ((len = inputStream.read(buffer)) != -1) {
                         gzipOutputStream.write(buffer, 0, len);
                     }
                 }
@@ -52,14 +54,14 @@ public final class FileZipper {
      * @param output the output
      * @throws IOException if something happens during the decompression process
      */
-    public static void decompress(File file, File output) throws IOException {
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            try (GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream)) {
-                try (FileOutputStream fileOutputStream = new FileOutputStream(output)) {
+    public static void decompress(Path file, Path output) throws IOException {
+        try (InputStream inputStream = Files.newInputStream(file)) {
+            try (GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream)) {
+                try (OutputStream outputStream = Files.newOutputStream(output)) {
                     byte[] buffer = new byte[1024];
                     int len;
                     while ((len = gzipInputStream.read(buffer)) != -1) {
-                        fileOutputStream.write(buffer, 0, len);
+                        outputStream.write(buffer, 0, len);
                     }
                 }
             }
@@ -70,11 +72,11 @@ public final class FileZipper {
     /**
      * Used for checking whether a file is Gzipped or not.
      *
-     * @param file the {@link File} to check
+     * @param path the {@link Path} to check
      * @return true if it's gzipped otherwise false
      */
-    public static boolean isZipped(File file) {
-        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+    public static boolean isZipped(Path path) {
+        try (RandomAccessFile raf = new RandomAccessFile(path.toFile(), "r")) {
             int val = raf.read() & 0xff | ((raf.read() << 8) & 0xff00);
             return val == GZIPInputStream.GZIP_MAGIC;
         } catch (IOException e) {

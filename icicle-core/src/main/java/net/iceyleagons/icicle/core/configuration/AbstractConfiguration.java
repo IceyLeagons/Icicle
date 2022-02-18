@@ -60,7 +60,7 @@ public abstract class AbstractConfiguration implements Configuration {
     @Override
     public void afterConstruct() {
         Asserts.notNull(configFile, "Config file must not be null!");
-        Asserts.isTrue(!configFile.isFolder(), "Config file must not be a folder!");
+        Asserts.isTrue(!configFile.isDirectory(), "Config file must not be a folder!");
 
         try {
             this.file = new YamlFile(configFile.getFile());
