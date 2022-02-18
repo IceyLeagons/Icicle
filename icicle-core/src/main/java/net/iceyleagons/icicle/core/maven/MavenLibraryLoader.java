@@ -35,6 +35,8 @@ import org.reflections.Reflections;
 
 import java.io.File;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * @author TOTHTOMI
@@ -64,10 +66,10 @@ public class MavenLibraryLoader {
 
     @SneakyThrows
     public static void load(MavenDependency dependency) {
-        File f = ICICLE_LIB_FOLDER.getChild(dependency.getName() + ".jar");
+        Path f = ICICLE_LIB_FOLDER.getChild(dependency.getName() + ".jar");
 
-        if (!f.exists()) FileUtils.downloadTo(f, dependency.getRequestUrl());
-        if (!f.exists()) {
+        if (!Files.exists(f)) FileUtils.downloadTo(f, dependency.getRequestUrl());
+        if (!Files.exists(f)) {
             throw new IllegalStateException("Unable to download maven dependency: " + dependency.getName());
         }
 

@@ -55,7 +55,7 @@ public class IcicleModuleLoader {
     }
 
     public void loadModulesInFolder() {
-        for (File file : Objects.requireNonNull(modulesFolder.getFile().listFiles()))
+        for (File file : Objects.requireNonNull(modulesFolder.asFile().listFiles()))
             try {
                 loadedModules.add(loadModule(file));
             } catch (MalformedURLException e) {

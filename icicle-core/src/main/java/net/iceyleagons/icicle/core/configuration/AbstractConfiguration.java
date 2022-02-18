@@ -63,7 +63,7 @@ public abstract class AbstractConfiguration implements Configuration {
         Asserts.isTrue(!configFile.isDirectory(), "Config file must not be a folder!");
 
         try {
-            this.file = new YamlFile(configFile.getFile());
+            this.file = new YamlFile(configFile.asFile());
             if (!file.exists()) {
                 this.file.createNewFile(true);
                 this.file.loadWithComments();

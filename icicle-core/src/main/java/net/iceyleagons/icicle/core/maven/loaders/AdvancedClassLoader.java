@@ -30,6 +30,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Path;
 
 /**
  * @author TOTHTOMI
@@ -41,6 +42,9 @@ public interface AdvancedClassLoader {
     void addUrl(@NonNull URL url);
 
     void loadLibrary(@NonNull File file) throws MalformedURLException;
+    default void loadLibrary(@NonNull Path file) throws MalformedURLException {
+        loadLibrary(file.toFile());
+    }
 
     URLClassLoader getOrigin();
 
