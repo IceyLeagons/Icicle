@@ -46,6 +46,10 @@ public final class GenericUtils {
         return (T[]) Array.newInstance(type, size);
     }
 
+    public static Object createGenericArrayWithoutCasting(Class<?> type, int size) {
+        return Array.newInstance(type, size);
+    }
+
     @Nullable
     public static Type getGenericType(Class<?> from, int typeIndex) {
         return ((ParameterizedType) from.getGenericSuperclass()).getActualTypeArguments()[typeIndex];
@@ -64,5 +68,21 @@ public final class GenericUtils {
     @Nullable
     public static Class<?> getGenericTypeClass(Class<?> from, int typeIndex) {
         return TypeToken.of(getGenericType(from, typeIndex)).getRawType();
+    }
+
+    public static <T> T[] genericArrayToNormalArray(Object genericArray, Class<T> wantedType) {
+        int originalSize = Array.getLength(genericArray);
+        T[] cloneArray = createGenericArray(wantedType, originalSize);
+
+        for (int i = 0; i < originalSize; i++) {
+            Object element = Array.get(genericArray, i);
+
+            if (!wantedType.isInstance(element))
+                throw new IllegalStateException("Generic array element type ( " + element.getClass().getName() + " ) cannot be casted to " + wantedType.getName());
+
+            cloneArray[i] = wantedType.cast(element);
+        }
+
+        return cloneArray;
     }
 }

@@ -56,7 +56,7 @@ public abstract class SeparatedFileProvider implements TranslationStringProvider
 
     public void addCsvFile(File file) {
         if (!file.exists() || file.isDirectory()) return;
-        final String[] lines = ArrayUtils.ignoreFirst(1, FileUtils.getContent(file, true).split(System.lineSeparator()));
+        final String[] lines = ArrayUtils.ignoreFirst(1, FileUtils.getContent(file.toPath(), true).split(System.lineSeparator()));
 
         for (final String line : lines) {
             String[] columns = line.split(delimiter);

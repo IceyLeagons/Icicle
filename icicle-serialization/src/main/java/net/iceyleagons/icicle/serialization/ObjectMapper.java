@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,68 +24,32 @@
 
 package net.iceyleagons.icicle.serialization;
 
+
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.serialization.annotations.Convert;
-import net.iceyleagons.icicle.serialization.annotations.SerializeIgnore;
-import net.iceyleagons.icicle.serialization.annotations.SerializedName;
 import net.iceyleagons.icicle.serialization.converters.ValueConverter;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
+import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 21, 2021
+ * @since Feb. 26, 2022
  */
-@SuppressWarnings("unchecked")
 public class ObjectMapper {
 
-    private Map<Class<?>, ValueConverter<?, ?>> converters = new HashMap<>();
-
-    public static boolean shouldConvert(Field field) {
-        return field.isAnnotationPresent(Convert.class);
-    }
-
-    public static boolean isSupportedCollection(Class<?> t) {
-        return t.equals(List.class) || t.equals(Collection.class) || t.equals(ArrayList.class) || t.equals(Set.class) || t.equals(HashSet.class);
-    }
-
-    public static Map<Object, Object> createMapFromType(Class<?> t) {
-        if (t.equals(HashMap.class) || t.equals(Map.class)) {
-            return new HashMap<>();
-        } else if (t.equals(ConcurrentHashMap.class)) {
-            return new ConcurrentHashMap<>();
-        } else {
-            throw new IllegalStateException("Unsupported type for map (deserialization): " + t.getName());
-        }
-    }
-
-    public static Object createCollectionFromType(Class<?> t) {
-        if (t.equals(List.class) || t.equals(Collection.class) || t.equals(ArrayList.class)) {
-            return new ArrayList<>();
-        } else if (t.equals(Set.class) || t.equals(HashSet.class)) {
-            return new HashSet<>();
-        } else {
-            throw new IllegalStateException("Unsupported type for collection (deserialization): " + t.getName());
-        }
-    }
-
-    public static boolean shouldIgnore(Field field) {
-        return Modifier.isTransient(field.getModifiers()) || field.isAnnotationPresent(SerializeIgnore.class);
-    }
-
-    public static String getName(Field field) {
-        return field.isAnnotationPresent(SerializedName.class) ? field.getAnnotation(SerializedName.class).value() : field.getName().toLowerCase();
-    }
+    private final Map<Class<?>, ValueConverter<?, ?>> converters = new HashMap<>();
 
     @SneakyThrows
-    protected <T> T demapObject(MappedObject mappedObject, Class<T> wantedType) {
-        final Class<?> type = mappedObject.getJavaType();
+    public <T> T demapObject(SerializedObject serializedObject, Class<T> wantedType) {
+        final Class<?> type = serializedObject.getJavaType();
         if (!wantedType.isAssignableFrom(type))
             throw new IllegalArgumentException("Wanted type is not assignable from the mapped object!");
 
@@ -93,108 +57,130 @@ public class ObjectMapper {
         if (constructor.getParameterTypes().length != 0)
             throw new IllegalStateException("Object must have an empty constructor!");
 
-        Object object = constructor.newInstance();
+        Object object = BeanUtils.instantiateClass(constructor, null);
 
-        for (ObjectValue value : mappedObject.getValues()) {
-            Field field = value.getField();
-            if (shouldIgnore(field)) continue;
-
-            if (value.isValuePrimitiveOrString() || (value.isArray() && !value.isCollection())) {
-                ReflectionUtils.set(field, object, value.getValue());
-            } else if (shouldConvert(field)) {
-                Object converted = convert(ReflectionUtils.get(field, value.getValue(), Object.class), field, false);
-                if (ObjectValue.isValuePrimitiveOrString(converted.getClass())) {
-                    ReflectionUtils.set(field, object, converted);
-                } else {
-                    ReflectionUtils.set(field, object, demapObject((MappedObject) converted, field.getType()));
-                }
+        for (ObjectValue value : serializedObject.getValues()) {
+            if (value.shouldConvert()) {
+                Object converted = convert(value.getValue(), value.getField(), false);
+                ReflectionUtils.set(value.getField(), object, converted);
+            } else if (value.isValuePrimitiveOrString()) {
+                ReflectionUtils.set(value.getField(), object, value.getValue());
+            } else if (value.isArray() && !value.isCollection()) {
+                Object demapped = demapArray(GenericUtils.genericArrayToNormalArray(value.getValue(), Object.class), value.getJavaType().getComponentType());
+                ReflectionUtils.set(value.getField(), object, demapped);
             } else if (value.isCollection()) {
-                Object mappedArray = value.getValue();
-                Class<?> t = value.getJavaType();
+                Object demapped = demapArray(GenericUtils.genericArrayToNormalArray(value.getValue(), Object.class), Object.class);
 
-                int arraySize = Array.getLength(mappedArray);
-                Collection<Object> collection = (Collection<Object>) createCollectionFromType(t);
-
-
-                for (int i = 0; i < arraySize; i++) {
-                    Object demapped = demapObject((MappedObject) Array.get(mappedArray, i), Object.class);
-                    collection.add(demapped);
-                }
-
-                ReflectionUtils.set(field, object, collection);
+                Collection<Object> collection = (Collection<Object>) SerializationUtils.createCollectionFromType(value.getJavaType());
+                collection.addAll(Arrays.asList(GenericUtils.genericArrayToNormalArray(demapped, Object.class)));
+                ReflectionUtils.set(value.getField(), object, collection);
             } else if (value.isMap()) {
-                //TODO figure out
+                Object demapped = demapMap(GenericUtils.genericArrayToNormalArray(value.getValue(), Object.class), value.getJavaType());
             } else if (value.isSubObject()) {
-                Object demapped = demapObject((MappedObject) value.getValue(), Object.class);
-                ReflectionUtils.set(field, object, demapped);
+                Object demapped = demapObject((SerializedObject) value.getValue(), Object.class);
+                ReflectionUtils.set(value.getField(), object, demapped);
             }
         }
 
         return wantedType.cast(object);
     }
 
-    protected MappedObject mapObject(Object object) {
-        final Class<?> type = object.getClass();
-        final MappedObject mappedObject = new MappedObject(type);
+    public SerializedObject mapObject(Object object) {
+        if (object == null) return null;
 
-        for (Field declaredField : type.getDeclaredFields()) {
-            if (shouldIgnore(declaredField)) continue;
+        Class<?> clazz = object.getClass();
+        Set<ObjectValue> values = SerializationUtils.getValuesForClass(clazz, (f, k) -> ReflectionUtils.get(f, object, Object.class));
 
-            final Class<?> fieldType = declaredField.getType();
-            ObjectValue result;
+        for (ObjectValue value : values) {
+            if (value.isValuePrimitiveOrString()) continue;
 
-            if (ObjectValue.isValuePrimitiveOrString(fieldType) || (ObjectValue.isArray(fieldType) && !ObjectValue.isCollection(fieldType))) {
-                result = new ObjectValue(fieldType, declaredField, ReflectionUtils.get(declaredField, object, Object.class));
-            } else if (shouldConvert(declaredField)) {
-                Object converted = convert(ReflectionUtils.get(declaredField, object, Object.class), declaredField, true);
-                if (ObjectValue.isValuePrimitiveOrString(converted.getClass())) {
-                    result = new ObjectValue(converted.getClass(), declaredField, converted);
-                } else {
-                    result = new ObjectValue(MappedObject.class, declaredField, mapObject(converted));
-                }
-            } else if (ObjectValue.isCollection(fieldType)) {
-                Object[] collection = Objects.requireNonNull(ReflectionUtils.get(declaredField, object, Collection.class)).toArray();
-                Object[] collArray = new Object[collection.length];
-
-                for (int i = 0; i < collection.length; i++) {
-                    Object colValue = collection[i];
-                    collArray[i] = mapObject(colValue);
-                }
-
-                result = new ObjectValue(fieldType, declaredField, collArray);
-            } else if (ObjectValue.isMap(fieldType)) {
-                Map<?, ?> map = ReflectionUtils.get(declaredField, object, Map.class);
-
-                assert map != null;
-                Set<Map.Entry<?, ?>> values = new HashSet<>(map.size());
-
-                for (Map.Entry<?, ?> entry : map.entrySet()) {
-                    Object value = entry.getValue();
-                    if (!ObjectValue.isValuePrimitiveOrString(entry.getKey().getClass())) {
-                        throw new IllegalStateException("Maps can only have a key of a string or a primitive type object representation. Consider using converters.");
-                    }
-
-
-                    if (ObjectValue.isValuePrimitiveOrString(value.getClass())) {
-                        values.add(new AbstractMap.SimpleEntry<>(entry.getKey(), value));
-                        continue;
-                    }
-
-                    values.add(new AbstractMap.SimpleEntry<>(entry.getKey(), mapObject(value)));
-                }
-
-                result = new ObjectValue(fieldType, declaredField, values.toArray(Map.Entry<?, ?>[]::new));
-            } else if (ObjectValue.isSubObject(fieldType)) {
-                Object value = ReflectionUtils.get(declaredField, object, Object.class);
-                result = new ObjectValue(fieldType, declaredField, value != null ? mapObject(value) : null);
-            } else {
-                throw new IllegalStateException("Unsupported value type: " + fieldType.getName());
+            if (value.shouldConvert()) {
+                Object converted = convert(value.getValue(), value.getField(), true);
+                value.setValue(SerializationUtils.isValuePrimitiveOrString(converted.getClass()) ? converted : mapObject(converted));
+            } else if (value.isArray() && !value.isCollection()) {
+                value.setValue(mapArray(GenericUtils.genericArrayToNormalArray(value.getValue(), Object.class)));
+            } else if (value.isCollection()) {
+                Object[] collection = value.getValueAs(Collection.class).toArray();
+                value.setValue(mapArray(collection));
+            } else if (value.isMap()) {
+                Map<?,?> map = value.getValueAs(Map.class);
+                value.setValue(mapMap(map));
+            } else if (value.isSubObject()) {
+               value.setValue(mapObject(value.getValue()));
             }
-
-            mappedObject.addValue(result);
         }
 
-        return mappedObject;
+        SerializedObject obj = new SerializedObject(clazz);
+        obj.getValues().addAll(values);
+
+        return obj;
+    }
+
+    private Object demapMap(Object[] array, Class<?> type) {
+        Map<Object, Object> map = (Map<Object, Object>) SerializationUtils.createMapFromType(type);
+        for (Object o : array) {
+            Map.Entry<Object, Object> entry = (Map.Entry<Object, Object>) o;
+            if (!SerializationUtils.isSubObject(entry.getValue().getClass())) {
+                map.put(entry.getKey(), entry.getValue());
+                continue;
+            }
+
+            map.put(entry.getKey(), demapObject((SerializedObject) entry.getKey(), Object.class));
+        }
+
+        return map;
+    }
+
+    private Object[] mapMap(Map<?,?> map) {
+        Set<Map.Entry<?, ?>> entries = new HashSet<>(map.size());
+
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            Object value = entry.getValue();
+            if (!SerializationUtils.isValuePrimitiveOrString(entry.getKey().getClass())) {
+                throw new IllegalStateException("Maps can only have a key of a string or a primitive type object representation. Consider using converters.");
+            }
+
+            if (!SerializationUtils.isSubObject(value.getClass())) {
+                entries.add(new AbstractMap.SimpleEntry<>(entry.getKey(), value));
+                continue;
+            }
+
+            entries.add(new AbstractMap.SimpleEntry<>(entry.getKey(), mapObject(value)));
+        }
+
+        return entries.toArray(Map.Entry<?,?>[]::new);
+    }
+
+    private Object[] mapArray(Object[] original) {
+        if (!SerializationUtils.isSubObject(original.getClass().getComponentType())) return original;
+
+        Object[] clone = new Object[original.length];
+        for (int i = 0; i < original.length; i++) {
+            if (!SerializationUtils.isSubObject(original[i].getClass())) {
+                clone[i] = original[i];
+                continue;
+            }
+
+            clone[i] = mapObject(original[i]);
+        }
+
+        return clone;
+    }
+
+    private Object demapArray(Object[] mapped, Class<?> originalType) {
+        if (!SerializationUtils.isSubObject(mapped.getClass().getComponentType())) return mapped;
+
+        Object clone = GenericUtils.createGenericArrayWithoutCasting(originalType, mapped.length);
+        for (int i = 0; i < mapped.length; i++) {
+            if (!SerializationUtils.isSubObject(mapped[i].getClass())) {
+                Array.set(clone, i, mapped[i]);
+                continue;
+            }
+
+            Array.set(clone, i, demapObject((SerializedObject) mapped[i], originalType));
+        }
+
+        return clone;
     }
 
     private Object convert(Object input, Field field, boolean serialize) {

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,19 +22,31 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization.serializers;
+package net.iceyleagons.icicle.serialization;
 
-import java.io.File;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 21, 2021
+ * @since Feb. 26, 2022
  */
-public interface FileSerializer {
+@Getter
+@EqualsAndHashCode
+@RequiredArgsConstructor
+public class SerializedObject {
 
-    void serializeToFile(File file, Object object);
+    private final Class<?> javaType;
+    private final Set<ObjectValue> values = new HashSet<>();
 
-    <T> T deSerializeFromFile(File file, Class<T> wantedType);
+    public void addValue(ObjectValue value) {
+        values.add(value);
+    }
 
 }

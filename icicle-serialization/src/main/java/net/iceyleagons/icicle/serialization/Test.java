@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,11 @@
 package net.iceyleagons.icicle.serialization;
 
 import lombok.EqualsAndHashCode;
-import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
-import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
-import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 import net.iceyleagons.icicle.serialization.annotations.Convert;
 import net.iceyleagons.icicle.serialization.converters.builtin.UUIDConverter;
-import net.iceyleagons.icicle.serialization.serializers.impl.JsonSerializer;
+import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
+import net.iceyleagons.icicle.utilities.Benchmark;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,45 +39,47 @@ import java.util.UUID;
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 21, 2021
+ * @since Feb. 26, 2022
  */
 public class Test {
 
-    public static void main(String[] args) throws BeanCreationException, UnsatisfiedDependencyException, CircularDependencyException {
-        JsonSerializer json = new JsonSerializer(2);
+    public static void main(String[] args) {
+        JsonSerializer jsonSerializer = new JsonSerializer();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        MapTest orig = new MapTest();
-        String c = json.convertToString(orig);
-        System.out.println(c);
+        Test1 original = new Test1();
 
+        JSONObject serialized = Benchmark.run(() -> jsonSerializer.serialize(original), "Serialization");
+        Test1 demap = Benchmark.run(() -> jsonSerializer.deserializeObject(serialized, Test1.class), "DeSerialization");
 
-        //System.out.println(new JsonSerializer().convertToString(new Test1()));
-    }
+        System.out.println("Serialized & Deserialized match: " + original.equals(demap));
 
-    @EqualsAndHashCode
-    static class MapTest {
-        private final String test = "Hello";
-        private final String[] test2 = new String[]{"Hello1", "Hello2"};
-        private final Map<String, String> test3 = Map.of("hello", "hello value", "next-key", "next-key value");
-        private final Map<String, Test2> test4 = Map.of("first", new Test2(), "second", new Test2());
+        System.out.println(original.test + " <--> " + demap.test);
+        System.out.println(Arrays.toString(original.test2) + " <--> " + Arrays.toString(demap.test2));
+        System.out.println(original.test3 + " <--> " + demap.test3);
+        System.out.println(Arrays.toString(original.test4) + " <--> " + Arrays.toString(demap.test4));
+        System.out.println(Arrays.toString(original.test5.toArray(String[]::new)) + " <--> " + Arrays.toString(demap.test5.toArray(String[]::new)));
+        System.out.println(original.test6.test2 + " <--> " + demap.test6.test2);
+        System.out.println(Arrays.toString(original.test7.entrySet().toArray()) + " <--> " + Arrays.toString(demap.test7.entrySet().toArray()));
 
-        @Convert(UUIDConverter.class)
-        private final UUID uuid = UUID.randomUUID();
+        System.out.println();
+        System.out.println("Serialized: ");
+        System.out.println(serialized.toString(2));
     }
 
     @EqualsAndHashCode
     static class Test1 {
-        private final String test = "Hello";
-        private final String[] test2 = new String[]{"Hello1", "Hello2"};
-        private final int test3 = 10;
-        private final Test2 test4 = new Test2();
-        private final List<Test2> moreTest4 = Arrays.asList(new Test2(), new Test2());
+        private String test = "Hello";
+        private String[] test2 = new String[]{"asd", "asd2"};
+        private int test3 = 4;
+        private int[] test4 = new int[]{1,2,3};
+        private List<String> test5 = Arrays.asList("test1", "test2", "test3");
+        private Test2 test6 = new Test2();
+        private Map<String, String> test7 = Map.of("testkey", "testvalue", "key2", "value2");
     }
 
     @EqualsAndHashCode
     static class Test2 {
-        private final String test2 = "This is test2";
-        private final int[] array = new int[]{1, 2, 3};
+        private String test2 = "Test2 field";
     }
-
 }

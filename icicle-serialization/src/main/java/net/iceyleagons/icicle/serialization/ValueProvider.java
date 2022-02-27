@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,27 +24,16 @@
 
 package net.iceyleagons.icicle.serialization;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Set;
+import java.lang.reflect.Field;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 21, 2021
+ * @since Feb. 26, 2022
  */
-@Getter
-@EqualsAndHashCode
-@RequiredArgsConstructor
-public class MappedObject {
+@FunctionalInterface
+public interface ValueProvider {
 
-    private final Class<?> javaType;
-    private final Set<ObjectValue> values = new HashSet<>();
+    Object getValue(Field field, String key);
 
-    public void addValue(ObjectValue value) {
-        values.add(value);
-    }
 }

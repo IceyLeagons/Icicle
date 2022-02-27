@@ -57,6 +57,6 @@ public class Updater {
     }
 
     public void downloadLatest(File to) {
-        FileUtils.downloadTo(to, updaterSource.getPluginLatestDownload());
+        FileUtils.downloadTo(to.toPath(), updaterSource.getPluginLatestDownload());
     }
 }

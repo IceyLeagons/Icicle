@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,30 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization.serializers;
+package net.iceyleagons.icicle.utilities;
+
+import java.util.function.Supplier;
 
 /**
+ * Benchmark is a simple standalone static class alternative to the @Measure annotation in Icicle core.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 21, 2021
+ * @since Feb. 27, 2022
  */
-public interface StringSerializer {
+public final class Benchmark {
 
-    String serializeToString(Object object);
+    public static <T> T run(Supplier<T> toRun, String name) {
+        System.out.println();
+        System.out.println("==============[ Benchmark - " + name + " ]==============");
 
-    <T> T deSerializeFromString(String input, Class<T> wantedType);
+        long start = System.currentTimeMillis();
+        T t = toRun.get();
+        long end = System.currentTimeMillis() - start;
 
+        System.out.println();
+        System.out.println("Running " + name + " took " + end + " ms");
+        System.out.println("========================================================");
+        return t;
+    }
 }
