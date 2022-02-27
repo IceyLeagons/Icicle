@@ -26,6 +26,7 @@ package net.iceyleagons.test.icicle.core.bean;
 
 import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 import net.iceyleagons.icicle.core.Application;
+import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import net.iceyleagons.test.icicle.core.bean.resolvable.CustomAutowiringHandlerService;
@@ -49,6 +50,7 @@ public class AutowiringTest {
 
     @BeforeAll
     public static void setupIcicle() {
+        Icicle.loadIcicle();
         application = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.resolvable", ExecutionUtils.debugHandler()) {
         };
         registry = application.getBeanManager().getBeanRegistry();

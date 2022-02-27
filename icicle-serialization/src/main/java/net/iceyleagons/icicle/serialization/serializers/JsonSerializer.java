@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.serialization.serializers;
 
+import lombok.SneakyThrows;
 import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.ObjectValue;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
@@ -32,7 +33,12 @@ import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,28 +47,31 @@ import java.util.Set;
  * @version 1.0.0
  * @since Feb. 26, 2022
  */
-public class JsonSerializer {
+public class JsonSerializer implements FileSerializer, StringSerializer {
 
     private final ObjectMapper objectMapper;
+    private final boolean pretty;
 
     public JsonSerializer() {
+        this(false);
+    }
+
+    public JsonSerializer(boolean pretty) {
+        this.pretty = pretty;
         this.objectMapper = new ObjectMapper();
     }
 
-    public String serializeToString(Object object) {
-        return serialize(object).toString(2);
-    }
 
     public JSONObject serialize(Object object) {
         return serialize(object, new JSONObject());
     }
 
-    public JSONObject serialize(Object object, JSONObject root) {
+    private JSONObject serialize(Object object, JSONObject root) {
         SerializedObject obj = objectMapper.mapObject(object);
         return serialize(obj, root);
     }
 
-    public JSONObject serialize(SerializedObject serializedObject, JSONObject root) {
+    private JSONObject serialize(SerializedObject serializedObject, JSONObject root) {
         for (ObjectValue value : serializedObject.getValues()) {
             if (value.shouldConvert()) {
                 Class<?> vClass = value.getValue().getClass();
@@ -173,5 +182,31 @@ public class JsonSerializer {
             jsonArray.put(o);
         }
         return jsonArray;
+    }
+
+    @Override
+    @SneakyThrows
+    public void serializeToPath(Object object, Path path) {
+        try (Writer writer = Files.newBufferedWriter(path, StandardOpenOption.WRITE)) {
+            serialize(object).write(writer, pretty ? 2 : 0, pretty ? 4 : 0);
+        }
+    }
+
+    @Override
+    @SneakyThrows
+    public <T> T deserializeFromPath(Path path, Class<T> type) {
+        try (Reader reader = Files.newBufferedReader(path)) {
+            return deserializeObject(new JSONObject(reader), type);
+        }
+    }
+
+    @Override
+    public String serializeToString(Object object) {
+        return serialize(object).toString(pretty ? 2 : 0);
+    }
+
+    @Override
+    public <T> T deserializeFromString(String string, Class<T> type) {
+        return deserializeObject(new JSONObject(string), type);
     }
 }

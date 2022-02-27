@@ -31,7 +31,6 @@ import net.iceyleagons.icicle.database.DatabaseConnector;
 import net.iceyleagons.icicle.database.Schema;
 import net.iceyleagons.icicle.database.filters.Filter;
 import net.iceyleagons.icicle.database.filters.Filters;
-import net.iceyleagons.icicle.oldserialization.serializers.impl.PreparedStatementFiller;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,7 +47,6 @@ import java.util.Set;
 public abstract class SQLDatabaseConnector<T> implements DatabaseConnector<T> {
 
     private final Schema<T> schema;
-    private final PreparedStatementFiller filler = new PreparedStatementFiller();
 
     @Override
     public boolean isSql() {
@@ -87,7 +85,7 @@ public abstract class SQLDatabaseConnector<T> implements DatabaseConnector<T> {
             ResultSet rs = ps.executeQuery();
             rs.next();
             //TODO indices
-            return rs.first() ? Optional.ofNullable(filler.convertFromResultSet(rs, schema.getClazz(), null)) : Optional.empty();
+            return null;//rs.first() ? Optional.ofNullable(filler.convertFromResultSet(rs, schema.getClazz(), null)) : Optional.empty();
         }
     }
 
