@@ -45,10 +45,10 @@ public class Icicle {
     public static final String ICICLE_VERSION = "1.0.0";
 
     public static final boolean PERFORMANCE_DEBUG = true;
-    public static final ClassLoader ICICLE_CLASS_LOADER = Icicle.class.getClassLoader();
+    public static final ClassLoader ICICLE_CLASS_LOADER = URLClassLoader.newInstance(new URL[0], Icicle.class.getClassLoader());
 
     // In newer version of Java, the default class loader is AppClassLoader, which cannot be cast to URLClassLoader, so we do it this way:
-    public static final ClassLoader[] ICICLE_CLASS_LOADERS = new ClassLoader[]{URLClassLoader.newInstance(new URL[0], ICICLE_CLASS_LOADER)};
+    public static final ClassLoader[] ICICLE_CLASS_LOADERS = new ClassLoader[]{ICICLE_CLASS_LOADER};
 
 
     public static final Reflections ICICLE_REFLECTIONS = new Reflections("net.iceyleagons.icicle", ICICLE_CLASS_LOADERS);
