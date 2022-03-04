@@ -40,7 +40,7 @@ import java.nio.file.Path;
  *     <li>Easy file content getting/setting/appending</li>
  *     <li>Easy deletion (both for files and directories)</li>
  * </ul>
- *
+ * <p>
  * As of 3.0.0 methods have been moved from using {@link File} to {@link Path} & {@link Files}
  *
  * @author TOTHTOMI
@@ -69,7 +69,7 @@ public class AdvancedFile {
      * "directory" parameter. If this is a file that's created by the developers, the directory should be specified by them, however if the {@link AdvancedFile}
      * is created from mapping a directory for example, the directory parameter should be from {@link File#isDirectory()}
      *
-     * @param file   the file to wrap
+     * @param file      the file to wrap
      * @param directory whether the file should be treated as a directory or not
      */
     public AdvancedFile(File file, boolean directory) {
@@ -150,7 +150,7 @@ public class AdvancedFile {
      * This method will basically create a new advanced file with the specified name, and the current file being the parent directory.
      * This method does not create the directory or file, that's handled in the {@link AdvancedFile} constructor!
      *
-     * @param name   the fileName
+     * @param name      the fileName
      * @param directory whether the file is a directory or not
      * @return the resulting {@link AdvancedFile}
      */

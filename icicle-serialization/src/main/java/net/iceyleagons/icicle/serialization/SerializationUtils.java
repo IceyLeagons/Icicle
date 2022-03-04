@@ -24,7 +24,6 @@
 
 package net.iceyleagons.icicle.serialization;
 
-import net.iceyleagons.icicle.oldserialization.MappedObject;
 import net.iceyleagons.icicle.serialization.annotations.Convert;
 import net.iceyleagons.icicle.serialization.annotations.SerializeIgnore;
 import net.iceyleagons.icicle.serialization.annotations.SerializedName;

@@ -18,7 +18,10 @@ package net.iceyleagons.icicle.utilities.file;
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.utilities.Asserts;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -26,7 +29,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * Utility methods regarding files.

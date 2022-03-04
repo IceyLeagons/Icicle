@@ -25,8 +25,6 @@
 package net.iceyleagons.icicle.serialization;
 
 import lombok.EqualsAndHashCode;
-import net.iceyleagons.icicle.serialization.annotations.Convert;
-import net.iceyleagons.icicle.serialization.converters.builtin.UUIDConverter;
 import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
 import net.iceyleagons.icicle.utilities.Benchmark;
 import org.json.JSONObject;
@@ -34,7 +32,6 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author TOTHTOMI
@@ -72,7 +69,7 @@ public class Test {
         private String test = "Hello";
         private String[] test2 = new String[]{"asd", "asd2"};
         private int test3 = 4;
-        private int[] test4 = new int[]{1,2,3};
+        private int[] test4 = new int[]{1, 2, 3};
         private List<String> test5 = Arrays.asList("test1", "test2", "test3");
         private Test2 test6 = new Test2();
         private Map<String, String> test7 = Map.of("testkey", "testvalue", "key2", "value2");

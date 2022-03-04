@@ -42,6 +42,7 @@ public interface AdvancedClassLoader {
     void addUrl(@NonNull URL url);
 
     void loadLibrary(@NonNull File file) throws MalformedURLException;
+
     default void loadLibrary(@NonNull Path file) throws MalformedURLException {
         loadLibrary(file.toFile());
     }

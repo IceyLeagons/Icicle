@@ -42,9 +42,6 @@ import java.util.Collection;
 public class UnsafeLoader implements AdvancedClassLoader {
 
     private static Unsafe unsafe;
-    private final Collection<URL> unopenedURLs;
-    private final Collection<URL> pathURLs;
-    private final URLClassLoader origin;
 
     static {
         try {
@@ -55,6 +52,11 @@ public class UnsafeLoader implements AdvancedClassLoader {
             unsafe = null;
         }
     }
+
+    private final Collection<URL> unopenedURLs;
+    private final Collection<URL> pathURLs;
+    private final URLClassLoader origin;
+
     @SuppressWarnings("unchecked")
     public UnsafeLoader(URLClassLoader origin) {
         this.origin = origin;

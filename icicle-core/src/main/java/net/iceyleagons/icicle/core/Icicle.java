@@ -30,6 +30,9 @@ import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
 import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import org.reflections.Reflections;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+
 /**
  * Main class of Icicle.
  *
@@ -43,7 +46,11 @@ public class Icicle {
 
     public static final boolean PERFORMANCE_DEBUG = true;
     public static final ClassLoader ICICLE_CLASS_LOADER = Icicle.class.getClassLoader();
-    public static final ClassLoader[] ICICLE_CLASS_LOADERS = new ClassLoader[]{ICICLE_CLASS_LOADER};
+
+    // In newer version of Java, the default class loader is AppClassLoader, which cannot be cast to URLClassLoader, so we do it this way:
+    public static final ClassLoader[] ICICLE_CLASS_LOADERS = new ClassLoader[]{URLClassLoader.newInstance(new URL[0], ICICLE_CLASS_LOADER)};
+
+
     public static final Reflections ICICLE_REFLECTIONS = new Reflections("net.iceyleagons.icicle", ICICLE_CLASS_LOADERS);
     // TODO Gradle plugin --> icicle.yml and the core searches for its dependencies rather than this \/
     public static final MavenDependency[] CORE_DEPENDENCIES = new MavenDependency[]{

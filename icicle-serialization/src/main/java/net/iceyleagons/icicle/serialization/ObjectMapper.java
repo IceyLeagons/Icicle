@@ -103,10 +103,10 @@ public class ObjectMapper {
                 Object[] collection = value.getValueAs(Collection.class).toArray();
                 value.setValue(mapArray(collection));
             } else if (value.isMap()) {
-                Map<?,?> map = value.getValueAs(Map.class);
+                Map<?, ?> map = value.getValueAs(Map.class);
                 value.setValue(mapMap(map));
             } else if (value.isSubObject()) {
-               value.setValue(mapObject(value.getValue()));
+                value.setValue(mapObject(value.getValue()));
             }
         }
 
@@ -131,7 +131,7 @@ public class ObjectMapper {
         return map;
     }
 
-    private Object[] mapMap(Map<?,?> map) {
+    private Object[] mapMap(Map<?, ?> map) {
         Set<Map.Entry<?, ?>> entries = new HashSet<>(map.size());
 
         for (Map.Entry<?, ?> entry : map.entrySet()) {
@@ -148,7 +148,7 @@ public class ObjectMapper {
             entries.add(new AbstractMap.SimpleEntry<>(entry.getKey(), mapObject(value)));
         }
 
-        return entries.toArray(Map.Entry<?,?>[]::new);
+        return entries.toArray(Map.Entry<?, ?>[]::new);
     }
 
     private Object[] mapArray(Object[] original) {

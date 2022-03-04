@@ -28,7 +28,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import net.iceyleagons.icicle.serialization.annotations.Convert;
 
 import java.lang.reflect.Field;
 
