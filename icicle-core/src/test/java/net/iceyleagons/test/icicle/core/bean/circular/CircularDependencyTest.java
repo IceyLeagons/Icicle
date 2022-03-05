@@ -28,6 +28,7 @@ import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
+import net.iceyleagons.icicle.core.Icicle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,8 @@ public class CircularDependencyTest {
     @Test
     @DisplayName("Circular dependency")
     public void testCircularDependency() {
+        if(!Icicle.LOADED)
+            Icicle.loadIcicle();
         Application app = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.circular", ExecutionUtils.debugHandler()) {
         };
         Assertions.assertThrows(CircularDependencyException.class, app::start);
