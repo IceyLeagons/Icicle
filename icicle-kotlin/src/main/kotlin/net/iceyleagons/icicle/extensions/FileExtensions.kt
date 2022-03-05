@@ -29,46 +29,46 @@ import net.iceyleagons.icicle.utilities.file.FileUtils
 import net.iceyleagons.icicle.utilities.file.FileZipper
 import java.io.File
 import java.nio.file.Files
+import java.nio.file.Path
 
 fun File.asAdvancedFile(): AdvancedFile = AdvancedFile(this, isDirectory)
+fun Path.asAdvancedFile(): AdvancedFile = AdvancedFile(this, Files.isDirectory(this))
 
 fun File.createIfDoesNotExist(ignoreErrors: Boolean = true) =
-    if (isDirectory) FileUtils.createDirectoryIfNotExists(this, ignoreErrors)
-    else FileUtils.createFileIfNotExists(this, ignoreErrors)
+    if (isDirectory) FileUtils.createDirectoryIfNotExists(this.toPath(), ignoreErrors)
+    else FileUtils.createFileIfNotExists(this.toPath(), ignoreErrors)
 
 fun File.isZipped(): Boolean =
-    FileZipper.isZipped(this)
+    FileZipper.isZipped(this.toPath())
 
 fun AdvancedFile.isZipped(): Boolean =
-    FileZipper.isZipped(file)
+    FileZipper.isZipped(this.path)
 
 fun File.compress(output: File = File(parent, "${nameWithoutExtension}_compressed.$extension")): File {
-    FileZipper.compress(this, output)
+    FileZipper.compress(this.toPath(), output.toPath())
     return output
 }
 
 fun AdvancedFile.compress(
-    output: File = File(
-        file.parent,
-        "${file.nameWithoutExtension}_compressed.${file.extension}"
+    output: AdvancedFile = AdvancedFile(
+        path.parent.resolve("${this.filenameWithoutExtension}_compressed.${FileUtils.getExtension(path)}")
     )
-): File {
-    FileZipper.compress(file, output)
+): AdvancedFile {
+    FileZipper.compress(path, output.path)
     return output
 }
 
 fun File.decompress(output: File = File(parent, "${nameWithoutExtension}_decompressed.$extension")): File {
-    FileZipper.decompress(this, output)
+    FileZipper.decompress(this.toPath(), output.toPath())
     return output
 }
 
 fun AdvancedFile.decompress(
-    output: File = File(
-        file.parent,
-        "${file.nameWithoutExtension}_decompressed.${file.extension}"
+    output: AdvancedFile = AdvancedFile(
+        path.parent.resolve("${this.filenameWithoutExtension}_decompressed.${FileUtils.getExtension(path)}")
     )
-): File {
-    FileZipper.decompress(file, output)
+): AdvancedFile {
+    FileZipper.decompress(path, output.path)
     return output
 }
 
@@ -83,21 +83,21 @@ operator fun File.invoke(): File {
 
 operator fun AdvancedFile.plusAssign(content: String) = appendToFile(content)
 
-operator fun AdvancedFile.contains(file: String): Boolean = getChild(file).exists()
+operator fun AdvancedFile.contains(file: String): Boolean = Files.exists(getChild(file))
 
 operator fun File.contains(file: String): Boolean = this[file].exists()
 
 operator fun AdvancedFile.contains(file: AdvancedFile): Boolean =
-    if (this.file.parentFile[file.file.name] == file.file) file.file.exists() else false
+    if (this.path.parent.resolve(file.path.fileName) == file.path) Files.exists(file.path) else false
 
 operator fun AdvancedFile.contains(file: File): Boolean =
-    if (this.file.parentFile[file.name] == file) file.exists() else false
+    if (this.path.parent.resolve(file.name) == file) file.exists() else false
 
 infix fun File.sameAs(file: File): Boolean =
     Files.mismatch(toPath(), file.toPath()) == -1L
 
 infix fun AdvancedFile.sameAs(otherFile: AdvancedFile): Boolean =
-    Files.mismatch(file.toPath(), otherFile.file.toPath()) == -1L
+    Files.mismatch(path, otherFile.path) == -1L
 
 infix fun File.same(file: File): Boolean =
     this sameAs file

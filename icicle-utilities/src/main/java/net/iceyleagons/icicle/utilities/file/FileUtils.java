@@ -18,10 +18,7 @@ package net.iceyleagons.icicle.utilities.file;
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.utilities.Asserts;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -42,6 +39,10 @@ import java.util.Scanner;
  * @since 1.0.0
  */
 public final class FileUtils {
+
+    public static String getExtension(Path path) {
+        return com.google.common.io.Files.getFileExtension(path.getFileName().toString());
+    }
 
     /**
      * Will return the file name, but without the extension.

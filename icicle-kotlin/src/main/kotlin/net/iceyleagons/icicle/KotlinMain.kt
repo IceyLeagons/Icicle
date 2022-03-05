@@ -25,6 +25,7 @@
 package net.iceyleagons.icicle
 
 import net.iceyleagons.icicle.extensions.*
+import net.iceyleagons.icicle.utilities.file.AdvancedFile
 import java.io.File
 
 class KotlinMain {
@@ -37,9 +38,9 @@ class KotlinMain {
 
             file += "This is a new line.\n"
 
-            file.compress(File("compressed_file.gzip"))
+            file.compress(AdvancedFile(File("compressed_file.gzip")))
             if (newFile["compressed_file.gzip"].isZipped())
-                newFile["compressed_file.zip"].decompress(File("decompressed.txt"))
+                newFile["compressed_file.zip"].decompress(AdvancedFile(File("decompressed.txt")))
 
             if (newFile["decompressed.txt"] sameAs newFile["this.txt"])
                 println("They're the same!")
