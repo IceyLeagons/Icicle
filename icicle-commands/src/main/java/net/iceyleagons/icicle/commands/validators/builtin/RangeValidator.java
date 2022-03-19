@@ -22,36 +22,28 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization;
+package net.iceyleagons.icicle.commands.validators.builtin;
 
+import net.iceyleagons.icicle.commands.annotations.validators.Range;
+import net.iceyleagons.icicle.commands.validators.CommandParameterValidator;
+import net.iceyleagons.icicle.commands.validators.CommandValidator;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Parameter;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Mar. 19, 2022
  */
-@Getter
-@EqualsAndHashCode
-@RequiredArgsConstructor
-public class SerializedObject {
+@CommandValidator(Range.class)
+public class RangeValidator implements CommandParameterValidator {
 
-    private final Class<?> javaType;
-    private final Set<ObjectValue> values = new HashSet<>();
+    @Override
+    public void validate(Parameter parameter, String input) throws Exception {
+        Range range = parameter.getAnnotation(Range.class);
+        double d = Double.parseDouble(input);
 
-    public void addValue(ObjectValue value) {
-        values.add(value);
-    }
-
-    public Map<String, Object> asMap() {
-        // TODO since these values are not converted etc., do the steps like in JsonSerializer
-        throw new IllegalStateException("Unimplemented!");
+        if (d > range.value() || d < range.min())
+            throw new IllegalArgumentException(parameter.getName() + " must be between " + range.min() + " and " + range.value());
     }
 }

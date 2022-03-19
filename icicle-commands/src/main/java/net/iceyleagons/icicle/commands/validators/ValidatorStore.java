@@ -22,36 +22,33 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization;
+package net.iceyleagons.icicle.commands.validators;
 
-
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-import java.util.HashSet;
+import java.lang.annotation.Annotation;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Mar. 19, 2022
  */
-@Getter
-@EqualsAndHashCode
-@RequiredArgsConstructor
-public class SerializedObject {
+public class ValidatorStore {
 
-    private final Class<?> javaType;
-    private final Set<ObjectValue> values = new HashSet<>();
+    @Getter
+    private final Map<Class<? extends Annotation>, CommandParameterValidator> validators = new HashMap<>();
 
-    public void addValue(ObjectValue value) {
-        values.add(value);
-    }
+    public void registerValidator(CommandParameterValidator validator, CommandValidator commandValidator) {
+        final Class<? extends Annotation> validatorClass = commandValidator.value();
+        Class<?> toReplace = commandValidator.replaces();
 
-    public Map<String, Object> asMap() {
-        // TODO since these values are not converted etc., do the steps like in JsonSerializer
-        throw new IllegalStateException("Unimplemented!");
+        if (toReplace != CommandValidator.Nothing.class) {
+            validators.remove(toReplace);
+        }
+
+        validators.put(validatorClass, validator);
+        System.out.println("Registered: " + validatorClass.getName());
     }
 }

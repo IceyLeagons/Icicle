@@ -99,13 +99,13 @@ public class RegisteredCommand implements TabCompleter {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         int counter = args.length;
 
+        // TODO figure out what to fix & why to fix
         Parameter param = method.getParameters()[counter]; // TODO fix
         if (param.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.params.CommandSender.class)) {
             param = method.getParameters()[++counter];
         }
 
         CommandParameterResolverTemplate resolver = manager.getCommandService().getParamResolvers().get(param.getType());
-
         return resolver.onTabComplete(sender, command, alias, args);
     }
 }

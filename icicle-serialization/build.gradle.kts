@@ -38,15 +38,15 @@ dependencies {
     implementation(project(":icicle-utilities"))
     implementation(project(":icicle-core"))
 
+
     implementation("org.slf4j:slf4j-api:1.7.32")
     implementation("org.jetbrains:annotations:20.1.0")
 
     // File handling APIs (TODO some of these may already be shadowed in core, we don't want duplicates -> fix)
     shadow("org.json:json:20210307")
-    shadow("com.github.Querz:NBT:6.1")
     shadow("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
     // https://mvnrepository.com/artifact/org.mongodb/bson
-    shadow("org.mongodb:bson:4.4.1")
+    shadow("org.mongodb:bson:4.5.0")
 
 
     lombok()

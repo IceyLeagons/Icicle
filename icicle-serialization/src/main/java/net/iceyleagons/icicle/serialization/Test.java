@@ -25,10 +25,19 @@
 package net.iceyleagons.icicle.serialization;
 
 import lombok.EqualsAndHashCode;
-import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
+import lombok.SneakyThrows;
+import net.iceyleagons.icicle.serialization.serializers.impl.BsonSerializer;
+import net.iceyleagons.icicle.serialization.serializers.impl.JsonSerializer;
+import net.iceyleagons.icicle.serialization.serializers.impl.YamlSerializer;
 import net.iceyleagons.icicle.utilities.Benchmark;
 import org.json.JSONObject;
+import org.simpleyaml.configuration.file.YamlFile;
+import org.yaml.snakeyaml.Yaml;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -40,17 +49,20 @@ import java.util.Map;
  */
 public class Test {
 
+    @SneakyThrows
     public static void main(String[] args) {
         JsonSerializer jsonSerializer = new JsonSerializer();
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
         Test1 original = new Test1();
+        Benchmark.run(() -> {
+            new YamlSerializer().serializeToPath(original, new File("test.yml").toPath());
+            return null;
+        }, "serialization");
 
-        JSONObject serialized = Benchmark.run(() -> jsonSerializer.serialize(original), "Serialization");
-        Test1 demap = Benchmark.run(() -> jsonSerializer.deserializeObject(serialized, Test1.class), "DeSerialization");
 
-        System.out.println("Serialized & Deserialized match: " + original.equals(demap));
 
+/*
         System.out.println(original.test + " <--> " + demap.test);
         System.out.println(Arrays.toString(original.test2) + " <--> " + Arrays.toString(demap.test2));
         System.out.println(original.test3 + " <--> " + demap.test3);
@@ -62,21 +74,23 @@ public class Test {
         System.out.println();
         System.out.println("Serialized: ");
         System.out.println(serialized.toString(2));
+
+ */
     }
 
     @EqualsAndHashCode
     static class Test1 {
-        private String test = "Hello";
-        private String[] test2 = new String[]{"asd", "asd2"};
-        private int test3 = 4;
-        private int[] test4 = new int[]{1, 2, 3};
-        private List<String> test5 = Arrays.asList("test1", "test2", "test3");
-        private Test2 test6 = new Test2();
-        private Map<String, String> test7 = Map.of("testkey", "testvalue", "key2", "value2");
+        public String name = "Hello";
+        public String[] list = new String[]{"asd", "asd2"};
+        public int number = 4;
+        public int[] numberList = new int[]{1, 2, 3};
+        public List<String> stringList = Arrays.asList("test1", "test2", "test3");
+        public Test2 subObject = new Test2();
+        public Map<String, String> mapTest = Map.of("testkey", "testvalue", "key2", "value2");
     }
 
     @EqualsAndHashCode
     static class Test2 {
-        private String test2 = "Test2 field";
+        public String name = "Test2 field";
     }
 }

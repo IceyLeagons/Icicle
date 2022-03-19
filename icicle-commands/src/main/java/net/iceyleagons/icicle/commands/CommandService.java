@@ -28,6 +28,8 @@ import lombok.Getter;
 import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
 import net.iceyleagons.icicle.commands.middleware.MiddlewareStore;
 import net.iceyleagons.icicle.commands.params.CommandParameterResolverTemplate;
+import net.iceyleagons.icicle.commands.validators.CommandParameterValidator;
+import net.iceyleagons.icicle.commands.validators.ValidatorStore;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.Service;
 import net.iceyleagons.icicle.core.translations.TranslationService;
@@ -39,6 +41,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.util.*;
 
 /**
@@ -50,6 +54,7 @@ public class CommandService {
 
     private final Application application;
     private final MiddlewareStore middlewareStore;
+    private final ValidatorStore validatorStore;
     private final JavaPlugin javaPlugin;
     private final TranslationService translationService;
     private final CommandInjector injector;
@@ -60,6 +65,7 @@ public class CommandService {
     public CommandService(Application application, JavaPlugin javaPlugin, TranslationService translationService) {
         this.application = application;
         this.middlewareStore = new MiddlewareStore();
+        this.validatorStore = new ValidatorStore();
         this.javaPlugin = javaPlugin;
         this.injector = new CommandInjector(javaPlugin);
         this.translationService = translationService;
@@ -78,7 +84,14 @@ public class CommandService {
         });
     }
 
-    public Object resolveParameter(Class<?> type, RegisteredCommandManager manager, String arg, CommandSender commandSender) {
+    public Object resolveParameter(Class<?> type, Parameter param, RegisteredCommandManager manager, String arg, CommandSender commandSender) throws Exception {
+        final Map<Class<? extends Annotation>, CommandParameterValidator> validators = this.getValidatorStore().getValidators();
+        for (Annotation annotation : param.getAnnotations()) {
+            if (validators.containsKey(annotation.annotationType())) {
+                validators.get(annotation.annotationType()).validate(param, arg);
+            }
+        }
+
         if (arg == null || arg.isEmpty() || type == null || !paramResolvers.containsKey(type)) {
             return Defaults.DEFAULT_TYPE_VALUES.getOrDefault(type, null);
         }

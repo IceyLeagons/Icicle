@@ -22,36 +22,46 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization;
+package net.iceyleagons.icicle.serialization.nbt.tags;
 
-
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.serialization.nbt.Tag;
+import net.iceyleagons.icicle.serialization.nbt.TagTypes;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Mar. 15, 2022
  */
-@Getter
-@EqualsAndHashCode
-@RequiredArgsConstructor
-public class SerializedObject {
+public class ListTag extends Tag {
 
-    private final Class<?> javaType;
-    private final Set<ObjectValue> values = new HashSet<>();
+    @Getter
+    private final TagTypes internalType;
+    private final List<Tag> value;
 
-    public void addValue(ObjectValue value) {
-        values.add(value);
+    public ListTag(String name, final TagTypes internalType, final List<Tag> value) {
+        super(name, TagTypes.LIST);
+        this.internalType = internalType;
+        this.value = Collections.unmodifiableList(value);
     }
 
-    public Map<String, Object> asMap() {
-        // TODO since these values are not converted etc., do the steps like in JsonSerializer
-        throw new IllegalStateException("Unimplemented!");
+    @Override
+    public List<Tag> getValue() {
+        return this.value;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(value.size()).append(" entries of type ").append(internalType.getName()).append("\r\n{\r\n");
+        for (final Tag t : value) {
+            sb.append("   ").append(t.toString().replaceAll("\r\n", "\r\n   ")).append("\r\n");
+        }
+        sb.append("}");
+
+        return super.getToString(sb.toString());
     }
 }

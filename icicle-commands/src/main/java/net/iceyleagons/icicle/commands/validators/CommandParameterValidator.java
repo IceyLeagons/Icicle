@@ -22,36 +22,19 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization;
+package net.iceyleagons.icicle.commands.validators;
 
+import org.bukkit.command.TabCompleter;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Parameter;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Mar. 19, 2022
  */
-@Getter
-@EqualsAndHashCode
-@RequiredArgsConstructor
-public class SerializedObject {
+public interface CommandParameterValidator {
 
-    private final Class<?> javaType;
-    private final Set<ObjectValue> values = new HashSet<>();
+    void validate(Parameter parameter, String input) throws Exception;
 
-    public void addValue(ObjectValue value) {
-        values.add(value);
-    }
-
-    public Map<String, Object> asMap() {
-        // TODO since these values are not converted etc., do the steps like in JsonSerializer
-        throw new IllegalStateException("Unimplemented!");
-    }
 }

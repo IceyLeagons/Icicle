@@ -22,36 +22,24 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization;
+package net.iceyleagons.icicle.commands.validators.builtin;
 
+import net.iceyleagons.icicle.commands.validators.CommandParameterValidator;
+import net.iceyleagons.icicle.commands.validators.CommandValidator;
+import net.iceyleagons.icicle.utilities.lang.NotNull;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Parameter;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Mar. 19, 2022
  */
-@Getter
-@EqualsAndHashCode
-@RequiredArgsConstructor
-public class SerializedObject {
+@CommandValidator(NotNull.class)
+public class NotNullValidator implements CommandParameterValidator {
 
-    private final Class<?> javaType;
-    private final Set<ObjectValue> values = new HashSet<>();
-
-    public void addValue(ObjectValue value) {
-        values.add(value);
-    }
-
-    public Map<String, Object> asMap() {
-        // TODO since these values are not converted etc., do the steps like in JsonSerializer
-        throw new IllegalStateException("Unimplemented!");
+    @Override
+    public void validate(Parameter parameter, String input) throws Exception {
+        if (input == null) throw new IllegalArgumentException(parameter.getName() + " must not be null!");
     }
 }

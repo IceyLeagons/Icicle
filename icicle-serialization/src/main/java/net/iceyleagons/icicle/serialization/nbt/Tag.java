@@ -22,36 +22,35 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization;
-
+package net.iceyleagons.icicle.serialization.nbt;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import net.iceyleagons.icicle.serialization.nbt.tags.*;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Mar. 15, 2022
  */
 @Getter
 @EqualsAndHashCode
 @RequiredArgsConstructor
-public class SerializedObject {
+public abstract class Tag {
 
-    private final Class<?> javaType;
-    private final Set<ObjectValue> values = new HashSet<>();
+    private final String name;
+    private final TagTypes type;
 
-    public void addValue(ObjectValue value) {
-        values.add(value);
-    }
+    public abstract Object getValue();
 
-    public Map<String, Object> asMap() {
-        // TODO since these values are not converted etc., do the steps like in JsonSerializer
-        throw new IllegalStateException("Unimplemented!");
+    protected String getToString(String value) {
+        final String name = getName();
+        String append = "";
+        if ((name != null) && !name.equals("")) {
+            append = "(\"" + getName() + "\")";
+        }
+
+        return type.getName() + append + ": " + value;
     }
 }

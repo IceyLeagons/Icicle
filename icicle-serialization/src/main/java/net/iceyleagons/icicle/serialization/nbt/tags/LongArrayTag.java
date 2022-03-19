@@ -22,36 +22,36 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization;
-
+package net.iceyleagons.icicle.serialization.nbt.tags;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.serialization.nbt.Tag;
+import net.iceyleagons.icicle.serialization.nbt.TagTypes;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.Arrays;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Mar. 15, 2022
  */
-@Getter
-@EqualsAndHashCode
-@RequiredArgsConstructor
-public class SerializedObject {
+@EqualsAndHashCode(callSuper = true)
+public class LongArrayTag extends Tag {
 
-    private final Class<?> javaType;
-    private final Set<ObjectValue> values = new HashSet<>();
+    private final long[] value;
 
-    public void addValue(ObjectValue value) {
-        values.add(value);
+    public LongArrayTag(final String name, final long[] value) {
+        super(name, TagTypes.LONG_ARRAY);
+        this.value = value;
     }
 
-    public Map<String, Object> asMap() {
-        // TODO since these values are not converted etc., do the steps like in JsonSerializer
-        throw new IllegalStateException("Unimplemented!");
+    @Override
+    public long[] getValue() {
+        return this.value;
+    }
+
+    @Override
+    public String toString() {
+        return super.getToString(Arrays.toString(value));
     }
 }

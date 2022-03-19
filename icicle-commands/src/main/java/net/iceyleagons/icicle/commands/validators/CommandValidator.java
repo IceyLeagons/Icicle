@@ -22,36 +22,38 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization;
+package net.iceyleagons.icicle.commands.validators;
 
+import net.iceyleagons.icicle.commands.middleware.CommandMiddleware;
+import net.iceyleagons.icicle.core.annotations.AutoCreate;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.lang.annotation.Annotation;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Mar. 19, 2022
  */
-@Getter
-@EqualsAndHashCode
-@RequiredArgsConstructor
-public class SerializedObject {
+@AutoCreate
+@Target(TYPE)
+@Retention(RUNTIME)
+public @interface CommandValidator {
 
-    private final Class<?> javaType;
-    private final Set<ObjectValue> values = new HashSet<>();
+    Class<? extends Annotation> value();
 
-    public void addValue(ObjectValue value) {
-        values.add(value);
+    /**
+     * This value is here, so users can override our default middlewares.
+     *
+     * @return the middleware this implementation is meant to replace
+     */
+    Class<?> replaces() default CommandMiddleware.Nothing.class;
+
+    class Nothing {
     }
 
-    public Map<String, Object> asMap() {
-        // TODO since these values are not converted etc., do the steps like in JsonSerializer
-        throw new IllegalStateException("Unimplemented!");
-    }
 }

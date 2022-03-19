@@ -102,7 +102,7 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
 
     }
 
-    private Object[] getParams(Parameter[] parameters, String[] args, CommandSender commandSender) throws IllegalArgumentException {
+    private Object[] getParams(Parameter[] parameters, String[] args, CommandSender commandSender) throws Exception {
         Object[] params = new Object[parameters.length];
         int argsCounter = 0;
 
@@ -124,13 +124,13 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
                 throw new IllegalStateException("FlagOptionals are currently not supported.");
             } else if (param.isAnnotationPresent(Optional.class)) {
                 if (argsCounter < args.length) {
-                    params[i] = this.commandService.resolveParameter(param.getType(), this, args[argsCounter++], commandSender);
+                    params[i] = this.commandService.resolveParameter(param.getType(), param, this, args[argsCounter++], commandSender);
                     continue;
                 }
                 params[i] = Defaults.DEFAULT_TYPE_VALUES.getOrDefault(param.getType(), null);
             } else {
                 if (argsCounter < args.length) {
-                    params[i] = this.commandService.resolveParameter(param.getType(), this, args[argsCounter++], commandSender);
+                    params[i] = this.commandService.resolveParameter(param.getType(), param, this, args[argsCounter++], commandSender);
                     continue;
                 }
 

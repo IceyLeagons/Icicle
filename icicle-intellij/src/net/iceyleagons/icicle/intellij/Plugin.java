@@ -22,36 +22,16 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization;
-
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+package net.iceyleagons.icicle.intellij;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Mar. 15, 2022
  */
-@Getter
-@EqualsAndHashCode
-@RequiredArgsConstructor
-public class SerializedObject {
+public class Plugin {
 
-    private final Class<?> javaType;
-    private final Set<ObjectValue> values = new HashSet<>();
+    // TODO Wanted to do syntax highlighting, but no clue how it works.
+    //  Ex.: https://github.com/carymrobbins/intellij-plugin-example
 
-    public void addValue(ObjectValue value) {
-        values.add(value);
-    }
-
-    public Map<String, Object> asMap() {
-        // TODO since these values are not converted etc., do the steps like in JsonSerializer
-        throw new IllegalStateException("Unimplemented!");
-    }
 }

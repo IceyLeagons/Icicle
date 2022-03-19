@@ -22,13 +22,15 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization.serializers;
+package net.iceyleagons.icicle.serialization.serializers.impl;
 
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.ObjectValue;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
 import net.iceyleagons.icicle.serialization.SerializedObject;
+import net.iceyleagons.icicle.serialization.serializers.FileSerializer;
+import net.iceyleagons.icicle.serialization.serializers.StringSerializer;
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -99,7 +101,11 @@ public class JsonSerializer implements FileSerializer, StringSerializer {
     private SerializedObject deserialize(JSONObject json, Class<?> javaType) {
         Set<ObjectValue> values = SerializationUtils.getValuesForClass(javaType, (field, key) -> {
             if (SerializationUtils.shouldConvert(field)) {
-                return SerializationUtils.isSubObject(field.getType()) ? deserialize((JSONObject) json.get(key), field.getType()) : json.get(key);
+                Object obj = json.get(key);
+                if (obj instanceof JSONObject) {
+                    return deserialize((JSONObject) obj, field.getType());
+                }
+                return json.get(key);
             } else if (SerializationUtils.isValuePrimitiveOrString(field.getType())) {
                 return json.get(key);
             } else if (SerializationUtils.isArray(field.getType())) {
