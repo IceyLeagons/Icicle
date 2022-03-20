@@ -29,8 +29,18 @@ import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.meta.PlayerOnly;
 import net.iceyleagons.icicle.commands.annotations.params.CommandSender;
 import net.iceyleagons.icicle.commands.annotations.params.Optional;
+import net.iceyleagons.icicle.commands.annotations.validators.Range;
+import net.iceyleagons.icicle.core.annotations.execution.Async;
+import net.iceyleagons.icicle.core.annotations.execution.Measure;
+import net.iceyleagons.icicle.core.annotations.execution.Sync;
+import net.iceyleagons.icicle.core.annotations.execution.extra.After;
+import net.iceyleagons.icicle.core.annotations.execution.extra.Periodically;
+import net.iceyleagons.icicle.utilities.Benchmark;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author TOTHTOMI
@@ -44,7 +54,31 @@ public class TestCommand {
 
     @PlayerOnly
     @Command(value = "four", returnsTranslationKey = false)
-    public String asd2(@CommandSender Player player, String arg, @Optional Player argOpt) {
+    public String asd2(@CommandSender Player player, String arg, @Optional Player argOpt, @Range(min = 18, value = 50 /* maximum */) int eletkor) {
         return "Executed2 sender: " + player.getName() + " | arg: " + arg + " opt: " + argOpt;
     }
+
+    /*
+
+    @Sync
+    @After(delay = 500, unit = TimeUnit.MILLISECONDS) // 0.5 másodperces késleltetés
+    @Periodically(period = 2, unit = TimeUnit.SECONDS) //Automatikus meghívás minden 2 másodpercben
+    public void test() {
+        System.out.println("Idegesítő 2 másodperces szöveg :)");
+    }
+
+    @Async
+    public void testAsync() {
+        System.out.println("Valami időigényes számítás kezdete");
+        // [...]
+    }
+
+    @Async
+    @After(delay = 2, unit = TimeUnit.SECONDS) //Metódus meghívás után 2 másodperccel fut csak le a kód
+    public void testAsyncWithDelay() {
+        System.out.println("Valami időigényes számítás kezdete 2 másodperc után");
+        // [...]
+    }
+
+     */
 }

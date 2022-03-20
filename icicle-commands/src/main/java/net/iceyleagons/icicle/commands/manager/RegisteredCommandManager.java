@@ -28,6 +28,7 @@ import com.google.common.base.Strings;
 import lombok.Getter;
 import net.iceyleagons.icicle.commands.CommandInjectionException;
 import net.iceyleagons.icicle.commands.CommandService;
+import net.iceyleagons.icicle.commands.Predictor;
 import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.manager.SubCommand;
@@ -53,6 +54,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
@@ -205,8 +207,11 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
                 handleSubCommand(registeredCommand, sender, command, args);
             } catch (CommandNotFoundException e2) {
                 String errorMsgKey = Strings.emptyToNull(commandManager.notFound());
-                String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cCommand &b{cmd} &cnot found!",
-                        Map.of("cmd", e.getCommand(), "sender", sender.getName()));
+                AtomicReference<String> prediction = new AtomicReference<>("");
+                Predictor.predict(this, args).ifPresent(r -> prediction.set(r.getDefaultUsage()));
+
+                String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cCommand &b{cmd} &cnot found! Did you mean {prediction}?",
+                        Map.of("cmd", e.getCommand(), "sender", sender.getName(), "prediction", prediction.get()));
 
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
             }

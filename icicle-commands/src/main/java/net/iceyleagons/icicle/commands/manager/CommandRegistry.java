@@ -33,8 +33,7 @@ import net.iceyleagons.icicle.commands.command.CommandNotFoundException;
 import net.iceyleagons.icicle.commands.command.RegisteredCommand;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -54,6 +53,21 @@ public class CommandRegistry {
     private static String[] getAliases(Method method) {
         String[] aliases = method.isAnnotationPresent(Alias.class) ? method.getAnnotation(Alias.class).value() : new String[0];
         return Arrays.stream(aliases).map(String::toLowerCase).toArray(String[]::new);
+    }
+
+    public Set<Map.Entry<String,RegisteredCommand>> getAllChildCommandNames(String rootCommand) {
+        final Set<Map.Entry<String,RegisteredCommand>> cmds = new HashSet<>();
+
+        this.commands.forEach((s, c) -> {
+            cmds.add(Map.entry(rootCommand + " " + s, c));
+        });
+
+        this.subCommands.forEach((s, manager) -> {
+            String root = rootCommand + " " + s;
+            cmds.addAll(manager.getCommandRegistry().getAllChildCommandNames(root));
+        });
+
+        return cmds;
     }
 
     public void registerSubCommand(RegisteredCommandManager manager, String... aliases) {

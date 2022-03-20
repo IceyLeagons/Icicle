@@ -63,8 +63,11 @@
     <link href="https://fonts.cdnfonts.com/css/open-sans" rel="stylesheet">
     <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
           integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
-          referrerpolicy="no-referrer" rel="stylesheet"/>
-    <link href="https://unpkg.com/img-comparison-slider@7/dist/styles.css" rel="stylesheet"/>
+          referrerpolicy="no-referrer" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism-okaidia.min.css" integrity="sha512-mIs9kKbaw6JZFfSuo+MovjU+Ntggfoj8RwAmJbVXQ5mkAX5LlgETQEweFPI18humSPHymTb5iikEOKWF7I8ncQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body class="black">
 <nav class="navbar">
@@ -102,7 +105,20 @@
         <div class="col-xs-6">
             <div class="box">
                 <h1 class="title">Icicle</h1>
-                <h2 class="subtitle">The only plugin framework, you will ever need.</h2>
+                <h2 class="subtitle">A plugin framework, <div class="typed" style="display: inline;"></div></h2>
+
+                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+                <script>
+                    var options = {
+                        strings: ['for all of your needs.', 'inspired by Spring.', 'to save you time.', 'to help you out.', 'designed for you.', 'built with ❤️.', 'designed to be fast.', 'to save servers space.', 'with space for your imagination.', 'for every part of plugin development.'],
+                        typeSpeed: 30,
+                        backSpeed: 40,
+                        shuffle: true,
+                        backDelay: 5000,
+                        loop: true,
+                    };
+                    var typed = new Typed('.typed', options);
+                </script>
             </div>
             <div class="row start-xs" style="margin-top: 3rem;">
                 <!-- TODO: Replace GitBook URLs once the actual, up-to-date documentation is done -->
@@ -227,6 +243,14 @@
                         projects, therefore saving precious space and making it lightweight.
                     </p>
                 </div>
+                <div class="feature">
+                    <i class="fa-solid fa-brush icon"></i>
+                    <h1 class="feature-title">Highly Customizable</h1>
+                    <p class="description">
+                        Built with a customizability in mind, every part of Icicle can be customized (yes even the core).
+                        and built-in features can be replaced with your imagination.
+                    </p>
+                </div>
                 <!-- Add feature: highly customizable -->
                 <div class="feature">
                     <i class="fa-solid fa-infinity icon"></i>
@@ -242,42 +266,79 @@
     </div>
 </section>
 <section class="demo">
-    <div class="row center-xs">
+    <div class="row center-xs" style="margin-bottom: 2rem;">
         <div class="col-xs-6">
             <h1 class="title2">Don't believe us?</h1>
             <h2>Experience it yourself! (And yes, it actually works)</h2>
         </div>
     </div>
     <div class="row center-xs">
+        <div class="col-xs-1"></div>
         <div class="col-xs-6">
-            <h2>Creating Configs</h2>
-            <small>Quite the improvement, am I right?</small>
-            <img-comparison-slider class="comp-slider" style="margin-left: 1rem;">
-                <figure class="before" slot="first">
-                    <img slot="first" src="assets/imgs/compare/config-vanilla.png" width="110%"/>
-                    <figcaption>Vanilla</figcaption>
-                </figure>
-                <figure class="after" slot="second">
-                    <img slot="second" src="assets/imgs/compare/config-icicle.png" width="110%"/>
-                    <figcaption>With Icicle</figcaption>
-                </figure>
+            <pre><code class="language-java">
+@Config(value = "config.yml", headerLines = {"You can even add headers!"})
+public class MyConfig {
 
-            </img-comparison-slider>
+    @ConfigField("settings.prefix")
+    @ConfigComment("Change the prefix of the demo.")
+    public String prefix = "DefaultPrefix";
+
+    @ConfigField("settings.auto-update")
+    public boolean autoUpdate = true;
+                    
+}
+            </code></pre>
+        </div>
+        <div class="col-xs-4 middle-xs al">
+            <h2>Creating Configurations</h2>
+            <p>
+                Don't waste time coding a multi-file configuration system for the 100th time.<br>
+                Save yourself some headache with our intuitive configuration system, built right into Icicle's core.
+                <br><br>
+                Set default values, give instructions via comments and most importantly give yourself a break from the madeness of configuration systems.
+            </p>
+            
+        </div>
+    </div>
+    <div class="row center-xs">
+        <div class="col-xs-4 middle-xs">
+            <h2 class="ar">Creating Commands</h2>
+            <p class="al">
+                Create complex interactions, or throw together a test command in a pinch with Icicle!
+                Our command system is designed to be powerful with automatic help generation, command prediction, input validation.
+                <br><br>
+                Maintain your freedom with middlewares & options of customization.
+            </p>
+            
         </div>
         <div class="col-xs-6">
-            <h2>Creating Commands</h2>
-            <small>When the vanilla code doesn't even fit in the picture...</small>
-            <img-comparison-slider class="comp-slider" style="margin-right: 1rem;">
-                <figure class="before" slot="first">
-                    <img slot="first" src="assets/imgs/compare/cmd_vanilla.png" width="110%"/>
-                    <figcaption>Vanilla</figcaption>
-                </figure>
-                <figure class="after" slot="second">
-                    <img slot="second" src="assets/imgs/compare/cmd_icicle.png" width="110%"/>
-                    <figcaption>With Icicle</figcaption>
-                </figure>
-            </img-comparison-slider>
+            <pre><code class="language-java">
+@CommandManager("demo")
+public class DemoCommand {
+
+    @Command(value = "execute", returnsTranslationKey = false)
+    public String onExecuted() {
+        return "You have executed the /demo execute command!";
+    }
+
+    @PlayerOnly
+    @Command(value = "player", returnsTranslationKey = false)
+    public String onExecuted(@CommandSender Player player) {
+        return "Hm, you must be a player then! Your name is: " + player.getName();
+    }
+
+    @PlayerOnly
+    @Permission("demo.admin.opCommand")
+    @Command(value = "setOp", returnsTranslationKey = false)
+    public String onExecuted(Player target, boolean value) {
+        target.setOp(value);
+        return value ? "Great, you have set " + target.getName() " to operator!"
+                     :  "You have removed " + target.getName() + "'s privileges!";
+    }
+}
+            </code></pre>
         </div>
+        <div class="col-xs-1"></div>
     </div>
 </section>
 <section class="review">
@@ -298,7 +359,9 @@
     </div>
 </footer>
 
-<script defer src="https://unpkg.com/img-comparison-slider@7/dist/index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-core.min.js" integrity="sha512-LCKPTo0gtJ74zCNMbWw04ltmujpzSR4oW+fgN+Y1YclhM5ZrHCZQAJE4quEodcI/G122sRhSGU2BsSRUZ2Gu3w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/autoloader/prism-autoloader.min.js" integrity="sha512-GP4x8UWxWyh4BMbyJGOGneiTbkrWEF5izsVJByzVLodP8CuJH/n936+yQDMJJrOPUHLgyPbLiGw2rXmdvGdXHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-SC44ZYPS6Y"></script>

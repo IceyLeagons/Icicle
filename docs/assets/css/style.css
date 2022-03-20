@@ -24,6 +24,10 @@ body {
     background-color: var(--bg-color);
 }
 
+p {
+    font-size: 1.1em;
+}
+
 .hero {
     padding-top: 6rem;
     padding-bottom: 6rem;
@@ -122,7 +126,7 @@ body {
 
 .demo {
     margin-top: 2rem;
-    height: 103vh;
+    height: auto;
     color: var(--text-color);
 }
 
@@ -136,7 +140,7 @@ body {
     width: 50%;
     transform: rotateZ(35deg);
 
-/ / border: solid 1 px black;
+    border: solid 1 px black;
 }
 
 .review {
@@ -182,4 +186,16 @@ body {
 
     vertical-align: middle;
     text-align: center;
+}
+
+.demo .row {
+    margin-bottom: 10rem;
+}
+
+.al {
+    text-align: left;
+}
+
+.ar {
+    text-align: right;
 }
