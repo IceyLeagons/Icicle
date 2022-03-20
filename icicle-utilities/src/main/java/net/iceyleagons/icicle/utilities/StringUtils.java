@@ -25,7 +25,6 @@
 package net.iceyleagons.icicle.utilities;
 
 import java.util.Locale;
-import java.util.Objects;
 
 public class StringUtils {
 
@@ -51,37 +50,5 @@ public class StringUtils {
         }
 
         return sb.substring(1);
-    }
-
-    public static int calculateLevenshteinDistance(String a, String b) {
-        int aLimit = a.length() + 1;
-        int bLimit = b.length() + 1;
-        int[][] distance = new int[aLimit][];
-        for (int i = 0; i < aLimit; ++i) {
-            distance[i] = new int[bLimit];
-        }
-        for (int i = 0; i < aLimit; ++i) {
-            distance[i][0] = i;
-        }
-        for (int j = 0; j < bLimit; ++j) {
-            distance[0][j] = j;
-        }
-        for (int i = 1; i < aLimit; ++i) {
-            for (int j = 1; j <  bLimit; ++j) {
-                char aChar = a.charAt(i - 1);
-                char bChar = b.charAt(j - 1);
-                distance[i][j] = findMin(
-                        distance[i - 1][j] + 1,
-                        distance[i][j - 1] + 1,
-                        distance[i - 1][j - 1] + (Objects.equals(aChar, bChar) ? 0 : 1) // + substitution cost
-                );
-            }
-        }
-        return distance[a.length()][b.length()];
-    }
-
-    private static int findMin(int a, int b, int c) {
-        int min = Math.min(a, b);
-        return Math.min(min, c);
     }
 }

@@ -83,7 +83,7 @@ public class IcicleBukkit extends JavaPlugin {
         // TODO update checker
 
 
-        MavenLibraryLoader.load("net.iceyleagons", "icicle-commands", "1.0-SNAPSHOT", "https://mvn.iceyleagons.net/snapshots/");
+        //MavenLibraryLoader.load("net.iceyleagons", "icicle-commands", "1.0-SNAPSHOT", "https://mvn.iceyleagons.net/snapshots/");
 
         this.getLogger().info("Registering listeners...");
         Bukkit.getPluginManager().registerEvents(new PluginStatusListener(), this);

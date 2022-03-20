@@ -55,7 +55,7 @@ public class CommandRegistry {
         return Arrays.stream(aliases).map(String::toLowerCase).toArray(String[]::new);
     }
 
-    public Set<Map.Entry<String,RegisteredCommand>> getAllChildCommandNames(String rootCommand) {
+    public Set<Map.Entry<String,RegisteredCommand>> getAllChildCommands(String rootCommand) {
         final Set<Map.Entry<String,RegisteredCommand>> cmds = new HashSet<>();
 
         this.commands.forEach((s, c) -> {
@@ -64,7 +64,7 @@ public class CommandRegistry {
 
         this.subCommands.forEach((s, manager) -> {
             String root = rootCommand + " " + s;
-            cmds.addAll(manager.getCommandRegistry().getAllChildCommandNames(root));
+            cmds.addAll(manager.getCommandRegistry().getAllChildCommands(root));
         });
 
         return cmds;

@@ -26,7 +26,7 @@ package net.iceyleagons.icicle.commands;
 
 import net.iceyleagons.icicle.commands.command.RegisteredCommand;
 import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
-import net.iceyleagons.icicle.utilities.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;
 import java.util.Optional;
@@ -42,16 +42,16 @@ public class Predictor {
     public static Optional<RegisteredCommand> predict(RegisteredCommandManager manager, String[] inputArgs) {
         final TreeMap<Double, RegisteredCommand> possibilities = new TreeMap<>();
 
-        for (Map.Entry<String, RegisteredCommand> command : manager.getCommandRegistry().getAllChildCommandNames(manager.getCommandManager().value())) {
+        for (Map.Entry<String, RegisteredCommand> command : manager.getCommandRegistry().getAllChildCommands(manager.getCommandManager().value())) {
             String cmd = command.getKey();
 
             String[] args = new String[cmd.split(" ").length];
             System.arraycopy(inputArgs, 0, args, 0, Math.min(inputArgs.length, args.length));
 
-            String cmdArgs = String.join(" ", args);
-            possibilities.put((1D - (StringUtils.calculateLevenshteinDistance(cmdArgs, command.getValue().getDefaultUsage(manager.getCommandManager().value())) / (Math.max(cmdArgs.length(), cmd.length()) * 1D))) * 100D, command.getValue());
+            String cmdArgs = StringUtils.join( args, " ");
+            possibilities.put((1D - (StringUtils.getLevenshteinDistance(cmdArgs, cmd) / (Math.max(cmdArgs.length(), cmd.length()) * 1D))) * 100D, command.getValue());
         }
 
-        return possibilities.size() > 0 ? Optional.ofNullable(possibilities.pollFirstEntry().getValue()) : Optional.empty();
+        return possibilities.size() > 0 ? Optional.ofNullable(possibilities.pollLastEntry().getValue()) : Optional.empty();
     }
 }

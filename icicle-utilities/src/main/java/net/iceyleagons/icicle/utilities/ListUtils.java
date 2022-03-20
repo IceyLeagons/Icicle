@@ -74,4 +74,10 @@ public final class ListUtils {
 
         return Arrays.stream(lists).flatMap(Collection::stream).collect(Collectors.toList());
     }
+
+    public static <T> List<T> toList(Iterable<T> list) {
+        List<T> result = new ArrayList<>();
+        list.forEach(result::add);
+        return result;
+    }
 }

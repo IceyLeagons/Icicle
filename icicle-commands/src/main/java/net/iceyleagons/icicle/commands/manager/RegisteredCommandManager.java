@@ -33,6 +33,7 @@ import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.manager.SubCommand;
 import net.iceyleagons.icicle.commands.annotations.meta.Alias;
+import net.iceyleagons.icicle.commands.annotations.meta.Description;
 import net.iceyleagons.icicle.commands.annotations.meta.Usage;
 import net.iceyleagons.icicle.commands.annotations.params.FlagOptional;
 import net.iceyleagons.icicle.commands.annotations.params.Optional;
@@ -43,6 +44,8 @@ import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.translations.TranslationService;
 import net.iceyleagons.icicle.core.utils.Defaults;
 import net.iceyleagons.icicle.utilities.ArrayUtils;
+import net.iceyleagons.icicle.utilities.ListUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -180,13 +183,35 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
             response = translationService.getTranslation(response, translationService.getLanguageProvider().getLanguage(sender), "");
         }
 
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', response));
+        sender.sendMessage(color(response));
         return true;
     }
 
     private boolean handleSubCommand(RegisteredCommandManager manager, @NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String[] args) {
         String[] newArgs = ArrayUtils.ignoreFirst(1, args);
         return manager.onCommand(sender, command, manager.getCommandManager().value(), newArgs);
+    }
+
+    private void printHelp(CommandSender sender, int page) {
+        List<Map.Entry<String, RegisteredCommand>> commands = ListUtils.toList(this.getCommandRegistry().getAllChildCommands(this.commandManager.value()));
+        int pages = commands.size() / 10;
+
+        if (pages == 0) pages = 1;
+        if (page > pages) page = pages;
+
+        String title = "&6Help for &b" + this.getCommandManager().value();
+        String lines = ChatColor.GOLD + StringUtils.repeat("=", title.length()/4);
+
+        sender.sendMessage(color(title));
+        sender.sendMessage(color(lines + " &fHelp index: " + (page + 1) + "/" + pages + " " + lines));
+        sender.sendMessage(" ");
+
+        int p2 = (page + 1) * 10;
+        for (int i = page * 10; i < Math.min(commands.size(), p2); i++) {
+            Map.Entry<String, RegisteredCommand> entry = commands.get(i);
+            sender.sendMessage(ChatColor.GOLD + "/" + entry.getKey() + ChatColor.WHITE + " - TODO");
+        }
+        sender.sendMessage(" ");
     }
 
     @Override
@@ -200,13 +225,18 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
                 sender.sendMessage("Specify subcommand!");
                 return true;
             }
+            if (args[0].equalsIgnoreCase("help")) {
+                // DO Possible number format exception!!!!
+                printHelp(sender, args.length < 2 ? 0 : Integer.parseInt(args[1]));
+                return true;
+            }
 
             RegisteredCommand registeredCommand = this.commandRegistry.getCommand(args[0].toLowerCase());
             return handleCommand(registeredCommand, translationService, sender, args);
         } catch (CommandNotFoundException e) {
             try {
                 RegisteredCommandManager registeredCommand = this.commandRegistry.getSubCommand(args[0].toLowerCase());
-                handleSubCommand(registeredCommand, sender, command, args);
+                return handleSubCommand(registeredCommand, sender, command, args);
             } catch (CommandNotFoundException e2) {
                 String errorMsgKey = Strings.emptyToNull(commandManager.notFound());
                 AtomicReference<String> prediction = new AtomicReference<>("");
@@ -215,13 +245,13 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
                 String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cCommand &b{cmd} &cnot found! Did you mean {prediction}?",
                         Map.of("cmd", e.getCommand(), "sender", sender.getName(), "prediction", prediction.get()));
 
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+                sender.sendMessage(color(msg));
             }
         } catch (Exception e) {
             if (this.commandManager.printExceptionStackTrace())
                 e.printStackTrace();
 
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.RED + e.getMessage()));
+            sender.sendMessage(color( ChatColor.RED + e.getMessage()));
             return true;
         }
 
@@ -246,5 +276,9 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
         }
 
         return completions;
+    }
+
+    private static String color(String msg) {
+        return ChatColor.translateAlternateColorCodes('&', msg);
     }
 }

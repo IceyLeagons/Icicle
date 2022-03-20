@@ -82,12 +82,11 @@ public class RegisteredCommand implements TabCompleter {
         sb.append(commandName);
 
         for (Parameter param : method.getParameters()) {
-            Class<?> paramType = param.getType();
-            if (paramType.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.params.CommandSender.class))
+            if (param.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.params.CommandSender.class))
                 continue;
             sb.append(" ");
 
-            boolean opt = paramType.isAnnotationPresent(Optional.class);
+            boolean opt = param.isAnnotationPresent(Optional.class);
             sb.append(opt ? "[" : "<");
             sb.append(param.getName());
             sb.append(opt ? "]" : ">");

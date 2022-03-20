@@ -37,7 +37,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains:annotations:20.1.0")
     implementation("org.slf4j:slf4j-api:1.7.32")
-    shadow("com.google.guava:guava:31.0.1-jre")
+    implementation("com.google.guava:guava:31.0.1-jre") // guava is loaded by Bukkit already
 
     lombok()
 
