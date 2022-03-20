@@ -71,12 +71,14 @@ public class RegisteredCommand implements TabCompleter {
     }
 
     public String execute(Object[] args) throws Exception {
-        return method.invoke(origin, args).toString();
+        Object object = method.invoke(origin, args);
+        return object == null ? null : object.toString();
     }
 
-    public String getDefaultUsage() {
+    public String getDefaultUsage(String rootCommand) {
         StringBuilder sb = new StringBuilder();
 
+        sb.append("/").append(rootCommand).append(" ");
         sb.append(commandName);
 
         for (Parameter param : method.getParameters()) {

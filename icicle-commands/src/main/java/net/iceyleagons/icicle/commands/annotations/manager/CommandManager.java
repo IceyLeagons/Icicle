@@ -63,4 +63,6 @@ public @interface CommandManager {
     String playerOnly() default "";
 
     String notFound() default "";
+
+    boolean printExceptionStackTrace() default false;
 }

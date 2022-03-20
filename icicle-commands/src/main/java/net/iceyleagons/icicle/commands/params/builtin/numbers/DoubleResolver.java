@@ -22,36 +22,44 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands;
+package net.iceyleagons.icicle.commands.params.builtin.numbers;
 
-import net.iceyleagons.icicle.commands.command.RegisteredCommand;
+import net.iceyleagons.icicle.commands.annotations.CommandParamResolver;
 import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
-import net.iceyleagons.icicle.utilities.StringUtils;
+import net.iceyleagons.icicle.commands.params.CommandParameterResolverTemplate;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Mar. 19, 2022
+ * @since Mar. 20, 2022
  */
-public class Predictor {
+@CommandParamResolver({double.class, Double.class})
+public class DoubleResolver implements CommandParameterResolverTemplate {
 
-    public static Optional<RegisteredCommand> predict(RegisteredCommandManager manager, String[] inputArgs) {
-        final TreeMap<Double, RegisteredCommand> possibilities = new TreeMap<>();
-
-        for (Map.Entry<String, RegisteredCommand> command : manager.getCommandRegistry().getAllChildCommandNames(manager.getCommandManager().value())) {
-            String cmd = command.getKey();
-
-            String[] args = new String[cmd.split(" ").length];
-            System.arraycopy(inputArgs, 0, args, 0, Math.min(inputArgs.length, args.length));
-
-            String cmdArgs = String.join(" ", args);
-            possibilities.put((1D - (StringUtils.calculateLevenshteinDistance(cmdArgs, command.getValue().getDefaultUsage(manager.getCommandManager().value())) / (Math.max(cmdArgs.length(), cmd.length()) * 1D))) * 100D, command.getValue());
+    private static boolean isDouble(String arg) {
+        try {
+            Double.parseDouble(arg);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
+    }
 
-        return possibilities.size() > 0 ? Optional.ofNullable(possibilities.pollFirstEntry().getValue()) : Optional.empty();
+    @Override
+    public Object resolveParameter(Class<?> type, RegisteredCommandManager manager, String arg, CommandSender commandSender) {
+        return isDouble(arg) ? Double.parseDouble(arg) : null;
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        return Collections.singletonList("0");
     }
 }

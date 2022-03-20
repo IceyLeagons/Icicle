@@ -22,25 +22,16 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.validators.builtin;
-
-import net.iceyleagons.icicle.commands.exception.ValidatorException;
-import net.iceyleagons.icicle.commands.validators.CommandParameterValidator;
-import net.iceyleagons.icicle.commands.validators.CommandValidator;
-import net.iceyleagons.icicle.utilities.lang.NotNull;
-
-import java.lang.reflect.Parameter;
+package net.iceyleagons.icicle.commands.exception;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Mar. 19, 2022
+ * @since Mar. 20, 2022
  */
-@CommandValidator(NotNull.class)
-public class NotNullValidator implements CommandParameterValidator {
+public class ValidatorException extends Exception {
 
-    @Override
-    public void validate(Parameter parameter, String input) throws Exception {
-        if (input == null) throw new ValidatorException(parameter.getName() + " must not be null!");
+    public ValidatorException(String error) {
+        super(error);
     }
 }

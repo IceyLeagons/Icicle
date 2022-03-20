@@ -25,6 +25,7 @@
 package net.iceyleagons.icicle.commands.validators.builtin;
 
 import net.iceyleagons.icicle.commands.annotations.validators.Range;
+import net.iceyleagons.icicle.commands.exception.ValidatorException;
 import net.iceyleagons.icicle.commands.validators.CommandParameterValidator;
 import net.iceyleagons.icicle.commands.validators.CommandValidator;
 
@@ -44,6 +45,6 @@ public class RangeValidator implements CommandParameterValidator {
         double d = Double.parseDouble(input);
 
         if (d > range.value() || d < range.min())
-            throw new IllegalArgumentException(parameter.getName() + " must be between " + range.min() + " and " + range.value());
+            throw new ValidatorException(parameter.getName() + " must be between " + range.min() + " and " + range.value());
     }
 }

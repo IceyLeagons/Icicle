@@ -150,7 +150,7 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
         } catch (IllegalArgumentException e) {
             String usage;
             if (toExecute.getUsage() == null) {
-                usage = toExecute.getDefaultUsage();
+                usage = toExecute.getDefaultUsage(this.commandManager.value());
             } else {
                 final TranslationService translationService = commandService.getTranslationService();
                 final Usage usg = toExecute.getUsage();
@@ -174,6 +174,8 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
         String[] newArgs = ArrayUtils.ignoreFirst(1, args);
 
         String response = handleCommand(registeredCommand, newArgs, sender);
+        if (response == null) return true;
+
         if (registeredCommand.isSuppliesTranslationKey()) {
             response = translationService.getTranslation(response, translationService.getLanguageProvider().getLanguage(sender), "");
         }
@@ -208,7 +210,7 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
             } catch (CommandNotFoundException e2) {
                 String errorMsgKey = Strings.emptyToNull(commandManager.notFound());
                 AtomicReference<String> prediction = new AtomicReference<>("");
-                Predictor.predict(this, args).ifPresent(r -> prediction.set(r.getDefaultUsage()));
+                Predictor.predict(this, args).ifPresent(r -> prediction.set(r.getDefaultUsage(this.commandManager.value())));
 
                 String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cCommand &b{cmd} &cnot found! Did you mean {prediction}?",
                         Map.of("cmd", e.getCommand(), "sender", sender.getName(), "prediction", prediction.get()));
@@ -216,7 +218,9 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (this.commandManager.printExceptionStackTrace())
+                e.printStackTrace();
+
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.RED + e.getMessage()));
             return true;
         }

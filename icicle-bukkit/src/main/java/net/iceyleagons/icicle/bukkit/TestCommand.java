@@ -28,19 +28,11 @@ import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.meta.PlayerOnly;
 import net.iceyleagons.icicle.commands.annotations.params.CommandSender;
-import net.iceyleagons.icicle.commands.annotations.params.Optional;
 import net.iceyleagons.icicle.commands.annotations.validators.Range;
-import net.iceyleagons.icicle.core.annotations.execution.Async;
-import net.iceyleagons.icicle.core.annotations.execution.Measure;
-import net.iceyleagons.icicle.core.annotations.execution.Sync;
-import net.iceyleagons.icicle.core.annotations.execution.extra.After;
-import net.iceyleagons.icicle.core.annotations.execution.extra.Periodically;
-import net.iceyleagons.icicle.utilities.Benchmark;
-import org.bukkit.Bukkit;
+import net.iceyleagons.icicle.core.translations.TranslationService;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
@@ -50,35 +42,36 @@ import java.util.concurrent.TimeUnit;
 @CommandManager("test")
 public class TestCommand {
 
-    Plugin plugin = null;
+    private final TranslationService translationService;
+
+    public TestCommand(TranslationService translationService) {
+        this.translationService = translationService;
+    }
 
     @PlayerOnly
     @Command(value = "four", returnsTranslationKey = false)
-    public String asd2(@CommandSender Player player, String arg, @Optional Player argOpt, @Range(min = 18, value = 50 /* maximum */) int eletkor) {
-        return "Executed2 sender: " + player.getName() + " | arg: " + arg + " opt: " + argOpt;
+    public String fourCommand(@CommandSender Player player, int age) {
+        return translationService.getTranslation(
+                "test", "en", // ATM no translation provider so will use defaultValue
+                "Your age is {age}, so you're {IF(GTEQ(age, 18), 'an adult', 'a child')}.",
+                Map.of("age", String.valueOf(age)));
     }
 
-    /*
-
-    @Sync
-    @After(delay = 500, unit = TimeUnit.MILLISECONDS) // 0.5 másodperces késleltetés
-    @Periodically(period = 2, unit = TimeUnit.SECONDS) //Automatikus meghívás minden 2 másodpercben
-    public void test() {
-        System.out.println("Idegesítő 2 másodperces szöveg :)");
+    @PlayerOnly
+    @Command(value = "range", returnsTranslationKey = false)
+    public String forwardCommand(@Range(value = 50.0d, min = 10.0d) double ranged) {
+        return "Value: " + ranged;
     }
 
-    @Async
-    public void testAsync() {
-        System.out.println("Valami időigényes számítás kezdete");
-        // [...]
+    @PlayerOnly
+    @Command(value = "forward", returnsTranslationKey = false)
+    public void forwardCommand(@CommandSender Player player, Player forwardTo, String messageToForward) {
+        forwardTo.sendMessage(
+                translationService.getTranslation(
+                        "test2", "en",
+                        "{from} --> {to}: {msg}",
+                        Map.of("from", player.getName(), "to", forwardTo.getName(), "msg", messageToForward)
+                )
+        );
     }
-
-    @Async
-    @After(delay = 2, unit = TimeUnit.SECONDS) //Metódus meghívás után 2 másodperccel fut csak le a kód
-    public void testAsyncWithDelay() {
-        System.out.println("Valami időigényes számítás kezdete 2 másodperc után");
-        // [...]
-    }
-
-     */
 }
