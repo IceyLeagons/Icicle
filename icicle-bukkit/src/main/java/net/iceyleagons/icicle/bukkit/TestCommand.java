@@ -43,28 +43,39 @@ import java.util.Map;
 public class TestCommand {
 
     private final TranslationService translationService;
+    private final TestService testService;
 
-    public TestCommand(TranslationService translationService) {
+    public TestCommand(TranslationService translationService, TestService testService) {
         this.translationService = translationService;
+        this.testService = testService;
     }
 
     @PlayerOnly
-    @Command(value = "four", returnsTranslationKey = false)
+    @Command(value = "four")
     public String fourCommand(@CommandSender Player player, int age) {
+        player.sendMessage(translationService.getTranslation("test5", "en",
+                "{IF(SW(targy, 'a','á','e','é','i','í','o','ó','ö','ő','u','ú','ü','ű'),'Az','A')} {targy} az enyém.",
+                Map.of("targy", "alma")));
+        player.sendMessage(translationService.getTranslation("test5", "en",
+                "{IF(SW(targy, 'a','á','e','é','i','í','o','ó','ö','ő','u','ú','ü','ű'),'Az','A')} {targy} az enyém.",
+                Map.of("targy", "körte")));
+
+        player.sendMessage("From test: " + testService.doSomething());
+
         return translationService.getTranslation(
                 "test", "en", // ATM no translation provider so will use defaultValue
-                "Your age is {age}, so you're {IF(GTEQ(age, 18), 'an adult', 'a child')}.",
+                "Az életkorod {age}, ezért te {IF(GTEQ(age, 18), 'nagykorú', 'kiskorú')} vagy.",
                 Map.of("age", String.valueOf(age)));
     }
 
     @PlayerOnly
-    @Command(value = "range", returnsTranslationKey = false)
+    @Command(value = "range")
     public String forwardCommand(@Range(value = 50.0d, min = 10.0d) double ranged) {
-        return "Value: " + ranged;
+        return "Érték: " + ranged;
     }
 
     @PlayerOnly
-    @Command(value = "forward", returnsTranslationKey = false)
+    @Command(value = "forward")
     public void forwardCommand(@CommandSender Player player, Player forwardTo, String messageToForward) {
         forwardTo.sendMessage(
                 translationService.getTranslation(

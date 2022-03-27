@@ -51,7 +51,11 @@ public class AutowiringTest {
     @BeforeAll
     public static void setupIcicle() {
         Icicle.loadIcicle();
-        application = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.resolvable", ExecutionUtils.debugHandler()) {
+        application = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.resolvable", ExecutionUtils.debugHandler(), null) {
+            @Override
+            public String getName() {
+                return "test";
+            }
         };
         registry = application.getBeanManager().getBeanRegistry();
         Assertions.assertDoesNotThrow(application::start);

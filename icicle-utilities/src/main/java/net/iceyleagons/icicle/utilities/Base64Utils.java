@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +22,30 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core;
+package net.iceyleagons.icicle.utilities;
 
-import net.iceyleagons.icicle.core.beans.BeanManager;
-import net.iceyleagons.icicle.core.beans.GlobalServiceProvider;
-import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment;
-import net.iceyleagons.icicle.core.utils.ExecutionHandler;
-import org.reflections.Reflections;
+import net.iceyleagons.icicle.utilities.lang.Utility;
 
-public interface Application {
+import java.util.Base64;
 
-    void start() throws Exception;
+/**
+ * Wrapping of {@link Base64}, so we don't have to use getEncoder() and getDecoder(),
+ * just plain old easy static access.
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Mar. 22, 2022
+ */
+@Utility
+public final class Base64Utils {
 
-    void shutdown();
+    private Base64Utils() { }
 
-    GlobalServiceProvider getGlobalServiceProvider();
+    public static String toBase64(byte[] data) {
+        return Base64.getEncoder().encodeToString(data);
+    }
 
-    BeanManager getBeanManager();
-
-    ConfigurationEnvironment getConfigurationEnvironment();
-
-    Reflections getReflections();
-
-    ExecutionHandler getExecutionHandler();
-
-    String getName();
+    public static byte[] fromBase64(String base64) {
+        return Base64.getDecoder().decode(base64);
+    }
 }

@@ -93,7 +93,7 @@ public class DefaultBeanManager implements BeanManager {
         this.application = application;
         this.reflections = application.getReflections();
 
-        this.beanRegistry = new DelegatingBeanRegistry();
+        this.beanRegistry = new DelegatingBeanRegistry(application);
         this.beanRegistry.registerBean(BeanRegistry.class, beanRegistry);
         this.beanRegistry.registerBean(DelegatingBeanRegistry.class, beanRegistry);
 

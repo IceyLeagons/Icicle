@@ -36,6 +36,6 @@ public @interface Command {
 
     String value();
 
-    boolean returnsTranslationKey() default true;
+    boolean returnsTranslationKey() default false;
 
 }

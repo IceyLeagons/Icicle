@@ -38,6 +38,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -120,7 +122,24 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
                         logger.warn("Circular dependency found!");
                         throw new CircularDependencyException(getCycleString(tree, dependency, bean));
                     } else if (!this.autoCreateResolver.isAnnotated(dependency)) {
-                        throw new UnsatisfiedDependencyException(param);
+                        if (dependency.isInterface()) {
+                            // Maybe it's a Service or GlobalService interface
+                            List<Class<?>> impls = BeanUtils.getImplementationsOfInterface(dependency, this.autoCreateResolver.getReflections());
+                            if (impls.isEmpty()) {
+                                throw new UnsatisfiedDependencyException(param);
+                            }
+
+                            if (impls.size() > 1) {
+                                throw new IllegalStateException("Multiple implementations are found for type: " + dependency.getName());
+                            }
+
+                            final Class<?> impl = impls.get(0);
+                            tree.add(impl);
+                            stack.add(impl);
+                            continue;
+                        } else {
+                            throw new UnsatisfiedDependencyException(param);
+                        }
                     }
                 }
 

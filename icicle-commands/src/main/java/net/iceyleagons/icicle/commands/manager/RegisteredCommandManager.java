@@ -33,7 +33,6 @@ import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.manager.SubCommand;
 import net.iceyleagons.icicle.commands.annotations.meta.Alias;
-import net.iceyleagons.icicle.commands.annotations.meta.Description;
 import net.iceyleagons.icicle.commands.annotations.meta.Usage;
 import net.iceyleagons.icicle.commands.annotations.params.FlagOptional;
 import net.iceyleagons.icicle.commands.annotations.params.Optional;

@@ -27,7 +27,7 @@ package net.iceyleagons.icicle.core.translations;
 import lombok.Getter;
 import lombok.Setter;
 import net.iceyleagons.icicle.core.Application;
-import net.iceyleagons.icicle.core.annotations.Service;
+import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.core.translations.code.CodeParser;
 import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
 import net.iceyleagons.icicle.core.translations.impl.ConstantLanguageProvider;

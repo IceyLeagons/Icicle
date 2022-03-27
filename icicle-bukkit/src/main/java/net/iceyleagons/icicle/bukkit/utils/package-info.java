@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +22,12 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core;
-
-import net.iceyleagons.icicle.core.beans.BeanManager;
-import net.iceyleagons.icicle.core.beans.GlobalServiceProvider;
-import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment;
-import net.iceyleagons.icicle.core.utils.ExecutionHandler;
-import org.reflections.Reflections;
-
-public interface Application {
-
-    void start() throws Exception;
-
-    void shutdown();
-
-    GlobalServiceProvider getGlobalServiceProvider();
-
-    BeanManager getBeanManager();
-
-    ConfigurationEnvironment getConfigurationEnvironment();
-
-    Reflections getReflections();
-
-    ExecutionHandler getExecutionHandler();
-
-    String getName();
-}
+/**
+ * Home of Bukkit specific utils. We don't place them inside icicle-utilities due to being tied to Bukkit.
+ * Icicle-utilities should remain standalone from bukkit.
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Mar. 22, 2022
+ */
+package net.iceyleagons.icicle.bukkit.utils;

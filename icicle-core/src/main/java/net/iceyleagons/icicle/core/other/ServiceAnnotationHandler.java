@@ -22,24 +22,43 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.test.icicle.core.bean.resolvable;
+package net.iceyleagons.icicle.core.other;
 
-import net.iceyleagons.icicle.core.Application;
+import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.service.Service;
+import net.iceyleagons.icicle.core.beans.BeanRegistry;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 01, 2022
+ * @since Mar. 25, 2022
  */
-@Service
-public class DependantConstructorService {
+@AnnotationHandler
+@RequiredArgsConstructor
+public class ServiceAnnotationHandler implements CustomAutoCreateAnnotationHandler {
 
-    public final EmptyConstructorService emptyConstructorService;
-    public final Application application;
+    private final BeanRegistry beanRegistry;
 
-    public DependantConstructorService(EmptyConstructorService service, Application application) {
-        this.emptyConstructorService = service;
-        this.application = application;
+    @Override
+    public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
+        return Collections.singleton(Service.class);
+    }
+
+    @Override
+    public void onCreated(Object bean, Class<?> type) throws Exception {
+        for (Class<?> anInterface : type.getInterfaces()) {
+            if (this.beanRegistry.isRegistered(anInterface)) {
+                throw new IllegalStateException("Service " + anInterface.getName() + " is already registered!");
+            }
+
+            this.beanRegistry.registerBean(anInterface, bean);
+        }
     }
 }

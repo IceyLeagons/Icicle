@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +22,25 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core;
+package net.iceyleagons.icicle.bukkit.annotations;
 
-import net.iceyleagons.icicle.core.beans.BeanManager;
-import net.iceyleagons.icicle.core.beans.GlobalServiceProvider;
-import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment;
-import net.iceyleagons.icicle.core.utils.ExecutionHandler;
-import org.reflections.Reflections;
+import org.bukkit.plugin.ServicePriority;
 
-public interface Application {
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-    void start() throws Exception;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-    void shutdown();
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Mar. 25, 2022
+ */
+@Target(TYPE)
+@Retention(RUNTIME)
+public @interface GlobalServicePriority {
 
-    GlobalServiceProvider getGlobalServiceProvider();
+    ServicePriority value();
 
-    BeanManager getBeanManager();
-
-    ConfigurationEnvironment getConfigurationEnvironment();
-
-    Reflections getReflections();
-
-    ExecutionHandler getExecutionHandler();
-
-    String getName();
 }

@@ -24,13 +24,19 @@
 
 package net.iceyleagons.icicle.core.utils;
 
+import net.iceyleagons.icicle.core.Icicle;
+import net.iceyleagons.icicle.core.annotations.AutoCreate;
+import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
+import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.utilities.Asserts;
 import org.jetbrains.annotations.Nullable;
+import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 /**
  * Utility methods for the creating and autowiring of beans.
@@ -40,6 +46,37 @@ import java.lang.reflect.InvocationTargetException;
  * @since Aug. 23, 2021
  */
 public final class BeanUtils {
+
+    public static void main(String[] args) {
+        MergedAnnotationResolver res = new MergedAnnotationResolver(AutoCreate.class, Icicle.ICICLE_REFLECTIONS);
+        res.getChildrenAnnotations().forEach(s -> System.out.println(s.getName()));
+    }
+
+    public static List<Class<?>> getImplementationsOfInterface(Class<?> interfaceClass, Reflections reflections) {
+        if (!interfaceClass.isInterface())
+            throw new IllegalArgumentException("Non-interface class passed to interfaceClass argument.");
+        List<Class<?>> set = new ArrayList<>();
+        Stack<Class<?>> stack = new Stack<>();
+        stack.push(interfaceClass);
+
+        while (!stack.isEmpty()) {
+            Class<?> interface0 = stack.pop();
+            if (interface0.isInterface()) {
+                for (Class<?> aClass : reflections.getSubTypesOf(interface0)) {
+                    if (aClass.isInterface()) {
+                        stack.push(aClass);
+                        continue;
+                    }
+
+                    set.add(aClass);
+                }
+            } else {
+                set.add(interface0);
+            }
+        }
+
+        return set;
+    }
 
     /**
      * Instantiates a class using the supplied constructor and arguments.

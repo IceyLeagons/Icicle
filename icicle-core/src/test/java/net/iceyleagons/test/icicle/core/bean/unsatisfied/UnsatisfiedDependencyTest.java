@@ -45,7 +45,11 @@ public class UnsatisfiedDependencyTest {
     public void testCircularDependency() {
         if(!Icicle.LOADED)
             Icicle.loadIcicle();
-        Application app = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.unsatisfied", ExecutionUtils.debugHandler()) {
+        Application app = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.unsatisfied", ExecutionUtils.debugHandler(), null) {
+            @Override
+            public String getName() {
+                return "test";
+            }
         };
         Assertions.assertThrows(UnsatisfiedDependencyException.class, app::start);
     }

@@ -31,7 +31,7 @@ import net.iceyleagons.icicle.commands.params.CommandParameterResolverTemplate;
 import net.iceyleagons.icicle.commands.validators.CommandParameterValidator;
 import net.iceyleagons.icicle.commands.validators.ValidatorStore;
 import net.iceyleagons.icicle.core.Application;
-import net.iceyleagons.icicle.core.annotations.Service;
+import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.core.translations.TranslationService;
 import net.iceyleagons.icicle.core.utils.Defaults;
 import net.iceyleagons.icicle.utilities.lang.Autowired;

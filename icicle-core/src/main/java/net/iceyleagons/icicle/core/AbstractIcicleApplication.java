@@ -26,8 +26,10 @@ package net.iceyleagons.icicle.core;
 
 import net.iceyleagons.icicle.core.beans.BeanManager;
 import net.iceyleagons.icicle.core.beans.DefaultBeanManager;
+import net.iceyleagons.icicle.core.beans.GlobalServiceProvider;
 import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment;
 import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironmentImpl;
+import net.iceyleagons.icicle.core.other.GlobalServiceAnnotationHandler;
 import net.iceyleagons.icicle.core.performance.PerformanceLog;
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
@@ -43,15 +45,17 @@ public abstract class AbstractIcicleApplication implements Application {
 
     private final Reflections reflections;
     private final ExecutionHandler executionHandler;
+    private final GlobalServiceProvider globalServiceProvider;
 
     private final BeanManager beanManager;
     private final ConfigurationEnvironment configurationEnvironment;
 
-    public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler) {
+    public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler, GlobalServiceProvider globalServiceProvider) {
         PerformanceLog.begin(this, "Application Creation", AbstractIcicleApplication.class);
         this.reflections = new Reflections(rootPackage).merge(Icicle.ICICLE_REFLECTIONS);
         this.beanManager = new DefaultBeanManager(this);
         this.executionHandler = executionHandler;
+        this.globalServiceProvider = globalServiceProvider;
 
         this.configurationEnvironment = new ConfigurationEnvironmentImpl(new AdvancedFile(new File("configs"), true).asFile()); //TODO once Bukkit API is present
 
@@ -64,7 +68,7 @@ public abstract class AbstractIcicleApplication implements Application {
 
     @Override
     public void start() throws Exception {
-        LOGGER.info("Booting Icicle application named: TODO");
+        LOGGER.info("Booting Icicle application named: " + getName());
 
         PerformanceLog.begin(this, "Application start", AbstractIcicleApplication.class);
         this.beanManager.scanAndCreateBeans();
@@ -73,7 +77,7 @@ public abstract class AbstractIcicleApplication implements Application {
 
     @Override
     public void shutdown() {
-        LOGGER.info("Shutting down Icicle application named: TODO");
+        LOGGER.info("Shutting down Icicle application named: " + getName());
         this.beanManager.cleanUp();
         this.configurationEnvironment.cleanUp();
     }
@@ -96,5 +100,10 @@ public abstract class AbstractIcicleApplication implements Application {
     @Override
     public ExecutionHandler getExecutionHandler() {
         return this.executionHandler;
+    }
+
+    @Override
+    public GlobalServiceProvider getGlobalServiceProvider() {
+        return this.globalServiceProvider;
     }
 }

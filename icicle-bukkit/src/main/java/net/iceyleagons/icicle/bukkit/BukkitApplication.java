@@ -26,6 +26,7 @@ package net.iceyleagons.icicle.bukkit;
 
 import lombok.Getter;
 import net.iceyleagons.icicle.bukkit.impl.BukkitExecutionHandler;
+import net.iceyleagons.icicle.bukkit.impl.BukkitServiceProvider;
 import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -39,14 +40,18 @@ public class BukkitApplication extends AbstractIcicleApplication {
     private final JavaPlugin javaPlugin;
 
     public BukkitApplication(String rootPackage, JavaPlugin javaPlugin) {
-        super(rootPackage, new BukkitExecutionHandler(javaPlugin));
+        super(rootPackage, new BukkitExecutionHandler(javaPlugin), new BukkitServiceProvider());
         this.javaPlugin = javaPlugin;
-
 
         super.getBeanManager().getBeanRegistry().registerBean(Server.class, javaPlugin.getServer()); //removed due to the introduction of GlobalBeanRegistry
         super.getBeanManager().getBeanRegistry().registerBean(BukkitApplication.class, this);
         super.getBeanManager().getBeanRegistry().registerBean(Plugin.class, javaPlugin);
         super.getBeanManager().getBeanRegistry().registerBean(JavaPlugin.class, javaPlugin);
         super.getBeanManager().getBeanRegistry().registerBean(PluginManager.class, Bukkit.getPluginManager()); //removed due to the introduction of GlobalBeanRegistry
+    }
+
+    @Override
+    public String getName() {
+        return this.javaPlugin.getName();
     }
 }

@@ -26,10 +26,8 @@ package net.iceyleagons.icicle.bukkit;
 
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.bukkit.listeners.PluginStatusListener;
-import net.iceyleagons.icicle.core.GlobalBeanRegistry;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.annotations.IcicleApplication;
-import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -68,7 +66,6 @@ public class IcicleBukkit extends JavaPlugin {
         RUNNING_APPLICATIONS.forEach((j, app) -> {
             app.shutdown();
         });
-        GlobalBeanRegistry.INSTANCE.cleanUp();
     }
 
     @Override

@@ -22,29 +22,23 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core;
+package net.iceyleagons.icicle.utilities.lang;
 
-import net.iceyleagons.icicle.core.beans.BeanManager;
-import net.iceyleagons.icicle.core.beans.GlobalServiceProvider;
-import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment;
-import net.iceyleagons.icicle.core.utils.ExecutionHandler;
-import org.reflections.Reflections;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface Application {
-
-    void start() throws Exception;
-
-    void shutdown();
-
-    GlobalServiceProvider getGlobalServiceProvider();
-
-    BeanManager getBeanManager();
-
-    ConfigurationEnvironment getConfigurationEnvironment();
-
-    Reflections getReflections();
-
-    ExecutionHandler getExecutionHandler();
-
-    String getName();
+/**
+ * Things marked with this are broken, and should not be used.
+ * Additionally, broken marked issues are known by the developers or it has been reported, but a fix could not be applied in the current
+ * version of the library.
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since March. 25, 2022
+ */
+@Retention(RetentionPolicy.SOURCE)
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PACKAGE, ElementType.ANNOTATION_TYPE, ElementType.FIELD})
+public @interface Broken {
 }

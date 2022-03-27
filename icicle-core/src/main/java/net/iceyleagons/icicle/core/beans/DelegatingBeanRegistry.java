@@ -24,7 +24,8 @@
 
 package net.iceyleagons.icicle.core.beans;
 
-import net.iceyleagons.icicle.core.GlobalBeanRegistry;
+import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import org.slf4j.Logger;
@@ -41,20 +42,23 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.1.0
  * @since Aug. 23, 2021
  */
+@RequiredArgsConstructor
 public class DelegatingBeanRegistry implements BeanRegistry {
 
     private static final Logger logger = LoggerFactory.getLogger(DelegatingBeanRegistry.class);
     private final Map<Class<?>, Object> beans = new ConcurrentHashMap<>();
-    private final BeanRegistry globalRegistry = GlobalBeanRegistry.INSTANCE; // introduced so we can save more memory
+    private final Application application;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public <T> Optional<T> getBean(Class<T> type) {
+        final GlobalServiceProvider globalServiceProvider = application.getGlobalServiceProvider();
+
         Optional<T> opt = beans.containsKey(type) ? Optional.ofNullable(ReflectionUtils.castIfNecessary(type, beans.get(type))) : Optional.empty();
-        if (opt.isEmpty() && globalRegistry.isRegistered(type)) {
-            opt = globalRegistry.getBean(type);
+        if (globalServiceProvider != null && opt.isEmpty() && globalServiceProvider.isRegistered(type)) {
+            opt = globalServiceProvider.getService(type);
         }
 
         return opt;
@@ -73,7 +77,8 @@ public class DelegatingBeanRegistry implements BeanRegistry {
      */
     @Override
     public boolean isRegistered(Class<?> type) {
-        return this.beans.containsKey(type);
+        final GlobalServiceProvider globalServiceProvider = application.getGlobalServiceProvider();
+        return this.beans.containsKey(type) || (globalServiceProvider != null && globalServiceProvider.isRegistered(type));
     }
 
     /**
