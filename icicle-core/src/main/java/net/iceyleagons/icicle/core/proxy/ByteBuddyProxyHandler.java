@@ -47,7 +47,11 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
 
     private final Set<MethodAdviceHandlerTemplate> adviceHandlers = new HashSet<>();
     private final Set<MethodInterceptorHandlerTemplate> interceptorHandlers = new HashSet<>();
-    private final ByteBuddy byteBuddy = new ByteBuddy();
+    private final ByteBuddy byteBuddy = getNewByteBuddyInstance();
+
+    public static ByteBuddy getNewByteBuddyInstance() {
+        return new ByteBuddy();
+    }
 
     public static void installBuddyAgent() {
         System.out.println("[Icicle] - Installing ByteBuddy Agent...");

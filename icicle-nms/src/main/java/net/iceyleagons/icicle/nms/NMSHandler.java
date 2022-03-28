@@ -31,6 +31,7 @@ import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.iceyleagons.icicle.core.Application;
+import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.nms.annotations.*;
 import net.iceyleagons.icicle.nms.annotations.constructor.Constructor;
 import net.iceyleagons.icicle.nms.annotations.version.Version;
@@ -55,9 +56,40 @@ public class NMSHandler {
 
     private final ByteBuddy byteBuddy;
 
-    public NMSHandler(Application application) {
-        this.byteBuddy = application.getBeanManager().getProxyHandler().getProxy();
+    private NMSHandler(ByteBuddy byteBuddy) {
+        this.byteBuddy = byteBuddy;
     }
+
+    /**
+     * Calling this create method, will result in using the same ByteBuddy instance as the application.
+     * Generally we recommend doing this.
+     *
+     * @param application the application to use the instance from
+     * @return the created {@link NMSHandler} instance
+     */
+    public static NMSHandler create(Application application) {
+        return create(application.getBeanManager().getProxyHandler().getProxy());
+    }
+
+    /**
+     * Creates an NMSHandler instance with a new instance of ByteBuddy from {@link ByteBuddyProxyHandler#getNewByteBuddyInstance()}
+     *
+     * @return the created {@link NMSHandler} instance
+     */
+    public static NMSHandler create() {
+        return create(ByteBuddyProxyHandler.getNewByteBuddyInstance());
+    }
+
+    /**
+     * Creates an NMSHandler instance with the specified ByteBuddy instance.
+     *
+     * @param byteBuddy the {@link ByteBuddy} instance to use
+     * @return the created {@link NMSHandler} instance
+     */
+    public static NMSHandler create(ByteBuddy byteBuddy) {
+        return new NMSHandler(byteBuddy);
+    }
+
 
     @SneakyThrows
     public <T> T wrap(Class<T> toWrap, int constructorId, Object... params) {

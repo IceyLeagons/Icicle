@@ -308,6 +308,44 @@
         </div>
     </div>
     <div class="row center-xs">
+        <div class="col-xs-4 middle-xs">
+            <h2 class="ar">Dependency Injection</h2>
+            <p class="al">
+                Let your productivity skyrocket with many of the features in Icicle, but most importantly with our dependency injection system.
+                <br><br>
+                It's really like in Spring, however we didn't feel like field autowiring is necessary, also forget about the @Autowired annotation being necessary.
+                <br><br>
+                Autowire services for Bukkit's ServicesManager as well, with this it's even easier to hook into APIs.
+            </p>
+            
+        </div>
+        <div class="col-xs-6">
+            <pre><code class="language-java">
+@Service
+public class TestServiceImpl implements TestService {
+    private final TranslationService translationService;
+    private final String something;
+    private final Economy economy; // Vault Economy interface (VaultAPI)
+
+    @Autowired // Only retained in source, not needed at runtime
+    public TestServiceImpl(TranslationService translationService,
+                        @Property("config.something") String something,
+                        Economy economy) {
+        this.translationService = translationService;
+
+        // You don't need to autowire the whole configuration,
+        // you can autowire specific fields as well.
+        this.something = something;
+
+        // Autowire from Bukkit's ServicesManager
+        this.economy = economy;
+    }
+}
+            </code></pre>
+        </div>
+        <div class="col-xs-1"></div>
+    </div>
+    <div class="row center-xs">
         <div class="col-xs-1"></div>
         <div class="col-xs-6">
             <pre><code class="language-java">
@@ -374,6 +412,36 @@ public class DemoCommand {
             </code></pre>
         </div>
         <div class="col-xs-1"></div>
+    </div>
+    <div class="row center-xs">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-6">
+            <pre><code class="language-java">
+String defaultValue =
+    "You have {IF(EQ(amount, 1),IF(SW(item, 'a', 'e', 'i', 'o', 'u'),'an','a'),amount)}" +
+    "{item}{IF(GT(amount, 1), 's', '')}.";
+player.sendMessage(
+    translationService.getTranslation(
+        "demo", "en", defaultValue,
+        Map.of("item", "apple", "amount", "12")
+    )
+);
+
+// Output: If amount is 12 & item is apple: You have 12 apples.
+//         If amount is 1 & item is apple: You have an apple.
+//         If amount is 1 & item is pear: You have a pear.
+            </code></pre>
+        </div>
+        <div class="col-xs-4 middle-xs al">
+            <h2>Innovative Translation System</h2>
+            <p>
+                Make your translators happy, with our innovative translation system.<br>
+                From now on, your translators don't need to hardcode every possibility, they can automate it with our script language.
+                <br><br>
+                Set parameters, let translators write the logic for it, so translations fit the language better.
+            </p>
+            
+        </div>
     </div>
 </section>
 <section class="review">

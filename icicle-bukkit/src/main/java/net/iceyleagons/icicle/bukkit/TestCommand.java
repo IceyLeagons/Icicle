@@ -43,24 +43,24 @@ import java.util.Map;
 public class TestCommand {
 
     private final TranslationService translationService;
-    private final TestService testService;
 
-    public TestCommand(TranslationService translationService, TestService testService) {
+    public TestCommand(TranslationService translationService) {
         this.translationService = translationService;
-        this.testService = testService;
     }
 
     @PlayerOnly
     @Command(value = "four")
     public String fourCommand(@CommandSender Player player, int age) {
+        translationService.getTranslation("test5", "en",
+                "{IF(SW(targy, 'a','á','e','é','i','í','o','ó','ö','ő','u','ú','ü','ű'),'Az','A')} {targy} az enyém.",
+                Map.of("targy", "alma"));
+
         player.sendMessage(translationService.getTranslation("test5", "en",
                 "{IF(SW(targy, 'a','á','e','é','i','í','o','ó','ö','ő','u','ú','ü','ű'),'Az','A')} {targy} az enyém.",
                 Map.of("targy", "alma")));
         player.sendMessage(translationService.getTranslation("test5", "en",
                 "{IF(SW(targy, 'a','á','e','é','i','í','o','ó','ö','ő','u','ú','ü','ű'),'Az','A')} {targy} az enyém.",
                 Map.of("targy", "körte")));
-
-        player.sendMessage("From test: " + testService.doSomething());
 
         return translationService.getTranslation(
                 "test", "en", // ATM no translation provider so will use defaultValue

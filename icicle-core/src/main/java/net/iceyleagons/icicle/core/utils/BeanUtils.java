@@ -47,11 +47,6 @@ import java.util.*;
  */
 public final class BeanUtils {
 
-    public static void main(String[] args) {
-        MergedAnnotationResolver res = new MergedAnnotationResolver(AutoCreate.class, Icicle.ICICLE_REFLECTIONS);
-        res.getChildrenAnnotations().forEach(s -> System.out.println(s.getName()));
-    }
-
     public static List<Class<?>> getImplementationsOfInterface(Class<?> interfaceClass, Reflections reflections) {
         if (!interfaceClass.isInterface())
             throw new IllegalArgumentException("Non-interface class passed to interfaceClass argument.");
