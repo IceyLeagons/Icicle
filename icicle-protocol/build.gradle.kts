@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
     implementation(project(":icicle-nms"))
+    implementation("net.bytebuddy:byte-buddy:1.11.15")
     implementation("io.netty:netty-all:4.1.72.Final")
     implementation(kotlin("stdlib"))
     spigotApi(spigotVersion)

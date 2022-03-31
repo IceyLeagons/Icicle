@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,16 +24,31 @@
 
 package net.iceyleagons.icicle.protocol;
 
-import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.protocol.action.Settings;
+import net.iceyleagons.icicle.protocol.action.impl.HideBlockAction;
+import net.iceyleagons.icicle.protocol.service.ProtocolService;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 23, 2021
+ * @since Mar. 31, 2022
  */
-@RequiredArgsConstructor
-public abstract class Packet {
+public class TemplateTest {
 
-    private final Object packetObject;
+    // This class is only here for us to test, whether the structure/flow feels nice
 
+    public static void main(String[] args) {
+        ProtocolService service = null;
+        Location pos = null;
+        Player player = null;
+
+        HideBlockAction action = new HideBlockAction(true,
+                Settings.create()
+                        .with(Settings.TARGET, player)
+                        .with(Settings.POSITION, pos));
+
+        service.executeAction(action);
+    }
 }

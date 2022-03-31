@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +22,19 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.protocol.event.impl;
+package net.iceyleagons.icicle.protocol;
 
-import net.iceyleagons.icicle.protocol.ProtocolPlayer;
-import net.iceyleagons.icicle.protocol.event.PacketContainer;
-import net.iceyleagons.icicle.protocol.event.PacketEvent;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 23, 2021
+ * @since Mar. 29, 2022
  */
-public class InBoundPacketEvent extends PacketEvent {
-
-    private static final HandlerList handlerList = new HandlerList();
-
-    public InBoundPacketEvent(ProtocolPlayer player, PacketContainer packetContainer) {
-        super(player, packetContainer);
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlerList;
-    }
-
-    @NotNull
-    @Override
-    public HandlerList getHandlers() {
-        return handlerList;
-    }
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ProtocolFunction {
 }

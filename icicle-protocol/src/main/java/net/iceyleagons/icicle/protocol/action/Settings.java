@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,32 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.protocol.event;
+package net.iceyleagons.icicle.protocol.action;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 23, 2021
+ * @since Mar. 31, 2022
  */
-@Data
-@RequiredArgsConstructor
-public class PacketContainer {
+@Getter
+public class Settings {
 
-    private final Object rawPacket;
+    public static final int TARGET = 0;
+    public static final int POSITION = 1;
 
+    private final Map<Integer, Object> settings = new ConcurrentHashMap<>();
 
+    public Settings with(int id, Object value) {
+        settings.put(id, value);
+        return this;
+    }
+
+    public static Settings create() {
+        return new Settings();
+    }
 }

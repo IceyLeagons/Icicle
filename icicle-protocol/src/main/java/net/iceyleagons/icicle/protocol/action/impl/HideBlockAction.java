@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,38 +22,38 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.protocol.event.impl;
+package net.iceyleagons.icicle.protocol.action.impl;
 
-import lombok.Getter;
-import net.iceyleagons.icicle.protocol.ProtocolPlayer;
-import net.iceyleagons.icicle.protocol.event.PacketContainer;
-import net.iceyleagons.icicle.protocol.event.PacketEvent;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
+import net.iceyleagons.icicle.protocol.action.Action;
+import net.iceyleagons.icicle.protocol.action.Settings;
+import net.iceyleagons.icicle.protocol.service.ProtocolService;
+import org.bukkit.Location;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 23, 2021
+ * @since Mar. 31, 2022
  */
-@Getter
-public class OutBoundPacketEvent extends PacketEvent {
+public class HideBlockAction extends Action {
 
-    private static final HandlerList handlerList = new HandlerList();
-    private final boolean customPacket;
-
-    public OutBoundPacketEvent(ProtocolPlayer player, PacketContainer packetContainer, boolean custom) {
-        super(player, packetContainer);
-        this.customPacket = custom;
+    public HideBlockAction(boolean async, Settings settings) {
+        super(async, settings.getSettings());
     }
 
-    public static HandlerList getHandlerList() {
-        return handlerList;
+    public HideBlockAction(Settings settings) {
+        super(settings);
     }
 
-    @NotNull
     @Override
-    public HandlerList getHandlers() {
-        return handlerList;
+    protected void onExecute(ProtocolService protocolService) {
+        Location toHide = super.getSettingAs(Settings.POSITION, Location.class);
+        super.sendPacketToTarget(protocolService, null);
+    }
+
+    @Override
+    protected void validateSettings() {
+        assertTarget();
+        assertDefined(Settings.POSITION, "Position");
+        assertOfType(Settings.POSITION, "Position", Location.class);
     }
 }

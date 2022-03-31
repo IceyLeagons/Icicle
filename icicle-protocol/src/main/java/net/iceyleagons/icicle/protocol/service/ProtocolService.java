@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,23 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.protocol.event;
+package net.iceyleagons.icicle.protocol.service;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.protocol.ProtocolPlayer;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
+import net.iceyleagons.icicle.protocol.action.Action;
+import net.iceyleagons.icicle.protocol.action.Settings;
+import org.bukkit.entity.Player;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 23, 2021
+ * @since Mar. 29, 2022
  */
-@Data
-@RequiredArgsConstructor
-public abstract class PacketEvent extends Event implements Cancellable {
+public interface ProtocolService {
 
-    private final ProtocolPlayer player;
-    private final PacketContainer packetContainer;
-    private boolean cancelled;
+    ProtocolPlayer getProtocolPlayer(Player player);
+    void executeAction(Action action);
+    ExecutionHandler getExecutionHandler();
 
 }
