@@ -36,9 +36,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Getter
 public class Settings {
-
+    // TARGET - 0
     public static final int TARGET = 0;
-    public static final int POSITION = 1;
+
+    // POSITIONAL - 1xx
+    public static final int POSITION = 100;
+    public static final int CENTER = 101;
+    public static final int SIZE = 103;
+
+    // ENTITY - 2xx
+    public static final int ENTITY = 200;
+    public static final int ORIGIN = 201;
 
     private final Map<Integer, Object> settings = new ConcurrentHashMap<>();
 

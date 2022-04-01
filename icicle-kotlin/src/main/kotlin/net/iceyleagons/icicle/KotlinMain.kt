@@ -25,10 +25,18 @@
 package net.iceyleagons.icicle
 
 import net.iceyleagons.icicle.extensions.*
+import net.iceyleagons.icicle.protocol.action.Settings
 import net.iceyleagons.icicle.utilities.file.AdvancedFile
 import java.io.File
 
 class KotlinMain {
+    fun doSomeProtocolStuff() {
+        newSettings {
+            field(Settings.POSITION, "x, y, z")
+            field(Settings.TARGET, "playerName")
+        }
+    }
+
     fun doSomeStuff() {
         val newFile = File("newFolder").asAdvancedFile()
         if (newFile.isDirectory) {

@@ -25,7 +25,7 @@
 package net.iceyleagons.icicle.protocol;
 
 import net.iceyleagons.icicle.protocol.action.Settings;
-import net.iceyleagons.icicle.protocol.action.impl.HideBlockAction;
+import net.iceyleagons.icicle.protocol.action.impl.ReplaceBlockAction;
 import net.iceyleagons.icicle.protocol.service.ProtocolService;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -44,7 +44,7 @@ public class TemplateTest {
         Location pos = null;
         Player player = null;
 
-        HideBlockAction action = new HideBlockAction(true,
+        ReplaceBlockAction action = new ReplaceBlockAction(true,
                 Settings.create()
                         .with(Settings.TARGET, player)
                         .with(Settings.POSITION, pos));

@@ -39,6 +39,7 @@ repositories {
 dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
+    implementation(project(":icicle-protocol"))
     shadow(kotlin("stdlib"))
 }
 

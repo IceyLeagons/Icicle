@@ -29,6 +29,7 @@ import net.iceyleagons.icicle.protocol.ProtocolPlayer;
 import net.iceyleagons.icicle.protocol.service.ProtocolService;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.lang.Internal;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -95,6 +96,11 @@ public abstract class Action {
     protected void sendPacketToTarget(ProtocolService service, Object packet) {
         ProtocolPlayer player = getProtocolPlayerFromSettings(service);
         player.sendPacket(packet);
+    }
+
+    protected void assertEntity() {
+        assertDefined(Settings.ENTITY, "Entity");
+        assertOfType(Settings.ENTITY, "Entity", Entity.class);
     }
 
     protected void assertTarget() {

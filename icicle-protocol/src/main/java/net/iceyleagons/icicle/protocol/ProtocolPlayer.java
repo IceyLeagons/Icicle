@@ -24,14 +24,16 @@
 
 package net.iceyleagons.icicle.protocol;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelPipeline;
+import io.netty.channel.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import net.iceyleagons.icicle.nms.NMSHandler;
 import net.iceyleagons.icicle.nms.wrap.player.WrappedCraftPlayer;
+import net.iceyleagons.icicle.protocol.events.PacketInEvent;
+import net.iceyleagons.icicle.protocol.events.PacketOutEvent;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author TOTHTOMI
@@ -45,16 +47,38 @@ public class ProtocolPlayer {
     private final Player player;
     private final WrappedCraftPlayer craftPlayer;
 
-    @Setter
-    private boolean injected = false;
-
     public ProtocolPlayer(Player player, NMSHandler handler) {
         this.player = player;
         this.craftPlayer = handler.wrapFromOrigin(player, WrappedCraftPlayer.class);
+        injectPlayer();
     }
 
-    public void sendPacket(Object object) {
-        // TODO
+    private void injectPlayer() {
+        ProtocolPlayer pp = this;
+        if (!getPipeline().names().contains("icicle-handler"))
+            getPipeline().addBefore("packet_handler", "icicle-handler", new ChannelDuplexHandler() {
+                @Override
+                public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+                    // event??
+                    PacketOutEvent event = new PacketOutEvent(pp, msg);
+                    if (msg != null)
+                        if (!event.isCancelled())
+                            super.write(ctx, msg, promise);
+                }
+
+                @Override
+                public void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object msg) throws Exception {
+                    PacketInEvent event = new PacketInEvent(pp, msg);
+                    // event?
+                    super.channelRead(ctx, msg);
+                }
+            });
+    }
+
+    public void sendPacket(Object packet) {
+        // probably works??
+        // FIXME: tesztelj?
+        getChannel().write(packet);
     }
 
     public Channel getChannel() {

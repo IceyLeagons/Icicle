@@ -34,13 +34,13 @@ import org.bukkit.Location;
  * @version 1.0.0
  * @since Mar. 31, 2022
  */
-public class HideBlockAction extends Action {
+public class ReplaceBlockAction extends Action {
 
-    public HideBlockAction(boolean async, Settings settings) {
+    public ReplaceBlockAction(boolean async, Settings settings) {
         super(async, settings.getSettings());
     }
 
-    public HideBlockAction(Settings settings) {
+    public ReplaceBlockAction(Settings settings) {
         super(settings);
     }
 
