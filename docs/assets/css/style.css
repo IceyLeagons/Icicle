@@ -199,3 +199,9 @@ p {
 .ar {
     text-align: right;
 }
+
+@media only screen and (max-width: 1030px) {
+    .demo * {
+        text-align: center;
+    }
+}

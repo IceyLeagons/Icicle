@@ -308,18 +308,18 @@
         </div>
     </div>
     <div class="row center-xs">
-        <div class="col-xs-4 middle-xs">
+        <div class="col-md-4 col-xs-12 middle-xs">
             <h2 class="ar">Dependency Injection</h2>
             <p class="al">
                 Let your productivity skyrocket with many of the features in Icicle, but most importantly with our dependency injection system.
                 <br><br>
-                It's really like in Spring, however we didn't feel like field autowiring is necessary, also forget about the @Autowired annotation being necessary.
+                It's really like in Spring, however we didn't feel like field autowiring is necessary, also forget about the @Autowired annotation being required.
                 <br><br>
-                Autowire services for Bukkit's ServicesManager as well, with this it's even easier to hook into APIs.
+                Autowire services from Bukkit's ServicesManager as well, with this it's even easier to hook into APIs.
             </p>
             
         </div>
-        <div class="col-xs-6">
+        <div class="col-md-6 col-xs-12">
             <pre><code class="language-java">
 @Service
 public class TestServiceImpl implements TestService {
@@ -343,11 +343,11 @@ public class TestServiceImpl implements TestService {
 }
             </code></pre>
         </div>
-        <div class="col-xs-1"></div>
+        <div class="col-md-1 col-xs-12"></div>
     </div>
     <div class="row center-xs">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-6">
+        <div class="col-md-1 col-xs-12"></div>
+        <div class="col-md-6 col-xs-12">
             <pre><code class="language-java">
 @Config(value = "config.yml", headerLines = {"You can even add headers!"})
 public class MyConfig {
@@ -362,7 +362,7 @@ public class MyConfig {
 }
             </code></pre>
         </div>
-        <div class="col-xs-4 middle-xs al">
+        <div class="col-md-4 middle-xs al col-xs-12">
             <h2>Creating Configurations</h2>
             <p>
                 Don't waste time coding a multi-file configuration system for the 100th time.<br>
@@ -374,7 +374,7 @@ public class MyConfig {
         </div>
     </div>
     <div class="row center-xs">
-        <div class="col-xs-4 middle-xs">
+        <div class="col-md-4 col-xs-12 middle-xs">
             <h2 class="ar">Creating Commands</h2>
             <p class="al">
                 Create complex interactions, or throw together a test command in a pinch with Icicle!
@@ -384,7 +384,7 @@ public class MyConfig {
             </p>
             
         </div>
-        <div class="col-xs-6">
+        <div class="col-md-6 col-xs-12">
             <pre><code class="language-java">
 @CommandManager("demo")
 public class DemoCommand {
@@ -411,11 +411,11 @@ public class DemoCommand {
 }
             </code></pre>
         </div>
-        <div class="col-xs-1"></div>
+        <div class="col-md-1 col-xs-12"></div>
     </div>
     <div class="row center-xs">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-6">
+        <div class="col-md-1 col-xs-12"></div>
+        <div class="col-md-6 col-xs-12">
             <pre><code class="language-java">
 String defaultValue =
     "You have {IF(EQ(amount, 1),IF(SW(item, 'a', 'e', 'i', 'o', 'u'),'an','a'),amount)}" +
@@ -432,7 +432,7 @@ player.sendMessage(
 //         If amount is 1 & item is pear: You have a pear.
             </code></pre>
         </div>
-        <div class="col-xs-4 middle-xs al">
+        <div class="col-md-4 col-xs-12 middle-xs al">
             <h2>Innovative Translation System</h2>
             <p>
                 Make your translators happy, with our innovative translation system.<br>
@@ -444,8 +444,9 @@ player.sendMessage(
         </div>
     </div>
 </section>
+
 <section class="review">
-    <div class="row center-xs">
+    <!--<div class="row center-xs">
         <div class="col-xs-6">
             <h1 class="title2">What others said</h1>
         </div>
@@ -454,8 +455,9 @@ player.sendMessage(
         <div class="col-xs-6">
 
         </div>
-    </div>
+    </div>-->
 </section>
+
 <footer class="footer">
     <div class="footer-content">
         Copyright &copy; 2021 IceyLeagons
