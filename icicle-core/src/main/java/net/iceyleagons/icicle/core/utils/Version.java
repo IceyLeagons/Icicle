@@ -28,8 +28,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 /**
- * Taken from
- * https://gist.github.com/brianguertin/ada4b65c6d1c4f6d3eee3c12b6ce021b
+ * Taken from <a href="https://gist.github.com/brianguertin/ada4b65c6d1c4f6d3eee3c12b6ce021b">this github gist</a>.
  */
 public class Version implements Comparable<Version> {
 

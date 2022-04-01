@@ -47,6 +47,13 @@ import java.util.*;
  */
 public final class BeanUtils {
 
+    /**
+     * Scans all classes available to the provided {@link org.reflections.Reflections}, and returns all that implement the provided class.
+     *
+     * @param interfaceClass the class which should be implemented to be returned.
+     * @param reflections    the reflections object with the packages fed into.
+     * @return a list of the classes that implement said interface.
+     */
     public static List<Class<?>> getImplementationsOfInterface(Class<?> interfaceClass, Reflections reflections) {
         if (!interfaceClass.isInterface())
             throw new IllegalArgumentException("Non-interface class passed to interfaceClass argument.");

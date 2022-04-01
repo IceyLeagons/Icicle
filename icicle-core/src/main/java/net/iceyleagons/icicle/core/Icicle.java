@@ -28,6 +28,7 @@ package net.iceyleagons.icicle.core;
 import net.iceyleagons.icicle.core.maven.MavenDependency;
 import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
 import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
+import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.reflections.Reflections;
 
 import java.net.URL;
@@ -42,33 +43,61 @@ import java.net.URLClassLoader;
  */
 public class Icicle {
 
+    /**
+     * Current version of icicle.
+     */
     public static final String ICICLE_VERSION = "1.0.0";
 
-    public static final boolean PERFORMANCE_DEBUG = true;
+    /**
+     * Enable performance logging
+     */
+    public static final boolean PERFORMANCE_LOG = true;
+
+    /**
+     * The classloader used to load in all the modules.
+     */
     public static final ClassLoader ICICLE_CLASS_LOADER = URLClassLoader.newInstance(new URL[0], Icicle.class.getClassLoader());
 
     // In newer version of Java, the default class loader is AppClassLoader, which cannot be cast to URLClassLoader, so we do it this way:
     public static final ClassLoader[] ICICLE_CLASS_LOADERS = new ClassLoader[]{ICICLE_CLASS_LOADER};
 
-
+    /**
+     * The instance of our Reflections.
+     */
     public static final Reflections ICICLE_REFLECTIONS = new Reflections("net.iceyleagons.icicle", ICICLE_CLASS_LOADERS);
-    // TODO Gradle plugin --> icicle.yml and the core searches for its dependencies rather than this \/
+    // TODO: Gradle plugin --> icicle.yml and the core searches for its dependencies rather than this \/
     public static final MavenDependency[] CORE_DEPENDENCIES = new MavenDependency[]{
             new MavenDependency("net.bytebuddy", "byte-buddy", "1.11.15", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("net.bytebuddy", "byte-buddy-agent", "1.11.15", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("me.carleslc.Simple-YAML", "Simple-Yaml", "1.7.2", MavenLibraryLoader.MAVEN_JITPACK),
             new MavenDependency("ch.qos.logback", "logback-core", "1.2.9", MavenLibraryLoader.MAVEN_CENTRAL_REPO)
     };
+    /**
+     * Whether Icicle is currently loaded.
+     */
     public static boolean LOADED = false;
 
+    /**
+     * @return a string containing our license.
+     */
     public static String getCopyrightText() {
         return "Icicle is licensed under the terms of MIT License.";
     }
 
+    /**
+     * @return a string containing the current icicle version and our license.
+     */
     public static String getLoadText() {
         return String.format("Loading Icicle v%s. %s", ICICLE_VERSION, getCopyrightText());
     }
 
+    /**
+     * Initializes Icicle.
+     *
+     * @throws IllegalStateException if Icicle was already loaded.
+     * @deprecated internal use only.
+     */
+    @Internal
     public static void loadIcicle() {
         if (LOADED) {
             throw new IllegalStateException("Icicle is already loaded!");

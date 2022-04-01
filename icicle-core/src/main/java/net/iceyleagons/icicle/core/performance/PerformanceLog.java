@@ -40,7 +40,7 @@ public class PerformanceLog {
     private static final Map<Application, PerformanceRecord> currentNodes = new ConcurrentHashMap<>(4);
 
     public static void begin(Application application, String name, Class<?> clazz) {
-        if (!Icicle.PERFORMANCE_DEBUG) return;
+        if (!Icicle.PERFORMANCE_LOG) return;
         PerformanceRecord currentNode = currentNodes.get(application);
 
         PerformanceRecord executionRecord = PerformanceRecord.of(name, clazz);
@@ -49,7 +49,7 @@ public class PerformanceLog {
     }
 
     public static void end(Application application) {
-        if (!Icicle.PERFORMANCE_DEBUG) return;
+        if (!Icicle.PERFORMANCE_LOG) return;
         PerformanceRecord currentNode = currentNodes.get(application);
 
         if (currentNode == null) return;
@@ -58,7 +58,7 @@ public class PerformanceLog {
     }
 
     public static String dumpExecutionLog(Application application) {
-        if (!Icicle.PERFORMANCE_DEBUG) return "";
+        if (!Icicle.PERFORMANCE_LOG) return "";
 
         final StringBuilder stringBuilder = new StringBuilder("\n ====== [ Execution Log ] ======\n\n");
 
@@ -69,6 +69,7 @@ public class PerformanceLog {
     }
 
     private static void dumpExecutionLog(PerformanceRecord record, int depth, StringBuilder sb) {
+        if (!Icicle.PERFORMANCE_LOG) return;
         String warning = (depth > 0 && record.getExecutionTime() >= MS_THRESHOLD) ? "[!]" : "   ";
         String prefix = warning + Strings.repeat("\t", depth) + (depth != 0 ? " -> " : "");
 
@@ -81,6 +82,7 @@ public class PerformanceLog {
     }
 
     private static void setParent(PerformanceRecord parent, PerformanceRecord child) {
+        if (!Icicle.PERFORMANCE_LOG) return;
         child.setParent(parent);
         if (parent != null) {
             parent.getChildren().add(child);

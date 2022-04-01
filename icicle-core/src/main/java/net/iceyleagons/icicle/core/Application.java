@@ -30,10 +30,23 @@ import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnviro
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import org.reflections.Reflections;
 
+/**
+ * Root of an Icicle-using project. Gives access to all the internals of the Icicle framework.
+ *
+ * @author TOTHTOMI
+ */
 public interface Application {
 
+    /**
+     * Starts this application instance.
+     *
+     * @throws Exception if an exception occurs during the initialization of the application.
+     */
     void start() throws Exception;
 
+    /**
+     * Shuts down this application instance.
+     */
     void shutdown();
 
     GlobalServiceProvider getGlobalServiceProvider();

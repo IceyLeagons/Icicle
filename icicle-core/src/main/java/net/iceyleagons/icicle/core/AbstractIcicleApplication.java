@@ -29,16 +29,29 @@ import net.iceyleagons.icicle.core.beans.DefaultBeanManager;
 import net.iceyleagons.icicle.core.beans.GlobalServiceProvider;
 import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment;
 import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironmentImpl;
-import net.iceyleagons.icicle.core.other.GlobalServiceAnnotationHandler;
 import net.iceyleagons.icicle.core.performance.PerformanceLog;
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
+import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+/**
+ * Base Icicle application. Most implementations of Icicle <b>SHOULD</b> extend from this.
+ * <p>
+ * Example usage:
+ * <pre>{@code new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.resolvable", ExecutionUtils.debugHandler(), null) {
+ *   @Override
+ *   public String getName() {
+ *     return "test";
+ *   }
+ * };}</pre>
+ *
+ * @author TOTHTOMI
+ */
 public abstract class AbstractIcicleApplication implements Application {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIcicleApplication.class);
@@ -50,6 +63,13 @@ public abstract class AbstractIcicleApplication implements Application {
     private final BeanManager beanManager;
     private final ConfigurationEnvironment configurationEnvironment;
 
+    /**
+     * Instantiates a new instance of the base application
+     *
+     * @param rootPackage           the package in which all the icicle annotated classes are contained. <i>(Icicle searches through subclasses as well.)</i>
+     * @param executionHandler      an instance of a {@link net.iceyleagons.icicle.core.utils.ExecutionHandler} fully implemented.
+     * @param globalServiceProvider an instance of a {@link net.iceyleagons.icicle.core.beans.GlobalServiceProvider}.
+     */
     public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler, GlobalServiceProvider globalServiceProvider) {
         PerformanceLog.begin(this, "Application Creation", AbstractIcicleApplication.class);
         this.reflections = new Reflections(rootPackage).merge(Icicle.ICICLE_REFLECTIONS);
@@ -82,26 +102,41 @@ public abstract class AbstractIcicleApplication implements Application {
         this.configurationEnvironment.cleanUp();
     }
 
+    /**
+     * @return the bean manager used by this application.
+     */
     @Override
     public BeanManager getBeanManager() {
         return this.beanManager;
     }
 
+    /**
+     * @return the environment in which this application was set up.
+     */
     @Override
     public ConfigurationEnvironment getConfigurationEnvironment() {
         return this.configurationEnvironment;
     }
 
+    /**
+     * @return the instance of {@link org.reflections.Reflections} used by this application.
+     */
     @Override
     public Reflections getReflections() {
         return this.reflections;
     }
 
+    /**
+     * @return the execution handler used by this application.
+     */
     @Override
     public ExecutionHandler getExecutionHandler() {
         return this.executionHandler;
     }
 
+    /**
+     * @return the service provider which was provided to this application.
+     */
     @Override
     public GlobalServiceProvider getGlobalServiceProvider() {
         return this.globalServiceProvider;
