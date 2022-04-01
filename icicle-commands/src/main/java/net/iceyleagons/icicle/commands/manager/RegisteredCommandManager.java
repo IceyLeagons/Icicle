@@ -57,6 +57,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Getter
 public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
@@ -106,26 +108,55 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
 
     }
 
+    private static String join(String[] args, int startFrom) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = startFrom; i < args.length; i++) {
+            sb.append(args[i]).append(" ");
+        }
+        return sb.toString();
+    }
+
     private Object[] getParams(Parameter[] parameters, String[] args, CommandSender commandSender) throws Exception {
         Object[] params = new Object[parameters.length];
         int argsCounter = 0;
+        String wholeArgs = join(args, 0);
 
         for (int i = 0; i < parameters.length; i++) {
             Parameter param = parameters[i];
 
-            if (param.getType().isArray() && param.getType().equals(String.class)) {
+            if (param.getType().isArray()) {
+                // TODO VERY BROKEN FIX!!!!!!
                 Object[] array = new Object[args.length - argsCounter];
                 for (int j = argsCounter; j < args.length; j++) {
-                    array[j - argsCounter] = args[argsCounter];
+                    array[j - argsCounter] = this.commandService.resolveParameter(param.getType(), param, this, args[argsCounter], commandSender);
                 }
 
+                System.out.println(Arrays.toString(array));
                 params[i] = array; // TODO this needs testing
                 break;
             } else if (param.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.params.CommandSender.class)) {
                 params[i] = param.getType().isInstance(commandSender) ? param.getType().cast(commandSender) : null;
             } else if (param.isAnnotationPresent(FlagOptional.class)) {
-                // TODO
-                throw new IllegalStateException("FlagOptionals are currently not supported.");
+                // TODO This is probably broken af, needs testing
+                FlagOptional flagOptional = param.getAnnotation(FlagOptional.class);
+                String flag = flagOptional.value();
+                Matcher matcher = Pattern.compile("-" + flag + "(.*?(?= -| $|$))").matcher(wholeArgs);
+                if (matcher.find()) {
+                    String value = matcher.group(1).stripIndent();
+                    if (value == null) {
+                        if (param.getType().equals(boolean.class) || param.getType().equals(Boolean.class)) {
+                            params[i] = true;
+                            continue;
+                        }
+                        params[i] = Defaults.DEFAULT_TYPE_VALUES.getOrDefault(param.getType(), null);
+                        continue;
+                    }
+
+                    params[i] = this.commandService.resolveParameter(param.getType(), param, this, value, commandSender);
+                    continue;
+                }
+
+                params[i] = Defaults.DEFAULT_TYPE_VALUES.getOrDefault(param.getType(), null);
             } else if (param.isAnnotationPresent(Optional.class)) {
                 if (argsCounter < args.length) {
                     params[i] = this.commandService.resolveParameter(param.getType(), param, this, args[argsCounter++], commandSender);

@@ -28,11 +28,11 @@ import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.meta.PlayerOnly;
 import net.iceyleagons.icicle.commands.annotations.params.CommandSender;
+import net.iceyleagons.icicle.commands.annotations.params.FlagOptional;
 import net.iceyleagons.icicle.commands.annotations.validators.Range;
-import net.iceyleagons.icicle.core.translations.TranslationService;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
+import java.util.Arrays;
 
 /**
  * @author TOTHTOMI
@@ -42,30 +42,10 @@ import java.util.Map;
 @CommandManager("test")
 public class TestCommand {
 
-    private final TranslationService translationService;
-
-    public TestCommand(TranslationService translationService) {
-        this.translationService = translationService;
-    }
-
     @PlayerOnly
     @Command(value = "four")
-    public String fourCommand(@CommandSender Player player, int age) {
-        translationService.getTranslation("test5", "en",
-                "{IF(SW(targy, 'a','á','e','é','i','í','o','ó','ö','ő','u','ú','ü','ű'),'Az','A')} {targy} az enyém.",
-                Map.of("targy", "alma"));
-
-        player.sendMessage(translationService.getTranslation("test5", "en",
-                "{IF(SW(targy, 'a','á','e','é','i','í','o','ó','ö','ő','u','ú','ü','ű'),'Az','A')} {targy} az enyém.",
-                Map.of("targy", "alma")));
-        player.sendMessage(translationService.getTranslation("test5", "en",
-                "{IF(SW(targy, 'a','á','e','é','i','í','o','ó','ö','ő','u','ú','ü','ű'),'Az','A')} {targy} az enyém.",
-                Map.of("targy", "körte")));
-
-        return translationService.getTranslation(
-                "test", "en", // ATM no translation provider so will use defaultValue
-                "Az életkorod {age}, ezért te {IF(GTEQ(age, 18), 'nagykorú', 'kiskorú')} vagy.",
-                Map.of("age", String.valueOf(age)));
+    public String fourCommand(@CommandSender Player player, String asd, String[] rest) {
+        return "Asd: " + asd + "| Rest: " + Arrays.toString(rest);
     }
 
     @PlayerOnly
@@ -76,13 +56,7 @@ public class TestCommand {
 
     @PlayerOnly
     @Command(value = "forward")
-    public void forwardCommand(@CommandSender Player player, Player forwardTo, String messageToForward) {
-        forwardTo.sendMessage(
-                translationService.getTranslation(
-                        "test2", "en",
-                        "{from} --> {to}: {msg}",
-                        Map.of("from", player.getName(), "to", forwardTo.getName(), "msg", messageToForward)
-                )
-        );
+    public String forwardCommand(@CommandSender Player player, String required, @FlagOptional("s") String test) {
+        return "Req: " + required + " | Test: " + test;
     }
 }
