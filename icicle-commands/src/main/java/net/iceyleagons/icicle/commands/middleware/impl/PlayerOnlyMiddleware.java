@@ -27,6 +27,7 @@ package net.iceyleagons.icicle.commands.middleware.impl;
 import com.google.common.base.Strings;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.meta.PlayerOnly;
+import net.iceyleagons.icicle.commands.exception.TranslatableException;
 import net.iceyleagons.icicle.commands.middleware.CommandMiddleware;
 import net.iceyleagons.icicle.commands.middleware.CommandMiddlewareTemplate;
 import net.iceyleagons.icicle.core.translations.TranslationService;
@@ -44,7 +45,7 @@ public class PlayerOnlyMiddleware implements CommandMiddlewareTemplate {
 
     @Override
     public boolean onCommand(CommandManager commandManager, Class<?> commandManagerClass, String commandName,
-                             Method method, CommandSender sender, TranslationService translationService) throws Exception {
+                             Method method, CommandSender sender, TranslationService translationService) {
         if (method.isAnnotationPresent(PlayerOnly.class)) {
             handlePlayerOnly(sender, commandManager, translationService);
         }
@@ -54,7 +55,7 @@ public class PlayerOnlyMiddleware implements CommandMiddlewareTemplate {
 
     @Override
     public boolean onCommand(CommandManager commandManager, Class<?> commandManagerClass, String commandName,
-                             Field field, CommandSender sender, TranslationService translationService) throws Exception {
+                             Field field, CommandSender sender, TranslationService translationService) {
         if (field.isAnnotationPresent(PlayerOnly.class)) {
             handlePlayerOnly(sender, commandManager, translationService);
         }
@@ -62,12 +63,13 @@ public class PlayerOnlyMiddleware implements CommandMiddlewareTemplate {
         return true;
     }
 
-    private void handlePlayerOnly(CommandSender sender, CommandManager commandManager, TranslationService translationService) throws Exception {
+    private void handlePlayerOnly(CommandSender sender, CommandManager commandManager, TranslationService translationService) {
         if (sender instanceof Player) return;
 
         String errorMsgKey = Strings.emptyToNull(commandManager.playerOnly());
-        String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cYou have to be a player to execute this command!");
+        // String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cYou have to be a player to execute this command!");
 
-        throw new IllegalStateException(msg);
+        // throw new IllegalStateException(msg);
+        throw new TranslatableException(errorMsgKey, "&cYou have to be a player to execute this command!");
     }
 }

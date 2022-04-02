@@ -52,7 +52,8 @@ public class PlayerLanguageGeoProvider implements LanguageProvider {
     @Override
     public String getLanguage(Object player) {
         if (!(player instanceof Player)) {
-            throw new IllegalStateException("Parameter must be a type of org.bukkit.entity.Player!");
+            //throw new IllegalStateException("Parameter must be a type of org.bukkit.entity.Player!");
+            return fallBack.getLanguage(player);
         }
 
         final InetSocketAddress addr = ((Player) player).getAddress();

@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.commands.CommandInjectionException;
 import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.meta.Alias;
-import net.iceyleagons.icicle.commands.command.CommandNotFoundException;
+import net.iceyleagons.icicle.commands.exception.CommandNotFoundException;
 import net.iceyleagons.icicle.commands.command.RegisteredCommand;
 
 import java.lang.reflect.Method;

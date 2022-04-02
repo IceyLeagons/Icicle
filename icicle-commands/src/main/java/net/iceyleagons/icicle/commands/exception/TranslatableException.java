@@ -22,25 +22,31 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.validators.builtin;
+package net.iceyleagons.icicle.commands.exception;
 
-import net.iceyleagons.icicle.commands.exception.ValidatorException;
-import net.iceyleagons.icicle.commands.validators.CommandParameterValidator;
-import net.iceyleagons.icicle.commands.validators.CommandValidator;
-import net.iceyleagons.icicle.utilities.lang.NotNull;
+import lombok.Getter;
 
-import java.lang.reflect.Parameter;
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Mar. 19, 2022
+ * @since Apr. 02, 2022
  */
-@CommandValidator(NotNull.class)
-public class NotNullValidator implements CommandParameterValidator {
+@Getter
+public class TranslatableException extends RuntimeException {
 
-    @Override
-    public void validate(Parameter parameter, String input) throws Exception {
-        if (input == null) throw new ValidatorException(parameter.getName() + " must not be null!");
+    private final String key;
+    private final String defaultValue;
+    private final Map<String, String> variables;
+
+    public TranslatableException(String key, String defaultValue, Map<String, String> variables) {
+        this.key = key;
+        this.defaultValue = defaultValue;
+        this.variables = variables;
+    }
+
+    public TranslatableException(String key, String defaultValue) {
+        this(key, defaultValue, Map.of());
     }
 }

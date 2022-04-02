@@ -24,14 +24,18 @@
 
 package net.iceyleagons.icicle.commands.exception;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Mar. 20, 2022
+ * @since Dec. 12, 2021
  */
-public class ValidatorException extends Exception {
+@Getter
+@RequiredArgsConstructor
+public class CommandNotFoundException extends Exception {
 
-    public ValidatorException(String error) {
-        super(error);
-    }
+    private final String command;
+
 }

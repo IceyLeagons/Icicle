@@ -33,11 +33,13 @@ import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.manager.SubCommand;
 import net.iceyleagons.icicle.commands.annotations.meta.Alias;
+import net.iceyleagons.icicle.commands.annotations.meta.Description;
 import net.iceyleagons.icicle.commands.annotations.meta.Usage;
 import net.iceyleagons.icicle.commands.annotations.params.FlagOptional;
 import net.iceyleagons.icicle.commands.annotations.params.Optional;
-import net.iceyleagons.icicle.commands.command.CommandNotFoundException;
+import net.iceyleagons.icicle.commands.exception.CommandNotFoundException;
 import net.iceyleagons.icicle.commands.command.RegisteredCommand;
+import net.iceyleagons.icicle.commands.exception.TranslatableException;
 import net.iceyleagons.icicle.commands.middleware.CommandMiddlewareTemplate;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.translations.TranslationService;
@@ -62,6 +64,11 @@ import java.util.regex.Pattern;
 
 @Getter
 public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
+
+    private static final String TOO_FEW_ARGS_KEY = "icicle.cmd.err.fewargs";
+    private static final String SUB_COMMAND_KEY = "icicle.cmd.err.subcmd";
+    private static final String HELP_TEXT = "icicle.cmd.help.info";
+    private static final String HELP_INDEX = "icicle.cmd.help.index";
 
     private final Application application;
     private final CommandService commandService;
@@ -116,7 +123,9 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
         return sb.toString();
     }
 
-    private Object[] getParams(Parameter[] parameters, String[] args, CommandSender commandSender) throws Exception {
+    private Object[] getParams(RegisteredCommand cmd, String[] args, CommandSender commandSender) throws Exception {
+        final Parameter[] parameters = cmd.getMethod().getParameters();
+
         Object[] params = new Object[parameters.length];
         int argsCounter = 0;
         String wholeArgs = join(args, 0);
@@ -137,7 +146,6 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
             } else if (param.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.params.CommandSender.class)) {
                 params[i] = param.getType().isInstance(commandSender) ? param.getType().cast(commandSender) : null;
             } else if (param.isAnnotationPresent(FlagOptional.class)) {
-                // TODO This is probably broken af, needs testing
                 FlagOptional flagOptional = param.getAnnotation(FlagOptional.class);
                 String flag = flagOptional.value();
                 Matcher matcher = Pattern.compile("-" + flag + "(.*?(?= -| $|$))").matcher(wholeArgs);
@@ -169,32 +177,27 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
                     continue;
                 }
 
-                throw new IllegalArgumentException("Too few arguments!");
+                throw new TranslatableException(TOO_FEW_ARGS_KEY, "Too few arguments! Usage: {usage}", Map.of("usage", getUsage(cmd, commandSender)));
             }
         }
 
         return params;
     }
 
-    private String handleCommand(RegisteredCommand toExecute, String[] args, CommandSender commandSender) throws Exception {
-        try {
-            Object[] params = getParams(toExecute.getMethod().getParameters(), args, commandSender);
-            return toExecute.execute(params);
-        } catch (IllegalArgumentException e) {
-            String usage;
-            if (toExecute.getUsage() == null) {
-                usage = toExecute.getDefaultUsage(this.commandManager.value());
-            } else {
-                final TranslationService translationService = commandService.getTranslationService();
-                final Usage usg = toExecute.getUsage();
+    private String getUsage(RegisteredCommand toExecute, CommandSender commandSender) {
+        String usage;
+        if (toExecute.getUsage() == null) {
+            usage = toExecute.getDefaultUsage(this.commandManager.value());
+        } else {
+            final TranslationService translationService = commandService.getTranslationService();
+            final Usage usg = toExecute.getUsage();
 
-                String key = Strings.emptyToNull(usg.key());
-                usage = translationService.getTranslation(key, translationService.getLanguageProvider().getLanguage(commandSender), usg.defaultValue(),
-                        Map.of("cmd", toExecute.getCommandName(), "sender", commandSender.getName()));
-            }
-
-            throw new IllegalArgumentException("Too few arguments!\nUsage: " + usage);
+            String key = Strings.emptyToNull(usg.key());
+            usage = translationService.getTranslation(key, translationService.getLanguageProvider().getLanguage(commandSender), usg.defaultValue(),
+                    Map.of("cmd", toExecute.getCommandName(), "sender", commandSender.getName()));
         }
+
+        return usage;
     }
 
     private boolean handleCommand(RegisteredCommand registeredCommand, TranslationService translationService, CommandSender sender, String[] args) throws Exception {
@@ -205,8 +208,9 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
         }
 
         String[] newArgs = ArrayUtils.ignoreFirst(1, args);
+        Object[] params = getParams(registeredCommand, newArgs, sender);
 
-        String response = handleCommand(registeredCommand, newArgs, sender);
+        String response = registeredCommand.execute(params);
         if (response == null) return true;
 
         if (registeredCommand.isSuppliesTranslationKey()) {
@@ -223,23 +227,38 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
     }
 
     private void printHelp(CommandSender sender, int page) {
-        List<Map.Entry<String, RegisteredCommand>> commands = ListUtils.toList(this.getCommandRegistry().getAllChildCommands(this.commandManager.value()));
+        final TranslationService translationService = this.commandService.getTranslationService();
+        final List<Map.Entry<String, RegisteredCommand>> commands = ListUtils.toList(this.getCommandRegistry().getAllChildCommands(this.commandManager.value()));
+
         int pages = commands.size() / 10;
 
         if (pages == 0) pages = 1;
         if (page > pages) page = pages;
 
-        String title = "&6Help for &b" + this.getCommandManager().value();
+        String title = translationService.getTranslation(HELP_TEXT, translationService.getLanguageProvider().getLanguage(sender), "&6Help for &b {cmd}", Map.of("cmd", this.getCommandManager().value()));
         String lines = ChatColor.GOLD + StringUtils.repeat("=", title.length()/4);
+        String index = translationService.getTranslation(HELP_TEXT, translationService.getLanguageProvider().getLanguage(sender), "{lines} &fHelp index: {current}/{max} {lines}",
+                Map.of("lines", lines,
+                        "current", String.valueOf(page + 1),
+                        "max", String.valueOf(pages)));
 
         sender.sendMessage(color(title));
-        sender.sendMessage(color(lines + " &fHelp index: " + (page + 1) + "/" + pages + " " + lines));
+        sender.sendMessage(color(index));
         sender.sendMessage(" ");
 
         int p2 = (page + 1) * 10;
         for (int i = page * 10; i < Math.min(commands.size(), p2); i++) {
             Map.Entry<String, RegisteredCommand> entry = commands.get(i);
-            sender.sendMessage(ChatColor.GOLD + "/" + entry.getKey() + ChatColor.WHITE + " - TODO");
+            Description description = entry.getValue().getDescription();
+
+            if (description == null) {
+                sender.sendMessage(ChatColor.GOLD + "/" + entry.getKey() + ChatColor.WHITE + " - N/A");
+                continue;
+            }
+
+            String descriptionText = translationService.getTranslation(description.key(), translationService.getLanguageProvider().getLanguage(sender), "");
+
+            sender.sendMessage(ChatColor.GOLD + "/" + entry.getKey() + ChatColor.WHITE + " - " + descriptionText);
         }
         sender.sendMessage(" ");
     }
@@ -252,11 +271,13 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
 
         try {
             if (args.length < 1) {
-                sender.sendMessage("Specify subcommand!");
+                sender.sendMessage(color(
+                        translationService.getTranslation(SUB_COMMAND_KEY, translationService.getLanguageProvider().getLanguage(sender), "&cPlease specify subcommand.")
+                ));
                 return true;
             }
             if (args[0].equalsIgnoreCase("help")) {
-                // DO Possible number format exception!!!!
+                // TODO Possible number format exception!!!!
                 printHelp(sender, args.length < 2 ? 0 : Integer.parseInt(args[1]));
                 return true;
             }
@@ -277,6 +298,10 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
 
                 sender.sendMessage(color(msg));
             }
+        } catch (TranslatableException e) {
+            String msg = translationService.getTranslation(e.getKey(), translationService.getLanguageProvider().getLanguage(sender), e.getDefaultValue(), e.getVariables());
+            sender.sendMessage(color(msg));
+            return true;
         } catch (Exception e) {
             if (this.commandManager.printExceptionStackTrace())
                 e.printStackTrace();

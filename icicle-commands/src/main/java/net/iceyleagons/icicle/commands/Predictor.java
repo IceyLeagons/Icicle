@@ -26,6 +26,8 @@ package net.iceyleagons.icicle.commands;
 
 import net.iceyleagons.icicle.commands.command.RegisteredCommand;
 import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
+import net.iceyleagons.icicle.utilities.lang.Internal;
+import net.iceyleagons.icicle.utilities.lang.Utility;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;
@@ -37,8 +39,12 @@ import java.util.TreeMap;
  * @version 1.0.0
  * @since Mar. 19, 2022
  */
-public class Predictor {
+@Utility
+public final class Predictor {
 
+    private Predictor() {}
+
+    @Internal
     public static Optional<RegisteredCommand> predict(RegisteredCommandManager manager, String[] inputArgs) {
         final TreeMap<Double, RegisteredCommand> possibilities = new TreeMap<>();
 

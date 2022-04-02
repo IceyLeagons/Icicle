@@ -25,11 +25,12 @@
 package net.iceyleagons.icicle.commands.validators.builtin;
 
 import net.iceyleagons.icicle.commands.annotations.validators.Range;
-import net.iceyleagons.icicle.commands.exception.ValidatorException;
+import net.iceyleagons.icicle.commands.exception.TranslatableException;
 import net.iceyleagons.icicle.commands.validators.CommandParameterValidator;
 import net.iceyleagons.icicle.commands.validators.CommandValidator;
 
 import java.lang.reflect.Parameter;
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
@@ -39,12 +40,15 @@ import java.lang.reflect.Parameter;
 @CommandValidator(Range.class)
 public class RangeValidator implements CommandParameterValidator {
 
+    private static final String KEY = "icicle.cmd.validator.range";
+
     @Override
-    public void validate(Parameter parameter, String input) throws Exception {
+    public void validate(Parameter parameter, String input) {
         Range range = parameter.getAnnotation(Range.class);
         double d = Double.parseDouble(input);
 
         if (d > range.value() || d < range.min())
-            throw new ValidatorException(parameter.getName() + " must be between " + range.min() + " and " + range.value());
+            throw new TranslatableException(KEY, "&c{param} must be between {min} and {max}!",
+                    Map.of("param", parameter.getName(), "min", String.valueOf(range.min()), "max", String.valueOf(range.value())));
     }
 }

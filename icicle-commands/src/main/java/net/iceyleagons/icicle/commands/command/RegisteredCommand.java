@@ -57,7 +57,6 @@ public class RegisteredCommand implements TabCompleter {
     private final Method method;
     private final Object origin;
 
-
     public String[] getAllCommandNames() {
         return ArrayUtils.appendToArray(this.aliases, this.commandName);
     }
@@ -100,7 +99,7 @@ public class RegisteredCommand implements TabCompleter {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         int counter = args.length;
 
-        // TODO figure out what to fix & why to fix
+        // TODO figure out what to fix & why to fix (aka. figure out what the other TODO was for)
         Parameter param = method.getParameters()[counter]; // TODO fix
         if (param.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.params.CommandSender.class)) {
             param = method.getParameters()[++counter];

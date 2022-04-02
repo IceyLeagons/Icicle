@@ -27,6 +27,7 @@ package net.iceyleagons.icicle.commands.middleware.impl;
 import com.google.common.base.Strings;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.meta.Permission;
+import net.iceyleagons.icicle.commands.exception.TranslatableException;
 import net.iceyleagons.icicle.commands.middleware.CommandMiddleware;
 import net.iceyleagons.icicle.commands.middleware.CommandMiddlewareTemplate;
 import net.iceyleagons.icicle.core.translations.TranslationService;
@@ -44,9 +45,9 @@ public class SecurityMiddleware implements CommandMiddlewareTemplate {
 
     @Override
     public boolean onCommand(CommandManager commandManager, Class<?> commandManagerClass, String commandName,
-                             Method method, CommandSender sender, TranslationService translationService) throws Exception {
+                             Method method, CommandSender sender, TranslationService translationService) {
         if (method.isAnnotationPresent(Permission.class)) {
-            handlePermission(method.getAnnotation(Permission.class), sender, commandManager, translationService);
+            handlePermission(method.getAnnotation(Permission.class), sender, commandManager);
         }
 
         return true;
@@ -54,23 +55,25 @@ public class SecurityMiddleware implements CommandMiddlewareTemplate {
 
     @Override
     public boolean onCommand(CommandManager commandManager, Class<?> commandManagerClass, String commandName,
-                             Field field, CommandSender sender, TranslationService translationService) throws Exception {
+                             Field field, CommandSender sender, TranslationService translationService) {
         if (field.isAnnotationPresent(Permission.class)) {
-            handlePermission(field.getAnnotation(Permission.class), sender, commandManager, translationService);
+            handlePermission(field.getAnnotation(Permission.class), sender, commandManager);
         }
 
         return true;
     }
 
     private void handlePermission(Permission permission, CommandSender sender,
-                                  CommandManager commandManager, TranslationService translationService) throws Exception {
+                                  CommandManager commandManager) {
+
         String requiredPermission = permission.value();
         if (sender.hasPermission(requiredPermission)) return;
 
         String errorMsgKey = Strings.emptyToNull(commandManager.permissionError());
-        String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cInsufficient permissions!",
-                Map.of("permission", requiredPermission, "sender", sender.getName()));
+        //  String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cInsufficient permissions!",
+        //         Map.of("permission", requiredPermission, "sender", sender.getName()));
 
-        throw new IllegalStateException(msg);
+        //throw new IllegalStateException(msg);
+        throw new TranslatableException(errorMsgKey, "&cInsufficient permissions!", Map.of("permission", requiredPermission, "sender", sender.getName()));
     }
 }

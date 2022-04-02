@@ -35,6 +35,7 @@ import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.core.translations.TranslationService;
 import net.iceyleagons.icicle.core.utils.Defaults;
 import net.iceyleagons.icicle.utilities.lang.Autowired;
+import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -84,6 +85,7 @@ public class CommandService {
         });
     }
 
+    @Internal
     public Object resolveParameter(Class<?> type, Parameter param, RegisteredCommandManager manager, String arg, CommandSender commandSender) throws Exception {
         final Map<Class<? extends Annotation>, CommandParameterValidator> validators = this.getValidatorStore().getValidators();
         for (Annotation annotation : param.getAnnotations()) {
