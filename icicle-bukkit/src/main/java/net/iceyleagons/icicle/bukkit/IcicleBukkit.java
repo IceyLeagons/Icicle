@@ -70,7 +70,7 @@ public class IcicleBukkit extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        Icicle.loadIcicle();
+        Icicle.loadIcicle(this.getClassLoader());
     }
 
     @SneakyThrows

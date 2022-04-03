@@ -50,10 +50,14 @@ public class MavenLibraryLoader {
     public static final AdvancedFile ICICLE_LIB_FOLDER;
     public static final String MAVEN_CENTRAL_REPO = "https://repo1.maven.org/maven2";
     public static final String MAVEN_JITPACK = "https://jitpack.io";
-    private static final AdvancedClassLoader acl = AdvancedClassLoaders.get((URLClassLoader) Icicle.ICICLE_CLASS_LOADER);
+    private static AdvancedClassLoader acl = null;
 
     static {
         ICICLE_LIB_FOLDER = new AdvancedFile(new File("icicleLibs"), true);
+    }
+
+    public static void init(ClassLoader classLoader) {
+        acl = AdvancedClassLoaders.get((URLClassLoader) classLoader);
     }
 
     public static void load(String groupId, String artifactId, String version) {
@@ -66,13 +70,20 @@ public class MavenLibraryLoader {
 
     @SneakyThrows
     public static void load(MavenDependency dependency) {
+        if (acl == null) {
+            throw new IllegalStateException("MavenLibraryLoader is not initialised! Please calls init()!");
+        }
         Path f = ICICLE_LIB_FOLDER.getChild(dependency.getName() + ".jar");
 
-        if (!Files.exists(f)) FileUtils.downloadTo(f, dependency.getRequestUrl());
+        if (!Files.exists(f)) {
+            System.out.println("Downloading " + dependency.getName() + " from " + dependency.getRepository());
+            FileUtils.downloadTo(f, dependency.getRequestUrl());
+        }
         if (!Files.exists(f)) {
             throw new IllegalStateException("Unable to download maven dependency: " + dependency.getName());
         }
 
+        System.out.println("Loading in " + dependency.getName() + " from " + f);
         acl.loadLibrary(f);
         Icicle.ICICLE_REFLECTIONS.merge(new Reflections(acl.getOrigin()));
         Icicle.ICICLE_REFLECTIONS.expandSuperTypes();

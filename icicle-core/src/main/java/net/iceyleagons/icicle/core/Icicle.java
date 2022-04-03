@@ -28,6 +28,7 @@ package net.iceyleagons.icicle.core;
 import net.iceyleagons.icicle.core.maven.MavenDependency;
 import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
 import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
+import net.iceyleagons.icicle.core.utils.Kotlin;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.reflections.Reflections;
 
@@ -70,7 +71,9 @@ public class Icicle {
             new MavenDependency("net.bytebuddy", "byte-buddy", "1.11.15", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("net.bytebuddy", "byte-buddy-agent", "1.11.15", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("me.carleslc.Simple-YAML", "Simple-Yaml", "1.7.2", MavenLibraryLoader.MAVEN_JITPACK),
-            new MavenDependency("ch.qos.logback", "logback-core", "1.2.9", MavenLibraryLoader.MAVEN_CENTRAL_REPO)
+            new MavenDependency("ch.qos.logback", "logback-core", "1.2.9", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
+            new MavenDependency("org.jetbrains.kotlin", "kotlin-reflect", "1.5.31", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
+            new MavenDependency("org.jetbrains.kotlin", "kotlin-stdlib", "1.6.20", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
     };
     /**
      * Whether Icicle is currently loaded.
@@ -98,10 +101,12 @@ public class Icicle {
      * @deprecated internal use only.
      */
     @Internal
-    public static void loadIcicle() {
+    public static void loadIcicle(ClassLoader classLoader) {
         if (LOADED) {
             throw new IllegalStateException("Icicle is already loaded!");
         }
+
+        MavenLibraryLoader.init(classLoader == null ? ICICLE_CLASS_LOADER : classLoader);
 
         System.out.println();
         System.out.println("[==================[Icicle Loader]==================]");
@@ -113,6 +118,8 @@ public class Icicle {
             MavenLibraryLoader.load(coreDependency);
         }
         System.out.println("[Icicle] - Libraries loaded!");
+
+        Kotlin.init(classLoader == null ? ICICLE_CLASS_LOADER : classLoader);
         ByteBuddyProxyHandler.installBuddyAgent();
 
         System.out.println();

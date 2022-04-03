@@ -52,12 +52,11 @@ import java.util.Map;
 public final class Kotlin {
 
     @Nullable
-    private static final Class<? extends Annotation> kotlinMeta;
-    private static final boolean kotlinReflectionPresent;
+    private static Class<? extends Annotation> kotlinMeta;
+    private static boolean kotlinReflectionPresent;
 
-    static {
-        final ClassLoader classLoader = Kotlin.class.getClassLoader();
 
+    public static void init(ClassLoader classLoader) {
         kotlinMeta = getKotlinMeta(classLoader);
         kotlinReflectionPresent = ReflectionUtils.isClassPresent("kotlin.reflect.full.KClasses", classLoader);
     }

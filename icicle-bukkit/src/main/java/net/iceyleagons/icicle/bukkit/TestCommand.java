@@ -30,8 +30,12 @@ import net.iceyleagons.icicle.commands.annotations.meta.PlayerOnly;
 import net.iceyleagons.icicle.commands.annotations.params.CommandSender;
 import net.iceyleagons.icicle.commands.annotations.params.FlagOptional;
 import net.iceyleagons.icicle.commands.annotations.validators.Range;
+import net.iceyleagons.icicle.core.translations.TranslationService;
+import net.iceyleagons.icicle.core.translations.impl.file.FileStringProvider;
+import net.iceyleagons.icicle.core.translations.impl.file.separated.CSVLanguageFile;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.util.Arrays;
 
 /**
@@ -41,6 +45,14 @@ import java.util.Arrays;
  */
 @CommandManager("test")
 public class TestCommand {
+
+    public TestCommand(TranslationService translationService) {
+        FileStringProvider provider = new FileStringProvider(
+                new CSVLanguageFile(new File("strings-en.csv"), "en", true)
+        );
+
+        translationService.setTranslationStringProvider(provider);
+    }
 
     @PlayerOnly
     @Command(value = "four")

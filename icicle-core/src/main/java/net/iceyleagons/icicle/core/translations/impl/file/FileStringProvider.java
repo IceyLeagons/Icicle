@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,34 @@
 
 package net.iceyleagons.icicle.core.translations.impl.file;
 
-import java.io.File;
+import net.iceyleagons.icicle.core.translations.TranslationStringProvider;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * This is a very basic string provider for parsing a CSV file with the following format:
- * language key string
- *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 27, 2021
+ * @since Apr. 03, 2022
  */
-public class TSVFileProvider extends SeparatedFileProvider {
-    public TSVFileProvider(File... csvFiles) {
-        super("\t", csvFiles);
+public class FileStringProvider implements TranslationStringProvider {
+
+    private final Map<String, LanguageFile> languageFiles = new HashMap<>();
+
+    public FileStringProvider(LanguageFile... files) {
+        for (LanguageFile file : files) {
+            addLanguageFile(file);
+        }
+    }
+
+    public void addLanguageFile(LanguageFile file) {
+        this.languageFiles.put(file.getProvidedLanguageCode(), file);
+        System.out.println("Registered language: " + file.getProvidedLanguageCode());
+    }
+
+    @Override
+    public String get(String language, String key, String defaultValue) {
+        return this.languageFiles.containsKey(language) ? languageFiles.get(language).getString(key, defaultValue) : defaultValue;
     }
 }

@@ -67,6 +67,7 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
 
     private static final String TOO_FEW_ARGS_KEY = "icicle.cmd.err.fewargs";
     private static final String SUB_COMMAND_KEY = "icicle.cmd.err.subcmd";
+    private static final String NOT_FOUND_KEY = "icicle.cmd.err.notfound";
     private static final String HELP_TEXT = "icicle.cmd.help.info";
     private static final String HELP_INDEX = "icicle.cmd.help.index";
 
@@ -289,7 +290,7 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
                 RegisteredCommandManager registeredCommand = this.commandRegistry.getSubCommand(args[0].toLowerCase());
                 return handleSubCommand(registeredCommand, sender, command, args);
             } catch (CommandNotFoundException e2) {
-                String errorMsgKey = Strings.emptyToNull(commandManager.notFound());
+                String errorMsgKey = Strings.emptyToNull(NOT_FOUND_KEY);
                 AtomicReference<String> prediction = new AtomicReference<>("");
                 Predictor.predict(this, args).ifPresent(r -> prediction.set(r.getDefaultUsage(this.commandManager.value())));
 

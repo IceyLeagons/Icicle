@@ -24,7 +24,6 @@
 
 package net.iceyleagons.icicle.commands.middleware.impl;
 
-import com.google.common.base.Strings;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.meta.PlayerOnly;
 import net.iceyleagons.icicle.commands.exception.TranslatableException;
@@ -42,6 +41,8 @@ import java.lang.reflect.Method;
  */
 @CommandMiddleware
 public class PlayerOnlyMiddleware implements CommandMiddlewareTemplate {
+
+    private static final String KEY = "icicle.cmd.middleware.playeronly.err";
 
     @Override
     public boolean onCommand(CommandManager commandManager, Class<?> commandManagerClass, String commandName,
@@ -66,10 +67,9 @@ public class PlayerOnlyMiddleware implements CommandMiddlewareTemplate {
     private void handlePlayerOnly(CommandSender sender, CommandManager commandManager, TranslationService translationService) {
         if (sender instanceof Player) return;
 
-        String errorMsgKey = Strings.emptyToNull(commandManager.playerOnly());
         // String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cYou have to be a player to execute this command!");
 
         // throw new IllegalStateException(msg);
-        throw new TranslatableException(errorMsgKey, "&cYou have to be a player to execute this command!");
+        throw new TranslatableException(KEY, "&cYou have to be a player to execute this command!");
     }
 }

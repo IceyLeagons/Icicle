@@ -142,8 +142,10 @@ public final class BeanUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T> Constructor<T> getResolvableConstructor(Class<T> clazz) {
-        Constructor<T> kotlinConst = Kotlin.findPrimaryConstructor(clazz);
-        if (kotlinConst != null) return kotlinConst;
+        if (Kotlin.isKotlinReflectionPresent() && Kotlin.isKotlinType(clazz)) {
+            Constructor<T> kotlinConst = Kotlin.findPrimaryConstructor(clazz);
+            if (kotlinConst != null) return kotlinConst;
+        }
 
         Constructor<?>[] constructors = clazz.getConstructors();
 

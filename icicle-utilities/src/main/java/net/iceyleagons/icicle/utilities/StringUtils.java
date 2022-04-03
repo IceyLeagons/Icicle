@@ -51,4 +51,12 @@ public class StringUtils {
 
         return sb.substring(1);
     }
+
+    public static String nullToEmpty(String input) {
+        return input == null ? "" : input;
+    }
+
+    public static String emptyToNull(String input) {
+        return input.isEmpty() ? null : input;
+    }
 }

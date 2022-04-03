@@ -50,7 +50,7 @@ public class AutowiringTest {
 
     @BeforeAll
     public static void setupIcicle() {
-        Icicle.loadIcicle();
+        Icicle.loadIcicle(null);
         application = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.resolvable", ExecutionUtils.debugHandler(), null) {
             @Override
             public String getName() {

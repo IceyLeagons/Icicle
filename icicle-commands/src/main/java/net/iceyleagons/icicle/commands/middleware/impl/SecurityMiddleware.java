@@ -24,7 +24,6 @@
 
 package net.iceyleagons.icicle.commands.middleware.impl;
 
-import com.google.common.base.Strings;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.meta.Permission;
 import net.iceyleagons.icicle.commands.exception.TranslatableException;
@@ -42,6 +41,8 @@ import java.util.Map;
  */
 @CommandMiddleware
 public class SecurityMiddleware implements CommandMiddlewareTemplate {
+
+    private static final String KEY = "icicle.cmd.middleware.playeronly.err";
 
     @Override
     public boolean onCommand(CommandManager commandManager, Class<?> commandManagerClass, String commandName,
@@ -68,12 +69,10 @@ public class SecurityMiddleware implements CommandMiddlewareTemplate {
 
         String requiredPermission = permission.value();
         if (sender.hasPermission(requiredPermission)) return;
-
-        String errorMsgKey = Strings.emptyToNull(commandManager.permissionError());
         //  String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cInsufficient permissions!",
         //         Map.of("permission", requiredPermission, "sender", sender.getName()));
 
         //throw new IllegalStateException(msg);
-        throw new TranslatableException(errorMsgKey, "&cInsufficient permissions!", Map.of("permission", requiredPermission, "sender", sender.getName()));
+        throw new TranslatableException(KEY, "&cInsufficient permissions!", Map.of("permission", requiredPermission, "sender", sender.getName()));
     }
 }

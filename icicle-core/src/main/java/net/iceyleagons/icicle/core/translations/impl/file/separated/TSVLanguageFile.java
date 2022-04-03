@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,18 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.translations.impl.file;
+package net.iceyleagons.icicle.core.translations.impl.file.separated;
 
 import java.io.File;
 
 /**
- * This is a very basic string provider for parsing a CSV file with the following format:
- * language,key,string
- *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 27, 2021
+ * @since Apr. 03, 2022
  */
-public class CSVFileProvider extends SeparatedFileProvider {
-    public CSVFileProvider(File... csvFiles) {
-        super(",", csvFiles);
+public class TSVLanguageFile extends SeparatedLanguageFile {
+
+    public TSVLanguageFile(File file, String providedLanguageCode, boolean appendDefaults) {
+        super(file, providedLanguageCode, appendDefaults, "\t");
     }
 }

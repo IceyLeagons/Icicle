@@ -59,7 +59,10 @@ public class TranslationService {
     }
 
     public String getTranslation(String key, String language, String defaultValue, Map<String, String> values) {
-        String translation = translationStringProvider == null ? defaultValue : translationStringProvider.get(key, language);
+        System.out.println("Providing translation for: " + String.format("KEY: %s | LANG: %s | DV: %s", key, language, defaultValue));
+        System.out.println("String Provider: " + this.translationStringProvider);
+
+        String translation = translationStringProvider == null ? defaultValue : translationStringProvider.get(language, key, defaultValue);
         String toParse = translation == null ? defaultValue : translation;
 
         return getNewParser().addValues(values).parseCode(toParse);
