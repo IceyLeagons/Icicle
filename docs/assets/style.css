@@ -2,6 +2,18 @@
  TODO: Convert this to be compatible with more browsers.
  TODO: Minify this
  */
+ :root {
+    --card-color: #fff;
+    --text-color: black;
+    --hero-button-text: white;
+    --bg-color: #f8f8f8;
+    --nav-border: #b7b7b7;
+    
+    --hero-box: rgba(222, 222, 222, 0.2);
+    --bg-img: url("./imgs/bg-light.png");
+
+    --nav-height: 70px;
+}
 
 body, html {
     margin: 0;
@@ -11,21 +23,72 @@ body, html {
     font-family: 'Open Sans', sans-serif;
 }
 
-html {
-    --card-color: #fff;
-    --text-color: black;
-    --hero-button-text: white;
-    --bg-color: #f8f8f8;
-
-    --nav-height: 70px;
-}
-
 body {
     background-color: var(--bg-color);
+    color: var(--text-color);
 }
 
 p {
     font-size: 1.1em;
+}
+
+.navbar {
+    position: fixed;
+    z-index: 20;
+
+    top: 0px;
+    left: 0px;
+
+    width: 100%;
+    height: var(--nav-height);
+    background-color: var(--card-color);
+
+    border-bottom: solid 5px var(--nav-border);
+}
+
+.navbar .logo {
+    width: 250px;
+}
+
+.navbar .nav-link {
+    color: var(--text-color);
+    margin: 1rem;
+    text-decoration: none;
+    text-align: center;
+}
+
+.navbar .nav-link:hover {
+    color: #3e9ce3;
+}
+
+.theme-switch {
+    text-align: center;
+    cursor: pointer;
+}
+
+.theme-switch i {
+    margin-right: -1.5rem;
+    cursor: pointer;
+}
+
+.theme-switch input {
+    opacity: 0;
+    cursor: pointer;
+}
+
+.navbar .nav-resp-collapse {
+    display: none;
+    color: var(--text-color);
+    margin: 1rem;
+    text-decoration: none;
+    text-align: center;
+}
+
+.navbar .nav-collapsed {
+    display: none;
+    flex-direction: column;
+    background: var(--bg-color);
+    z-index: 999;
 }
 
 .hero {
@@ -35,16 +98,16 @@ p {
 
     margin-top: var(--nav-height);
 
-    background: var(--card-color) url("../imgs/blur.png") no-repeat fixed center center;
+    background: var(--card-color) var(--bg-img) no-repeat fixed center center;
     background-size: cover;
 
-    border-bottom: solid 5px #b7b7b7;
+    border-bottom: solid 5px var(--nav-border);
 }
 
 .hero .box {
     padding: 2px;
     border-radius: 10px;
-    background: rgba(222, 222, 222, 0.2);
+    background: var(--hero-box);
 }
 
 .title {
@@ -144,8 +207,8 @@ p {
 }
 
 .review {
-    border-top: solid 5px #b7b7b7;
-    background: var(--card-color) url("../imgs/blur.png") no-repeat fixed center center;
+    border-top: solid 5px var(--nav-border);
+    background: var(--card-color) var(--bg-img) no-repeat fixed center center;
     color: var(--text-color);
     background-size: cover;
     height: 60vh;
@@ -171,7 +234,7 @@ p {
 }
 
 .footer {
-    background: rgba(0, 0, 0, 0.3) url("../imgs/blur.png") no-repeat fixed center center;
+    background: rgba(0, 0, 0, 0.3) var(--bg-img) no-repeat fixed center center;
     background-size: cover;
     height: 30px;
 }
@@ -204,4 +267,41 @@ p {
     .demo * {
         text-align: center;
     }
+}
+
+@media screen and (max-width: 870px) {
+    .navbar .nav-collapsed.visible {
+        display: flex;
+    }
+
+    .navbar .nav-resp-collapse {
+        position: absolute;
+        display: unset;
+
+        top: .5rem;
+        right: 1rem;
+
+    }
+
+    .navbar .nav-link-collapse {
+        display: none;
+    }
+}
+
+[data-theme="dark"] {
+    --card-color: #272822;
+    --text-color: #fff;
+    --hero-button-text: #fff;
+    --bg-color: #333333;
+    --bg-img: url("./imgs/bg-dark.png");
+    --nav-border: #1a1a1a;
+    --hero-box: rgba(50, 50, 50, 0.2);
+}
+
+[data-theme="dark"] .navbar .logo {
+    filter: invert();
+}
+
+[data-theme="dark"] .feature .kotlin {
+    filter: invert();
 }
