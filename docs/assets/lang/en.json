@@ -1,0 +1,100 @@
+{
+    "typer-text": [
+        "for all of your needs.",
+        "inspired by Spring.",
+        "to save you time.",
+        "to help you out.",
+        "designed for you.",
+        "built with ❤️.",
+        "designed to be fast.",
+        "to save servers space.",
+        "with space for your imagination.",
+        "for every part of plugin development."
+    ],
+    "typer-start": "A plugin framework, %typer%",
+
+    "nav-source": "Source",
+    "nav-doc": "Documentation",
+    "nav-javadoc": "JavaDoc",
+    "nav-mvn": "Maven/Gradle",
+    "nav-discord": "Discord",
+    "nav-collapsed-source": "Source",
+    "nav-collapsed-doc": "Documentation",
+    "nav-collapsed-javadoc": "JavaDoc",
+    "nav-collapsed-mvn": "Maven/Gradle",
+    "nav-collapsed-discord": "Discord",
+    "soon-banner": "Soon...",
+
+    "hero-why": "Why Icicle?",
+    "hero-gh": "GitHub",
+    "hero-start": "Getting Started",
+
+    "features": "Features",
+    "features-s1": "* Some features are only available by installing the separate modules.",
+    "features-s2": "** Some features are still in development, therefore may not be available for the public, or they may be buggy.",
+
+    "dep-inj-title": "Dependency Injection",
+    "dep-inj-description": "Are you used to using dependency injection in Spring, or just like it? Well, we've made our own from scratch, so you don't have to give that up.",
+
+    "conf-title": "Configurations",
+    "conf-description": "Easy-to-use configuration system out of the box.\nYou don't have to deal with making a multi-config system with reloading etc.",
+
+    "transl-title": "Translation System",
+    "transl-description": "Multi lingual projects made easy, with a highly customizable localization system. We even provide geolocation and a special code parser for even more solutions.",
+
+    "kotlin-title": "Kotlin Support",
+    "kotlin-description": "Icicle not only supports Kotlin in its core, but also in many of the separate modules we provide. We even have a dedicated one just for the juicy Kotlin-only gadgets!",
+
+    "cmd-title": "Innovative Commands",
+    "cmd-description": "Commands are the main way you interact with a plugin, so it has to be done right.\nIcicle provides a very intuitive, easy-to-use, annotation-based system.",
+    
+    "prot-title": "Protocol",
+    "prot-description": "Make an impact on people, with a unique experience achieved with packets. Choose our pre-defined presets, or build your own with our custom protocol library!",
+
+    "nms-title": "NMS",
+    "nms-description": "Icicle comes with an interface-based NMS system. Also did I mention we've pre-wrapped most of Minecraft's modules with DeFrost?",
+
+    "dev-title": "Dev Tools",
+    "dev-description": "Assist your development with Icicle, and use our custom developer tools for\n Gradle and IntelliJ.",
+
+    "db-title": "Database Interface",
+    "db-description": "Provide a wide variety of database-types for the server owners to choose from. Interact with SQL, NoSQL and file-based database solutions easily with our lightweight database handler!",
+
+    "gui-title": "GUI System",
+    "gui-description": "An easy-to-use system for creating complex or simple test UIs.",
+
+    "ai-title": "AI Framework",
+    "ai-description": "Create custom AIs for mobs easily. Make them do parkour, or awesome particle attacks easily with code!",
+
+    "world-title": "World Generator API",
+    "world-description": "We know creating a custom world generator is not easy. This is why we've decided to help you even more, with a cleaned up framework, with ready-to-use advanced features.",
+
+    "utils-title": "Utilities",
+    "utils-description": "Icicle's utility classes are also available for use. They contain tools & solutions, that you don't have to copy from StackOverflow again.",
+
+    "module-title": "Module-based",
+    "module-description": "Icicle only downloads/updates/loads modules (dependencies), that are truly required for the projects, therefore saving precious space and making it lightweight.",
+
+    "custom-title": "Highly Customizable",
+    "custom-description": "Built with a customizability in mind, every part of Icicle can be customized (yes even the core), and built-in features can be replaced with your imagination.",
+
+    "more-title": "Much More",
+    "more-description": "The list just goes on. The possibilities are truly endless, especially with a whole community behind it.\nJoin and be part of this community!",
+
+    "demo-title": "Don't believe us?",
+    "demo-subtitle": "Experience it yourself!",
+
+    "demo-dep-title": "Dependency Injection",
+    "demo-dep-description": "Let your productivity skyrocket with many of the features in Icicle, but most importantly with our dependency injection system.\n\nIt's really like in Spring, however we didn't feel like field autowiring is necessary, also forget about the @Autowired annotation being required.\n\nAutowire services from Bukkit's ServicesManager as well, with this it's even easier to hook into APIs.",
+
+    "demo-config-title": "Creating Configurations",
+    "demo-config-description": "Don't waste time coding a multi-file configuration system for the 100th time.\nSave yourself some headache with our intuitive configuration system, built right into Icicle's core.\n\nSet default values, give instructions via comments and most importantly give yourself a break from the madeness of configuration systems.",
+
+    "demo-cmd-title": "Creating Commands",
+    "demo-cmd-description": "Create complex interactions, or throw together a test command in a pinch with Icicle! Our command system is designed to be powerful with automatic help generation, command prediction, input validation.\n\nMaintain your freedom with middlewares & options of customization.",
+
+    "demo-transl-title": "Innovative Translation System",
+    "demo-transl-description": "Make your translators happy, with our innovative translation system.\nFrom now on, your translators don't need to hardcode every possibility, they can automate it with our script language.\n\nSet parameters, let translators write the logic for it, so translations fit the language better.",
+
+    "copyright": "Copyright &copy; 2022 IceyLeagons. All rights reserved."
+}

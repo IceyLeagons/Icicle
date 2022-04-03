@@ -19,6 +19,7 @@
 
     <meta content="Icicle Framework" name="application-name">
     <meta content="#3e9ce3" name="theme-color">
+    <!--  -->
 
     <!-- Icons -->
     <link href="apple-touch-icon-144x144.png" rel="apple-touch-icon-precomposed" sizes="144x144"> <!-- TODO: replace -->
@@ -71,6 +72,8 @@
 </head>
 
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="assets/js/localizer.js"></script>
     <nav class="navbar">
         <div class="row between-xs">
             <div class="col-xs-3 col-lg-3">
@@ -79,11 +82,11 @@
             <div class="col-xs-1 col-lg-4"></div>
             <div class="col-xs-8 col-lg-5" style="margin-top: 1.3rem; text-align: center;">
                 <!-- TODO: make this sh*t responsive -->
-                <a class="nav-link nav-link-collapse" href="https://github.com/IceyLeagons/iciclev2">Source</a>
-                <a class="nav-link nav-link-collapse" href="https://docs.iceyleagons.net/icicle/">Documentation</a>
-                <a class="nav-link nav-link-collapse" href="#">JavaDoc</a>
-                <a class="nav-link nav-link-collapse" href="https://mvn.iceyleagons.net/">Maven/Gradle</a>
-                <a class="nav-link nav-link-collapse" href="https://discord.iceyleagons.net/">Discord</a>
+                <a id="nav-source" class="nav-link nav-link-collapse" href="https://github.com/IceyLeagons/iciclev2">Source</a>
+                <a id="nav-doc" class="nav-link nav-link-collapse" href="https://docs.iceyleagons.net/icicle/">Documentation</a>
+                <a id="nav-javadoc" class="nav-link nav-link-collapse" href="#">JavaDoc</a>
+                <a id="nav-mvn" class="nav-link nav-link-collapse" href="https://mvn.iceyleagons.net/">Maven/Gradle</a>
+                <a id="nav-discord" class="nav-link nav-link-collapse" href="https://discord.iceyleagons.net/">Discord</a>
                 <a class="nav-resp-collapse nav-link" href="javascript:void(0)" onclick="toggleNav();">&#9776;</a>
                 <label id="theme-switch" class="theme-switch nav-link nav-link-collapse" for="checkbox_theme">
                     <i class="fa-solid fa-circle-half-stroke"></i>
@@ -92,11 +95,11 @@
             </div>
         </div>
         <div class="nav-collapsed" id="responsive-nav-menu">
-            <a class="nav-link" href="https://github.com/IceyLeagons/iciclev2" onclick="toggleNav();">Source</a>
-            <a class="nav-link" href="https://docs.iceyleagons.net/icicle/" onclick="toggleNav();">Documentation</a>
-            <a class="nav-link" href="#" onclick="toggleNav();">JavaDoc</a>
-            <a class="nav-link" href="https://mvn.iceyleagons.net/" onclick="toggleNav();">Maven/Gradle</a>
-            <a class="nav-link" href="https://discord.iceyleagons.net/" onclick="toggleNav();">Discord</a>
+            <a id="nav-collapsed-source" class="nav-link" href="https://github.com/IceyLeagons/iciclev2" onclick="toggleNav();">Source</a>
+            <a id="nav-collapsed-doc" class="nav-link" href="https://docs.iceyleagons.net/icicle/" onclick="toggleNav();">Documentation</a>
+            <a id="nav-collapsed-javadoc" class="nav-link" href="#" onclick="toggleNav();">JavaDoc</a>
+            <a id="nav-collapsed-mvn" class="nav-link" href="https://mvn.iceyleagons.net/" onclick="toggleNav();">Maven/Gradle</a>
+            <a id="nav-collapsed-discord" class="nav-link" href="https://discord.iceyleagons.net/" onclick="toggleNav();">Discord</a>
             <label id="theme-switch2" class="theme-switch nav-link" for="checkbox_theme">
                 <i class="fa-solid fa-circle-half-stroke"></i>
                 <input type="checkbox" id="checkbox_theme">
@@ -114,44 +117,25 @@
             <div class="col-xs-6">
                 <div class="box">
                     <h1 class="title">Icicle</h1>
-                    <h2 class="subtitle">A plugin framework, <div class="typed" style="display: inline;"></div>
+                    <h2 class="subtitle" id="typer-start"><div class="typed" style="display: inline;"></div>
                     </h2>
-
-                    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-                    <script>
-                        var options = {
-                            strings: ['for all of your needs.', 'inspired by Spring.', 'to save you time.', 'to help you out.', 'designed for you.', 'built with ❤️.', 'designed to be fast.', 'to save servers space.', 'with space for your imagination.', 'for every part of plugin development.'],
-                            typeSpeed: 30,
-                            backSpeed: 40,
-                            shuffle: true,
-                            backDelay: 5000,
-                            loop: true,
-                        };
-                        var typed = new Typed('.typed', options);
-                    </script>
                 </div>
                 <div class="row start-xs" style="margin-top: 3rem;">
                     <!-- TODO: Replace GitBook URLs once the actual, up-to-date documentation is done -->
 
                     <div class="col-xs-12 col-md-4 mt">
                         <div class="row center-xs">
-                            <a class="button" href="https://docs.iceyleagons.net/icicle/">
-                                Why Icicle?
-                            </a>
+                            <a id="hero-why" class="button" href="https://docs.iceyleagons.net/icicle/"></a>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-4 mt">
                         <div class="row center-xs">
-                            <a class="button" href="https://github.com/IceyLeagons/iciclev2" target="_blank">
-                                GitHub
-                            </a>
+                            <a id="hero-gh" class="button" href="https://github.com/IceyLeagons/iciclev2" target="_blank"></a>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-4 mt">
                         <div class="row center-xs">
-                            <a class="button" href="https://docs.iceyleagons.net/icicle/">
-                                Getting Started
-                            </a>
+                            <a id="hero-start" class="button" href="https://docs.iceyleagons.net/icicle/"> </a>
                         </div>
                     </div>
                 </div>
@@ -161,11 +145,9 @@
     <section class="features">
         <div class="row center-xs">
             <div class="col-xs-6">
-                <h1 class="title2">Features</h1>
-                <small>* Some features are only available by installing the separate modules.</small><br>
-                <small>** Some features are still in development, therefore may not be available for the public, or they
-                    may
-                    be buggy.</small>
+                <h1 id="features" class="title2"></h1>
+                <small id="features-s1"></small><br>
+                <small id="features-s2"></small>
             </div>
         </div>
         <div class="row center-xs">
@@ -173,144 +155,88 @@
                 <div class="feature-list">
                     <div class="feature">
                         <i class="fa-solid fa-syringe icon"></i>
-                        <h1 class="feature-title">Dependency Injection</h1>
-                        <p class="description">
-                            Are you used to using dependency injection in Spring, or just like it?
-                            Well, we've made our own from scratch, so you don't have to give that up.
-                        </p>
+                        <h1 class="feature-title" id="dep-inj-title"></h1>
+                        <p class="description" id="dep-inj-description"></p>
                     </div>
                     <div class="feature">
                         <i class="fa-solid fa-sliders icon"></i>
-                        <h1 class="feature-title">Configurations</h1>
-                        <p class="description">
-                            Easy-to-use configuration system out of the box.<br>
-                            You don't have to deal with making a multi-config system with reloading etc.
-                        </p>
+                        <h1 id="conf-title" class="feature-title"></h1>
+                        <p id="conf-description" class="description"></p>
                     </div>
                     <div class="feature">
                         <i class="fa-solid fa-language icon"></i>
-                        <h1 class="feature-title">Translation System</h1>
-                        <p class="description">
-                            Multi lingual projects made easy, with a highly customizable localization system.
-                            We even provide geolocation and a special code parser for even more solutions.
-                        </p>
+                        <h1 id="transl-title" class="feature-title"></h1>
+                        <p id="transl-description" class="description"></p>
                     </div>
                     <div class="feature">
                         <img alt="Kotlin Icon" class="icon kotlin" src="assets/imgs/kotlin.svg" />
-                        <h1 class="feature-title">Kotlin Support</h1>
-                        <p class="description">
-                            Icicle not only supports Kotlin in its core, but also in many of the separate modules we
-                            provide.
-                            We even have a dedicated one just for the juicy Kotlin-only gadgets!
-                        </p>
+                        <h1 id="kotlin-title" class="feature-title"></h1>
+                        <p id="kotlin-description" class="description"></p>
                     </div>
                     <div class="feature">
                         <i class="fa-solid fa-terminal icon"></i>
-                        <h1 class="feature-title">Innovative Commands</h1>
-                        <p class="description">
-                            Commands are the main way you interact with a plugin, so it has to be done right.<br>
-                            Icicle provides a very intuitive, easy-to-use, annotation-based system.
-                        </p>
+                        <h1 id="cmd-title" class="feature-title"></h1>
+                        <p id="cmd-description" class="description"></p>
                     </div>
                     <div class="feature">
                         <i class="fa-solid fa-network-wired icon"></i>
-                        <h1 class="feature-title">Protocol</h1>
-                        <p class="description">
-                            Make an impact on people, with a unique experience achieved with packets.
-                            Choose our pre-defined presets, or build your own with our custom protocol library!
-                        </p>
+                        <h1 id="prot-title" class="feature-title"></h1>
+                        <p id="prot-description" class="description"></p>
                     </div>
                     <div class="feature">
                         <i class="fa-solid fa-server icon"></i>
-                        <h1 class="feature-title">NMS</h1>
-                        <p class="description">
-                            Icicle comes with an interface-based NMS system.
-                            Also did I mention we've pre-wrapped most of Minecraft's modules with DeFrost?
-                        </p>
+                        <h1 id="nms-title" class="feature-title"></h1>
+                        <p id="nms-description" class="description"></p>
                     </div>
                     <div class="feature">
                         <i class="fa-solid fa-code icon"></i>
-                        <h1 class="feature-title">Dev Tools</h1>
-                        <p class="description">
-                            Assist your development with Icicle, and use our custom developer tools for<br> Gradle and
-                            IntelliJ.
-                        </p>
+                        <h1 id="dev-title" class="feature-title"></h1>
+                        <p id="dev-description" class="description"></p>
                     </div>
                     <div class="feature">
                         <i class="fa-solid fa-database icon"></i>
-                        <h1 class="feature-title">Database Interface</h1>
-                        <div class="banner">Soon...</div>
-                        <p class="description">
-                            Provide a wide variety of database-types for the server owners to choose from.
-                            Interact with SQL, NoSQL and file-based database solutions easily with our lightweight
-                            database
-                            handler!
-                        </p>
+                        <h1 id="db-title" class="feature-title"></h1>
+                        <div class="banner"></div>
+                        <p id="db-description" class="description"></p>
                     </div>
                     <div class="feature">
                         <i class="fa-solid fa-arrow-pointer icon"></i>
-                        <h1 class="feature-title">GUI System</h1>
-                        <div class="banner">Soon...</div>
-                        <p class="description">
-                            An easy-to-use system for creating complex or simple test UIs.
-                        </p>
+                        <h1 id="gui-title" class="feature-title"></h1>
+                        <div class="banner"></div>
+                        <p id="gui-description" class="description"></p>
                     </div>
                     <div class="feature">
                         <i class="fa-solid fa-robot icon"></i>
-                        <h1 class="feature-title">AI Framework</h1>
-                        <div class="banner">Soon...</div>
-                        <p class="description">
-                            Create custom AIs for mobs easily. Make them do parkour, or awesome particle attacks easily
-                            with code!
-                        </p>
+                        <h1 id="ai-title" class="feature-title"></h1>
+                        <div class="banner"></div>
+                        <p id="ai-description" class="description"></p>
                     </div>
                     <div class="feature">
                         <i class="fa-solid fa-earth-americas icon"></i>
-                        <h1 class="feature-title">World Generator API</h1>
-                        <div class="banner">Soon...</div>
-                        <p class="description">
-                            We know creating a custom world generator is not easy. This is why we've decided to help you
-                            even more, with a cleaned up framework, with ready-to-use advanced features.
-                        </p>
+                        <h1 id="world-title" class="feature-title"></h1>
+                        <div class="banner"></div>
+                        <p id="world-description" class="description"></p>
                     </div>
                     <div class="feature">
                         <i class="fa-solid fa-toolbox icon"></i>
-                        <h1 class="feature-title">Utilities</h1>
-                        <p class="description">
-                            Icicle's utility classes are also available for use.
-                            They contain tools & solutions, that you don't have to copy from StackOverflow again.
-                        </p>
+                        <h1 id="utils-title" class="feature-title"></h1>
+                        <p id="utils-description" class="description"></p>
                     </div>
-
-
-
                     <div class="feature">
                         <i class="fa-solid fa-box icon"></i>
-                        <h1 class="feature-title">Module-based</h1>
-                        <p class="description">
-                            Icicle only downloads/updates/loads modules (dependencies), that are truly required for the
-                            projects, therefore saving precious space and making it lightweight.
-                        </p>
+                        <h1 id="module-title" class="feature-title"></h1>
+                        <p id="module-description" class="description"></p>
                     </div>
                     <div class="feature">
                         <i class="fa-solid fa-brush icon"></i>
-                        <h1 class="feature-title">Highly Customizable</h1>
-                        <p class="description">
-                            Built with a customizability in mind, every part of Icicle can be customized (yes even the
-                            core).
-                            and built-in features can be replaced with your imagination.
-                        </p>
+                        <h1 id="custom-title" class="feature-title"></h1>
+                        <p id="custom-description" class="description"></p>
                     </div>
                     <!-- Add feature: highly customizable -->
                     <div class="feature">
                         <i class="fa-solid fa-infinity icon"></i>
-                        <h1 class="feature-title">Much More</h1>
-                        <p class="description">
-                            The list just goes on. The possibilities are truly endless, especially with a whole
-                            community
-                            behind it.<br>
-                            Join and be part of this community!
-                        </p>
+                        <h1 id="more-title" class="feature-title"></h1>
+                        <p id="more-description" class="description"></p>
                     </div>
                 </div>
             </div>
@@ -319,24 +245,14 @@
     <section class="demo">
         <div class="row center-xs" style="margin-bottom: 2rem;">
             <div class="col-xs-6">
-                <h1 class="title2">Don't believe us?</h1>
-                <h2>Experience it yourself!</h2>
+                <h1 id="demo-title" class="title2"></h1>
+                <h2 id="demo-subtitle"></h2>
             </div>
         </div>
         <div class="row center-xs">
             <div class="col-md-4 col-xs-12 middle-xs">
-                <h2 class="ar">Dependency Injection</h2>
-                <p class="al">
-                    Let your productivity skyrocket with many of the features in Icicle, but most importantly with our
-                    dependency injection system.
-                    <br><br>
-                    It's really like in Spring, however we didn't feel like field autowiring is necessary, also forget
-                    about the @Autowired annotation being required.
-                    <br><br>
-                    Autowire services from Bukkit's ServicesManager as well, with this it's even easier to hook into
-                    APIs.
-                </p>
-
+                <h2 id="demo-dep-title" class="ar"></h2>
+                <p id="demo-dep-description" class="al"></p>
             </div>
             <div class="col-md-6 col-xs-12">
                 <pre><code class="language-java">
@@ -382,28 +298,14 @@ public class MyConfig {
             </code></pre>
             </div>
             <div class="col-md-4 middle-xs al col-xs-12">
-                <h2>Creating Configurations</h2>
-                <p>
-                    Don't waste time coding a multi-file configuration system for the 100th time.<br>
-                    Save yourself some headache with our intuitive configuration system, built right into Icicle's core.
-                    <br><br>
-                    Set default values, give instructions via comments and most importantly give yourself a break from
-                    the madeness of configuration systems.
-                </p>
-
+                <h2 id="demo-config-title"></h2>
+                <p id="demo-config-description"></p>
             </div>
         </div>
         <div class="row center-xs">
             <div class="col-md-4 col-xs-12 middle-xs">
-                <h2 class="ar">Creating Commands</h2>
-                <p class="al">
-                    Create complex interactions, or throw together a test command in a pinch with Icicle!
-                    Our command system is designed to be powerful with automatic help generation, command prediction,
-                    input validation.
-                    <br><br>
-                    Maintain your freedom with middlewares & options of customization.
-                </p>
-
+                <h2 id="demo-cmd-title" class="ar"></h2>
+                <p id="demo-cmd-description" class="al"></p>
             </div>
             <div class="col-md-6 col-xs-12">
                 <pre><code class="language-java">
@@ -454,14 +356,8 @@ player.sendMessage(
             </code></pre>
             </div>
             <div class="col-md-4 col-xs-12 middle-xs al">
-                <h2>Innovative Translation System</h2>
-                <p>
-                    Make your translators happy, with our innovative translation system.<br>
-                    From now on, your translators don't need to hardcode every possibility, they can automate it with
-                    our script language.
-                    <br><br>
-                    Set parameters, let translators write the logic for it, so translations fit the language better.
-                </p>
+                <h2 id="demo-transl-title"></h2>
+                <p id="demo-transl-description"></p>
 
             </div>
         </div>
@@ -480,9 +376,8 @@ player.sendMessage(
     </div>-->
     </section>
 
-    <footer class="footer">
-        <div class="footer-content">
-            Copyright &copy; 2022 IceyLeagons
+    <footer class="footer" style="margin-bottom: -2.4vh;">
+        <div id="copyright" class="footer-content">
         </div>
     </footer>
 
@@ -495,6 +390,8 @@ player.sendMessage(
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.js"
         integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="assets/js/theme.js"></script>>
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SC44ZYPS6Y"></script>
@@ -509,60 +406,7 @@ player.sendMessage(
 
         gtag('config', 'G-SC44ZYPS6Y');
     </script>
-    <script>
-        //determines if the user has a set theme
-        function detectColorScheme() {
-            var theme = "light";    //default to light
-
-            //local storage is used to override OS theme settings
-            if (localStorage.getItem("theme")) {
-                if (localStorage.getItem("theme") == "dark") {
-                    var theme = "dark";
-                }
-            } else if (!window.matchMedia) {
-                //matchMedia method not supported
-                return false;
-            } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                //OS theme setting detected as dark
-                var theme = "dark";
-            }
-
-            //dark theme preferred, set document with a `data-theme` attribute
-            if (theme == "dark") {
-                document.documentElement.setAttribute("data-theme", "dark");
-            }
-        }
-
-        detectColorScheme();
-        //identify the toggle switch HTML element
-        const toggleSwitch = document.querySelector('#theme-switch input[type="checkbox"]');
-        const toggleSwitch2 = document.querySelector('#theme-switch2 input[type="checkbox"]');
-
-        //function that changes the theme, and sets a localStorage variable to track the theme between page loads
-        function switchTheme(e) {
-            if (e.target.checked) {
-                localStorage.setItem('theme', 'dark');
-                document.documentElement.setAttribute('data-theme', 'dark');
-                toggleSwitch.checked = true;
-                toggleSwitch2.checked = true;
-            } else {
-                localStorage.setItem('theme', 'light');
-                document.documentElement.setAttribute('data-theme', 'light');
-                toggleSwitch.checked = false;
-                toggleSwitch2.checked = false;
-            }
-        }
-
-        //listener for changing themes
-        toggleSwitch.addEventListener('change', switchTheme, false);
-        toggleSwitch2.addEventListener('change', switchTheme, false);
-
-        //pre-check the dark-theme checkbox if dark-theme is set
-        if (document.documentElement.getAttribute("data-theme") == "dark") {
-            toggleSwitch.checked = true;
-            toggleSwitch2.checked = true;
-        }
-    </script>
+    <script src="assets/js/theme.js"></script>
 </body>
 
 </html>

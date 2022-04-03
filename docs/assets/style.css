@@ -166,7 +166,8 @@ p {
     color: var(--text-color);
 
     width: 220px;
-    height: 330px;
+    min-height: 330px;
+    height: auto;
 
     filter: drop-shadow(0px 1px 4px #000);
     transition: .3s;
