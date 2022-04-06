@@ -48,6 +48,10 @@ public class Settings {
     public static final int ENTITY = 200;
     public static final int ORIGIN = 201;
 
+    // ARGUMENT - 3xx
+    public static final int MATERIAL = 300;
+    public static final int LENGTH =  301;
+
     private final Map<Integer, Object> settings = new ConcurrentHashMap<>();
 
     public Settings with(int id, Object value) {

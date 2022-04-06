@@ -24,15 +24,20 @@
 
 package net.iceyleagons.icicle.nms.wrap.player;
 
+import net.iceyleagons.icicle.nms.NMSHandler;
 import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
 import net.iceyleagons.icicle.nms.annotations.NMSWrap;
+import net.iceyleagons.icicle.nms.annotations.OriginGetter;
+import net.iceyleagons.icicle.nms.annotations.Wrapping;
+import net.iceyleagons.icicle.nms.wrap.WrappedEntity;
+import net.iceyleagons.icicle.nms.wrap.server.WrappedDataWatcher;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 23, 2021
  */
-@NMSWrap("server.level.EntityPlayer")
+@NMSWrap("server.level.Entity")
 public interface WrappedEntityPlayer {
 
     //@Wrapping(value = "networkManager", isField = true) TODO?? not found in 1.18
@@ -43,4 +48,11 @@ public interface WrappedEntityPlayer {
 
     @FieldWrapping(value = "b")
     WrappedPlayerConnection getPlayerConnection();
+
+    default WrappedEntity getHandle(NMSHandler handler) {
+        return handler.wrapFromOrigin(getOrigin(), WrappedEntity.class);
+    }
+
+    @OriginGetter
+    Object getOrigin();
 }

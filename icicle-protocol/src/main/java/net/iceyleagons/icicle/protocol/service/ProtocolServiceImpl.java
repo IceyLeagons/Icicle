@@ -62,6 +62,11 @@ public class ProtocolServiceImpl implements ProtocolService {
     }
 
     @Override
+    public NMSHandler getNMSHandler() {
+        return nms;
+    }
+
+    @Override
     public ProtocolPlayer getProtocolPlayer(Player player) {
         return protocolPlayers.computeIfAbsent(player, p -> new ProtocolPlayer(p, this.nms));
     }

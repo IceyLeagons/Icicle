@@ -19,6 +19,8 @@ public class WorldBorderAction extends Action {
     protected void onExecute(ProtocolService protocolService) {
         Tuple<Integer, Integer> size = super.getSettingAs(Settings.SIZE, Tuple.class);
         Tuple<Integer, Integer> center = super.getSettingAs(Settings.CENTER, Tuple.class);
+
+
         super.sendPacketToTarget(protocolService, null);
     }
 

@@ -24,10 +24,15 @@
 
 package net.iceyleagons.icicle.protocol.action.impl;
 
+import lombok.SneakyThrows;
+import lombok.val;
 import net.iceyleagons.icicle.protocol.action.Action;
 import net.iceyleagons.icicle.protocol.action.Settings;
+import net.iceyleagons.icicle.protocol.nms.BlockPosition;
+import net.iceyleagons.icicle.protocol.nms.PacketPlayOutBlockChange;
 import net.iceyleagons.icicle.protocol.service.ProtocolService;
 import org.bukkit.Location;
+import org.bukkit.Material;
 
 /**
  * @author TOTHTOMI
@@ -44,10 +49,19 @@ public class ReplaceBlockAction extends Action {
         super(settings);
     }
 
+    @SneakyThrows
     @Override
     protected void onExecute(ProtocolService protocolService) {
-        Location toHide = super.getSettingAs(Settings.POSITION, Location.class);
-        super.sendPacketToTarget(protocolService, null);
+        val material = super.getSettingAs(Settings.MATERIAL, Material.class);
+        val toHide = super.getSettingAs(Settings.POSITION, Location.class);
+
+        val location = protocolService.getNMSHandler().wrap(BlockPosition.class, 0, toHide.getBlockX(), toHide.getBlockY(), toHide.getBlockZ()).getOrigin();
+
+        val blockData = Class.forName("org.bukkit.craftbukkit.v1_18_R1.block.data.CraftBlockData");
+        val typeRaw = blockData.cast(material.createBlockData());
+        val type = typeRaw.getClass().getDeclaredMethod("getState").invoke(typeRaw);
+
+        super.sendPacketToTarget(protocolService, protocolService.getNMSHandler().wrap(PacketPlayOutBlockChange.class, 0, location, type));
     }
 
     @Override

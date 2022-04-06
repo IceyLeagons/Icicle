@@ -25,6 +25,7 @@
 package net.iceyleagons.icicle.protocol.service;
 
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
+import net.iceyleagons.icicle.nms.NMSHandler;
 import net.iceyleagons.icicle.protocol.ProtocolPlayer;
 import net.iceyleagons.icicle.protocol.action.Action;
 import net.iceyleagons.icicle.protocol.action.Settings;
@@ -40,5 +41,6 @@ public interface ProtocolService {
     ProtocolPlayer getProtocolPlayer(Player player);
     void executeAction(Action action);
     ExecutionHandler getExecutionHandler();
+    NMSHandler getNMSHandler();
 
 }
