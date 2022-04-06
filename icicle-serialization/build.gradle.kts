@@ -48,9 +48,17 @@ dependencies {
     // https://mvnrepository.com/artifact/org.mongodb/bson
     shadow("org.mongodb:bson:4.5.0")
 
-
     lombok()
 
+
+    testImplementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
+    testImplementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.20")
+    testImplementation("com.google.guava:guava:31.1-jre")
+    testImplementation(project(":icicle-utilities"))
+    testImplementation(project(":icicle-core"))
+    testImplementation("org.mongodb:bson:4.5.0")
+    testImplementation("org.json:json:20210307")
+    testImplementation("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
 }

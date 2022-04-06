@@ -29,12 +29,13 @@ plugins {
 }
 
 version = "0.1-SNAPSHOT"
-val spigotVersion = "1.17.1"
+val spigotVersion = "1.18.1"
 
 repositories {
     mavenCentral()
     spigot()
     jitpack()
+    maven("https://hub.spigotmc.org/nexus/content/repositories/public/")
 }
 
 dependencies {

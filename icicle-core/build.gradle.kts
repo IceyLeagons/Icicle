@@ -51,13 +51,25 @@ dependencies {
     compileOnly("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
 
 
+    // https://mvnrepository.com/artifact/org.jetbrains/annotations
+    compileOnly("org.jetbrains:annotations:23.0.0")
+
+
     compileOnly("ch.qos.logback:logback-core:1.2.9")
     compileOnly("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
 
     lombok()
 
+    testImplementation("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
+    testImplementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
+    testImplementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.20")
+    testImplementation("org.slf4j:slf4j-api:1.7.32")
+    testImplementation("net.bytebuddy:byte-buddy:1.11.15")
+    testImplementation("net.bytebuddy:byte-buddy-agent:1.11.15")
+    testCompileOnly("org.jetbrains:annotations:23.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+    testImplementation("ch.qos.logback:logback-core:1.2.9")
 }
 
 icicle {

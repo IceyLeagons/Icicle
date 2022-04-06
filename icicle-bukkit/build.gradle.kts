@@ -30,20 +30,23 @@ plugins {
 group = "net.iceyleagons"
 version = "0.1-SNAPSHOT"
 
-val spigotVersion = "1.17.1"
+val spigotVersion = "1.18.1"
 
 repositories {
     mavenCentral()
     spigot()
     jitpack()
+    maven("https://hub.spigotmc.org/nexus/content/repositories/public/")
 }
 
 dependencies {
     compileOnly("io.netty:netty-all:4.1.72.Final")
+
     shadow(project(":icicle-core"))
     shadow(project(":icicle-commands"))
     shadow(project(":icicle-nms"))
     compileOnly(project(":icicle-utilities"))
+
     spigotApi(spigotVersion)
     lombok()
 }

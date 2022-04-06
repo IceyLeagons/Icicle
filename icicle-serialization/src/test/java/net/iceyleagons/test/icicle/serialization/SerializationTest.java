@@ -24,8 +24,6 @@
 
 package net.iceyleagons.test.icicle.serialization;
 
-import net.iceyleagons.icicle.serialization.annotations.Convert;
-import net.iceyleagons.icicle.serialization.converters.builtin.UUIDConverter;
 import net.iceyleagons.icicle.serialization.serializers.impl.BsonSerializer;
 import net.iceyleagons.icicle.serialization.serializers.impl.JsonSerializer;
 import net.iceyleagons.icicle.serialization.serializers.impl.YamlSerializer;
@@ -38,10 +36,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author TOTHTOMI
@@ -52,7 +46,7 @@ public class SerializationTest {
 
     @Test
     @DisplayName("JSON (String) - Serialization & Deserialization")
-    public void testJson() {
+    public void testJson() throws ClassNotFoundException {
         JsonSerializer serializer = new JsonSerializer();
         TestClass original = new TestClass();
 
@@ -71,6 +65,7 @@ public class SerializationTest {
         Assertions.assertIterableEquals(original.mapTest.entrySet(), clone.mapTest.entrySet());
     }
 
+
     @Test
     @DisplayName("BSON (Document) - Serialization & Deserialization")
     public void testBson() {
@@ -78,6 +73,7 @@ public class SerializationTest {
         TestClass original = new TestClass();
 
         Document serialized = Assertions.assertDoesNotThrow(() -> serializer.serialize(original));
+
         TestClass clone = Assertions.assertDoesNotThrow(() -> serializer.deserialize(serialized, TestClass.class));
 
         Assertions.assertEquals(original.uuid.toString(), clone.uuid.toString());
@@ -89,6 +85,8 @@ public class SerializationTest {
 
         Assertions.assertNotNull(clone.subObject);
         Assertions.assertEquals(original.subObject.name, clone.subObject.name);
+
+
         Assertions.assertIterableEquals(original.mapTest.entrySet(), clone.mapTest.entrySet());
     }
 
@@ -98,6 +96,7 @@ public class SerializationTest {
         YamlSerializer serializer = new YamlSerializer();
         TestClass original = new TestClass();
         Path file = new File("test.yml").toPath();
+
 
         Assertions.assertDoesNotThrow(() -> serializer.serializeToPath(original, file));
         TestClass clone = Assertions.assertDoesNotThrow(() -> serializer.deserializeFromPath(file, TestClass.class));
@@ -118,21 +117,5 @@ public class SerializationTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    static class TestClass {
-        @Convert(UUIDConverter.class)
-        public UUID uuid = UUID.randomUUID();
-        public String name = "Hello";
-        public String[] list = new String[]{"asd", "asd2"};
-        public int number = 4;
-        public int[] numberList = new int[]{1, 2, 3};
-        public List<String> stringList = Arrays.asList("test1", "test2", "test3");
-        public TestSubClass subObject = new TestSubClass();
-        public Map<String, String> mapTest = Map.of("testkey", "testvalue", "key2", "value2");
-    }
-
-    static class TestSubClass {
-        public String name = "Test2 field";
     }
 }

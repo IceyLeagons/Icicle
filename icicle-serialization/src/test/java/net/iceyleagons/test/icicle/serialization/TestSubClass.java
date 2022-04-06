@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,37 +22,13 @@
  * SOFTWARE.
  */
 
-plugins {
-    java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
-}
+package net.iceyleagons.test.icicle.serialization;
 
-group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compileOnly("org.jetbrains:annotations:20.1.0")
-    compileOnly("org.slf4j:slf4j-api:1.7.32")
-    compileOnly("com.google.guava:guava:31.1-jre") // guava is loaded by Bukkit already
-
-    lombok()
-
-    testImplementation("com.google.guava:guava:31.1-jre")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-}
-
-icicle {
-    name = "Utilities"
-    version = project.version.toString()
-    description = "Contains utility classes that may or may not prove to be useful."
-    developers = listOf("TOTHTOMI", "Gabe")
-}
-
-tasks.test {
-    useJUnitPlatform()
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Apr. 06, 2022
+ */
+public class TestSubClass {
+    public String name = "Test2 field";
 }
