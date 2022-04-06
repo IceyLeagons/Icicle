@@ -1,0 +1,100 @@
+{
+    "typer-text": [
+        "ami mindenre jó.",
+        "amit a Spring ihletett.",
+        "ami ⏱️ spórol.",
+        "ami segít neked.",
+        "neked tervezve",
+        "❤️ készítve.",
+        "⚡ gyorsnak tervezve.",
+        "ami a szervereknek helyet spórol.",
+        "ami helyet ad a ✨ kreativitásodnak.",
+        "a plugin készítés minden területére."
+    ],
+    "typer-start": "Egy plugin keretrendszer, %typer%",
+
+    "nav-source": "Forráskód",
+    "nav-doc": "Dokumentáció",
+    "nav-javadoc": "JavaDoc",
+    "nav-mvn": "Maven/Gradle",
+    "nav-discord": "Discord",
+    "nav-collapsed-source": "Forráskód",
+    "nav-collapsed-doc": "Dokumentáció",
+    "nav-collapsed-javadoc": "JavaDoc",
+    "nav-collapsed-mvn": "Maven/Gradle",
+    "nav-collapsed-discord": "Discord",
+    "soon-banner": "Hamarosan...",
+
+    "hero-why": "Miért Icicle?",
+    "hero-gh": "GitHub",
+    "hero-start": "Első Lépések",
+
+    "features": "Funkciók",
+    "features-s1": "* Néhány funkció csak a megfelelő modul telepítése után érhető el.",
+    "features-s2": "** Néhány funkció még fejlesztés alatt áll, így nem biztos, hogy mindegyik publikusan elérhető, vagy lehet nagyon bugosak.",
+
+    "dep-inj-title": "Függőség Injektálás",
+    "dep-inj-description": "Hozzászoktál a dependency injection-höz a Spring-ben, vagy hasonló rendszerekben? Nos, mi a nulláról megírtuk a sajátunkat, így nem kell ezt feladnod.",
+
+    "conf-title": "Konfiguráció",
+    "conf-description": "Egyszerűen használható konfigurációs rendszer a dobozból.\nNem kell foglalkoznod egy többkonfigurációs rendszer létrehozásával, újratöltéssel stb.",
+
+    "transl-title": "Fordító Rendszer",
+    "transl-description": "Többnyelvű projektek egyszerűen, egy rendkívül testreszabható lokalizációs rendszerrel. Még több megoldáshoz még geolokációt és egy speciális szkriptnyelvet is biztosítunk.",
+
+    "kotlin-title": "Kotlin Támogatás",
+    "kotlin-description": "Icicle nem csak a magjában támogatja a Kotlint, hanem számos különálló modulban is. Még egy külön modulunk is van, csak a szaftos, csak Kotlin-alapú kütyüknek!",
+
+    "cmd-title": "Innovatív Parancsok",
+    "cmd-description": "A parancsok jelentik az interakció fő módját a pluginokkal, ezért ezt jól kell csinálni.\nAz Icicle egy nagyon intuitív, könnyen használható, annotációkon alapuló rendszert kínál.",
+    
+    "prot-title": "Protokoll",
+    "prot-description": "Hass a játékosokra, a csomagokkal elért egyedi élményekkel. Válasszd az előre definiált előbeállításainkat, vagy készítsd el sajátjaid egyéni protokollkönyvtárunkkal!",
+
+    "nms-title": "NMS",
+    "nms-description": "Icicle interfész-alapú NMS rendszerrel rendelkezik. Említettem már, hogy a Minecraft legtöbb modulját előre csomagoltuk a DeFrost-tal?",
+
+    "dev-title": "Fejlesztői Eszközök",
+    "dev-description": "Segítsd a fejlesztésed az Icicle segítségével, és használd az egyedi fejlesztői eszközeinket a\nGradle és IntelliJ számára.",
+
+    "db-title": "Adatbázis Interfész",
+    "db-description": "Engedd a szerver tukajdonosoknak, hagy válasszanak egy nagy választéknyi adatbázis-típusból. Használj SQL-t, NoSQL-t, és fájl-alapú adatbázis megoldásokat egyszerűen a keretrendszerünkkel!",
+
+    "gui-title": "GUI Rendszer",
+    "gui-description": "Egy könnyen használható rendszer komplex, vagy szimpla teszt UI-ok létrehozására.",
+
+    "ai-title": "AI Keretrendszer",
+    "ai-description": "Könnyedén hozz létre saját AI-t szörnyeknek. Csináltass velük parkour-t, vagy menő particle támadásokat könnyen kóddal!",
+
+    "world-title": "Világ Generátor API",
+    "world-description": "Tudjuk, hogy egy saját világ generátor elkészítése nem egy könnyű feladat. Ezért gondoltuk, hogy ezen a folyamaton is megpróbálunk könnyíteni egy letisztult rendszerrel és használatra kész építőkockákkal.",
+
+    "utils-title": "Hasznosságok",
+    "utils-description": "Az Icicle kisegítő osztályai is elérhetők a használatra. Tartalmaznak eszközöket és megoldásokat olyan problémákra amelyeket egyébként StackOverflowról másolnál ki úgy is.",
+
+    "module-title": "Modul-alapú",
+    "module-description": "Az Icicle csak azt tölti le/frissíti/tölti be ami kell a betöltött modulokhoz, ezáltal csökkenti a teljes féjlméretet.",
+
+    "custom-title": "Rendkívül Testreszabható",
+    "custom-description": "Testreszabhatósággal tervezve, ezúton minden része az Iciclenek szabályozható, - igen, a törzs is - még a beépített funkciók is cserélhetők a sajátokkal.",
+
+    "more-title": "És még sok több",
+    "more-description": "A lista csak megy és megy. A lehetőségek végtelenek, főleg egy nagy közösséggel mögötte.\nCsatlakozz és légy része közünknek!",
+
+    "demo-title": "Nem hiszed el?",
+    "demo-subtitle": "Éld át te magad!",
+
+    "demo-dep-title": "Függőség injektálás",
+    "demo-dep-description": "Engedd, hogy produktivitásod szárnyaljon az Icicle sok kisegítő lehetőségével, de mindenek közt a legfontosabb a dependency injection rendszerünk.\n\nKöss szolgáltatásokat a Bukkit ServiceManagerjéből, ezzel tovább könnyítve a meglévő API-ok kezelését.",
+
+    "demo-config-title": "Konfigurációk létrehozása",
+    "demo-config-description": "Ne vesztegess időt egy több-fájlos konfigurációs rendszer megírásával a 100. alkalommal.\nMentsd meg magad attól a sok fejfájástól a mi intuitív konfigurációs rendszerünkkel, ami az Icicle szívéve van építve.\n\nÁllíts be alap értékeket, adj instrukciókat kommentekkel, és a legfontosabb, adj magadnak egy kis szünetet a konfigurációs rendszerekkel balhézásból.",
+
+    "demo-cmd-title": "Parancsok létrehozása",
+    "demo-cmd-description": "Hozz létre komplex interakciókat, vagy dobj össze egy teszt parancsot gyorsan az Icicle-el! A mi command rendszerünk a lehető legerősebbre lett tervezve, a lehető legtöbb segítséggel, amikhez tartoznak pl. a /help generálás, a parancs predikció és bemenet validáció\n\nTartsd kódod szabadon a middleware-ekkel és egy nagy listányi testreszabhatósággal.",
+
+    "demo-transl-title": "Innovatív fordító rendszer",
+    "demo-transl-description": "Tedd fordítóid boldoggá az innovatív fordítü rendszerünkkel.\nMostantól a fordítóidnak nem kell minden lehetőséget hardcode-olniuk, elég írniuk egy rövid scriptet amivel automatizálni tudják.\n\nÁllíts paramétereket, hagyd a logikát a fordítókra.",
+
+    "copyright": "Copyright &copy; 2022 IceyLeagons. Minden jog fenntartva."
+}
