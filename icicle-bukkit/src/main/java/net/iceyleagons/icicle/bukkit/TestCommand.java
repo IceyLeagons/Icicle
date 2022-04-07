@@ -43,7 +43,7 @@ import java.util.Arrays;
  * @version 1.0.0
  * @since Dec. 12, 2021
  */
-@CommandManager("test")
+@CommandManager(value = "test", printExceptionStackTrace = true)
 public class TestCommand {
 
     public TestCommand(TranslationService translationService) {

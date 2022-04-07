@@ -46,6 +46,7 @@ import net.iceyleagons.icicle.core.translations.TranslationService;
 import net.iceyleagons.icicle.core.utils.Defaults;
 import net.iceyleagons.icicle.utilities.ArrayUtils;
 import net.iceyleagons.icicle.utilities.ListUtils;
+import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
@@ -55,6 +56,7 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
@@ -135,17 +137,19 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
             Parameter param = parameters[i];
 
             if (param.getType().isArray()) {
-                // TODO VERY BROKEN FIX!!!!!!
-                Object[] array = new Object[args.length - argsCounter];
+                final Class<?> compType = param.getType().getComponentType();
+
+                Object array = GenericUtils.createGenericArrayWithoutCasting(compType, args.length - argsCounter); //new Object[args.length - argsCounter];
                 for (int j = argsCounter; j < args.length; j++) {
-                    array[j - argsCounter] = this.commandService.resolveParameter(param.getType(), param, this, args[argsCounter], commandSender);
+                    Array.set(array, j - argsCounter, this.commandService.resolveParameter(compType, param, this, args[j], commandSender));
                 }
 
-                System.out.println(Arrays.toString(array));
                 params[i] = array; // TODO this needs testing
                 break;
             } else if (param.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.params.CommandSender.class)) {
                 params[i] = param.getType().isInstance(commandSender) ? param.getType().cast(commandSender) : null;
+                System.out.println("Sender: " + argsCounter);
+                continue;
             } else if (param.isAnnotationPresent(FlagOptional.class)) {
                 FlagOptional flagOptional = param.getAnnotation(FlagOptional.class);
                 String flag = flagOptional.value();
