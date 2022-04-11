@@ -130,9 +130,19 @@ public class NMSHandler {
         for (Method declaredMethod : methods) {
             if (declaredMethod.isAnnotationPresent(Wrapping.class)) {
                 Wrapping wrapping = declaredMethod.getAnnotation(Wrapping.class);
+                if (wrapping.isStatic()) {
+                    suppliers.put(declaredMethod, handleMethodWrapping(null, wrapping, clazz, declaredMethod));
+                    continue;
+                }
+
                 suppliers.put(declaredMethod, handleMethodWrapping(origin, wrapping, clazz, declaredMethod));
             } else if (declaredMethod.isAnnotationPresent(FieldWrapping.class)) {
                 FieldWrapping wrapping = declaredMethod.getAnnotation(FieldWrapping.class);
+                if (wrapping.isStatic()) {
+                    suppliers.put(declaredMethod, handleFieldWrapping(null, wrapping, clazz, declaredMethod));
+                    continue;
+                }
+
                 suppliers.put(declaredMethod, handleFieldWrapping(origin, wrapping, clazz, declaredMethod));
             } else if (declaredMethod.isAnnotationPresent(OriginGetter.class)) {
                 suppliers.put(declaredMethod, WrapSupplier.createOriginSupplier(origin));
@@ -177,7 +187,12 @@ public class NMSHandler {
             WrapSupplier<Object> supplier = methodWrapSupplierEntry.getValue();
 
             if (method.isAnnotationPresent(FieldWrapping.class)) {
-                builder = builder.define(method).intercept(FixedValue.value(supplier.supply(null)));
+                //if (method.getAnnotation(FieldWrapping.class).isSetter()) {
+                builder = builder.define(method).intercept(MethodDelegation.to(new MethodDelegator(supplier)));
+               // }
+
+                // This is probably not needed as the one above is more general and hopefully works. Famous last word ~TOTH
+                // builder = builder.define(method).intercept(FixedValue.value(supplier.supply(null)));
                 continue;
             }
 

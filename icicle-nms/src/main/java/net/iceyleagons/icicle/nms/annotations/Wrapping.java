@@ -41,4 +41,5 @@ public @interface Wrapping {
     String value();
 
     String[] paramTypes() default {};
+    boolean isStatic() default false;
 }
