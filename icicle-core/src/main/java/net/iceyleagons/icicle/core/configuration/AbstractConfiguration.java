@@ -25,11 +25,13 @@
 package net.iceyleagons.icicle.core.configuration;
 
 import lombok.Setter;
+import net.iceyleagons.icicle.core.annotations.PostConstruct;
 import net.iceyleagons.icicle.core.annotations.config.ConfigComment;
 import net.iceyleagons.icicle.core.annotations.config.ConfigField;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
+import net.iceyleagons.icicle.utilities.file.FileUtils;
 import org.simpleyaml.configuration.file.YamlFile;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
 
@@ -66,6 +68,10 @@ public abstract class AbstractConfiguration implements Configuration {
             this.file = new YamlFile(configFile.asFile());
             if (!file.exists()) {
                 this.file.createNewFile(true);
+                if (this.header != null) {
+                    FileUtils.appendFile(configFile.getPath(), this.header.split("\n"));
+                }
+
                 this.file.loadWithComments();
             }
 
@@ -128,7 +134,7 @@ public abstract class AbstractConfiguration implements Configuration {
             Object value = entry.getValue();
 
             if (!file.contains(path)) {
-                System.out.println("Setting \"" + path + "\" to " + value);
+                //System.out.println("Setting \"" + path + "\" to " + value);
                 file.set(path, value);
             }
         });

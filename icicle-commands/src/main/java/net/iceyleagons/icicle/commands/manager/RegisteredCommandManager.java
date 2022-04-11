@@ -35,6 +35,7 @@ import net.iceyleagons.icicle.commands.annotations.manager.SubCommand;
 import net.iceyleagons.icicle.commands.annotations.meta.Alias;
 import net.iceyleagons.icicle.commands.annotations.meta.Description;
 import net.iceyleagons.icicle.commands.annotations.meta.Usage;
+import net.iceyleagons.icicle.commands.annotations.params.Concat;
 import net.iceyleagons.icicle.commands.annotations.params.FlagOptional;
 import net.iceyleagons.icicle.commands.annotations.params.Optional;
 import net.iceyleagons.icicle.commands.exception.CommandNotFoundException;
@@ -148,8 +149,11 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
                 break;
             } else if (param.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.params.CommandSender.class)) {
                 params[i] = param.getType().isInstance(commandSender) ? param.getType().cast(commandSender) : null;
-                System.out.println("Sender: " + argsCounter);
-                continue;
+            } else if (param.isAnnotationPresent(Concat.class)) {
+                String[] array = new String[args.length - argsCounter];
+                if (args.length - argsCounter >= 0) System.arraycopy(args, argsCounter, array, 0, args.length - argsCounter);
+
+                params[i] = String.join(" ", array);
             } else if (param.isAnnotationPresent(FlagOptional.class)) {
                 FlagOptional flagOptional = param.getAnnotation(FlagOptional.class);
                 String flag = flagOptional.value();

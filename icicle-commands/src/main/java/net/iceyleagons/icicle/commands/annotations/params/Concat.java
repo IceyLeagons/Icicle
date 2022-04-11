@@ -22,41 +22,20 @@
  * SOFTWARE.
  */
 
-plugins {
-    java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
-}
+package net.iceyleagons.icicle.commands.annotations.params;
 
-group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-val spigotVersion = "1.18.1"
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-repositories {
-    mavenCentral()
-    spigot()
-    jitpack()
-}
+/**
+ * @since Nov. 1, 2021
+ */
+@Target(PARAMETER)
+@Retention(RUNTIME)
+public @interface Concat {
 
-dependencies {
-    compileOnly("io.netty:netty-all:4.1.72.Final")
-    testImplementation("com.github.seeseemelk:MockBukkit-v1.18:1.21.2")
 
-    shadow(project(":icicle-core"))
-    shadow(project(":icicle-commands"))
-    shadow(project(":icicle-protocol"))
-    shadow(project(":icicle-nms"))
-    compileOnly(project(":icicle-utilities"))
-
-    spigotApi(spigotVersion)
-    lombok()
-}
-
-icicle {
-    isModifyPluginYml = false
-
-}
-
-tasks.test {
-    useJUnitPlatform()
 }

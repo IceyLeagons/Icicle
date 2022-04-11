@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.nms.utils;
 
+import net.iceyleagons.icicle.core.utils.Defaults;
 import net.iceyleagons.icicle.nms.annotations.CraftWrap;
 import net.iceyleagons.icicle.nms.annotations.NMSWrap;
 import net.iceyleagons.icicle.utilities.AdvancedClass;
@@ -69,6 +70,9 @@ public class ClassHelper {
         try {
             return Class.forName(name);
         } catch (ClassNotFoundException e) {
+            Class<?> clazz = Defaults.getPrimitiveClassFromName(name);
+            if (clazz != null) return clazz;
+
             logger.warning("Class " + name + " was not found due to: ");
             e.printStackTrace();
             return null;

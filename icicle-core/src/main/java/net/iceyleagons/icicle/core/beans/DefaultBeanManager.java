@@ -360,6 +360,7 @@ public class DefaultBeanManager implements BeanManager {
             Object[] parameters = this.constructorParameterResolver.resolveConstructorParameters(constructor, getBeanRegistry());
             Object bean = BeanUtils.instantiateClass(constructor, this.beanProxyHandler, parameters);
 
+            BeanUtils.invokePostConstructor(beanClass, bean);
             this.registerBean(beanClass, bean);
             callBeanMethodsInsideBean(beanClass, bean);
         }

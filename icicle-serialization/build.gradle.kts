@@ -46,7 +46,7 @@ dependencies {
     shadow("org.json:json:20210307")
     shadow("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
     // https://mvnrepository.com/artifact/org.mongodb/bson
-    shadow("org.mongodb:bson:4.5.0")
+    compileOnly("org.mongodb:bson:4.5.0")
 
     lombok()
 

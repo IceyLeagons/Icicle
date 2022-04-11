@@ -92,6 +92,7 @@ public abstract class AbstractIcicleApplication implements Application {
 
         PerformanceLog.begin(this, "Application start", AbstractIcicleApplication.class);
         this.beanManager.scanAndCreateBeans();
+        onConstructed();
         PerformanceLog.end(this);
     }
 
@@ -101,6 +102,8 @@ public abstract class AbstractIcicleApplication implements Application {
         this.beanManager.cleanUp();
         this.configurationEnvironment.cleanUp();
     }
+
+    protected void onConstructed() {}
 
     /**
      * @return the bean manager used by this application.

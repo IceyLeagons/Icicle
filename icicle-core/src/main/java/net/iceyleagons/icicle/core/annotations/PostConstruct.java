@@ -22,45 +22,20 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.utils;
+package net.iceyleagons.icicle.core.annotations;
 
-import java.util.Map;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Utility class to hold all the default values for all the primitive types to be used when autowiring.
- *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Aug. 23, 2021
+ * @since Nov. 28, 2021
  */
-public final class Defaults {
-
-    public static final Map<Class<?>, Object> DEFAULT_TYPE_VALUES;
-    public static final Map<String, Class<?>> CLASSES;
-
-    static {
-        DEFAULT_TYPE_VALUES = Map.of(
-                boolean.class, false,
-                byte.class, (byte) 0,
-                short.class, (short) 0,
-                int.class, 0,
-                long.class, 0L,
-                float.class, 0f,
-                double.class, 0d,
-                char.class, (char) 0);
-        CLASSES = Map.of(
-                "boolean", boolean.class,
-                "byte", byte.class,
-                "short", short.class,
-                "int", int.class,
-                "long", long.class,
-                "float", float.class,
-                "double", double.class,
-                "char", char.class
-        );
-    }
-
-    public static Class<?> getPrimitiveClassFromName(String name) {
-        return CLASSES.getOrDefault(name.toLowerCase(), null);
-    }
+@Target(METHOD)
+@Retention(RUNTIME)
+public @interface PostConstruct {
 }

@@ -57,6 +57,7 @@ public class MavenLibraryLoader {
     }
 
     public static void init(ClassLoader classLoader) {
+        if (acl != null) return;
         acl = AdvancedClassLoaders.get((URLClassLoader) classLoader);
     }
 

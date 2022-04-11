@@ -61,7 +61,7 @@ public class ReplaceBlockAction extends Action {
         val typeRaw = blockData.cast(material.createBlockData());
         val type = typeRaw.getClass().getDeclaredMethod("getState").invoke(typeRaw);
 
-        super.sendPacketToTarget(protocolService, protocolService.getNMSHandler().wrap(PacketPlayOutBlockChange.class, 0, location, type));
+        super.sendPacketToTarget(protocolService, protocolService.getNMSHandler().wrap(PacketPlayOutBlockChange.class, 0, location, type).getOrigin());
     }
 
     @Override

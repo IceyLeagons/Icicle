@@ -37,7 +37,7 @@ import net.iceyleagons.icicle.nms.wrap.server.WrappedDataWatcher;
  * @version 1.0.0
  * @since Dec. 23, 2021
  */
-@NMSWrap("server.level.Entity")
+@NMSWrap("server.level.EntityPlayer")
 public interface WrappedEntityPlayer {
 
     //@Wrapping(value = "networkManager", isField = true) TODO?? not found in 1.18

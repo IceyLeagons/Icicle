@@ -26,18 +26,9 @@ package net.iceyleagons.icicle.serialization;
 
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
-import net.iceyleagons.icicle.serialization.serializers.impl.BsonSerializer;
 import net.iceyleagons.icicle.serialization.serializers.impl.JsonSerializer;
-import net.iceyleagons.icicle.serialization.serializers.impl.YamlSerializer;
 import net.iceyleagons.icicle.utilities.Benchmark;
-import org.json.JSONObject;
-import org.simpleyaml.configuration.file.YamlFile;
-import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -51,17 +42,12 @@ public class Test {
 
     @SneakyThrows
     public static void main(String[] args) {
-        JsonSerializer jsonSerializer = new JsonSerializer();
+        JsonSerializer jsonSerializer = new JsonSerializer(true);
         ObjectMapper mapper = new ObjectMapper();
 
         Test1 original = new Test1();
-        Benchmark.run(() -> {
-            new YamlSerializer().serializeToPath(original, new File("test.yml").toPath());
-            return null;
-        }, "serialization");
-
-
-
+        String out = Benchmark.run(() -> jsonSerializer.serializeToString(original), "serialization");
+        System.out.println(out);
 /*
         System.out.println(original.test + " <--> " + demap.test);
         System.out.println(Arrays.toString(original.test2) + " <--> " + Arrays.toString(demap.test2));

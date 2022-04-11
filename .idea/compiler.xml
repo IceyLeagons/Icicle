@@ -26,6 +26,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
+      <module name="icicle.icicle-demo.main" target="16" />
+      <module name="icicle.icicle-demo.test" target="16" />
       <module name="icicle.icicle-gui" target="16" />
       <module name="icicle.icicle-gui.main" target="16" />
       <module name="icicle.icicle-gui.test" target="16" />

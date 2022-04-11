@@ -25,9 +25,11 @@
 package net.iceyleagons.icicle.bukkit;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import net.iceyleagons.icicle.bukkit.impl.BukkitExecutionHandler;
 import net.iceyleagons.icicle.bukkit.impl.BukkitServiceProvider;
 import net.iceyleagons.icicle.core.AbstractIcicleApplication;
+import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.nms.NMSHandler;
 import net.iceyleagons.icicle.nms.wrap.player.WrappedCraftPlayer;
 import org.bukkit.Bukkit;
@@ -51,6 +53,14 @@ public class BukkitApplication extends AbstractIcicleApplication {
         super.getBeanManager().getBeanRegistry().registerBean(Plugin.class, javaPlugin);
         super.getBeanManager().getBeanRegistry().registerBean(JavaPlugin.class, javaPlugin);
         super.getBeanManager().getBeanRegistry().registerBean(PluginManager.class, Bukkit.getPluginManager()); //removed due to the introduction of GlobalBeanRegistry
+
+        // javaPlugin.getDescription().getMain()
+    }
+
+    @Override
+    @SneakyThrows
+    protected void onConstructed() {
+        BeanUtils.invokePostConstructor(Class.forName(javaPlugin.getDescription().getMain()), javaPlugin);
     }
 
     @Override

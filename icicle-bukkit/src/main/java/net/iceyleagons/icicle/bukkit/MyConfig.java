@@ -22,19 +22,29 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.protocol;
+package net.iceyleagons.icicle.bukkit;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import net.iceyleagons.icicle.core.annotations.config.Config;
+import net.iceyleagons.icicle.core.annotations.config.ConfigComment;
+import net.iceyleagons.icicle.core.annotations.config.ConfigField;
+import net.iceyleagons.icicle.core.configuration.AbstractConfiguration;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Mar. 29, 2022
+ * @since Apr. 09, 2022
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ProtocolFunction {
+@Config(value = "config.yml", headerLines = {"You can even add headers!"})
+public class MyConfig extends AbstractConfiguration {
+
+    @ConfigField("settings.prefix")
+    @ConfigComment("Change the prefix of the demo.")
+    public String prefix = "DefaultPrefix";
+
+    @ConfigField("settings.auto-update")
+    public boolean autoUpdate = true;
+
+    void asd() {
+        boolean asd = (boolean) super.get("settings.prefix");
+    }
 }

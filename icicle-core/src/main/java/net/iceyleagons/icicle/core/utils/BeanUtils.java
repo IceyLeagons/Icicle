@@ -27,6 +27,7 @@ package net.iceyleagons.icicle.core.utils;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.annotations.AutoCreate;
 import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
+import net.iceyleagons.icicle.core.annotations.PostConstruct;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
@@ -78,6 +79,18 @@ public final class BeanUtils {
         }
 
         return set;
+    }
+
+    public static void invokePostConstructor(Class<?> clazz, Object parent) {
+        Arrays.stream(clazz.getDeclaredMethods())
+                .filter(m -> m.isAnnotationPresent(PostConstruct.class))
+                .forEach(m -> {
+                    try {
+                        m.invoke(parent);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 
     /**
