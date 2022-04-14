@@ -76,6 +76,7 @@ public class ObjectMapper {
                 ReflectionUtils.set(value.getField(), object, collection);
             } else if (value.isMap()) {
                 Object demapped = demapMap(GenericUtils.genericArrayToNormalArray(value.getValue(), Object.class), value.getJavaType());
+                ReflectionUtils.set(value.getField(), object, demapped);
             } else if (value.isSubObject()) {
                 Object demapped = demapObject((SerializedObject) value.getValue(), Object.class);
                 ReflectionUtils.set(value.getField(), object, demapped);
@@ -98,7 +99,7 @@ public class ObjectMapper {
                 Object converted = convert(value.getValue(), value.getField(), true);
                 value.setValue(SerializationUtils.isValuePrimitiveOrString(converted.getClass()) ? converted : mapObject(converted));
             } else if (value.isArray() && !value.isCollection()) {
-                value.setValue(mapArray(GenericUtils.genericArrayToNormalArray(value.getValue(), Object.class)));
+                value.setValue(mapArray(genericArrayToNormalArray(value.getValue(), Object.class)));
             } else if (value.isCollection()) {
                 Object[] collection = value.getValueAs(Collection.class).toArray();
                 value.setValue(mapArray(collection));

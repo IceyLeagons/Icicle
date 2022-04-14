@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.translations.code.functions;
 
+@FunctionalInterface
 public interface SizeFilter {
 
     boolean isAllowed(int size);

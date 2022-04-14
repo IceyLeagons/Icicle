@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.translations.code.functions;
 
+@FunctionalInterface
 public interface ReturnValueSupplier {
 
     String get(String val1, String val2);

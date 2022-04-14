@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.translations;
 
+@FunctionalInterface
 public interface TranslationStringProvider {
 
     String get(String language, String key, String defaultValue);

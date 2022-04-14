@@ -25,7 +25,9 @@
 package net.iceyleagons.icicle.utilities;
 
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
+import net.iceyleagons.icicle.utilities.lang.Experimental;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
@@ -36,6 +38,17 @@ import java.util.Arrays;
  * @since Nov. 06, 2021
  */
 public final class ArrayUtils {
+
+    @Experimental
+    public static Object appendToGenericArray(Object array, Class<?> type, Object... toAppend) {
+        final int length = Array.getLength(array);
+        final Object result = GenericUtils.createGenericArrayWithoutCasting(type, length + toAppend.length);
+
+        System.arraycopy(array, 0, result, 0, length);
+        System.arraycopy(toAppend, 0, result, length, toAppend.length);
+
+        return result;
+    }
 
     @SuppressWarnings("unchecked")
     public static <T> T[] appendToArray(T[] list, T... toAppend) {
