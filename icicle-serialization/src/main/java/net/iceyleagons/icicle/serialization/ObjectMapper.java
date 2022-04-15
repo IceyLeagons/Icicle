@@ -38,6 +38,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+import static net.iceyleagons.icicle.utilities.generic.GenericUtils.genericArrayToNormalArray;
+
+
 /**
  * @author TOTHTOMI
  * @version 1.0.0
@@ -66,16 +69,16 @@ public class ObjectMapper {
             } else if (value.isValuePrimitiveOrString()) {
                 ReflectionUtils.set(value.getField(), object, value.getValue());
             } else if (value.isArray() && !value.isCollection()) {
-                Object demapped = demapArray(GenericUtils.genericArrayToNormalArray(value.getValue(), Object.class), value.getJavaType().getComponentType());
+                Object demapped = demapArray(genericArrayToNormalArray(value.getValue(), Object.class), value.getJavaType().getComponentType());
                 ReflectionUtils.set(value.getField(), object, demapped);
             } else if (value.isCollection()) {
-                Object demapped = demapArray(GenericUtils.genericArrayToNormalArray(value.getValue(), Object.class), Object.class);
+                Object demapped = demapArray(genericArrayToNormalArray(value.getValue(), Object.class), Object.class);
 
                 Collection<Object> collection = (Collection<Object>) SerializationUtils.createCollectionFromType(value.getJavaType());
-                collection.addAll(Arrays.asList(GenericUtils.genericArrayToNormalArray(demapped, Object.class)));
+                collection.addAll(Arrays.asList(genericArrayToNormalArray(demapped, Object.class)));
                 ReflectionUtils.set(value.getField(), object, collection);
             } else if (value.isMap()) {
-                Object demapped = demapMap(GenericUtils.genericArrayToNormalArray(value.getValue(), Object.class), value.getJavaType());
+                Object demapped = demapMap(genericArrayToNormalArray(value.getValue(), Object.class), value.getJavaType());
                 ReflectionUtils.set(value.getField(), object, demapped);
             } else if (value.isSubObject()) {
                 Object demapped = demapObject((SerializedObject) value.getValue(), Object.class);
