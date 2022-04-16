@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.bukkit;
 
+import lombok.SneakyThrows;
 import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.meta.PlayerOnly;
@@ -31,6 +32,7 @@ import net.iceyleagons.icicle.commands.annotations.params.CommandSender;
 import net.iceyleagons.icicle.commands.annotations.params.Concat;
 import net.iceyleagons.icicle.commands.annotations.params.FlagOptional;
 import net.iceyleagons.icicle.commands.annotations.validators.Range;
+import net.iceyleagons.icicle.core.annotations.execution.Async;
 import net.iceyleagons.icicle.core.translations.TranslationService;
 import net.iceyleagons.icicle.core.translations.impl.file.FileStringProvider;
 import net.iceyleagons.icicle.core.translations.impl.file.separated.CSVLanguageFile;
@@ -39,12 +41,16 @@ import net.iceyleagons.icicle.protocol.action.Settings;
 import net.iceyleagons.icicle.protocol.action.impl.FreezeScreenAction;
 import net.iceyleagons.icicle.protocol.action.impl.ReplaceBlockAction;
 import net.iceyleagons.icicle.protocol.service.ProtocolService;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 /**
  * @author TOTHTOMI
@@ -54,14 +60,16 @@ import java.util.Objects;
 @CommandManager(value = "test", printExceptionStackTrace = true)
 public class TestCommand {
 
+    private final JavaPlugin plugin;
     private final ProtocolService protocolService;
 
-    public TestCommand(TranslationService translationService, ProtocolService protocolService) {
+    public TestCommand(JavaPlugin plugin, TranslationService translationService, ProtocolService protocolService) {
         FileStringProvider provider = new FileStringProvider(
                 new CSVLanguageFile(new File("strings-en.csv"), "en", true)
         );
 
         translationService.setTranslationStringProvider(provider);
+        this.plugin = plugin;
         this.protocolService = protocolService;
     }
 
@@ -92,6 +100,24 @@ public class TestCommand {
                         .with(Settings.MATERIAL, Material.SPONGE)
         );
         this.protocolService.executeAction(action);
+    }
+
+    @PlayerOnly
+    @Command("async")
+    public void testCommand() {
+        System.out.println("Calling");
+        nonBlockingTest(System.out::println);
+        System.out.println("Calling end");
+    }
+
+
+    @Async
+    @SneakyThrows
+    public void nonBlockingTest(Consumer<String> result) {
+        System.out.println("Entered non-blocking");
+        Thread.sleep(5000L);
+        result.accept("hello");
+        System.out.println("Exited non-blocking");
     }
 
     /*

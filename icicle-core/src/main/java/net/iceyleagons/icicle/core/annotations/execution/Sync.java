@@ -33,4 +33,31 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(METHOD)
 @Retention(RUNTIME)
 public @interface Sync {
+
+    /**
+     * <b>WARNING!</b> Setting blocking to true and calling the method from the main thread
+     * is not recommended in Bukkit environments, as it may/will cause the server to freeze up.
+     * <b>In general we don't recommend setting this to true, due the the following reason:</b>
+     *
+     * We recommend using a Consumer in the parameters and passing the value through that.
+     * Ex.
+     * <code>
+     *      @Sync
+     *      public void demo(Consumer cons) {
+     *          cons.accept(something);
+     *      }
+     * </code>
+     *
+     * Even though returns are supported, we highly recommend using the method above for non-blocking as well. If you prefer not to, then:
+     *
+     * If the method is executed in a non-blocking way, the return type must be an Object.
+     * Reason is that we call the original method (and it should return the proper value), but the proxy will return a CompletableFuture,
+     * so where the method is called you need to cast it to CompletableFuture. As we don't have a compiler plugin just yet, this is a workaround, but will result in warnings, so hopefully you get why we
+     * recommend the consumer solution.
+     *
+     * @deprecated should not be set to true, you've been warned. Use consumers in parameters instead!
+     * @return true if the method should be run sync in a blocking way, or false to not join in.
+     */
+    boolean blocking() default false;
+
 }

@@ -28,12 +28,17 @@ import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.SuperCall;
+import net.iceyleagons.icicle.core.annotations.execution.Async;
+import net.iceyleagons.icicle.core.annotations.execution.Sync;
 import net.iceyleagons.icicle.core.annotations.execution.extra.After;
 import net.iceyleagons.icicle.core.annotations.execution.extra.Periodically;
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
+import net.iceyleagons.icicle.utilities.ReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -47,7 +52,8 @@ public class SyncDelegation {
     private final ExecutionHandler executionHandler;
 
     @RuntimeType
-    public Object run(@SuperCall Callable<?> callable, @Origin Method method) {
+    public Object run(@SuperCall Callable<?> callable, @Origin Method method) throws ExecutionException, InterruptedException {
+        CompletableFuture<?> future;
         if (method.isAnnotationPresent(Periodically.class)) {
             final Periodically period = method.getAnnotation(Periodically.class);
 
@@ -60,12 +66,28 @@ public class SyncDelegation {
             }
 
             //periodical execution only returns the first time it gets run
-            return executionHandler.runSyncPeriodically(callable, period.unit(), period.period(), delayUnit, delay).join();
+            future = executionHandler.runSyncPeriodically(callable, period.unit(), period.period(), delayUnit, delay);
         } else if (method.isAnnotationPresent(After.class)) {
             After after = method.getAnnotation(After.class);
-            return executionHandler.runSyncAfter(callable, after.unit(), after.delay()).join();
+            future = executionHandler.runSyncAfter(callable, after.unit(), after.delay());
+        } else {
+            future = executionHandler.runSync(callable);
         }
 
-        return executionHandler.runSync(callable).join();
+        Class<?> type = method.getReturnType();
+        if (type.equals(Void.class)) return null;
+
+
+        boolean blocking = method.getAnnotation(Sync.class).blocking();
+        if (blocking) {
+            if (future.isDone()) {
+                return ReflectionUtils.castIfNecessary(type, future.get());
+            }
+
+            Object result = future.join(); // This may cause server to lock up, see javadoc of @Sync
+            return ReflectionUtils.castIfNecessary(type, result);
+        }
+
+        return ReflectionUtils.castIfNecessary(type, future);
     }
 }
