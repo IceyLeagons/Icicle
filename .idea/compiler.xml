@@ -18,7 +18,6 @@
         <module name="icicle.icicle-commands.main" />
         <module name="icicle.icicle-utilities.main" />
         <module name="icicle.icicle-bukkit.main" />
-        <module name="icicle.icicle-database.main" />
         <module name="icicle.icicle-core.main" />
         <module name="icicle.icicle-serialization.main" />
         <module name="icicle.icicle-protocol.main" />
@@ -26,6 +25,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
+      <module name="icicle.icicle-database" target="16" />
+      <module name="icicle.icicle-database.main" target="16" />
+      <module name="icicle.icicle-database.test" target="16" />
       <module name="icicle.icicle-demo.main" target="16" />
       <module name="icicle.icicle-demo.test" target="16" />
       <module name="icicle.icicle-gui" target="16" />
