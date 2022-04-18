@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,31 @@
  * SOFTWARE.
  */
 
-plugins {
-    java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
-}
+package net.iceyleagons.icicle.gui.components.impl.bars;
 
-group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
+import lombok.EqualsAndHashCode;
+import net.iceyleagons.icicle.utilities.MathUtils;
+import org.bukkit.inventory.ItemStack;
 
-val spigotVersion = "1.18.1"
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Apr. 18, 2022
+ */
+@EqualsAndHashCode(callSuper = false)
+public class PercentageBar extends ProgressBar {
 
-repositories {
-    mavenCentral()
-    spigot()
-    jitpack()
-}
+    public PercentageBar(int x, int y, ItemStack filled, ItemStack background) {
+        super(x, y, filled, background);
+    }
 
-dependencies {
-    implementation(project(":icicle-core"))
-    implementation(project(":icicle-utilities"))
-    compileOnly("org.jetbrains:annotations:20.1.0")
-    spigotApi(spigotVersion)
-    lombok()
-}
+    public PercentageBar(int x, int y, int w, int h, ItemStack filled, ItemStack background) {
+        super(x, y, w, h, filled, background);
+    }
 
-icicle {
-    name = "Minecraft Commands"
-
-    dependencyNotation = "net.iceyleagons:icicle-addon-commands:$version"
-    version = project.version.toString()
-    description = "A complete command framework ready-to-use in your project!"
-    developers = listOf("TOTHTOMI", "Gabe")
-
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
-}
-
-tasks.test {
-    useJUnitPlatform()
+    @Override
+    public PercentageBar setValue(int value) {
+        super.setValue(MathUtils.map(value, 0, 100, 1, super.getWidth()));
+        return this;
+    }
 }

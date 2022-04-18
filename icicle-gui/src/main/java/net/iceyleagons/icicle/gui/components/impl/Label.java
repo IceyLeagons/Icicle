@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,36 @@
  * SOFTWARE.
  */
 
-plugins {
-    java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
-}
+package net.iceyleagons.icicle.gui.components.impl;
 
-group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
+import lombok.EqualsAndHashCode;
+import net.iceyleagons.icicle.gui.DrawUtils;
+import net.iceyleagons.icicle.gui.Pane;
+import net.iceyleagons.icicle.gui.components.GuiComponent;
+import org.bukkit.inventory.ItemStack;
 
-val spigotVersion = "1.18.1"
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Apr. 17, 2022
+ */
+@EqualsAndHashCode(callSuper = false)
+public class Label extends GuiComponent {
 
-repositories {
-    mavenCentral()
-    spigot()
-    jitpack()
-}
+    private final ItemStack itemStack;
 
-dependencies {
-    implementation(project(":icicle-core"))
-    implementation(project(":icicle-utilities"))
-    compileOnly("org.jetbrains:annotations:20.1.0")
-    spigotApi(spigotVersion)
-    lombok()
-}
+    public Label(int x, int y, ItemStack itemStack) {
+        super(x, y);
+        this.itemStack = itemStack;
+    }
 
-icicle {
-    name = "Minecraft Commands"
+    public Label(int x, int y, int w, int h, ItemStack itemStack) {
+        super(x, y, w, h);
+        this.itemStack = itemStack;
+    }
 
-    dependencyNotation = "net.iceyleagons:icicle-addon-commands:$version"
-    version = project.version.toString()
-    description = "A complete command framework ready-to-use in your project!"
-    developers = listOf("TOTHTOMI", "Gabe")
-
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
-}
-
-tasks.test {
-    useJUnitPlatform()
+    @Override
+    public void draw(Pane pane, int xOff, int yOff, int mW, int mH) {
+        DrawUtils.basicLabelDraw(pane, getX(), getY(), xOff, yOff, getWidth(), getHeight(), mW, mH, this.itemStack);
+    }
 }

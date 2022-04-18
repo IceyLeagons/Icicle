@@ -67,4 +67,20 @@ public final class MathUtils {
         //localNumber *= (1.5f - xh * localNumber * localNumber);
         return localNumber;
     }
+
+    /**
+     * Clamps the value between the min and max values
+     *
+     * @param value to clamp
+     * @param min   the minimum value
+     * @param max   the maximum value
+     * @return value if it's between min and max otherwise min or max
+     */
+    public static float clamp(float value, float min, float max) {
+        return value < min ? min : (Math.min(value, max));
+    }
+
+    public static int map(int value, int in_min, int in_max, int out_min, int out_max) {
+        return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
 }

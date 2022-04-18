@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,39 @@
  * SOFTWARE.
  */
 
-plugins {
-    java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
-}
+package net.iceyleagons.icicle.gui.components.impl;
 
-group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
+import lombok.EqualsAndHashCode;
+import net.iceyleagons.icicle.gui.GuiInteractEvent;
+import net.iceyleagons.icicle.gui.components.GuiComponent;
+import net.iceyleagons.icicle.gui.components.Interactable;
 
-val spigotVersion = "1.18.1"
+import java.util.function.Consumer;
 
-repositories {
-    mavenCentral()
-    spigot()
-    jitpack()
-}
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Apr. 17, 2022
+ */
+@EqualsAndHashCode(callSuper = false)
+public abstract class Button extends GuiComponent implements Interactable {
 
-dependencies {
-    implementation(project(":icicle-core"))
-    implementation(project(":icicle-utilities"))
-    compileOnly("org.jetbrains:annotations:20.1.0")
-    spigotApi(spigotVersion)
-    lombok()
-}
+    public Button(int x, int y) {
+        super(x, y);
+    }
 
-icicle {
-    name = "Minecraft Commands"
+    public Button(int x, int y, int w, int h) {
+        super(x, y, w, h);
+    }
 
-    dependencyNotation = "net.iceyleagons:icicle-addon-commands:$version"
-    version = project.version.toString()
-    description = "A complete command framework ready-to-use in your project!"
-    developers = listOf("TOTHTOMI", "Gabe")
+    protected abstract Consumer<GuiInteractEvent> getClickHandler();
 
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
-}
+    @Override
+    public void onClick(GuiInteractEvent guiInteractEvent) {
+        Consumer<GuiInteractEvent> onClicked = getClickHandler();
 
-tasks.test {
-    useJUnitPlatform()
+        if (onClicked != null) {
+            onClicked.accept(guiInteractEvent);
+        }
+    }
 }

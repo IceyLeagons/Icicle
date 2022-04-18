@@ -21,6 +21,7 @@
         <module name="icicle.icicle-core.main" />
         <module name="icicle.icicle-serialization.main" />
         <module name="icicle.icicle-protocol.main" />
+        <module name="icicle.icicle-gui.main" />
         <module name="icicle.icicle-nms.main" />
       </profile>
     </annotationProcessing>
@@ -30,9 +31,6 @@
       <module name="icicle.icicle-database.test" target="16" />
       <module name="icicle.icicle-demo.main" target="16" />
       <module name="icicle.icicle-demo.test" target="16" />
-      <module name="icicle.icicle-gui" target="16" />
-      <module name="icicle.icicle-gui.main" target="16" />
-      <module name="icicle.icicle-gui.test" target="16" />
       <module name="icicle.icicle-pathing" target="16" />
       <module name="icicle.icicle-pathing.main" target="16" />
       <module name="icicle.icicle-pathing.test" target="16" />

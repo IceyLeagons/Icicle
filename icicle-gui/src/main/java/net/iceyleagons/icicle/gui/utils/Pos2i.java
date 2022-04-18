@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,45 @@
  * SOFTWARE.
  */
 
-plugins {
-    java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
-}
+package net.iceyleagons.icicle.gui.utils;
 
-group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import net.iceyleagons.icicle.utilities.MathUtils;
+import org.jetbrains.annotations.Contract;
 
-val spigotVersion = "1.18.1"
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Apr. 17, 2022
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Pos2i {
 
-repositories {
-    mavenCentral()
-    spigot()
-    jitpack()
-}
+    private int x;
+    private int y;
 
-dependencies {
-    implementation(project(":icicle-core"))
-    implementation(project(":icicle-utilities"))
-    compileOnly("org.jetbrains:annotations:20.1.0")
-    spigotApi(spigotVersion)
-    lombok()
-}
+    public int toInventorySlot(int rowSize) {
+        return InventoryUtils.calculateSlotFromXY(x, y, rowSize);
+    }
 
-icicle {
-    name = "Minecraft Commands"
+    public Pos2i rotateClockwise(int rot, int w, int h) {
+        return InventoryUtils.rotateClockwise(x, y, w, h, rot);
+    }
 
-    dependencyNotation = "net.iceyleagons:icicle-addon-commands:$version"
-    version = project.version.toString()
-    description = "A complete command framework ready-to-use in your project!"
-    developers = listOf("TOTHTOMI", "Gabe")
+    public Pos2i rotateCounterClockwise(int rot, int w, int h) {
+        return InventoryUtils.rotateCounterClockwise(x, y, w, h, rot);
+    }
 
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
-}
+    public static Pos2i from(int slot, int rowSize) {
+        return InventoryUtils.calculateXYFromSlot(slot, rowSize);
+    }
 
-tasks.test {
-    useJUnitPlatform()
+    @Override
+    public String toString() {
+        return "Pos2i[x=" + x + ", y=" + y + "]";
+    }
 }

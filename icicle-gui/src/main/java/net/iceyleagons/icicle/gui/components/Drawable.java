@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,21 @@
  * SOFTWARE.
  */
 
-plugins {
-    java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
-}
+package net.iceyleagons.icicle.gui.components;
 
-group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
+import net.iceyleagons.icicle.gui.Pane;
 
-val spigotVersion = "1.18.1"
+/**
+ * Drawable components are the ones that can put an item in the inventory.
+ * In most cases this will be implemented directly or indirectly via {@link GuiComponent}.
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Apr. 17, 2022
+ * @see GuiComponent
+ */
+public interface Drawable {
 
-repositories {
-    mavenCentral()
-    spigot()
-    jitpack()
-}
+    void draw(Pane pane, int xOff, int yOff, int mW, int mH);
 
-dependencies {
-    implementation(project(":icicle-core"))
-    implementation(project(":icicle-utilities"))
-    compileOnly("org.jetbrains:annotations:20.1.0")
-    spigotApi(spigotVersion)
-    lombok()
-}
-
-icicle {
-    name = "Minecraft Commands"
-
-    dependencyNotation = "net.iceyleagons:icicle-addon-commands:$version"
-    version = project.version.toString()
-    description = "A complete command framework ready-to-use in your project!"
-    developers = listOf("TOTHTOMI", "Gabe")
-
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
-}
-
-tasks.test {
-    useJUnitPlatform()
 }

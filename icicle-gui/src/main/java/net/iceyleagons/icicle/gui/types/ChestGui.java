@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,32 @@
  * SOFTWARE.
  */
 
-plugins {
-    java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
-}
+package net.iceyleagons.icicle.gui.types;
 
-group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
+import net.iceyleagons.icicle.gui.GUI;
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.plugin.java.JavaPlugin;
 
-val spigotVersion = "1.18.1"
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Apr. 17, 2022
+ */
+public class ChestGui extends GUI {
 
-repositories {
-    mavenCentral()
-    spigot()
-    jitpack()
-}
+    private final String title;
+    private final int size;
 
-dependencies {
-    implementation(project(":icicle-core"))
-    implementation(project(":icicle-utilities"))
-    compileOnly("org.jetbrains:annotations:20.1.0")
-    spigotApi(spigotVersion)
-    lombok()
-}
+    public ChestGui(String title, int size, JavaPlugin javaPlugin, boolean global) {
+        super(javaPlugin, global, 9, size);
+        this.title = title;
+        this.size = size;
+    }
 
-icicle {
-    name = "Minecraft Commands"
-
-    dependencyNotation = "net.iceyleagons:icicle-addon-commands:$version"
-    version = project.version.toString()
-    description = "A complete command framework ready-to-use in your project!"
-    developers = listOf("TOTHTOMI", "Gabe")
-
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
-}
-
-tasks.test {
-    useJUnitPlatform()
+    @Override
+    protected Inventory getInventory(InventoryHolder holder) {
+        return Bukkit.createInventory(holder, this.size, this.title);
+    }
 }

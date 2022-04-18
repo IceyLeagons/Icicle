@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,29 @@
  * SOFTWARE.
  */
 
-plugins {
-    java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
-}
+package net.iceyleagons.icicle.gui;
 
-group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
+/**
+ * StateAware objects have the ability to become dirty, so basically updated.
+ * A rerender must only be executed when the target StateAware object is dirty.
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Apr. 17, 2022
+ */
+public interface StateAware {
 
-val spigotVersion = "1.18.1"
+    /**
+     * @return true if the object is dirty, and requires GUI update.
+     */
+    boolean isDirty();
 
-repositories {
-    mavenCentral()
-    spigot()
-    jitpack()
-}
+    /**
+     * Sets the current state of the object.
+     *
+     * @param dirty the value to set to.
+     * @see #isDirty()
+     */
+    void setDirty(boolean dirty);
 
-dependencies {
-    implementation(project(":icicle-core"))
-    implementation(project(":icicle-utilities"))
-    compileOnly("org.jetbrains:annotations:20.1.0")
-    spigotApi(spigotVersion)
-    lombok()
-}
-
-icicle {
-    name = "Minecraft Commands"
-
-    dependencyNotation = "net.iceyleagons:icicle-addon-commands:$version"
-    version = project.version.toString()
-    description = "A complete command framework ready-to-use in your project!"
-    developers = listOf("TOTHTOMI", "Gabe")
-
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
-}
-
-tasks.test {
-    useJUnitPlatform()
 }

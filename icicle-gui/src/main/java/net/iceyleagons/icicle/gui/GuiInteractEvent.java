@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,31 @@
  * SOFTWARE.
  */
 
-plugins {
-    java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
-}
+package net.iceyleagons.icicle.gui;
 
-group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.gui.utils.Pos2i;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
-val spigotVersion = "1.18.1"
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Apr. 17, 2022
+ */
+@Getter
+@RequiredArgsConstructor
+public class GuiInteractEvent {
 
-repositories {
-    mavenCentral()
-    spigot()
-    jitpack()
-}
+    private final GUI gui;
+    private final Pane pane;
+    private final Pos2i clickPosition;
+    private final InventoryClickEvent event;
 
-dependencies {
-    implementation(project(":icicle-core"))
-    implementation(project(":icicle-utilities"))
-    compileOnly("org.jetbrains:annotations:20.1.0")
-    spigotApi(spigotVersion)
-    lombok()
-}
-
-icicle {
-    name = "Minecraft Commands"
-
-    dependencyNotation = "net.iceyleagons:icicle-addon-commands:$version"
-    version = project.version.toString()
-    description = "A complete command framework ready-to-use in your project!"
-    developers = listOf("TOTHTOMI", "Gabe")
-
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
-}
-
-tasks.test {
-    useJUnitPlatform()
+    public void playClickSound(Sound sound) {
+        Player player = (Player) event.getWhoClicked();
+        player.playSound(event.getWhoClicked().getLocation(), sound, 1f, 1);
+    }
 }

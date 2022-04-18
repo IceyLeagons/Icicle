@@ -34,6 +34,8 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
+import static net.iceyleagons.icicle.utilities.ErrorUtils.TODO;
+
 /**
  * Contains basic operations regarding Website connections and requests.
  *
@@ -42,6 +44,10 @@ import java.util.Scanner;
  * @since 1.0.0
  */
 public final class WebUtils {
+
+    public void something() {
+        TODO("This is not implemented bruh");
+    }
 
     /**
      * This will open a connection to the given {@link URL} and generate a string with line separators.

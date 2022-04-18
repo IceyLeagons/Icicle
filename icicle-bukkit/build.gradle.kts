@@ -40,8 +40,8 @@ repositories {
 
 dependencies {
     compileOnly("io.netty:netty-all:4.1.72.Final")
-    testImplementation("com.github.seeseemelk:MockBukkit-v1.18:1.21.2")
 
+    shadow(project(":icicle-gui"))
     shadow(project(":icicle-core"))
     shadow(project(":icicle-commands"))
     shadow(project(":icicle-protocol"))

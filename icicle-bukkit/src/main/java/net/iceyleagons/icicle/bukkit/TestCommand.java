@@ -24,18 +24,21 @@
 
 package net.iceyleagons.icicle.bukkit;
 
-import lombok.SneakyThrows;
 import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
 import net.iceyleagons.icicle.commands.annotations.meta.PlayerOnly;
 import net.iceyleagons.icicle.commands.annotations.params.CommandSender;
 import net.iceyleagons.icicle.commands.annotations.params.Concat;
-import net.iceyleagons.icicle.commands.annotations.params.FlagOptional;
-import net.iceyleagons.icicle.commands.annotations.validators.Range;
-import net.iceyleagons.icicle.core.annotations.execution.Async;
+import net.iceyleagons.icicle.core.annotations.execution.Sync;
+import net.iceyleagons.icicle.core.annotations.execution.extra.Periodically;
 import net.iceyleagons.icicle.core.translations.TranslationService;
 import net.iceyleagons.icicle.core.translations.impl.file.FileStringProvider;
 import net.iceyleagons.icicle.core.translations.impl.file.separated.CSVLanguageFile;
+import net.iceyleagons.icicle.gui.components.impl.bars.ProgressBar;
+import net.iceyleagons.icicle.gui.components.impl.bars.Slider;
+import net.iceyleagons.icicle.gui.components.impl.buttons.LabelButton;
+import net.iceyleagons.icicle.gui.components.impl.buttons.ToggleButton;
+import net.iceyleagons.icicle.gui.types.ChestGui;
 import net.iceyleagons.icicle.protocol.action.Action;
 import net.iceyleagons.icicle.protocol.action.Settings;
 import net.iceyleagons.icicle.protocol.action.impl.FreezeScreenAction;
@@ -44,13 +47,13 @@ import net.iceyleagons.icicle.protocol.service.ProtocolService;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author TOTHTOMI
@@ -61,7 +64,12 @@ import java.util.function.Consumer;
 public class TestCommand {
 
     private final JavaPlugin plugin;
+    private final ChestGui chestGui;
     private final ProtocolService protocolService;
+    private final LabelButton button;
+
+    private final Material[] materials = Material.values();
+    private final Random random = new Random();
 
     public TestCommand(JavaPlugin plugin, TranslationService translationService, ProtocolService protocolService) {
         FileStringProvider provider = new FileStringProvider(
@@ -71,6 +79,33 @@ public class TestCommand {
         translationService.setTranslationStringProvider(provider);
         this.plugin = plugin;
         this.protocolService = protocolService;
+
+        button = new LabelButton(4, 3, 3, 3, new ItemStack(Material.DIAMOND_BLOCK), clicked -> {
+            clicked.getEvent().getWhoClicked().sendMessage("Hello, you've clicked the button :D");
+        });
+
+        chestGui = new ChestGui("Hello", 54, plugin, true);
+        chestGui.createPane()
+                .addComponent(
+                        new Slider(1, 1, 4, 1,
+                                new ItemStack(Material.GREEN_STAINED_GLASS_PANE),
+                                new ItemStack(Material.GRAY_STAINED_GLASS_PANE), (value, event) -> {}).setValue(5)
+                )
+                .addComponent(button)
+                .addComponent(new ToggleButton(1, 3, 1, 1,
+                        new ItemStack(Material.GREEN_DYE),
+                        new ItemStack(Material.RED_DYE),
+                        (val, e) -> {
+                    e.getEvent().getWhoClicked().sendMessage("new value: " + val);
+                }));
+
+        update();
+    }
+
+    @Sync
+    @Periodically(period = 4, unit = TimeUnit.SECONDS)
+    public void update() {
+        this.button.setItemStack(new ItemStack(materials[random.nextInt(materials.length - 1)]));
     }
 
     @PlayerOnly
@@ -103,21 +138,9 @@ public class TestCommand {
     }
 
     @PlayerOnly
-    @Command("async")
-    public void testCommand() {
-        System.out.println("Calling");
-        nonBlockingTest(System.out::println);
-        System.out.println("Calling end");
-    }
-
-
-    @Async
-    @SneakyThrows
-    public void nonBlockingTest(Consumer<String> result) {
-        System.out.println("Entered non-blocking");
-        Thread.sleep(5000L);
-        result.accept("hello");
-        System.out.println("Exited non-blocking");
+    @Command("gui")
+    public void testGui(@CommandSender Player player) {
+        chestGui.open(player);
     }
 
     /*
