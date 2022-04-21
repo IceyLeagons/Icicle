@@ -24,8 +24,6 @@
 
 package net.iceyleagons.icicle.gui.utils;
 
-import org.bukkit.inventory.ItemStack;
-
 import static net.iceyleagons.icicle.utilities.ErrorUtils.ILLEGAL;
 
 /**

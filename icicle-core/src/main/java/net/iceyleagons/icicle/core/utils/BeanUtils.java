@@ -108,8 +108,11 @@ public final class BeanUtils {
         Asserts.notNull(constructor, "Constructor must not be null!");
 
         try {
-            constructor.setAccessible(true);
+            if (beanProxyHandler != null) {
+                constructor = beanProxyHandler.getEnhancedBean(constructor);
+            }
 
+            constructor.setAccessible(true);
 
             Class<?>[] parameterTypes = constructor.getParameterTypes();
             Asserts.isTrue(arguments.length <= parameterTypes.length, "Cannot specify more arguments than constructor parameters!");
@@ -129,11 +132,11 @@ public final class BeanUtils {
                 return Kotlin.instantiateKotlinClass(constructor, argObjects);
             }
 
-            T value = beanProxyHandler == null ? constructor.newInstance(argObjects) : beanProxyHandler.createEnhancedBean(constructor, argObjects);
-            if (value == null)
-                throw new BeanCreationException(constructor, "Resulting value from instance generation is null."); //just in case
+           // T value = constructor.newInstance(argObjects); //beanProxyHandler == null ? constructor.newInstance(argObjects) : beanProxyHandler.createEnhancedBean(constructor, argObjects);
+           // if (value == null)
+            //    throw new BeanCreationException(constructor, "Resulting value from instance generation is null."); //just in case
 
-            return value;
+            return constructor.newInstance(argObjects);
         } catch (InvocationTargetException e) {
             throw new BeanCreationException(constructor, "Constructor execution resulted in an exception.", e);
         } catch (InstantiationException e) {

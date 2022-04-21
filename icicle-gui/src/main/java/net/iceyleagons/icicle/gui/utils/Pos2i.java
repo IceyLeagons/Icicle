@@ -27,8 +27,6 @@ package net.iceyleagons.icicle.gui.utils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.iceyleagons.icicle.utilities.MathUtils;
-import org.jetbrains.annotations.Contract;
 
 /**
  * @author TOTHTOMI

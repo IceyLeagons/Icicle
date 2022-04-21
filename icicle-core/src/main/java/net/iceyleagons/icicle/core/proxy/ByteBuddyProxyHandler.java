@@ -67,6 +67,19 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
 
     @Override
     public <T> T createEnhancedBean(Constructor<T> constructor, Object[] arguments) throws BeanCreationException {
+        try {
+            return getEnhancedBean(constructor).newInstance(arguments);
+        } catch (InvocationTargetException e) {
+            throw new BeanCreationException(constructor, "Constructor execution resulted in an exception.", e);
+        } catch (InstantiationException e) {
+            throw new BeanCreationException(constructor, "Could not instantiate class. (Is it an abstract class?)");
+        } catch (IllegalAccessException e) {
+            throw new BeanCreationException(constructor, "Constructor is not accessible! (Is it accessible/public?)");
+        }
+    }
+
+    @Override
+    public <T> Constructor<T> getEnhancedBean(Constructor<T> constructor) throws BeanCreationException {
         //.with(Implementation.Context.Disabled.Factory.INSTANCE);
         DynamicType.Builder<T> builder = byteBuddy
                 .subclass(constructor.getDeclaringClass());
@@ -86,15 +99,9 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
         try {
             LOGGER.debug("Creating enhanced proxy class.");
 
-            return builder.make()
+            return (Constructor<T>) builder.make()
                     .load(constructor.getDeclaringClass().getClassLoader(), ClassReloadingStrategy.fromInstalledAgent())
-                    .getLoaded().getDeclaredConstructor(constructor.getParameterTypes()).newInstance(arguments);
-        } catch (InvocationTargetException e) {
-            throw new BeanCreationException(constructor, "Constructor execution resulted in an exception.", e);
-        } catch (InstantiationException e) {
-            throw new BeanCreationException(constructor, "Could not instantiate class. (Is it an abstract class?)");
-        } catch (IllegalAccessException e) {
-            throw new BeanCreationException(constructor, "Constructor is not accessible! (Is it accessible/public?)");
+                    .getLoaded().getDeclaredConstructor(constructor.getParameterTypes());
         } catch (NoSuchMethodException e) {
             throw new BeanCreationException(constructor, "Matching constructor in enhanced class can not be found!");
         }

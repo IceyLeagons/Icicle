@@ -24,16 +24,20 @@
 
 package net.iceyleagons.test.icicle.serialization;
 
+import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.serialization.serializers.impl.BsonSerializer;
 import net.iceyleagons.icicle.serialization.serializers.impl.JsonSerializer;
 import net.iceyleagons.icicle.serialization.serializers.impl.YamlSerializer;
 import org.bson.Document;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -43,6 +47,11 @@ import java.nio.file.Path;
  * @since Mar. 14, 2022
  */
 public class SerializationTest {
+
+    @BeforeAll
+    public static void installIcicle() {
+        Icicle.loadIcicle(null);
+    }
 
     @Test
     @DisplayName("JSON (String) - Serialization & Deserialization")

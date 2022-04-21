@@ -46,7 +46,7 @@ public class PercentageBar extends ProgressBar {
 
     @Override
     public PercentageBar setValue(int value) {
-        super.setValue(MathUtils.map(value, 0, 100, 1, super.getWidth()));
+        super.setValue(Math.min(MathUtils.map(value, 0, 100, 1, super.getWidth()), super.getWidth()));
         return this;
     }
 }

@@ -35,6 +35,7 @@ import java.util.Set;
 public interface BeanProxyHandler {
 
     <T> T createEnhancedBean(Constructor<T> constructor, Object[] arguments) throws BeanCreationException;
+    <T> Constructor<T> getEnhancedBean(Constructor<T> constructor) throws BeanCreationException;
 
     Set<MethodAdviceHandlerTemplate> getMethodAdviceHandlers();
 

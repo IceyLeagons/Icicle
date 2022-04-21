@@ -30,6 +30,7 @@ import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
 import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.core.utils.Kotlin;
 import net.iceyleagons.icicle.utilities.lang.Internal;
+import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 
 import java.net.URL;
@@ -101,7 +102,7 @@ public class Icicle {
      * @deprecated internal use only.
      */
     @Internal
-    public static void loadIcicle(ClassLoader classLoader) {
+    public static void loadIcicle(@Nullable ClassLoader classLoader) {
         if (LOADED) {
             throw new IllegalStateException("Icicle is already loaded!");
         }

@@ -32,14 +32,16 @@ import java.util.regex.Pattern;
 
 public class IPDetailsGeoProvider implements LanguageProvider {
 
-    private static final Pattern PATTERN = Pattern.compile("\"country_short\":\"(.*?)\"");
+    private static final Pattern PATTERN = Pattern.compile("\"country_code\":\"(.*?)\"");
     private static final Pattern IP_PATTERN = Pattern.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
-    private static final String URL_PATTERN = "https://free.ipdetails.io/%ip%";
+    private static final String URL_PATTERN = "https://reallyfreegeoip.org/json/%ip%";
 
     @Override
     public String getLanguage(Object key) {
         if (IP_PATTERN.matcher(key.toString()).matches()) {
-            String webResponse = WebUtils.readURL(URL_PATTERN.replaceAll("%ip%", key.toString()));
+            String webResponse = WebUtils.readURL(URL_PATTERN.replaceAll("%ip%", key.toString()), 500);
+            if (webResponse == null || webResponse.isEmpty()) return null;
+
             Matcher matcher = PATTERN.matcher(webResponse);
             if (matcher.find()) {
                 return matcher.group(1);
