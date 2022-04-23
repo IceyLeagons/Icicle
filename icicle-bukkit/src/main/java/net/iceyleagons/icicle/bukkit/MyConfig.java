@@ -43,8 +43,4 @@ public class MyConfig extends AbstractConfiguration {
 
     @ConfigField("settings.auto-update")
     public boolean autoUpdate = true;
-
-    void asd() {
-        boolean asd = (boolean) super.get("settings.prefix");
-    }
 }

@@ -63,21 +63,26 @@ public abstract class AbstractIcicleApplication implements Application {
     private final BeanManager beanManager;
     private final ConfigurationEnvironment configurationEnvironment;
 
+    public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler, GlobalServiceProvider globalServiceProvider) {
+        this(rootPackage, executionHandler, globalServiceProvider, new File("configs"));
+    }
+
     /**
      * Instantiates a new instance of the base application
      *
      * @param rootPackage           the package in which all the icicle annotated classes are contained. <i>(Icicle searches through subclasses as well.)</i>
      * @param executionHandler      an instance of a {@link net.iceyleagons.icicle.core.utils.ExecutionHandler} fully implemented.
      * @param globalServiceProvider an instance of a {@link net.iceyleagons.icicle.core.beans.GlobalServiceProvider}.
+     * @param configRoot            the root folder, where the configs will be placed
      */
-    public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler, GlobalServiceProvider globalServiceProvider) {
+    public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler, GlobalServiceProvider globalServiceProvider, File configRoot) {
         PerformanceLog.begin(this, "Application Creation", AbstractIcicleApplication.class);
         this.reflections = new Reflections(rootPackage).merge(Icicle.ICICLE_REFLECTIONS);
         this.beanManager = new DefaultBeanManager(this);
         this.executionHandler = executionHandler;
         this.globalServiceProvider = globalServiceProvider;
 
-        this.configurationEnvironment = new ConfigurationEnvironmentImpl(new AdvancedFile(new File("configs"), true).asFile()); //TODO once Bukkit API is present
+        this.configurationEnvironment = new ConfigurationEnvironmentImpl(new AdvancedFile(configRoot, true).asFile()); //TODO once Bukkit API is present
 
         this.beanManager.getBeanRegistry().registerBean(Application.class, this); //registering self instance
         this.beanManager.getBeanRegistry().registerBean(ConfigurationEnvironment.class, configurationEnvironment);

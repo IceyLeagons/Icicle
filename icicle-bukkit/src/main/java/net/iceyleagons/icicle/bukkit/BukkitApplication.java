@@ -39,13 +39,15 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+
 @Getter
 public class BukkitApplication extends AbstractIcicleApplication {
 
     private final JavaPlugin javaPlugin;
 
     public BukkitApplication(String rootPackage, JavaPlugin javaPlugin) {
-        super(rootPackage, new BukkitExecutionHandler(javaPlugin), new BukkitServiceProvider());
+        super(rootPackage, new BukkitExecutionHandler(javaPlugin), new BukkitServiceProvider(), javaPlugin.getDataFolder());
         this.javaPlugin = javaPlugin;
 
         super.getBeanManager().getBeanRegistry().registerBean(Server.class, javaPlugin.getServer()); //removed due to the introduction of GlobalBeanRegistry

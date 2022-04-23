@@ -30,6 +30,7 @@ import net.iceyleagons.icicle.utilities.Asserts;
 import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,7 @@ public class ModuleMetadata {
 
     // private static final List<ModuleMetadata> loadedModules = new ArrayList<>();
 
-    public ModuleMetadata(InputStream inputStream, File file) {
+    public ModuleMetadata(InputStream inputStream, File file) throws IOException {
         val yamlFile = YamlFile.loadConfiguration(inputStream);
 
         // Required stuff...

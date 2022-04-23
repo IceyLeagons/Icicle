@@ -56,11 +56,11 @@ dependencies {
 
 
     compileOnly("ch.qos.logback:logback-core:1.2.9")
-    compileOnly("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
+    compileOnly("me.carleslc.Simple-YAML:Simple-Yaml:1.8")
 
     lombok()
 
-    testImplementation("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
+    testImplementation("me.carleslc.Simple-YAML:Simple-Yaml:1.8")
     testImplementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.20")
     testImplementation("org.slf4j:slf4j-api:1.7.32")

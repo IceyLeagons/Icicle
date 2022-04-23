@@ -178,11 +178,7 @@ public class DefaultBeanManager implements BeanManager {
             configuration.setOrigin(object);
             configuration.setOriginType(config);
 
-            if (annotation.headerLines().length != 0) {
-                configuration.setHeader(String.join("\n", annotation.headerLines()));
-            }
-
-            configuration.afterConstruct();
+            configuration.afterConstruct(annotation);
             this.application.getConfigurationEnvironment().addConfiguration(configuration);
             PerformanceLog.end(application);
         }

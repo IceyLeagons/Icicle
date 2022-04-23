@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
     compileOnly("org.jetbrains:annotations:20.1.0")
+    compileOnly("org.slf4j:slf4j-api:1.7.32")
     spigotApi(spigotVersion)
     lombok()
 }

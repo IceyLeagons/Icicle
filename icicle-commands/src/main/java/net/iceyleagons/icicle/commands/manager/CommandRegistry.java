@@ -31,6 +31,8 @@ import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.meta.Alias;
 import net.iceyleagons.icicle.commands.exception.CommandNotFoundException;
 import net.iceyleagons.icicle.commands.command.RegisteredCommand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -43,6 +45,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @RequiredArgsConstructor
 public class CommandRegistry {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandRegistry.class);
 
     private final RegisteredCommandManager commandManager;
     @Getter
@@ -72,8 +76,19 @@ public class CommandRegistry {
 
     public void registerSubCommand(RegisteredCommandManager manager, String... aliases) {
         if (!manager.getCommandManager().isSubCommand()) return;
-        subCommands.put(manager.getCommandManager().value(), manager);
+
+        String cmd = manager.getCommandManager().value();
+        if (subCommands.containsKey(cmd)) {
+            LOGGER.warn("CommandRegistry for main command: {}, already contains a sub-command: {}. Overwriting...", this.commandManager.getCommandManager().value(), cmd);
+        }
+
+        subCommands.put(cmd, manager);
+
         for (String alias : aliases) {
+            if (subCommands.containsKey(alias)) {
+                LOGGER.warn("CommandRegistry for main command: {}, already contains an alias ({}) for sub-command: {}. Overwriting...", this.commandManager.getCommandManager().value(), alias, cmd);
+            }
+
             subCommands.put(alias, manager);
         }
     }
@@ -90,6 +105,10 @@ public class CommandRegistry {
 
     public void registerCommand(RegisteredCommand command) throws CommandInjectionException {
         for (String allCommandName : command.getAllCommandNames()) {
+            if (commands.containsKey(allCommandName)) {
+                LOGGER.warn("CommandRegistry for main command: {}, already contains a sub-command: {}. Overwriting...", this.commandManager.getCommandManager().value(), allCommandName);
+            }
+
             commands.put(allCommandName.toLowerCase(), command);
         }
     }

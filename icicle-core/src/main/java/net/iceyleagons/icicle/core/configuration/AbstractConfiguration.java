@@ -25,13 +25,15 @@
 package net.iceyleagons.icicle.core.configuration;
 
 import lombok.Setter;
-import net.iceyleagons.icicle.core.annotations.PostConstruct;
+import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.config.ConfigComment;
 import net.iceyleagons.icicle.core.annotations.config.ConfigField;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.iceyleagons.icicle.utilities.file.FileUtils;
+import org.simpleyaml.configuration.comments.format.YamlCommentFormat;
+import org.simpleyaml.configuration.comments.format.YamlHeaderFormatter;
 import org.simpleyaml.configuration.file.YamlFile;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
 
@@ -60,9 +62,13 @@ public abstract class AbstractConfiguration implements Configuration {
     private YamlFile file;
 
     @Override
-    public void afterConstruct() {
+    public void afterConstruct(Config annotation) {
         Asserts.notNull(configFile, "Config file must not be null!");
         Asserts.isTrue(!configFile.isDirectory(), "Config file must not be a folder!");
+
+        if (annotation.headerLines().length != 0) {
+            setHeader(String.join("\n", annotation.headerLines()));
+        }
 
         try {
             this.file = new YamlFile(configFile.asFile());
@@ -75,10 +81,20 @@ public abstract class AbstractConfiguration implements Configuration {
                 this.file.loadWithComments();
             }
 
+            applyHeaderOptions(annotation);
             loadDefaultValues();
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (IOException e) {
             throw new IllegalStateException("Could not load Configuration described by " + originType.getName(), e);
         }
+    }
+
+    private void applyHeaderOptions(Config ann) {
+        final YamlHeaderFormatter formatter = file.options().headerFormatter();
+
+        if (!ann.headerPrefixFirst().isEmpty()) formatter.prefixFirst(ann.headerPrefixFirst());
+        if (!ann.headerCommentPrefix().isEmpty()) formatter.commentPrefix(ann.headerCommentPrefix());
+        if (!ann.headerCommentSuffix().isEmpty()) formatter.commentSuffix(ann.headerCommentSuffix());
+        if (!ann.headerSuffixLast().isEmpty()) formatter.suffixLast(ann.headerSuffixLast());;
     }
 
     @Override
@@ -103,7 +119,7 @@ public abstract class AbstractConfiguration implements Configuration {
     public void reload() {
         try {
             reloadFromConfig();
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (IOException e) {
             throw new IllegalStateException("Could not reload config described by: " + originType.getName(), e);
         }
     }
@@ -127,7 +143,9 @@ public abstract class AbstractConfiguration implements Configuration {
         Set<Field> fields = getFields();
         Set<Map.Entry<String, Object>> values = getValues(fields);
 
-        if (header != null) file.options().header(header);
+        if (header != null) {
+            file.setHeader(header);
+        }
 
         values.forEach((entry) -> {
             String path = entry.getKey();
@@ -139,6 +157,7 @@ public abstract class AbstractConfiguration implements Configuration {
             }
         });
 
+        file.setCommentFormat(YamlCommentFormat.PRETTY);
         fields.stream().filter(f -> f.isAnnotationPresent(ConfigComment.class)).forEach(f -> {
             String path = f.getAnnotation(ConfigField.class).value();
             ConfigComment comment = f.getAnnotation(ConfigComment.class);

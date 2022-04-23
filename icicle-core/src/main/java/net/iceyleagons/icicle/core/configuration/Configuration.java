@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.configuration;
 
+import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 
@@ -53,6 +54,6 @@ public interface Configuration {
     void setHeader(String header);
 
     @Internal
-    void afterConstruct();
+    void afterConstruct(Config annotation);
 
 }

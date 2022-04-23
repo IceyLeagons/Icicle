@@ -71,7 +71,7 @@ public class Icicle {
     public static final MavenDependency[] CORE_DEPENDENCIES = new MavenDependency[]{
             new MavenDependency("net.bytebuddy", "byte-buddy", "1.11.15", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("net.bytebuddy", "byte-buddy-agent", "1.11.15", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
-            new MavenDependency("me.carleslc.Simple-YAML", "Simple-Yaml", "1.7.2", MavenLibraryLoader.MAVEN_JITPACK),
+            new MavenDependency("me.carleslc.Simple-YAML", "Simple-Yaml", "1.8", MavenLibraryLoader.MAVEN_JITPACK),
             new MavenDependency("ch.qos.logback", "logback-core", "1.2.9", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("org.jetbrains.kotlin", "kotlin-reflect", "1.5.31", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("org.jetbrains.kotlin", "kotlin-stdlib", "1.6.20", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
