@@ -71,7 +71,12 @@ public class SerializationTest {
 
         Assertions.assertNotNull(clone.subObject);
         Assertions.assertEquals(original.subObject.name, clone.subObject.name);
-        Assertions.assertIterableEquals(original.mapTest.entrySet(), clone.mapTest.entrySet());
+
+        Assertions.assertTrue(original.mapTest.containsKey("testkey"));
+        Assertions.assertTrue(original.mapTest.containsKey("key2"));
+        Assertions.assertEquals(original.mapTest.get("testkey"), clone.mapTest.get("testkey"));
+        Assertions.assertEquals(original.mapTest.get("key2"), clone.mapTest.get("key2"));
+
     }
 
 
@@ -96,7 +101,10 @@ public class SerializationTest {
         Assertions.assertEquals(original.subObject.name, clone.subObject.name);
 
 
-        Assertions.assertIterableEquals(original.mapTest.entrySet(), clone.mapTest.entrySet());
+        Assertions.assertTrue(original.mapTest.containsKey("testkey"));
+        Assertions.assertTrue(original.mapTest.containsKey("key2"));
+        Assertions.assertEquals(original.mapTest.get("testkey"), clone.mapTest.get("testkey"));
+        Assertions.assertEquals(original.mapTest.get("key2"), clone.mapTest.get("key2"));
     }
 
     @Test
@@ -119,7 +127,10 @@ public class SerializationTest {
 
         Assertions.assertNotNull(clone.subObject);
         Assertions.assertEquals(original.subObject.name, clone.subObject.name);
-        Assertions.assertIterableEquals(original.mapTest.entrySet(), clone.mapTest.entrySet());
+        Assertions.assertTrue(original.mapTest.containsKey("testkey"));
+        Assertions.assertTrue(original.mapTest.containsKey("key2"));
+        Assertions.assertEquals(original.mapTest.get("testkey"), clone.mapTest.get("testkey"));
+        Assertions.assertEquals(original.mapTest.get("key2"), clone.mapTest.get("key2"));
 
         try {
             Files.delete(file);
