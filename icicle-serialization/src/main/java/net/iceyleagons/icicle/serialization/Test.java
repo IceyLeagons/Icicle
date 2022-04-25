@@ -27,8 +27,11 @@ package net.iceyleagons.icicle.serialization;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.serialization.serializers.impl.JsonSerializer;
+import net.iceyleagons.icicle.serialization.serializers.impl.NBTSerializer;
 import net.iceyleagons.icicle.utilities.Benchmark;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -42,26 +45,24 @@ public class Test {
 
     @SneakyThrows
     public static void main(String[] args) {
-        JsonSerializer jsonSerializer = new JsonSerializer(true);
-        ObjectMapper mapper = new ObjectMapper();
-
+        NBTSerializer nbt = new NBTSerializer();
         Test1 original = new Test1();
-        String out = Benchmark.run(() -> jsonSerializer.serializeToString(original), "serialization");
-        System.out.println(out);
-/*
-        System.out.println(original.test + " <--> " + demap.test);
-        System.out.println(Arrays.toString(original.test2) + " <--> " + Arrays.toString(demap.test2));
-        System.out.println(original.test3 + " <--> " + demap.test3);
-        System.out.println(Arrays.toString(original.test4) + " <--> " + Arrays.toString(demap.test4));
-        System.out.println(Arrays.toString(original.test5.toArray(String[]::new)) + " <--> " + Arrays.toString(demap.test5.toArray(String[]::new)));
-        System.out.println(original.test6.test2 + " <--> " + demap.test6.test2);
-        System.out.println(Arrays.toString(original.test7.entrySet().toArray()) + " <--> " + Arrays.toString(demap.test7.entrySet().toArray()));
 
-        System.out.println();
-        System.out.println("Serialized: ");
-        System.out.println(serialized.toString(2));
+        nbt.serializeToPath(original, new File("test.nbt").toPath());
+        Test1 serialized = nbt.deserializeFromPath(new File("test.nbt").toPath(), Test1.class);
 
- */
+        System.out.println(original.name + " <--> " + serialized.name);
+        System.out.println(Arrays.toString(original.list) + " <--> " + Arrays.toString(serialized.list));
+        System.out.println(original.number + " <--> " + serialized.number);
+        System.out.println(Arrays.toString(original.numberList) + " <--> " + Arrays.toString(serialized.numberList));
+        System.out.println(Arrays.toString(original.stringList.toArray(String[]::new)) + " <--> " + Arrays.toString(original.stringList.toArray(String[]::new)));
+        System.out.println(original.subObject.name + " <--> " + serialized.subObject.name);
+        System.out.println(Arrays.toString(original.mapTest.entrySet().toArray(Map.Entry[]::new)) + " <--> " + Arrays.toString(original.mapTest.entrySet().toArray(Map.Entry[]::new)));
+
+
+        System.out.println("Equals: " + original.equals(serialized));
+
+
     }
 
     @EqualsAndHashCode
@@ -73,6 +74,7 @@ public class Test {
         public List<String> stringList = Arrays.asList("test1", "test2", "test3");
         public Test2 subObject = new Test2();
         public Map<String, String> mapTest = Map.of("testkey", "testvalue", "key2", "value2");
+
     }
 
     @EqualsAndHashCode

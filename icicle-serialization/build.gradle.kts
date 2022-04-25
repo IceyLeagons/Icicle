@@ -31,6 +31,7 @@ version = "0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    iglooSnapshots()
     jitpack()
 }
 
@@ -41,11 +42,16 @@ dependencies {
 
     implementation("org.slf4j:slf4j-api:1.7.32")
     implementation("org.jetbrains:annotations:20.1.0")
+    implementation("net.iceyleagons:nbtlib:1.2-SNAPSHOT")
 
     // File handling APIs (TODO some of these may already be shadowed in core, we don't want duplicates -> fix)
     shadow("org.json:json:20210307")
-    shadow("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
-    // https://mvnrepository.com/artifact/org.mongodb/bson
+
+    // runtimeOnly("com.google.guava:guava:31.1-jre") // Used for testing
+   //  runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.5.31") // Used for testing
+    // runtimeOnly("org.jetbrains.kotlin:kotlin-stdlib:1.6.20") // Used for testing
+
+    compileOnly("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
     compileOnly("org.mongodb:bson:4.5.0")
 
     lombok()

@@ -46,5 +46,10 @@
       <option name="name" value="maven" />
       <option name="url" value="https://hub.spigotmc.org/nexus/content/repositories/public/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="Icicle Igloo Snapshots" />
+      <option name="name" value="Icicle Igloo Snapshots" />
+      <option name="url" value="https://mvn.iceyleagons.net/snapshots/" />
+    </remote-repository>
   </component>
 </project>
