@@ -68,13 +68,16 @@
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.css"
         integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ=="
+
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
 </head>
 
 <body style="overflow-y: hidden;">
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-    <script src="assets/js/localizer.js"></script>
+
+
     <nav class="navbar">
         <div class="row between-xs">
             <div class="col-xs-3 col-lg-3">
@@ -83,11 +86,14 @@
             <div class="col-xs-1 col-lg-4"></div>
             <div class="col-xs-8 col-lg-5" style="margin-top: 1.3rem; text-align: right;">
                 <!-- TODO: make this sh*t responsive -->
-                <a id="nav-source" class="nav-link nav-link-collapse" href="https://github.com/IceyLeagons/iciclev2">Source</a>
-                <a id="nav-doc" class="nav-link nav-link-collapse" href="https://docs.iceyleagons.net/icicle/">Documentation</a>
+                <a id="nav-source" class="nav-link nav-link-collapse"
+                    href="https://github.com/IceyLeagons/iciclev2">Source</a>
+                <a id="nav-doc" class="nav-link nav-link-collapse"
+                    href="https://docs.iceyleagons.net/icicle/">Documentation</a>
                 <a id="nav-javadoc" class="nav-link nav-link-collapse" href="#">JavaDoc</a>
                 <a id="nav-mvn" class="nav-link nav-link-collapse" href="https://mvn.iceyleagons.net/">Maven/Gradle</a>
-                <a id="nav-discord" class="nav-link nav-link-collapse" href="https://discord.iceyleagons.net/">Discord</a>
+                <a id="nav-discord" class="nav-link nav-link-collapse"
+                    href="https://discord.iceyleagons.net/">Discord</a>
                 <a class="nav-resp-collapse nav-link" href="javascript:void(0)" onclick="toggleNav();">&#9776;</a>
                 <label id="theme-switch" class="theme-switch nav-link nav-link-collapse" for="checkbox_theme">
                     <i class="fa-solid fa-circle-half-stroke"></i>
@@ -96,16 +102,21 @@
             </div>
         </div>
         <div class="nav-collapsed" id="responsive-nav-menu">
-            <a id="nav-collapsed-source" class="nav-link" href="https://github.com/IceyLeagons/iciclev2" onclick="toggleNav();">Source</a>
-            <a id="nav-collapsed-doc" class="nav-link" href="https://docs.iceyleagons.net/icicle/" onclick="toggleNav();">Documentation</a>
+            <a id="nav-collapsed-source" class="nav-link" href="https://github.com/IceyLeagons/iciclev2"
+                onclick="toggleNav();">Source</a>
+            <a id="nav-collapsed-doc" class="nav-link" href="https://docs.iceyleagons.net/icicle/"
+                onclick="toggleNav();">Documentation</a>
             <a id="nav-collapsed-javadoc" class="nav-link" href="#" onclick="toggleNav();">JavaDoc</a>
-            <a id="nav-collapsed-mvn" class="nav-link" href="https://mvn.iceyleagons.net/" onclick="toggleNav();">Maven/Gradle</a>
-            <a id="nav-collapsed-discord" class="nav-link" href="https://discord.iceyleagons.net/" onclick="toggleNav();">Discord</a>
+            <a id="nav-collapsed-mvn" class="nav-link" href="https://mvn.iceyleagons.net/"
+                onclick="toggleNav();">Maven/Gradle</a>
+            <a id="nav-collapsed-discord" class="nav-link" href="https://discord.iceyleagons.net/"
+                onclick="toggleNav();">Discord</a>
             <label id="theme-switch2" class="theme-switch nav-link" for="checkbox_theme">
                 <i class="fa-solid fa-circle-half-stroke"></i>
                 <input type="checkbox" id="checkbox_theme">
             </label>
         </div>
+
 
         <script type="text/javascript">
             function toggleNav() {
@@ -118,7 +129,8 @@
             <div class="col-xs-6">
                 <div class="box">
                     <h1 class="title">Icicle</h1>
-                    <h2 class="subtitle" id="typer-start"><div class="typed" style="display: inline;"></div>
+                    <h2 class="subtitle" id="typer-start">
+                        <div class="typed" style="display: inline;"></div>
                     </h2>
                 </div>
                 <div class="row start-xs" style="margin-top: 3rem;">
@@ -131,7 +143,8 @@
                     </div>
                     <div class="col-xs-12 col-md-4 mt">
                         <div class="row center-xs">
-                            <a id="hero-gh" class="button" href="https://github.com/IceyLeagons/iciclev2" target="_blank"></a>
+                            <a id="hero-gh" class="button" href="https://github.com/IceyLeagons/iciclev2"
+                                target="_blank"></a>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-4 mt">
@@ -154,87 +167,86 @@
         <div class="row center-xs">
             <div class="col-xs-10">
                 <div class="feature-list">
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-syringe icon"></i>
                         <h1 class="feature-title" id="dep-inj-title"></h1>
                         <p class="description" id="dep-inj-description"></p>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-sliders icon"></i>
                         <h1 id="conf-title" class="feature-title"></h1>
                         <p id="conf-description" class="description"></p>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-language icon"></i>
                         <h1 id="transl-title" class="feature-title"></h1>
                         <p id="transl-description" class="description"></p>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <img alt="Kotlin Icon" class="icon kotlin" src="assets/imgs/kotlin.svg" />
                         <h1 id="kotlin-title" class="feature-title"></h1>
                         <p id="kotlin-description" class="description"></p>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-terminal icon"></i>
                         <h1 id="cmd-title" class="feature-title"></h1>
                         <p id="cmd-description" class="description"></p>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-network-wired icon"></i>
                         <h1 id="prot-title" class="feature-title"></h1>
                         <p id="prot-description" class="description"></p>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-server icon"></i>
                         <h1 id="nms-title" class="feature-title"></h1>
                         <p id="nms-description" class="description"></p>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-code icon"></i>
                         <h1 id="dev-title" class="feature-title"></h1>
                         <p id="dev-description" class="description"></p>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
+                        <i class="fa-solid fa-arrow-pointer icon"></i>
+                        <h1 id="gui-title" class="feature-title"></h1>
+                        <p id="gui-description" class="description"></p>
+                    </div>
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-database icon"></i>
                         <h1 id="db-title" class="feature-title"></h1>
                         <div class="banner"></div>
                         <p id="db-description" class="description"></p>
                     </div>
-                    <div class="feature">
-                        <i class="fa-solid fa-arrow-pointer icon"></i>
-                        <h1 id="gui-title" class="feature-title"></h1>
-                        <div class="banner"></div>
-                        <p id="gui-description" class="description"></p>
-                    </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-robot icon"></i>
                         <h1 id="ai-title" class="feature-title"></h1>
                         <div class="banner"></div>
                         <p id="ai-description" class="description"></p>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-earth-americas icon"></i>
                         <h1 id="world-title" class="feature-title"></h1>
                         <div class="banner"></div>
                         <p id="world-description" class="description"></p>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-toolbox icon"></i>
                         <h1 id="utils-title" class="feature-title"></h1>
                         <p id="utils-description" class="description"></p>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-box icon"></i>
                         <h1 id="module-title" class="feature-title"></h1>
                         <p id="module-description" class="description"></p>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-brush icon"></i>
                         <h1 id="custom-title" class="feature-title"></h1>
                         <p id="custom-description" class="description"></p>
                     </div>
                     <!-- Add feature: highly customizable -->
-                    <div class="feature">
+                    <div class="feature" data-aos="fade-up">
                         <i class="fa-solid fa-infinity icon"></i>
                         <h1 id="more-title" class="feature-title"></h1>
                         <p id="more-description" class="description"></p>
@@ -243,14 +255,41 @@
             </div>
         </div>
     </section>
+
+    <section class="award">
+        <svg width="100%" height="100%" id="svg" viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg"
+            class="wave up">
+            <path
+                d="M 0,400 C 0,400 0,200 0,200 C 122.03827751196172,163.23444976076553 244.07655502392345,126.46889952153109 334,136 C 423.92344497607655,145.53110047846891 481.73205741626793,201.35885167464116 563,226 C 644.2679425837321,250.64114832535884 748.9952153110047,244.09569377990428 844,239 C 939.0047846889953,233.90430622009572 1024.287081339713,230.25837320574166 1122,224 C 1219.712918660287,217.74162679425834 1329.8564593301435,208.87081339712915 1440,200 C 1440,200 1440,400 1440,400 Z"
+                stroke="none" stroke-width="0"></path>
+        </svg>
+        <div class="row center-xs" style="margin-top: -4rem;">
+            <div class="col-xs-6">
+                <div class="sziiv" data-aos="flip-up">
+                    <img class="sziiv" src="./assets/imgs/sziiv.png" />
+                </div>
+                <h1 id="award-title" class="title" data-aos="fade-up"></h1>
+                <p id="award-description" style="font-size: 2rem" data-aos="fade-down">
+
+                </p>
+            </div>
+            <svg width="100%" height="100%" id="svg" viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg"
+                class="wave">
+                <path
+                    d="M 0,400 C 0,400 0,200 0,200 C 122.03827751196172,163.23444976076553 244.07655502392345,126.46889952153109 334,136 C 423.92344497607655,145.53110047846891 481.73205741626793,201.35885167464116 563,226 C 644.2679425837321,250.64114832535884 748.9952153110047,244.09569377990428 844,239 C 939.0047846889953,233.90430622009572 1024.287081339713,230.25837320574166 1122,224 C 1219.712918660287,217.74162679425834 1329.8564593301435,208.87081339712915 1440,200 C 1440,200 1440,400 1440,400 Z"
+                    stroke="none" stroke-width="0"></path>
+            </svg>
+        </div>
+    </section>
+
     <section class="demo">
         <div class="row center-xs" style="margin-bottom: 2rem;">
-            <div class="col-xs-6">
+            <div class="col-xs-6" data-aos="fade-up">
                 <h1 id="demo-title" class="title2"></h1>
                 <h2 id="demo-subtitle"></h2>
             </div>
         </div>
-        <div class="row center-xs">
+        <div class="row center-xs" data-aos="zoom-in-up">
             <div class="col-md-4 col-xs-12 middle-xs">
                 <h2 id="demo-dep-title" class="ar"></h2>
                 <p id="demo-dep-description" class="al"></p>
@@ -281,12 +320,12 @@ public class TestServiceImpl implements TestService {
             </div>
             <div class="col-md-1 col-xs-12"></div>
         </div>
-        <div class="row center-xs">
+        <div class="row center-xs" data-aos="zoom-in-up">
             <div class="col-md-1 col-xs-12"></div>
             <div class="col-md-6 col-xs-12">
                 <pre><code class="language-java">
 @Config(value = "config.yml", headerLines = {"You can even add headers!"})
-public class MyConfig {
+public class MyConfig extends AbstractConfiguration {
 
     @ConfigField("settings.prefix")
     @ConfigComment("Change the prefix of the demo.")
@@ -303,7 +342,7 @@ public class MyConfig {
                 <p id="demo-config-description"></p>
             </div>
         </div>
-        <div class="row center-xs">
+        <div class="row center-xs" data-aos="zoom-in-up">
             <div class="col-md-4 col-xs-12 middle-xs">
                 <h2 id="demo-cmd-title" class="ar"></h2>
                 <p id="demo-cmd-description" class="al"></p>
@@ -337,7 +376,7 @@ public class DemoCommand {
             </div>
             <div class="col-md-1 col-xs-12"></div>
         </div>
-        <div class="row center-xs">
+        <div class="row center-xs" data-aos="zoom-in-up">
             <div class="col-md-1 col-xs-12"></div>
             <div class="col-md-6 col-xs-12">
                 <pre><code class="language-java">
@@ -359,7 +398,6 @@ player.sendMessage(
             <div class="col-md-4 col-xs-12 middle-xs al">
                 <h2 id="demo-transl-title"></h2>
                 <p id="demo-transl-description"></p>
-
             </div>
         </div>
     </section>
@@ -393,6 +431,12 @@ player.sendMessage(
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="assets/js/theme.js"></script>
+    <script src="assets/js/localizer.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SC44ZYPS6Y"></script>

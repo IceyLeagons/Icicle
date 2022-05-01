@@ -8,6 +8,8 @@
     --hero-button-text: white;
     --bg-color: #f8f8f8;
     --nav-border: #b7b7b7;
+
+    --bg2-color: blue;
     
     --hero-box: rgba(222, 222, 222, 0.2);
     --bg-img: url("./imgs/bg-light.png");
@@ -251,6 +253,35 @@ p {
     text-align: center;
 }
 
+.award {
+    height: calc(100% - 10rem);
+
+    color: white;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("./imgs/award.jpg") no-repeat fixed center center;
+    background-size: cover;
+}
+
+.award .sziiv {
+    display: flex;
+    justify-content:
+     center;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.award .sziiv img {
+    width: 20%;
+}
+
+.award .wave.up {
+    transform: rotate(180deg);
+}
+
+.award svg {
+    z-index: 1;
+    fill: var(--bg-color) !important;
+}
+
 .demo .row {
     margin-bottom: 10rem;
 }
@@ -293,6 +324,7 @@ p {
     --text-color: #fff;
     --hero-button-text: #fff;
     --bg-color: #333333;
+    --bg2-color: #595959;
     --bg-img: url("./imgs/bg-dark.png");
     --nav-border: #1a1a1a;
     --hero-box: rgba(50, 50, 50, 0.2);

@@ -81,6 +81,9 @@
     "more-title": "És még sok több",
     "more-description": "A lista csak megy és megy. A lehetőségek végtelenek, főleg egy nagy közösséggel mögötte.\nCsatlakozz és légy része közünknek!",
 
+    "award-title": "Díjnyertes",
+    "award-description": "Az Icicle egy díjnyertes keretrendszer.\nAz országos Szegedi Innovatív Informatika Versenyen\n <b>3. helyezést</b> ért el.\n\nA közönségszavazáson 2. helyet szerzett.",
+
     "demo-title": "Nem hiszed el?",
     "demo-subtitle": "Éld át te magad!",
 
@@ -94,7 +97,7 @@
     "demo-cmd-description": "Hozz létre komplex interakciókat, vagy dobj össze egy teszt parancsot gyorsan az Icicle-el! A mi command rendszerünk a lehető legerősebbre lett tervezve, a lehető legtöbb segítséggel, amikhez tartoznak pl. a /help generálás, a parancs predikció és bemenet validáció\n\nTartsd kódod szabadon a middleware-ekkel és egy nagy listányi testreszabhatósággal.",
 
     "demo-transl-title": "Innovatív fordító rendszer",
-    "demo-transl-description": "Tedd fordítóid boldoggá az innovatív fordítü rendszerünkkel.\nMostantól a fordítóidnak nem kell minden lehetőséget hardcode-olniuk, elég írniuk egy rövid scriptet amivel automatizálni tudják.\n\nÁllíts paramétereket, hagyd a logikát a fordítókra.",
+    "demo-transl-description": "Tedd fordítóid boldoggá az innovatív fordító rendszerünkkel.\nMostantól a fordítóidnak nem kell minden lehetőséget hardcode-olniuk, elég írniuk egy rövid scriptet amivel automatizálni tudják.\n\nÁllíts paramétereket, hagyd a logikát a fordítókra.",
 
     "copyright": "Copyright &copy; 2022 IceyLeagons. Minden jog fenntartva."
 }

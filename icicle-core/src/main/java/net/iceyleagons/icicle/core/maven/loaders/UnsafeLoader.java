@@ -32,6 +32,8 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -53,20 +55,20 @@ public class UnsafeLoader implements AdvancedClassLoader {
         }
     }
 
-    private final Collection<URL> unopenedURLs;
-    private final Collection<URL> pathURLs;
+    private final ArrayDeque<URL> unopenedURLs;
+    private final ArrayList<URL> pathURLs;
     private final URLClassLoader origin;
 
     @SuppressWarnings("unchecked")
     public UnsafeLoader(URLClassLoader origin) {
         this.origin = origin;
-        Collection<URL> unopenedURLs;
-        Collection<URL> pathURLs;
+        ArrayDeque<URL> unopenedURLs;
+        ArrayList<URL> pathURLs;
 
         try {
             Object ucp = getField(URLClassLoader.class, origin, "ucp");
-            unopenedURLs = (Collection<URL>) getField(ucp.getClass(), ucp, "unopenedUrls");
-            pathURLs = (Collection<URL>) getField(ucp.getClass(), ucp, "path");
+            unopenedURLs = (ArrayDeque<URL>) getField(ucp.getClass(), ucp, "unopenedUrls");
+            pathURLs = (ArrayList<URL>) getField(ucp.getClass(), ucp, "path");
         } catch (Exception e) {
             unopenedURLs = null;
             pathURLs = null;
@@ -88,8 +90,15 @@ public class UnsafeLoader implements AdvancedClassLoader {
 
     @Override
     public void addUrl(@NonNull URL url) {
-        this.unopenedURLs.add(url);
-        this.pathURLs.add(url);
+        synchronized (unopenedURLs) {
+            if (!pathURLs.contains(url)) {
+                unopenedURLs.addLast(url);
+                pathURLs.add(url);
+            }
+        }
+
+        // this.unopenedURLs.add(url);
+        // this.pathURLs.add(url);
     }
 
     @Override

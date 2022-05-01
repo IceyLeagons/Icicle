@@ -22,8 +22,9 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.gui;
+package net.iceyleagons.icicle.gui.utils;
 
+import net.iceyleagons.icicle.gui.Pane;
 import net.iceyleagons.icicle.utilities.lang.Utility;
 import org.bukkit.inventory.ItemStack;
 
