@@ -50,7 +50,7 @@ public class YamlSerializer implements FileSerializer {
     public void serializeToPath(Object object, Path path) {
         // Am lazy, don't hurt me (this hurts performance btw) - TOTHTOMI
         YamlFile yaml = new YamlFile(path.toFile());
-        yaml.addDefaults(serializer.serialize(object).toMap());
+        serializer.serialize(object).toMap().forEach(yaml::set);
         yaml.save();
     }
 

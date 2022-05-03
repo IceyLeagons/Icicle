@@ -88,6 +88,7 @@ public class SerializationTest {
         Assertions.assertDoesNotThrow(() -> serializer.serializeToPath(original, file));
         TestClass clone = Assertions.assertDoesNotThrow(() -> serializer.deserializeFromPath(file, TestClass.class));
         compare(original, clone);
+
         try {
             Files.delete(file);
         } catch (IOException e) {

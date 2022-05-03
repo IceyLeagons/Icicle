@@ -52,6 +52,7 @@ dependencies {
     lombok()
 
 
+    testImplementation("org.slf4j:slf4j-api:${findProperty("slf4jApiVersion")}")
     testImplementation("org.jetbrains.kotlin:kotlin-reflect:${findProperty("kotlinReflectVersion")}")
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib:${findProperty("kotlinStdlibVersion")}")
     testImplementation("com.google.guava:guava:${findProperty("guavaVersion")}")
