@@ -27,6 +27,7 @@ package net.iceyleagons.test.icicle.serialization;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.serialization.serializers.impl.BsonSerializer;
 import net.iceyleagons.icicle.serialization.serializers.impl.JsonSerializer;
+import net.iceyleagons.icicle.serialization.serializers.impl.NBTSerializer;
 import net.iceyleagons.icicle.serialization.serializers.impl.YamlSerializer;
 import org.bson.Document;
 import org.junit.jupiter.api.Assertions;
@@ -36,8 +37,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -56,29 +55,16 @@ public class SerializationTest {
     @Test
     @DisplayName("JSON (String) - Serialization & Deserialization")
     public void testJson() throws ClassNotFoundException {
-        JsonSerializer serializer = new JsonSerializer();
+        JsonSerializer serializer = new JsonSerializer(true);
         TestClass original = new TestClass();
 
         String serialized = Assertions.assertDoesNotThrow(() -> serializer.serializeToString(original));
+        System.out.println("JSON Output: ");
+        System.out.println(serialized);
+
         TestClass clone = Assertions.assertDoesNotThrow(() -> serializer.deserializeFromString(serialized, TestClass.class));
-
-        Assertions.assertEquals(original.uuid.toString(), clone.uuid.toString());
-        Assertions.assertEquals(original.name, clone.name);
-        Assertions.assertArrayEquals(original.list, clone.list);
-        Assertions.assertEquals(original.number, clone.number);
-        Assertions.assertArrayEquals(original.numberList, clone.numberList);
-        Assertions.assertIterableEquals(original.stringList, clone.stringList);
-
-        Assertions.assertNotNull(clone.subObject);
-        Assertions.assertEquals(original.subObject.name, clone.subObject.name);
-
-        Assertions.assertTrue(original.mapTest.containsKey("testkey"));
-        Assertions.assertTrue(original.mapTest.containsKey("key2"));
-        Assertions.assertEquals(original.mapTest.get("testkey"), clone.mapTest.get("testkey"));
-        Assertions.assertEquals(original.mapTest.get("key2"), clone.mapTest.get("key2"));
-
+        compare(original, clone);
     }
-
 
     @Test
     @DisplayName("BSON (Document) - Serialization & Deserialization")
@@ -87,24 +73,8 @@ public class SerializationTest {
         TestClass original = new TestClass();
 
         Document serialized = Assertions.assertDoesNotThrow(() -> serializer.serialize(original));
-
         TestClass clone = Assertions.assertDoesNotThrow(() -> serializer.deserialize(serialized, TestClass.class));
-
-        Assertions.assertEquals(original.uuid.toString(), clone.uuid.toString());
-        Assertions.assertEquals(original.name, clone.name);
-        Assertions.assertArrayEquals(original.list, clone.list);
-        Assertions.assertEquals(original.number, clone.number);
-        Assertions.assertArrayEquals(original.numberList, clone.numberList);
-        Assertions.assertIterableEquals(original.stringList, clone.stringList);
-
-        Assertions.assertNotNull(clone.subObject);
-        Assertions.assertEquals(original.subObject.name, clone.subObject.name);
-
-
-        Assertions.assertTrue(original.mapTest.containsKey("testkey"));
-        Assertions.assertTrue(original.mapTest.containsKey("key2"));
-        Assertions.assertEquals(original.mapTest.get("testkey"), clone.mapTest.get("testkey"));
-        Assertions.assertEquals(original.mapTest.get("key2"), clone.mapTest.get("key2"));
+        compare(original, clone);
     }
 
     @Test
@@ -117,25 +87,44 @@ public class SerializationTest {
 
         Assertions.assertDoesNotThrow(() -> serializer.serializeToPath(original, file));
         TestClass clone = Assertions.assertDoesNotThrow(() -> serializer.deserializeFromPath(file, TestClass.class));
+        compare(original, clone);
+        try {
+            Files.delete(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Test
+    @DisplayName("NBT (File) - Serialization & Deserialization")
+    public void testNbt() {
+        NBTSerializer serializer = new NBTSerializer();
+        TestClass original = new TestClass();
+        Path file = new File("test.nbt").toPath();
+
+        Assertions.assertDoesNotThrow(() -> serializer.serializeToPath(original, file));
+        TestClass clone = Assertions.assertDoesNotThrow(() -> serializer.deserializeFromPath(file, TestClass.class));
+        compare(original, clone);
+        try {
+            Files.delete(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void compare(TestClass original, TestClass clone) {
         Assertions.assertEquals(original.uuid.toString(), clone.uuid.toString());
         Assertions.assertEquals(original.name, clone.name);
+        Assertions.assertEquals(original.testEnum.name(), clone.testEnum.name());
         Assertions.assertArrayEquals(original.list, clone.list);
         Assertions.assertEquals(original.number, clone.number);
         Assertions.assertArrayEquals(original.numberList, clone.numberList);
         Assertions.assertIterableEquals(original.stringList, clone.stringList);
-
         Assertions.assertNotNull(clone.subObject);
         Assertions.assertEquals(original.subObject.name, clone.subObject.name);
         Assertions.assertTrue(original.mapTest.containsKey("testkey"));
         Assertions.assertTrue(original.mapTest.containsKey("key2"));
         Assertions.assertEquals(original.mapTest.get("testkey"), clone.mapTest.get("testkey"));
         Assertions.assertEquals(original.mapTest.get("key2"), clone.mapTest.get("key2"));
-
-        try {
-            Files.delete(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -54,6 +54,10 @@ public final class SerializationUtils {
         return type.isPrimitive() || type.equals(String.class);
     }
 
+    public static boolean isEnum(Class<?> type) {
+        return type.isEnum();
+    }
+
     public static boolean isArray(Class<?> type) {
         return type.isArray();
     }

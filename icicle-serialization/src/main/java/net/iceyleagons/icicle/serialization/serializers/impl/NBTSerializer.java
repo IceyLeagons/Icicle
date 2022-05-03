@@ -74,7 +74,7 @@ public class NBTSerializer implements FileSerializer {
             if (value.shouldConvert()) {
                 Class<?> vClass = value.getValue().getClass();
                 root.putTag(value.getKey(), getValue(value.getKey(), vClass, value.getValue()));
-            } else if (value.isValuePrimitiveOrString()) {
+            } else if (value.isValuePrimitiveOrString() || value.isEnum()) {
                 root.putTag(value.getKey(), toTag(value.getKey(), value.getValue()));
             } else if (value.isArray()) {
                 root.putTag(value.getKey(), toListTag(value.getKey(), value.getValue(), value.getField().getType().getComponentType()));
@@ -103,7 +103,7 @@ public class NBTSerializer implements FileSerializer {
                 }
 
                 return t.getValue();
-            } else if (SerializationUtils.isValuePrimitiveOrString(field.getType())) {
+            } else if (SerializationUtils.isValuePrimitiveOrString(field.getType()) || SerializationUtils.isEnum(field.getType())) {
                 return tag.getTag(key, Tag.class).getValue();
             } else if (SerializationUtils.isArray(field.getType())) {
                 return fromListTag(tag.getTag(key, ListTag.class), field.getType().getComponentType());

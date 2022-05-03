@@ -71,6 +71,8 @@ public class ObjectMapper {
             } else if (value.isArray() && !value.isCollection()) {
                 Object demapped = demapArray(genericArrayToNormalArray(value.getValue(), Object.class), value.getJavaType().getComponentType());
                 ReflectionUtils.set(value.getField(), object, demapped);
+            } else if (value.isEnum()) {
+                ReflectionUtils.set(value.getField(), object, value.getJavaType().getEnumConstants()[(int) value.getValue()]);
             } else if (value.isCollection()) {
                 Object demapped = demapArray(genericArrayToNormalArray(value.getValue(), Object.class), Object.class);
 
@@ -97,10 +99,11 @@ public class ObjectMapper {
 
         for (ObjectValue value : values) {
             if (value.isValuePrimitiveOrString()) continue;
-
             if (value.shouldConvert()) {
                 Object converted = convert(value.getValue(), value.getField(), true);
                 value.setValue(SerializationUtils.isValuePrimitiveOrString(converted.getClass()) ? converted : mapObject(converted));
+            } else if (value.isEnum()) {
+                value.setValue(value.getValueAs(Enum.class).ordinal());
             } else if (value.isArray() && !value.isCollection()) {
                 value.setValue(mapArray(genericArrayToNormalArray(value.getValue(), Object.class)));
             } else if (value.isCollection()) {

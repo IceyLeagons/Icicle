@@ -24,30 +24,13 @@
 
 package net.iceyleagons.test.icicle.serialization;
 
-import net.iceyleagons.icicle.serialization.annotations.Convert;
-import net.iceyleagons.icicle.serialization.converters.builtin.UUIDConverter;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Apr. 06, 2022
+ * @since May. 03, 2022
  */
-public class TestClass {
+public enum TestEnum {
 
-    @Convert(UUIDConverter.class)
-    public UUID uuid = UUID.randomUUID();
-    public TestEnum testEnum = TestEnum.ENUM2;
-    public String name = "Hello";
-    public String[] list = new String[]{"asd", "asd2"};
-    public int number = 4;
-    public int[] numberList = new int[]{1, 2, 3};
-    public List<String> stringList = Arrays.asList("test1", "test2", "test3");
-    public TestSubClass subObject = new TestSubClass();
-    public Map<String, String> mapTest = Map.of("testkey", "testvalue", "key2", "value2");
+    ENUM1, ENUM2, ENUM3;
 
 }

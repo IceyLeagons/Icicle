@@ -78,7 +78,7 @@ public class JsonSerializer implements FileSerializer, StringSerializer {
             if (value.shouldConvert()) {
                 Class<?> vClass = value.getValue().getClass();
                 root.put(value.getKey(), SerializationUtils.isSubObject(vClass) ? serialize((SerializedObject) value.getValue(), new JSONObject()) : value.getValue());
-            } else if (value.isValuePrimitiveOrString()) {
+            } else if (value.isValuePrimitiveOrString() || value.isEnum()) {
                 root.put(value.getKey(), value.getValue());
             } else if (value.isArray() || value.isCollection()) {
                 JSONArray jsonArray = toJsonArray(value.getValue());
@@ -106,7 +106,7 @@ public class JsonSerializer implements FileSerializer, StringSerializer {
                     return deserialize((JSONObject) obj, field.getType());
                 }
                 return json.get(key);
-            } else if (SerializationUtils.isValuePrimitiveOrString(field.getType())) {
+            } else if (SerializationUtils.isValuePrimitiveOrString(field.getType()) || SerializationUtils.isEnum(field.getType())) {
                 return json.get(key);
             } else if (SerializationUtils.isArray(field.getType())) {
                 return fromJsonArray(json.getJSONArray(key), field.getType().getComponentType());

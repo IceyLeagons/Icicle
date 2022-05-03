@@ -64,6 +64,10 @@ public class ObjectValue {
         return SerializationUtils.isArray(this.javaType);
     }
 
+    public boolean isEnum() {
+        return SerializationUtils.isEnum(this.javaType);
+    }
+
     public boolean isCollection() {
         return SerializationUtils.isCollection(this.javaType);
     }
