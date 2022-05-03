@@ -35,15 +35,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.jetbrains:annotations:20.1.0")
-    compileOnly("org.slf4j:slf4j-api:1.7.32")
-    compileOnly("com.google.guava:guava:31.1-jre") // guava is loaded by Bukkit already
+    compileOnly("org.jetbrains:annotations:${findProperty("jetbrainsAnnotationVersion")}")
+    compileOnly("org.slf4j:slf4j-api:${findProperty("slf4jApiVersion")}")
+    compileOnly("com.google.guava:guava:${findProperty("guavaVersion")}") // guava is loaded by Bukkit already
 
     lombok()
 
-    testImplementation("com.google.guava:guava:31.1-jre")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+    testImplementation("com.google.guava:guava:${findProperty("guavaVersion")}")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${findProperty("jupiterApiVersion")}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${findProperty("jupiterEngineVersion")}")
 }
 
 icicle {

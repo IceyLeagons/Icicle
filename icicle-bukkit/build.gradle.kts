@@ -30,7 +30,7 @@ plugins {
 group = "net.iceyleagons"
 version = "0.1-SNAPSHOT"
 
-val spigotVersion = "1.18.1"
+val spigotVersion = findProperty("spigotVersion") as String
 
 repositories {
     mavenCentral()
@@ -39,7 +39,9 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.netty:netty-all:4.1.72.Final")
+    lombok()
+    compileOnly("io.netty:netty-all:${findProperty("nettyVersion")}")
+    spigotApi(spigotVersion)
 
     shadow(project(":icicle-gui"))
     shadow(project(":icicle-core"))
@@ -47,9 +49,7 @@ dependencies {
     shadow(project(":icicle-protocol"))
     shadow(project(":icicle-nms"))
     compileOnly(project(":icicle-utilities"))
-
-    spigotApi(spigotVersion)
-    lombok()
+    testImplementation("com.github.seeseemelk:${findProperty("mockBukkitVersion")}")
 }
 
 icicle {

@@ -28,7 +28,7 @@ plugins {
 }
 
 version = "0.1-SNAPSHOT"
-val spigotVersion = "1.17.1"
+val spigotVersion = findProperty("spigotVersion") as String
 
 repositories {
     mavenCentral()
@@ -39,9 +39,9 @@ repositories {
 dependencies {
     lombok()
     // https://mvnrepository.com/artifact/io.netty/netty-all
-    compileOnly("io.netty:netty-all:4.1.72.Final")
+    compileOnly("io.netty:netty-all:${findProperty("nettyVersion")}")
 
-    compileOnly("net.bytebuddy:byte-buddy:1.11.15")
+    compileOnly("net.bytebuddy:byte-buddy:${findProperty("byteBuddyVersion")}")
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
 

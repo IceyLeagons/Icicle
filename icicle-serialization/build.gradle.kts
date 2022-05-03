@@ -36,40 +36,36 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":icicle-utilities"))
-    implementation(project(":icicle-core"))
+    compileOnly(project(":icicle-utilities"))
+    compileOnly(project(":icicle-core"))
 
 
-    implementation("org.slf4j:slf4j-api:1.7.32")
-    implementation("org.jetbrains:annotations:20.1.0")
-    implementation("net.iceyleagons:nbtlib:1.2-SNAPSHOT")
+    compileOnly("org.slf4j:slf4j-api:${findProperty("slf4jApiVersion")}")
+    compileOnly("org.jetbrains:annotations:${findProperty("jetbrainsAnnotationVersion")}")
 
-    // File handling APIs (TODO some of these may already be shadowed in core, we don't want duplicates -> fix)
-    shadow("org.json:json:20210307")
+    shadow("net.iceyleagons:nbtlib:${findProperty("nbtLibVersion")}")
+    shadow("org.json:json:${findProperty("jsonVersion")}")
 
-    // runtimeOnly("com.google.guava:guava:31.1-jre") // Used for testing
-   //  runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.5.31") // Used for testing
-    // runtimeOnly("org.jetbrains.kotlin:kotlin-stdlib:1.6.20") // Used for testing
-
-    compileOnly("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
-    compileOnly("org.mongodb:bson:4.5.0")
+    compileOnly("me.carleslc.Simple-YAML:Simple-Yaml:${findProperty("simpleYamlVersion")}")
+    compileOnly("org.mongodb:bson:${findProperty("bsonVersion")}")
 
     lombok()
 
 
-    testImplementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.20")
-    testImplementation("com.google.guava:guava:31.1-jre")
-    testImplementation("org.mongodb:bson:4.5.0")
+    testImplementation("org.jetbrains.kotlin:kotlin-reflect:${findProperty("kotlinReflectVersion")}")
+    testImplementation("org.jetbrains.kotlin:kotlin-stdlib:${findProperty("kotlinStdlibVersion")}")
+    testImplementation("com.google.guava:guava:${findProperty("guavaVersion")}")
+
     testImplementation(project(":icicle-utilities"))
     testImplementation(project(":icicle-core"))
-    testImplementation("net.bytebuddy:byte-buddy:1.11.15")
-    testImplementation("net.bytebuddy:byte-buddy-agent:1.11.15")
-    testImplementation("org.mongodb:bson:4.5.0")
-    testImplementation("org.json:json:20210307")
-    testImplementation("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+
+    testImplementation("net.bytebuddy:byte-buddy:${findProperty("byteBuddyVersion")}")
+    testImplementation("net.bytebuddy:byte-buddy-agent:${findProperty("byteBuddyAgentVersion")}")
+    testImplementation("org.mongodb:bson:${findProperty("bsonVersion")}")
+    testImplementation("org.json:json:${findProperty("jsonVersion")}")
+    testImplementation("me.carleslc.Simple-YAML:Simple-Yaml:${findProperty("simpleYamlVersion")}")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${findProperty("jupiterApiVersion")}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${findProperty("jupiterEngineVersion")}")
 }
 
 icicle {

@@ -34,13 +34,17 @@ version = "0.1-SNAPSHOT"
 repositories {
     mavenCentral()
     jitpack()
+    spigot()
 }
+
+val spigotVersion = findProperty("spigotVersion") as String
 
 dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
     implementation(project(":icicle-protocol"))
     shadow(kotlin("stdlib"))
+    spigotApi(spigotVersion)
 }
 
 icicle {

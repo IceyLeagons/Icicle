@@ -6,7 +6,7 @@ plugins {
 group = "net.iceyleagons"
 version = "0.1-SNAPSHOT"
 
-val spigotVersion = "1.18.1"
+val spigotVersion = findProperty("spigotVersion") as String
 
 repositories {
     mavenCentral()
@@ -17,7 +17,7 @@ repositories {
 dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
-    compileOnly("org.jetbrains:annotations:20.1.0")
+    compileOnly("org.jetbrains:annotations:${findProperty("jetbrainsAnnotationVersion")}")
     spigotApi(spigotVersion)
     lombok()
 }

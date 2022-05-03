@@ -29,7 +29,7 @@ plugins {
 }
 
 version = "0.1-SNAPSHOT"
-val spigotVersion = "1.18.1"
+val spigotVersion = findProperty("spigotVersion") as String
 
 repositories {
     mavenCentral()
@@ -43,8 +43,8 @@ dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
     implementation(project(":icicle-nms"))
-    compileOnly("net.bytebuddy:byte-buddy:1.11.15")
-    compileOnly("io.netty:netty-all:4.1.72.Final")
+    compileOnly("net.bytebuddy:byte-buddy:${findProperty("byteBuddyVersion")}")
+    compileOnly("io.netty:netty-all:${findProperty("nettyVersion")}")
     compileOnly(kotlin("stdlib"))
     spigotApi(spigotVersion)
 }
