@@ -25,16 +25,10 @@
 package net.iceyleagons.icicle.commands.handlers;
 
 import net.iceyleagons.icicle.commands.CommandService;
-import net.iceyleagons.icicle.commands.annotations.CommandParamResolver;
-import net.iceyleagons.icicle.commands.middleware.CommandMiddleware;
-import net.iceyleagons.icicle.commands.middleware.CommandMiddlewareTemplate;
-import net.iceyleagons.icicle.commands.params.CommandParameterResolverTemplate;
 import net.iceyleagons.icicle.commands.validators.CommandParameterValidator;
 import net.iceyleagons.icicle.commands.validators.CommandValidator;
-import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
-import net.iceyleagons.icicle.core.performance.PerformanceLog;
 import net.iceyleagons.icicle.utilities.lang.Autowired;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,12 +45,10 @@ import java.util.Set;
 public class CommandValidatorAnnotationHandler implements CustomAutoCreateAnnotationHandler {
 
     private final CommandService commandService;
-    private final Application application;
 
     @Autowired
-    public CommandValidatorAnnotationHandler(CommandService commandService, Application application) {
+    public CommandValidatorAnnotationHandler(CommandService commandService) {
         this.commandService = commandService;
-        this.application = application;
     }
 
     @Override
@@ -65,7 +57,7 @@ public class CommandValidatorAnnotationHandler implements CustomAutoCreateAnnota
     }
 
     @Override
-    public void onCreated(Object bean, Class<?> type) throws Exception {
+    public void onCreated(Object bean, Class<?> type) {
         if (bean instanceof CommandParameterValidator) {
             commandService.getValidatorStore().registerValidator((CommandParameterValidator) bean, type.getAnnotation(CommandValidator.class));
         }

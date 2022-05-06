@@ -30,16 +30,11 @@ import net.iceyleagons.icicle.bukkit.impl.BukkitExecutionHandler;
 import net.iceyleagons.icicle.bukkit.impl.BukkitServiceProvider;
 import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
-import net.iceyleagons.icicle.nms.NMSHandler;
-import net.iceyleagons.icicle.nms.wrap.player.WrappedCraftPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
 
 @Getter
 public class BukkitApplication extends AbstractIcicleApplication {

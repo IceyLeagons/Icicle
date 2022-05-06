@@ -38,16 +38,17 @@ import net.iceyleagons.nbtlib.streams.NBTInputStream;
 import net.iceyleagons.nbtlib.streams.NBTOutputStream;
 import net.iceyleagons.nbtlib.tags.CompoundTag;
 import net.iceyleagons.nbtlib.tags.ListTag;
-import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static net.iceyleagons.nbtlib.NBTConverter.getAppropriateTagClass;
 

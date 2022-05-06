@@ -61,7 +61,6 @@ import java.util.concurrent.TimeUnit;
 @CommandManager(value = "test", printExceptionStackTrace = true)
 public class TestCommand {
 
-    private final JavaPlugin plugin;
     private final ChestGui chestGui;
     private final ProtocolService protocolService;
     private final LabelButton button;
@@ -75,7 +74,6 @@ public class TestCommand {
         );
 
         translationService.setTranslationStringProvider(provider);
-        this.plugin = plugin;
         this.protocolService = protocolService;
 
         button = new LabelButton(4, 3, 3, 3, new ItemStack(Material.DIAMOND_BLOCK), clicked -> {

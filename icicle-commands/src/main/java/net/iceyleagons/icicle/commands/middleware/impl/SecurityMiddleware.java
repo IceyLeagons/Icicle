@@ -48,7 +48,7 @@ public class SecurityMiddleware implements CommandMiddlewareTemplate {
     public boolean onCommand(CommandManager commandManager, Class<?> commandManagerClass, String commandName,
                              Method method, CommandSender sender, TranslationService translationService) {
         if (method.isAnnotationPresent(Permission.class)) {
-            handlePermission(method.getAnnotation(Permission.class), sender, commandManager);
+            handlePermission(method.getAnnotation(Permission.class), sender);
         }
 
         return true;
@@ -58,21 +58,15 @@ public class SecurityMiddleware implements CommandMiddlewareTemplate {
     public boolean onCommand(CommandManager commandManager, Class<?> commandManagerClass, String commandName,
                              Field field, CommandSender sender, TranslationService translationService) {
         if (field.isAnnotationPresent(Permission.class)) {
-            handlePermission(field.getAnnotation(Permission.class), sender, commandManager);
+            handlePermission(field.getAnnotation(Permission.class), sender);
         }
 
         return true;
     }
 
-    private void handlePermission(Permission permission, CommandSender sender,
-                                  CommandManager commandManager) {
-
+    private void handlePermission(Permission permission, CommandSender sender) {
         String requiredPermission = permission.value();
         if (sender.hasPermission(requiredPermission)) return;
-        //  String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cInsufficient permissions!",
-        //         Map.of("permission", requiredPermission, "sender", sender.getName()));
-
-        //throw new IllegalStateException(msg);
         throw new TranslatableException(KEY, "&cInsufficient permissions!", Map.of("permission", requiredPermission, "sender", sender.getName()));
     }
 }

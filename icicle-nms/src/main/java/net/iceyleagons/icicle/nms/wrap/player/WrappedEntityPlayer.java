@@ -28,9 +28,7 @@ import net.iceyleagons.icicle.nms.NMSHandler;
 import net.iceyleagons.icicle.nms.annotations.FieldWrapping;
 import net.iceyleagons.icicle.nms.annotations.NMSWrap;
 import net.iceyleagons.icicle.nms.annotations.OriginGetter;
-import net.iceyleagons.icicle.nms.annotations.Wrapping;
 import net.iceyleagons.icicle.nms.wrap.WrappedEntity;
-import net.iceyleagons.icicle.nms.wrap.server.WrappedDataWatcher;
 
 /**
  * @author TOTHTOMI

@@ -3,7 +3,6 @@ package net.iceyleagons.icicle.protocol.events;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.iceyleagons.icicle.protocol.ProtocolPlayer;
-import org.bukkit.entity.Player;
 
 @Getter
 @AllArgsConstructor

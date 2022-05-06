@@ -29,13 +29,16 @@ import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.commands.CommandInjectionException;
 import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.meta.Alias;
-import net.iceyleagons.icicle.commands.exception.CommandNotFoundException;
 import net.iceyleagons.icicle.commands.command.RegisteredCommand;
+import net.iceyleagons.icicle.commands.exception.CommandNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

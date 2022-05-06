@@ -24,7 +24,6 @@
 
 package net.iceyleagons.icicle.core.other;
 
-import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;

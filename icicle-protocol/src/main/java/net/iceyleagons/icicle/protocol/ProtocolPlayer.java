@@ -27,7 +27,6 @@ package net.iceyleagons.icicle.protocol;
 import io.netty.channel.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import net.iceyleagons.icicle.nms.NMSHandler;
 import net.iceyleagons.icicle.nms.wrap.player.WrappedCraftPlayer;
 import net.iceyleagons.icicle.protocol.events.PacketInEvent;
@@ -61,8 +60,7 @@ public class ProtocolPlayer {
                 public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                     // event??
                     PacketOutEvent event = new PacketOutEvent(pp, msg);
-                    if (msg != null)
-                        if (!event.isCancelled())
+                    if (msg != null && !event.isCancelled())
                             super.write(ctx, msg, promise);
                 }
 

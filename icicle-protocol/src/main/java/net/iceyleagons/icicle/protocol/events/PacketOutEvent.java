@@ -4,7 +4,6 @@ package net.iceyleagons.icicle.protocol.events;
 import lombok.Getter;
 import lombok.Setter;
 import net.iceyleagons.icicle.protocol.ProtocolPlayer;
-import org.bukkit.entity.Player;
 
 @Getter
 public class PacketOutEvent extends PacketEvent {

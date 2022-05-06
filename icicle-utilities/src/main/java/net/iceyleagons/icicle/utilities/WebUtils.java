@@ -34,7 +34,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
-import java.util.concurrent.TimeoutException;
 
 import static net.iceyleagons.icicle.utilities.ErrorUtils.TODO;
 

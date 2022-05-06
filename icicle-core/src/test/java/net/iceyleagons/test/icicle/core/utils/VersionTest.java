@@ -40,51 +40,51 @@ public class VersionTest {
 
     @Test
     @DisplayName("Parsing of: 1.26.6")
-    public void newInstance_withTwoDotRelease_isParsedCorrectly() {
+    public void testOne() {
         final Version version = new Version("1.26.6");
         Assertions.assertArrayEquals(version.numbers, new int[]{1, 26, 6});
     }
 
     @Test
     @DisplayName("Parsing of: 1.26.6-DEBUG")
-    public void newInstance_withTwoDotReleaseAndPreReleaseName_isParsedCorrectly() {
+    public void testTwo() {
         final Version version = new Version("1.26.6-DEBUG");
         Assertions.assertArrayEquals(version.numbers, new int[]{1, 26, 6});
     }
 
     @Test
     @DisplayName("Comparing 2.0.0 to 1.0.0")
-    public void compareTo_withEarlierVersion_isGreaterThan() {
+    public void testThree() {
         Assertions.assertEquals(new Version("2.0.0").compareTo(new Version("1.0.0")), 1);
     }
 
     @Test
     @DisplayName("Comparing 2.0.0 to 2.0.0")
-    public void compareTo_withSameVersion_isEqual() {
+    public void testFour() {
         Assertions.assertEquals(new Version("2.0.0").compareTo(new Version("2.0.0")), 0);
     }
 
     @Test
     @DisplayName("Comparing 1.0.0 to 2.0.0")
-    public void compareTo_withLaterVersion_isLessThan() {
+    public void testFive() {
         Assertions.assertEquals(new Version("1.0.0").compareTo(new Version("2.0.0")), -1);
     }
 
     @Test
     @DisplayName("Comparing 1 to 1.0.0")
-    public void compareTo_withMorePreciseSameVersion_isFalse() {
+    public void testSix() {
         Assertions.assertEquals(new Version("1").compareTo(new Version("1.0.0")), 0);
     }
 
     @Test
     @DisplayName("Comparing 2 to 1.0.0")
-    public void compareTo_withMorePreciseEarlierVersion_isFalse() {
+    public void testSeven() {
         Assertions.assertEquals(new Version("2").compareTo(new Version("1.0.0")), 1);
     }
 
     @Test
     @DisplayName("Comparing 1 to 1.0.1")
-    public void compareTo_withMorePreciseLaterVersion_isLessThan() {
+    public void testEight() {
         Assertions.assertEquals(new Version("1").compareTo(new Version("1.0.1")), -1);
     }
 }

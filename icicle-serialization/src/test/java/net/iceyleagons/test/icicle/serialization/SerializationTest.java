@@ -54,7 +54,7 @@ public class SerializationTest {
 
     @Test
     @DisplayName("JSON (String) - Serialization & Deserialization")
-    public void testJson() throws ClassNotFoundException {
+    public void testJson() {
         JsonSerializer serializer = new JsonSerializer(true);
         TestClass original = new TestClass();
 

@@ -28,7 +28,6 @@ import lombok.SneakyThrows;
 import net.iceyleagons.icicle.bukkit.listeners.PluginStatusListener;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.annotations.IcicleApplication;
-import net.iceyleagons.icicle.core.annotations.PostConstruct;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 

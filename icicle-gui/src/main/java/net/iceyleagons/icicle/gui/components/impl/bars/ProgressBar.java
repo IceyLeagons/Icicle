@@ -26,9 +26,9 @@ package net.iceyleagons.icicle.gui.components.impl.bars;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import net.iceyleagons.icicle.gui.utils.DrawUtils;
 import net.iceyleagons.icicle.gui.Pane;
 import net.iceyleagons.icicle.gui.components.GuiComponent;
+import net.iceyleagons.icicle.gui.utils.DrawUtils;
 import org.bukkit.inventory.ItemStack;
 
 /**

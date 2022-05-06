@@ -25,10 +25,10 @@
 package net.iceyleagons.icicle.gui.components.impl.buttons;
 
 import lombok.EqualsAndHashCode;
-import net.iceyleagons.icicle.gui.utils.DrawUtils;
 import net.iceyleagons.icicle.gui.GuiInteractEvent;
 import net.iceyleagons.icicle.gui.Pane;
 import net.iceyleagons.icicle.gui.components.impl.Button;
+import net.iceyleagons.icicle.gui.utils.DrawUtils;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Consumer;

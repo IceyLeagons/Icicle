@@ -34,7 +34,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * @author TOTHTOMI

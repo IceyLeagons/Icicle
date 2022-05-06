@@ -28,7 +28,6 @@ import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.nms.NMSHandler;
 import net.iceyleagons.icicle.protocol.ProtocolPlayer;
 import net.iceyleagons.icicle.protocol.action.Action;
-import net.iceyleagons.icicle.protocol.action.Settings;
 import org.bukkit.entity.Player;
 
 /**

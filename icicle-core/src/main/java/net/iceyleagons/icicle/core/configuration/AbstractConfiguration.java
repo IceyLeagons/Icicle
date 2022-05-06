@@ -94,7 +94,7 @@ public abstract class AbstractConfiguration implements Configuration {
         if (!ann.headerPrefixFirst().isEmpty()) formatter.prefixFirst(ann.headerPrefixFirst());
         if (!ann.headerCommentPrefix().isEmpty()) formatter.commentPrefix(ann.headerCommentPrefix());
         if (!ann.headerCommentSuffix().isEmpty()) formatter.commentSuffix(ann.headerCommentSuffix());
-        if (!ann.headerSuffixLast().isEmpty()) formatter.suffixLast(ann.headerSuffixLast());;
+        if (!ann.headerSuffixLast().isEmpty()) formatter.suffixLast(ann.headerSuffixLast());
     }
 
     @Override

@@ -24,11 +24,7 @@
 
 package net.iceyleagons.icicle.core.utils;
 
-import net.iceyleagons.icicle.core.Icicle;
-import net.iceyleagons.icicle.core.annotations.AutoCreate;
-import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
 import net.iceyleagons.icicle.core.annotations.PostConstruct;
-import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.utilities.Asserts;
@@ -37,7 +33,10 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * Utility methods for the creating and autowiring of beans.

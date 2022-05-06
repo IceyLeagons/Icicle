@@ -48,7 +48,7 @@ public class PlayerOnlyMiddleware implements CommandMiddlewareTemplate {
     public boolean onCommand(CommandManager commandManager, Class<?> commandManagerClass, String commandName,
                              Method method, CommandSender sender, TranslationService translationService) {
         if (method.isAnnotationPresent(PlayerOnly.class)) {
-            handlePlayerOnly(sender, commandManager, translationService);
+            handlePlayerOnly(sender);
         }
 
         return true;
@@ -58,18 +58,14 @@ public class PlayerOnlyMiddleware implements CommandMiddlewareTemplate {
     public boolean onCommand(CommandManager commandManager, Class<?> commandManagerClass, String commandName,
                              Field field, CommandSender sender, TranslationService translationService) {
         if (field.isAnnotationPresent(PlayerOnly.class)) {
-            handlePlayerOnly(sender, commandManager, translationService);
+            handlePlayerOnly(sender);
         }
 
         return true;
     }
 
-    private void handlePlayerOnly(CommandSender sender, CommandManager commandManager, TranslationService translationService) {
+    private void handlePlayerOnly(CommandSender sender) {
         if (sender instanceof Player) return;
-
-        // String msg = translationService.getTranslation(errorMsgKey, translationService.getLanguageProvider().getLanguage(sender), "&cYou have to be a player to execute this command!");
-
-        // throw new IllegalStateException(msg);
         throw new TranslatableException(KEY, "&cYou have to be a player to execute this command!");
     }
 }

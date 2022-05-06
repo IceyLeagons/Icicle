@@ -111,7 +111,7 @@ public abstract class GUI implements Listener {
         if (viewers.isEmpty()) return;
         if (activePane != null && activePane.isDirty()) {
             if (global && globalInventory != null) {
-                activePane.render(globalInventory);;
+                activePane.render(globalInventory);
                 return;
             }
 

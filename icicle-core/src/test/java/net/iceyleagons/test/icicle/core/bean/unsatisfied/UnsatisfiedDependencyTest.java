@@ -26,9 +26,9 @@ package net.iceyleagons.test.icicle.core.bean.unsatisfied;
 
 import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 import net.iceyleagons.icicle.core.Application;
+import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
-import net.iceyleagons.icicle.core.Icicle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

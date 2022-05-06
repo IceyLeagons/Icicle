@@ -32,7 +32,6 @@ import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnviro
 import net.iceyleagons.icicle.core.performance.PerformanceLog;
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
-import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

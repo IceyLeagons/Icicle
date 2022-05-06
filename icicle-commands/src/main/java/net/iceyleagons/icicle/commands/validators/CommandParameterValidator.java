@@ -24,8 +24,6 @@
 
 package net.iceyleagons.icicle.commands.validators;
 
-import org.bukkit.command.TabCompleter;
-
 import java.lang.reflect.Parameter;
 
 /**

@@ -28,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.SuperCall;
-import net.iceyleagons.icicle.core.annotations.execution.Async;
 import net.iceyleagons.icicle.core.annotations.execution.Sync;
 import net.iceyleagons.icicle.core.annotations.execution.extra.After;
 import net.iceyleagons.icicle.core.annotations.execution.extra.Periodically;

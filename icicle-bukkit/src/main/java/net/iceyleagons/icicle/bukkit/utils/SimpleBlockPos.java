@@ -25,7 +25,6 @@
 package net.iceyleagons.icicle.bukkit.utils;
 
 import lombok.AllArgsConstructor;
-import net.iceyleagons.icicle.utilities.Base64Utils;
 import net.iceyleagons.icicle.utilities.MathUtils;
 import org.bukkit.block.Block;
 
