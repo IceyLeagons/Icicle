@@ -1,0 +1,153 @@
+:root {
+    --card-color: #fff;
+    --text-color: black;
+    --hero-button-text: white;
+    --bg-color: #f8f8f8;
+    --nav-border: #b7b7b7;
+
+    --bg2-color: blue;
+    --action-color: #3e9ce3;
+    
+    --hero-box: rgba(222, 222, 222, 0.2);
+    --bg-img: url("../assets/imgs/bg-light.png");
+
+    --nav-height: 70px;
+
+    --scrollbar-track-color: #fff;
+    --scrollbar-thumb-color: #ababab;
+    --scrollbar-thumb-color-hover: #d1cbcb;
+
+    --accent-color: #ebe8e8;
+    --footer-color: #dfd9d9;
+}
+
+* {
+    transition: .3s background-color;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+p {
+    font-size: 1.1em;
+}
+
+.title {
+    font-size: 3.5rem;
+}
+
+.title2 {
+    font-size: 3rem;
+}
+
+.subtitle {
+    margin-top: -.7rem;
+    font-size: 1.6rem;
+}
+
+.mt {
+    margin-top: 1rem;
+}
+
+.button {
+    text-align: center;
+    font-size: 1.4rem;
+    text-decoration: none;
+    color: var(--hero-button-text);
+
+    background: rgba(0, 0, 0, 0.7);
+
+    width: 160px;
+
+    border-radius: 10px;
+    padding: 1rem;
+
+    transition: .4s;
+}
+
+.button:hover {
+    cursor: pointer;
+    transform: translateY(-3px);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] {
+    --card-color: #272822;
+    --text-color: #fff;
+    --hero-button-text: #fff;
+    --bg-color: #333333;
+    --bg2-color: #595959;
+    --bg-img: url("../assets/imgs/bg-dark.png");
+    --nav-border: #1a1a1a;
+    --hero-box: rgba(50, 50, 50, 0.2);
+    --scrollbar-thumb-color: #202020;
+    --scrollbar-thumb-color-hover: #2b2929;
+    --scrollbar-track-color: #3f3f3f;
+    --accent-color: #2c2c2c;
+    --footer-color: #252525;
+}
+
+[data-theme="dark"] .navbar .logo {
+    filter: invert();
+}
+
+.token.annotation {
+    color: rgb(0, 245, 110);
+}
+.token.string {
+    color: #b9d343;
+}
+.token.operator {
+    background: none;
+    text-shadow: none;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-color-hover);
+}
+
+pre::-webkit-scrollbar-corner {
+    border-radius: 50%;
+}
+
+pre::-webkit-scrollbar-track {
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb {
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+pre {
+
+    transition: .4s;
+}
+
+pre:hover {
+    transform: translateY(-3px);
+}

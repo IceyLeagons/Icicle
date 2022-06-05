@@ -1,456 +1,119 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
-    <!-- Charsets, Compatibility, Responsive -->
-    <meta charset="UTF-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
+	<!-- Charsets, Compatibility, Responsive -->
+	<meta charset="utf-8">
+	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+	<meta name="viewport" content="width=device-width, initial-scale=1" >
 
-    <!-- Generic Meta -->
-    <title>Icicle Framework</title>
+	<!-- Generic Meta -->
+	<title>Icicle Framework - Plugin creation made easy</title>
 
-    <meta content="Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development.
-             It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form."
-        name="description" />
+	<meta name="description" content="Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development.
+		 It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form. Its sole purpose is to make plugin development an easy task."
+		 />
 
-    <meta content="Spigot,Bukkit,Plugin,Development,Framework,Easy,Light-weight,free,open source" name="keywords" />
-    <meta content="IceyLeagons" name="author" />
+	<meta name="keywords" content="spigot, bukkit, plugin, development, framework, easy, light-weight, free, open-source, IceyLeagons, icicle, spring," />
+	<meta name="author" content="IceyLeagons" />
+	<meta name="robots" content="index, follow" />
 
-    <meta content="Icicle Framework" name="application-name">
-    <meta content="#3e9ce3" name="theme-color">
-    <!--  -->
+	<meta name="copyright" content="IceyLeagons" />
+	<meta name="application-name" content="Icicle Framework" />
+	<meta name="theme-color" content="#3e9ce3" />
+	<!--  -->
 
-    <!-- Icons -->
-    <link href="apple-touch-icon-144x144.png" rel="apple-touch-icon-precomposed" sizes="144x144"> <!-- TODO: replace -->
-    <link href="apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"> <!-- TODO: replace -->
-    <link href="favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"> <!-- TODO: replace -->
-    <link href="favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"> <!-- TODO: replace -->
+	<!-- Icons -->
+	<link href="assets/imgs/icon_144.png" rel="apple-touch-icon-precomposed" sizes="144x144" />
+	<link href="assets/imgs/icon_152.png" rel="apple-touch-icon-precomposed" sizes="152x152" />
+	<link href="assets/imgs/icon_32.png" rel="icon" sizes="32x32" type="image/png" />
+	<link href="assets/imgs/icon_16.png" rel="icon" sizes="16x16" type="image/png" />
 
-    <!-- Pinned Website Icon (after Windows 8) -->
-    <meta content="#3e9ce3" name="msapplication-TileColor">
-    <meta content="mstile-144x144.png" name="msapplication-TileImage"> <!-- TODO: replace -->
+	<!-- Pinned Website Icon (after Windows 8) -->
+	<meta name="msapplication-TileColor" content="#3e9ce3" />
+	<meta name="msapplication-TileImage" content="assets/imgs/icon_144.png" />
 
-    <!-- Twitter Stuff -->
-    <!-- https://cards-dev.twitter.com/validator -->
-    <meta content="summary_large_image" name="twitter:card" />
-    <meta content="Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development.
-             It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form."
-        name="twitter:description" />
-    <meta content="Make your dev life easier with Icicle" name="twitter:title" />
-    <meta content="image.png" name="twitter:image" /> <!-- TODO: Social Image -->
+	<!-- Twitter Stuff -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:description" content="Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development. It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form. Its sole purpose is to make plugin development an easy task."/>
+	<meta name="twitter:title" content="Icicle Framework - Plugin creation made easy" />
+	<meta name="twitter:image" content="assets/social_image.png" /> <!-- TODO: Social Image -->
 
-    <!-- OG Stuff (aka. other social media) -->
-    <meta content="Icicle Framework" property="og:title" />
-    <meta content="Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development.
-             It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form."
-        property="og:description" />
-    <meta content="website" property="og:type" />
-    <meta content="image.png" property="og:image" /> <!-- TODO: Social Image -->
+	<!-- OG Stuff (aka. other social media) -->
+	<meta property="og:title" content="Icicle Framework - Plugin creation made easy" />
+	<meta property="og:description" content="Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development. It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form. Its sole purpose is to make plugin development an easy task." />
+	<meta property="og:url" content="https://icicle.iceyleagons.net/" />
+	<meta property="og:site_name" content="Icicle Framework" />
+	<meta property="og:locale" content="en_GB" />
+	<meta property="og:type" content="website" />
+	<meta property="og:image" content="assets/social_image.png" /> <!-- TODO: Social Image -->
 
-    <!-- Links -->
-    <link href="/" rel="canonical" />
+	<!-- Links -->
+	<link href="/" rel="canonical" />
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/style.css" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.cdnfonts.com/css/open-sans" rel="stylesheet">
-    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
-        integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
-        referrerpolicy="no-referrer" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" rel="stylesheet"
+		type="text/css" />
+	<link href="https://fonts.cdnfonts.com/css/open-sans" rel="stylesheet">
+	<link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+		integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+		referrerpolicy="no-referrer" rel="stylesheet" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism.min.css"
-        integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism-okaidia.min.css"
-        integrity="sha512-mIs9kKbaw6JZFfSuo+MovjU+Ntggfoj8RwAmJbVXQ5mkAX5LlgETQEweFPI18humSPHymTb5iikEOKWF7I8ncQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.css"
-        integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ=="
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism.min.css"
+		integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism-okaidia.min.css"
+		integrity="sha512-mIs9kKbaw6JZFfSuo+MovjU+Ntggfoj8RwAmJbVXQ5mkAX5LlgETQEweFPI18humSPHymTb5iikEOKWF7I8ncQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.css"
+		integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/match-braces/prism-match-braces.min.css"
+		integrity="sha512-SwPHdIEEQ3lKazpLV9+r1UH4HnpNVlYVdKYgBwD/8QuougtQj6xm5x2xladh3mC/bz+jVWkvYTpKCI1KWD1MWQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.3.0/css/flag-icons.min.css"
+		integrity="sha512-uvXdJud8WaOlQFjlz9B15Yy2Au/bMAvz79F7Xa6OakCl2jvQPdHD0hb3dEqZRdSwG4/sknePXlE7GiarwA/9Wg=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="plugins/line-numbers/prism-line-numbers.css" data-noprefix />
+	<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
+	<link rel='stylesheet' href='/global.css'>
+	<link rel='stylesheet' href='/build/bundle.css'>
+
+	<script defer src='/build/bundle.js'></script>
 </head>
 
-<body style="overflow-y: hidden;">
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<body style="overflow-y: hidden;" class="line-numbers">
+	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-core.min.js"
+		integrity="sha512-LCKPTo0gtJ74zCNMbWw04ltmujpzSR4oW+fgN+Y1YclhM5ZrHCZQAJE4quEodcI/G122sRhSGU2BsSRUZ2Gu3w=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/autoloader/prism-autoloader.min.js"
+		integrity="sha512-GP4x8UWxWyh4BMbyJGOGneiTbkrWEF5izsVJByzVLodP8CuJH/n936+yQDMJJrOPUHLgyPbLiGw2rXmdvGdXHA=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.js"
+		integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/match-braces/prism-match-braces.min.js"
+		integrity="sha512-1V2DjbHHHr8KzGoafg/R5GoT/+5A5WJBvno03LEL1unbfCLy4PLTQ2Trcrp+qfvTEtyI9Uj825deuInXoRkOyA=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-SC44ZYPS6Y"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
 
-    <nav class="navbar">
-        <div class="row between-xs">
-            <div class="col-xs-3 col-lg-3">
-                <img alt="logo" class="logo" src="assets/imgs/black_no_subtitle.png" />
-            </div>
-            <div class="col-xs-1 col-lg-4"></div>
-            <div class="col-xs-8 col-lg-5" style="margin-top: 1.3rem; text-align: right;">
-                <!-- TODO: make this sh*t responsive -->
-                <a id="nav-source" class="nav-link nav-link-collapse"
-                    href="https://github.com/IceyLeagons/iciclev2">Source</a>
-                <a id="nav-doc" class="nav-link nav-link-collapse"
-                    href="https://docs.iceyleagons.net/icicle/">Documentation</a>
-                <a id="nav-javadoc" class="nav-link nav-link-collapse" href="#">JavaDoc</a>
-                <a id="nav-mvn" class="nav-link nav-link-collapse" href="https://mvn.iceyleagons.net/">Maven/Gradle</a>
-                <a id="nav-discord" class="nav-link nav-link-collapse"
-                    href="https://discord.iceyleagons.net/">Discord</a>
-                <a class="nav-resp-collapse nav-link" href="javascript:void(0)" onclick="toggleNav();">&#9776;</a>
-                <label id="theme-switch" class="theme-switch nav-link nav-link-collapse" for="checkbox_theme">
-                    <i class="fa-solid fa-circle-half-stroke"></i>
-                    <input type="checkbox" id="checkbox_theme">
-                </label>
-            </div>
-        </div>
-        <div class="nav-collapsed" id="responsive-nav-menu">
-            <a id="nav-collapsed-source" class="nav-link" href="https://github.com/IceyLeagons/iciclev2"
-                onclick="toggleNav();">Source</a>
-            <a id="nav-collapsed-doc" class="nav-link" href="https://docs.iceyleagons.net/icicle/"
-                onclick="toggleNav();">Documentation</a>
-            <a id="nav-collapsed-javadoc" class="nav-link" href="#" onclick="toggleNav();">JavaDoc</a>
-            <a id="nav-collapsed-mvn" class="nav-link" href="https://mvn.iceyleagons.net/"
-                onclick="toggleNav();">Maven/Gradle</a>
-            <a id="nav-collapsed-discord" class="nav-link" href="https://discord.iceyleagons.net/"
-                onclick="toggleNav();">Discord</a>
-            <label id="theme-switch2" class="theme-switch nav-link" for="checkbox_theme">
-                <i class="fa-solid fa-circle-half-stroke"></i>
-                <input type="checkbox" id="checkbox_theme">
-            </label>
-        </div>
+		function gtag() {
+			dataLayer.push(arguments);
+		}
 
+		gtag('js', new Date());
 
-        <script type="text/javascript">
-            function toggleNav() {
-                document.getElementById("responsive-nav-menu").classList.toggle("visible");
-            }
-        </script>
-    </nav>
-    <section class="hero" style="margin-top: 3rem;">
-        <div class="row center-xs">
-            <div class="col-xs-6">
-                <div class="box">
-                    <h1 class="title">Icicle</h1>
-                    <h2 class="subtitle" id="typer-start">
-                        <div class="typed" style="display: inline;"></div>
-                    </h2>
-                </div>
-                <div class="row start-xs" style="margin-top: 3rem;">
-                    <!-- TODO: Replace GitBook URLs once the actual, up-to-date documentation is done -->
-
-                    <div class="col-xs-12 col-md-4 mt">
-                        <div class="row center-xs">
-                            <a id="hero-why" class="button" href="https://docs.iceyleagons.net/icicle/"></a>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-4 mt">
-                        <div class="row center-xs">
-                            <a id="hero-gh" class="button" href="https://github.com/IceyLeagons/iciclev2"
-                                target="_blank"></a>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-4 mt">
-                        <div class="row center-xs">
-                            <a id="hero-start" class="button" href="https://docs.iceyleagons.net/icicle/"> </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="features">
-        <div class="row center-xs">
-            <div class="col-xs-6">
-                <h1 id="features" class="title2"></h1>
-                <small id="features-s1"></small><br>
-                <small id="features-s2"></small>
-            </div>
-        </div>
-        <div class="row center-xs">
-            <div class="col-xs-10">
-                <div class="feature-list">
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-syringe icon"></i>
-                        <h1 class="feature-title" id="dep-inj-title"></h1>
-                        <p class="description" id="dep-inj-description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-sliders icon"></i>
-                        <h1 id="conf-title" class="feature-title"></h1>
-                        <p id="conf-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-language icon"></i>
-                        <h1 id="transl-title" class="feature-title"></h1>
-                        <p id="transl-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <img alt="Kotlin Icon" class="icon kotlin" src="assets/imgs/kotlin.svg" />
-                        <h1 id="kotlin-title" class="feature-title"></h1>
-                        <p id="kotlin-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-terminal icon"></i>
-                        <h1 id="cmd-title" class="feature-title"></h1>
-                        <p id="cmd-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-network-wired icon"></i>
-                        <h1 id="prot-title" class="feature-title"></h1>
-                        <p id="prot-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-server icon"></i>
-                        <h1 id="nms-title" class="feature-title"></h1>
-                        <p id="nms-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-code icon"></i>
-                        <h1 id="dev-title" class="feature-title"></h1>
-                        <p id="dev-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-arrow-pointer icon"></i>
-                        <h1 id="gui-title" class="feature-title"></h1>
-                        <p id="gui-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-database icon"></i>
-                        <h1 id="db-title" class="feature-title"></h1>
-                        <div class="banner"></div>
-                        <p id="db-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-robot icon"></i>
-                        <h1 id="ai-title" class="feature-title"></h1>
-                        <div class="banner"></div>
-                        <p id="ai-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-earth-americas icon"></i>
-                        <h1 id="world-title" class="feature-title"></h1>
-                        <div class="banner"></div>
-                        <p id="world-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-toolbox icon"></i>
-                        <h1 id="utils-title" class="feature-title"></h1>
-                        <p id="utils-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-box icon"></i>
-                        <h1 id="module-title" class="feature-title"></h1>
-                        <p id="module-description" class="description"></p>
-                    </div>
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-brush icon"></i>
-                        <h1 id="custom-title" class="feature-title"></h1>
-                        <p id="custom-description" class="description"></p>
-                    </div>
-                    <!-- Add feature: highly customizable -->
-                    <div class="feature" data-aos="fade-up">
-                        <i class="fa-solid fa-infinity icon"></i>
-                        <h1 id="more-title" class="feature-title"></h1>
-                        <p id="more-description" class="description"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="award">
-        <svg width="100%" height="100%" id="svg" viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg"
-            class="wave up">
-            <path
-                d="M 0,400 C 0,400 0,200 0,200 C 122.03827751196172,163.23444976076553 244.07655502392345,126.46889952153109 334,136 C 423.92344497607655,145.53110047846891 481.73205741626793,201.35885167464116 563,226 C 644.2679425837321,250.64114832535884 748.9952153110047,244.09569377990428 844,239 C 939.0047846889953,233.90430622009572 1024.287081339713,230.25837320574166 1122,224 C 1219.712918660287,217.74162679425834 1329.8564593301435,208.87081339712915 1440,200 C 1440,200 1440,400 1440,400 Z"
-                stroke="none" stroke-width="0"></path>
-        </svg>
-        <div class="row center-xs" style="margin-top: -4rem;">
-            <div class="col-xs-6">
-                <div class="sziiv" data-aos="flip-up">
-                    <img class="sziiv" src="./assets/imgs/sziiv.png" />
-                </div>
-                <h1 id="award-title" class="title" data-aos="fade-up"></h1>
-                <p id="award-description" style="font-size: 2rem" data-aos="fade-down">
-
-                </p>
-            </div>
-            <svg width="100%" height="100%" id="svg" viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg"
-                class="wave">
-                <path
-                    d="M 0,400 C 0,400 0,200 0,200 C 122.03827751196172,163.23444976076553 244.07655502392345,126.46889952153109 334,136 C 423.92344497607655,145.53110047846891 481.73205741626793,201.35885167464116 563,226 C 644.2679425837321,250.64114832535884 748.9952153110047,244.09569377990428 844,239 C 939.0047846889953,233.90430622009572 1024.287081339713,230.25837320574166 1122,224 C 1219.712918660287,217.74162679425834 1329.8564593301435,208.87081339712915 1440,200 C 1440,200 1440,400 1440,400 Z"
-                    stroke="none" stroke-width="0"></path>
-            </svg>
-        </div>
-    </section>
-
-    <section class="demo">
-        <div class="row center-xs" style="margin-bottom: 2rem;">
-            <div class="col-xs-6" data-aos="fade-up">
-                <h1 id="demo-title" class="title2"></h1>
-                <h2 id="demo-subtitle"></h2>
-            </div>
-        </div>
-        <div class="row center-xs" data-aos="zoom-in-up">
-            <div class="col-md-4 col-xs-12 middle-xs">
-                <h2 id="demo-dep-title" class="ar"></h2>
-                <p id="demo-dep-description" class="al"></p>
-            </div>
-            <div class="col-md-6 col-xs-12">
-                <pre><code class="language-java">
-@Service
-public class TestServiceImpl implements TestService {
-    private final TranslationService translationService;
-    private final String something;
-    private final Economy economy; // Vault Economy interface (VaultAPI)
-
-    @Autowired // Only retained in source, not needed at runtime
-    public TestServiceImpl(TranslationService translationService,
-                        @Property("config.something") String something,
-                        Economy economy) {
-        this.translationService = translationService;
-
-        // You don't need to autowire the whole configuration,
-        // you can autowire specific fields as well.
-        this.something = something;
-
-        // Autowire from Bukkit's ServicesManager
-        this.economy = economy;
-    }
-}
-            </code></pre>
-            </div>
-            <div class="col-md-1 col-xs-12"></div>
-        </div>
-        <div class="row center-xs" data-aos="zoom-in-up">
-            <div class="col-md-1 col-xs-12"></div>
-            <div class="col-md-6 col-xs-12">
-                <pre><code class="language-java">
-@Config(value = "config.yml", headerLines = {"You can even add headers!"})
-public class MyConfig extends AbstractConfiguration {
-
-    @ConfigField("settings.prefix")
-    @ConfigComment("Change the prefix of the demo.")
-    public String prefix = "DefaultPrefix";
-
-    @ConfigField("settings.auto-update")
-    public boolean autoUpdate = true;
-                    
-}
-            </code></pre>
-            </div>
-            <div class="col-md-4 middle-xs al col-xs-12">
-                <h2 id="demo-config-title"></h2>
-                <p id="demo-config-description"></p>
-            </div>
-        </div>
-        <div class="row center-xs" data-aos="zoom-in-up">
-            <div class="col-md-4 col-xs-12 middle-xs">
-                <h2 id="demo-cmd-title" class="ar"></h2>
-                <p id="demo-cmd-description" class="al"></p>
-            </div>
-            <div class="col-md-6 col-xs-12">
-                <pre><code class="language-java">
-@CommandManager("demo")
-public class DemoCommand {
-
-    @Command(value = "execute", returnsTranslationKey = false)
-    public String onExecuted() {
-        return "You have executed the /demo execute command!";
-    }
-
-    @PlayerOnly
-    @Command(value = "player", returnsTranslationKey = false)
-    public String onExecuted(@CommandSender Player player) {
-        return "Hm, you must be a player then! Your name is: " + player.getName();
-    }
-
-    @PlayerOnly
-    @Permission("demo.admin.opCommand")
-    @Command(value = "setOp", returnsTranslationKey = false)
-    public String onExecuted(Player target, boolean value) {
-        target.setOp(value);
-        return value ? "Great, you have set " + target.getName() " to operator!"
-                     :  "You have removed " + target.getName() + "'s privileges!";
-    }
-}
-            </code></pre>
-            </div>
-            <div class="col-md-1 col-xs-12"></div>
-        </div>
-        <div class="row center-xs" data-aos="zoom-in-up">
-            <div class="col-md-1 col-xs-12"></div>
-            <div class="col-md-6 col-xs-12">
-                <pre><code class="language-java">
-String defaultValue =
-    "You have {IF(EQ(amount, 1),IF(SW(item, 'a', 'e', 'i', 'o', 'u'),'an','a'),amount)}" +
-    "{item}{IF(GT(amount, 1), 's', '')}.";
-player.sendMessage(
-    translationService.getTranslation(
-        "demo", "en", defaultValue,
-        Map.of("item", "apple", "amount", "12")
-    )
-);
-
-// Output: If amount is 12 & item is apple: You have 12 apples.
-//         If amount is 1 & item is apple: You have an apple.
-//         If amount is 1 & item is pear: You have a pear.
-            </code></pre>
-            </div>
-            <div class="col-md-4 col-xs-12 middle-xs al">
-                <h2 id="demo-transl-title"></h2>
-                <p id="demo-transl-description"></p>
-            </div>
-        </div>
-    </section>
-
-    <section class="review">
-        <!--<div class="row center-xs">
-        <div class="col-xs-6">
-            <h1 class="title2">What others said</h1>
-        </div>
-    </div>
-    <div class="row center-xs">
-        <div class="col-xs-6">
-
-        </div>
-    </div>-->
-    </section>
-
-    <footer class="footer">
-        <div id="copyright" class="footer-content">
-        </div>
-    </footer>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-core.min.js"
-        integrity="sha512-LCKPTo0gtJ74zCNMbWw04ltmujpzSR4oW+fgN+Y1YclhM5ZrHCZQAJE4quEodcI/G122sRhSGU2BsSRUZ2Gu3w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/autoloader/prism-autoloader.min.js"
-        integrity="sha512-GP4x8UWxWyh4BMbyJGOGneiTbkrWEF5izsVJByzVLodP8CuJH/n936+yQDMJJrOPUHLgyPbLiGw2rXmdvGdXHA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.js"
-        integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <script src="assets/js/theme.js"></script>
-    <script src="assets/js/localizer.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init();
-    </script>
-
-
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SC44ZYPS6Y"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
-        gtag('js', new Date());
-
-        gtag('config', 'G-SC44ZYPS6Y');
-    </script>
+		gtag('config', 'G-SC44ZYPS6Y');
+	</script>
 </body>
 
 </html>

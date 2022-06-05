@@ -1,0 +1,23 @@
+@CommandManager("demo")
+public class DemoCommand {
+
+    @Command(value = "execute", returnsTranslationKey = false)
+    public String onExecuted() {
+        return "You have executed the /demo execute command!";
+    }
+
+    @PlayerOnly
+    @Command(value = "player", returnsTranslationKey = false)
+    public String onExecuted(@CommandSender Player player) {
+        return "Hm, you must be a player then! Your name is: " + player.getName();
+    }
+
+    @PlayerOnly
+    @Permission("demo.admin.opCommand")
+    @Command(value = "setOp", returnsTranslationKey = false)
+    public String onExecuted(Player target, boolean value) {
+        target.setOp(value);
+        return value ? "Great, you have set " + target.getName() " to operator!"
+                     :  "You have removed " + target.getName() + "'s privileges!";
+    }
+}

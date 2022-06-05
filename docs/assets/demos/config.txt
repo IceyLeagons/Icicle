@@ -1,0 +1,11 @@
+@Config(value = "config.yml", headerLines = {"You can even add headers!"})
+public class MyConfig extends AbstractConfiguration {
+
+    @ConfigField("settings.prefix")
+    @ConfigComment("Change the prefix of the demo.")
+    public String prefix = "DefaultPrefix";
+
+    @ConfigField("settings.auto-update")
+    public boolean autoUpdate = true;
+                    
+}

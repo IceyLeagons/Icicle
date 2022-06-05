@@ -1,0 +1,13 @@
+String defaultValue =
+    "You have {IF(EQ(amount, 1),IF(SW(item, 'a', 'e', 'i', 'o', 'u'),'an','a'),amount)}" +
+    "{item}{IF(GT(amount, 1), 's', '')}.";
+player.sendMessage(
+    translationService.getTranslation(
+        "demo", "en", defaultValue,
+        Map.of("item", "apple", "amount", "12")
+    )
+);
+
+// Output: If amount is 12 & item is apple: You have 12 apples.
+//         If amount is 1 & item is apple: You have an apple.
+//         If amount is 1 & item is pear: You have a pear.

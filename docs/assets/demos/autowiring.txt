@@ -1,0 +1,20 @@
+@Service
+public class TestServiceImpl implements TestService {
+    private final TranslationService translationService;
+    private final String something;
+    private final Economy economy; // Vault Economy interface (VaultAPI)
+
+    @Autowired // Only retained in source, not needed at runtime
+    public TestServiceImpl(TranslationService translationService,
+                        @Property("config.something") String something,
+                        Economy economy) {
+        this.translationService = translationService;
+
+        // You don't need to autowire the whole configuration,
+        // you can autowire specific fields as well.
+        this.something = something;
+
+        // Autowire from Bukkit's ServicesManager
+        this.economy = economy;
+    }
+}

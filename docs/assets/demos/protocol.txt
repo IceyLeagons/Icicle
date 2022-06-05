@@ -1,0 +1,9 @@
+Location location = [...];
+Action action = new ReplaceBlockAction(
+    Settings.create()
+        .with(Settings.TARGET, player) // The client to send the packet to
+        .with(Settings.POSITION, location) // The targeted location
+        .with(Settings.MATERIAL, Material.SPONGE) // The material to change to
+);
+
+protocolService.executeAction(action);

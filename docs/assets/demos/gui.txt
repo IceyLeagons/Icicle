@@ -1,0 +1,16 @@
+// Background item
+ItemStack bg = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+
+// Select area item
+ItemStack select = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
+
+// Slider(x,y,width,height,selectedItem,bgItem,event)
+final Slider slider =  new Slider(1, 1, 4, 1, select, bg, (value, event) -> {
+    clicked.getEvent().getWhoClicked().sendMessage("Value: " + value);
+});
+
+// ChestGui(title,slots,plugin,isGlobal)
+ChestGui chestGui = new ChestGui("Hello", 54, plugin, true);
+chestGui.createPane().addComponent(slider);
+
+chestGui.open(player); // Opening GUI for player
