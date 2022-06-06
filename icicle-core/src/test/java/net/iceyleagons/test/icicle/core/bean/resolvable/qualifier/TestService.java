@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,15 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+package net.iceyleagons.test.icicle.core.bean.resolvable.qualifier;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 28, 2021
+ * @since Jun. 06, 2022
  */
-@Target(METHOD)
-@Retention(RUNTIME)
-public @interface Bean {
+public interface TestService {
+
+    String id();
 
 }

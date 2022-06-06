@@ -28,6 +28,7 @@ import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.AutoCreate;
 import net.iceyleagons.icicle.core.annotations.Bean;
 import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
+import net.iceyleagons.icicle.core.annotations.Primary;
 import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
@@ -45,7 +46,9 @@ import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingDependencyTree
 import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
+import net.iceyleagons.icicle.core.exceptions.MultipleInstanceException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
+import net.iceyleagons.icicle.core.other.QualifierKey;
 import net.iceyleagons.icicle.core.performance.PerformanceLog;
 import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
@@ -89,7 +92,7 @@ public class DefaultBeanManager implements BeanManager {
 
     private final Application application;
 
-    public DefaultBeanManager(Application application) {
+    public DefaultBeanManager(Application application) throws MultipleInstanceException {
         this.application = application;
         this.reflections = application.getReflections();
 
@@ -362,9 +365,10 @@ public class DefaultBeanManager implements BeanManager {
         }
     }
 
-    private void callBeanMethodsInsideBean(Class<?> beanClass, Object bean) {
-        for (Method method : Arrays.stream(beanClass.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(Bean.class)).peek(m -> m.setAccessible(true)).toList()) {
+    private void callBeanMethodsInsideBean(Class<?> beanClass, Object bean) throws MultipleInstanceException {
+        for (Method method : Arrays.stream(beanClass.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(Bean.class)).toList()) {
             try {
+                method.setAccessible(true);
                 method.invoke(bean); // BeanDelegation (in proxy) will take care of registration, we just need to invoke it once, to register it
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new IllegalStateException("Could not invoke @Bean method inside bean: " + beanClass.getName(), e);

@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core;
 
+import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.beans.BeanManager;
 import net.iceyleagons.icicle.core.beans.DefaultBeanManager;
 import net.iceyleagons.icicle.core.beans.GlobalServiceProvider;
@@ -74,6 +75,7 @@ public abstract class AbstractIcicleApplication implements Application {
      * @param globalServiceProvider an instance of a {@link net.iceyleagons.icicle.core.beans.GlobalServiceProvider}.
      * @param configRoot            the root folder, where the configs will be placed
      */
+    @SneakyThrows
     public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler, GlobalServiceProvider globalServiceProvider, File configRoot) {
         PerformanceLog.begin(this, "Application Creation", AbstractIcicleApplication.class);
         this.reflections = new Reflections(rootPackage).merge(Icicle.ICICLE_REFLECTIONS);

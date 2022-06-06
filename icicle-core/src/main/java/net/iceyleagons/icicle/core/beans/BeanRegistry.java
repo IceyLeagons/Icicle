@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.beans;
 
+import net.iceyleagons.icicle.core.exceptions.MultipleInstanceException;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,6 +50,17 @@ public interface BeanRegistry {
     <T> Optional<T> getBean(Class<T> type);
 
     /**
+     * Returns the bean for the supplied class or an empty optional.
+     *
+     * @param type the class of the wanted bean
+     * @param qualifier the name of the implementation
+     * @param <T>  type of the bean
+     * @return the Optional containing the bean (if exists) or empty
+     * @see Optional
+     */
+    <T> Optional<T> getBean(Class<T> type, String qualifier);
+
+    /**
      * Returns the bean for the supplied class or null.
      *
      * @param type the class of the wanted bean
@@ -56,6 +68,16 @@ public interface BeanRegistry {
      * @return the bean (if exists) or null
      */
     @Nullable <T> T getBeanNullable(Class<T> type);
+
+    /**
+     * Returns the bean for the supplied class or null.
+     *
+     * @param type the class of the wanted bean
+     * @param qualifier the name of the implementation
+     * @param <T>  type of the bean
+     * @return the bean (if exists) or null
+     */
+    @Nullable <T> T getBeanNullable(Class<T> type, String qualifier);
 
     /**
      * Checks whether a bean instance has been registered for the supplied class.
@@ -66,19 +88,45 @@ public interface BeanRegistry {
     boolean isRegistered(Class<?> type);
 
     /**
+     * Checks whether a bean instance has been registered for the supplied class.
+     *
+     * @param type the class to check
+     * @param qualifier the name of the implementation
+     * @return true if a bean instance is registered for this class
+     */
+    boolean isRegistered(Class<?> type, String qualifier);
+
+    /**
      * Registers a bean with the specified class (type).
      *
      * @param type   the type to register the bean as
      * @param object the bean
      */
-    void registerBean(Class<?> type, Object object);
+    void registerBean(Class<?> type, Object object) throws MultipleInstanceException;
+
+    /**
+     * Registers a bean with the specified class (type).
+     *
+     * @param type   the type to register the bean as
+     * @param qualifier the name of the implementation
+     * @param object the bean
+     */
+    void registerBean(Class<?> type, Object object, String qualifier) throws MultipleInstanceException;
 
     /**
      * Registers a bean using {@link Object#getClass()} as its type.
      *
      * @param object the bean
      */
-    void registerBean(Object object);
+    void registerBean(Object object) throws MultipleInstanceException;
+
+    /**
+     * Registers a bean using {@link Object#getClass()} as its type.
+     *
+     * @param object the bean
+     * @param qualifier the name of the implementation
+     */
+    void registerBean(Object object, String qualifier) throws MultipleInstanceException;
 
     /**
      * Unregister a bean from the registry.
@@ -91,6 +139,19 @@ public interface BeanRegistry {
      */
     @Internal
     void unregisterBean(Class<?> type);
+
+    /**
+     * Unregister a bean from the registry.
+     * <p>
+     * <b>WARNING!</b>
+     * Should only be called internally, otherwise it may cause serious issues with dependency tree resolving.
+     *
+     * @param type the type to unregister
+     * @param qualifier the name of the implementation
+     * @see Internal
+     */
+    @Internal
+    void unregisterBean(Class<?> type, String qualifier);
 
 
     /**

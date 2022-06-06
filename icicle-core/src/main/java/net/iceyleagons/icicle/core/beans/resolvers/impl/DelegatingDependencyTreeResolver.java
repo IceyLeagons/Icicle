@@ -30,6 +30,7 @@ import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
+import net.iceyleagons.icicle.core.other.QualifierKey;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.utilities.ListUtils;
 import org.slf4j.Logger;
@@ -40,6 +41,7 @@ import java.lang.reflect.Parameter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 /**
  * Default implementation of {@link DependencyTreeResolver}.
@@ -65,12 +67,14 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
     /**
      * Formats a human-friendly "graph" of the dependency circle.
      *
-     * @param tree  the dependencies that form a circle
+     * @param rawTree  the dependencies that form a circle
      * @param start the starting point of the circle
      * @param end   the ending point of the circle (the one that references the starting point --> making a circle)
      * @return the formatted "graph" to use in {@link CircularDependencyException}
      */
-    private static String getCycleString(LinkedList<Class<?>> tree, Class<?> start, Class<?> end) {
+    private static String getCycleString(LinkedList<QualifierKey> rawTree, Class<?> start, Class<?> end) {
+        LinkedList<Class<?>> tree = rawTree.stream().map(QualifierKey::getClazz).collect(Collectors.toCollection(LinkedList::new));
+
         int startIndex = tree.indexOf(start);
         int endIndex = tree.indexOf(end);
 
@@ -96,10 +100,11 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
     public LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException, UnsatisfiedDependencyException {
         logger.debug("Resolving dependency tree for bean-type: {}", currentBean.getName());
 
-        LinkedList<Class<?>> tree = new LinkedList<>();
+        LinkedList<QualifierKey> tree = new LinkedList<>();
         Stack<Class<?>> stack = new Stack<>();
 
-        tree.add(currentBean);
+        QualifierKey cq = new QualifierKey(currentBean, QualifierKey.getQualifier(currentBean));
+        tree.add(cq);
         stack.add(currentBean);
 
         while (!stack.isEmpty()) {
@@ -116,14 +121,19 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
                     }
                 }
 
-                if (!beanRegistry.isRegistered(dependency)) {
-                    if (tree.contains(dependency)) {
+                String qualifier = QualifierKey.getQualifier(param);
+
+                if (!beanRegistry.isRegistered(dependency, qualifier)) {
+                    if (tree.contains(new QualifierKey(dependency, qualifier))) {
                         logger.warn("Circular dependency found!");
                         throw new CircularDependencyException(getCycleString(tree, dependency, bean));
                     } else if (!this.autoCreateResolver.isAnnotated(dependency)) {
                         if (dependency.isInterface()) {
                             // Maybe it's a Service or GlobalService interface
-                            List<Class<?>> impls = BeanUtils.getImplementationsOfInterface(dependency, this.autoCreateResolver.getReflections());
+                            List<Class<?>> impls =
+                                    BeanUtils.getImplementationsOfInterface(dependency, this.autoCreateResolver.getReflections())
+                                            .stream().filter(c -> QualifierKey.getQualifier(c).equals(qualifier)).collect(Collectors.toList());
+
                             if (impls.isEmpty()) {
                                 throw new UnsatisfiedDependencyException(param);
                             }
@@ -133,7 +143,7 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
                             }
 
                             final Class<?> impl = impls.get(0);
-                            tree.add(impl);
+                            tree.add(new QualifierKey(impl, QualifierKey.getQualifier(impl)));
                             stack.add(impl);
                             continue;
                         } else {
@@ -142,13 +152,13 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
                     }
                 }
 
-                tree.add(dependency);
+                tree.add(new QualifierKey(dependency, qualifier));
                 stack.add(dependency);
             }
         }
 
-        tree.remove(currentBean);
+        tree.remove(cq);
 
-        return ListUtils.reverseLinkedList(tree);
+        return ListUtils.reverseLinkedList(tree).stream().map(QualifierKey::getClazz).collect(Collectors.toCollection(LinkedList::new));
     }
 }

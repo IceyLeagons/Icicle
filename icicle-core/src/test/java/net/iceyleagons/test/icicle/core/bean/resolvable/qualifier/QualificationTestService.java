@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,42 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations;
+package net.iceyleagons.test.icicle.core.bean.resolvable.qualifier;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import net.iceyleagons.icicle.core.annotations.Qualifier;
+import net.iceyleagons.icicle.core.annotations.service.Service;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 28, 2021
+ * @since Jun. 06, 2022
  */
-@Target(METHOD)
-@Retention(RUNTIME)
-public @interface Bean {
+@Service
+public class QualificationTestService {
 
+    private final TestService test;
+    private final TestService test2;
+    private final TestService test3;
+
+    public QualificationTestService(
+            @Qualifier("qualified") TestService test, // Should be QualifiedService
+            @Qualifier("qualified2") TestService test2, // Should be SecondQualifiedService
+            TestService test3 // Should be NotQualifiedService
+    ){
+        this.test = test;
+        this.test2 = test2;
+        this.test3 = test3;
+    }
+
+    public TestService getQualified() {
+        return this.test;
+    }
+
+    public TestService getQualified2() {
+        return this.test2;
+    }
+
+    public TestService getNonQualified() {
+        return this.test3;
+    }
 }

@@ -28,6 +28,7 @@ import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.ConstructorParameterResolver;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
+import net.iceyleagons.icicle.core.other.QualifierKey;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -61,9 +62,10 @@ public class DelegatingConstructorParameterResolver implements ConstructorParame
 
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
+            String qualifier = QualifierKey.getQualifier(parameter);
             Class<?> type = parameter.getType();
 
-            Object result = beanRegistry.getBeanNullable(type);
+            Object result = beanRegistry.getBeanNullable(type, qualifier);
 
             if (parameter.getAnnotations().length != 0 && result == null) {
                 for (Annotation annotation : parameter.getAnnotations()) {

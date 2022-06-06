@@ -22,23 +22,21 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.test.icicle.core.bean.resolvable;
+package net.iceyleagons.test.icicle.core.bean.resolvable.custom;
 
-import net.iceyleagons.icicle.core.annotations.service.Service;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Feb. 01, 2022
  */
-@Service
-public class CustomAutowiringHandlerService {
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface TestAutowiring {
 
-    public String asd;
-    public String should;
-
-    public CustomAutowiringHandlerService(@TestAutowiring("should") String should, @TestAutowiring("asd") String asd) {
-        this.should = should;
-        this.asd = asd;
-    }
+    String value();
 }

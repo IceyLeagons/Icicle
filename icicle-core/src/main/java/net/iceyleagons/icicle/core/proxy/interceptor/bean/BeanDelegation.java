@@ -28,7 +28,13 @@ import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.SuperCall;
+import net.iceyleagons.icicle.core.annotations.Bean;
+import net.iceyleagons.icicle.core.annotations.Primary;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
+import net.iceyleagons.icicle.core.beans.DelegatingBeanRegistry;
+import net.iceyleagons.icicle.core.other.QualifierKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -42,6 +48,7 @@ import java.util.concurrent.Callable;
 public class BeanDelegation {
 
     private final BeanRegistry beanRegistry;
+    private static final Logger logger = LoggerFactory.getLogger(BeanDelegation.class);
 
     @RuntimeType
     public Object run(@SuperCall Callable<?> callable, @Origin Method method) throws Exception {
@@ -50,12 +57,25 @@ public class BeanDelegation {
             throw new IllegalStateException("Method marked with @Bean must have a non-void return type.");
         }
 
-        if (this.beanRegistry.isRegistered(beanType)) {
-            return this.beanRegistry.getBeanNullable(beanType);
+        String qualifier = QualifierKey.getQualifier(method);
+
+        if (this.beanRegistry.isRegistered(beanType, qualifier)) {
+            if (method.isAnnotationPresent(Primary.class)) {
+                logger.info("Primary marked bean found, with already registered non-primary implementation. Replacing registered instance with primary one...");
+                // Removing previous bean type registered as this one is the primary.
+                this.beanRegistry.isRegistered(beanType, qualifier);
+
+                // Adding the primary
+                Object bean = callable.call();
+                this.beanRegistry.registerBean(beanType, bean, qualifier);
+                return bean;
+            }
+
+            return this.beanRegistry.getBeanNullable(beanType, qualifier);
         }
 
         Object bean = callable.call();
-        this.beanRegistry.registerBean(beanType, bean);
+        this.beanRegistry.registerBean(beanType, bean, qualifier);
         return bean;
     }
 }

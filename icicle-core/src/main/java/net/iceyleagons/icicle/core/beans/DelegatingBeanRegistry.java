@@ -24,15 +24,21 @@
 
 package net.iceyleagons.icicle.core.beans;
 
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.core.Application;
+import net.iceyleagons.icicle.core.exceptions.MultipleInstanceException;
+import net.iceyleagons.icicle.core.other.QualifierKey;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -46,17 +52,27 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DelegatingBeanRegistry implements BeanRegistry {
 
     private static final Logger logger = LoggerFactory.getLogger(DelegatingBeanRegistry.class);
-    private final Map<Class<?>, Object> beans = new ConcurrentHashMap<>();
+
+    private final Map<QualifierKey, Object> beans = new ConcurrentHashMap<>();
     private final Application application;
+
+    // Global service providers can only supply one implementation for a service, therefore qualifiers don't need to be implemented.
 
     /**
      * {@inheritDoc}
      */
     @Override
     public <T> Optional<T> getBean(Class<T> type) {
-        final GlobalServiceProvider globalServiceProvider = application.getGlobalServiceProvider();
+        return getBean(type, QualifierKey.DEFAULT_NAME);
+    }
 
-        Optional<T> opt = beans.containsKey(type) ? Optional.ofNullable(ReflectionUtils.castIfNecessary(type, beans.get(type))) : Optional.empty();
+    @Override
+    public <T> Optional<T> getBean(Class<T> type, String qualifier) {
+        final GlobalServiceProvider globalServiceProvider = application.getGlobalServiceProvider();
+        final QualifierKey key = new QualifierKey(type, qualifier);
+
+        Optional<T> opt = beans.containsKey(key) ? Optional.ofNullable(ReflectionUtils.castIfNecessary(type, beans.get(key))) : Optional.empty();
+
         if (globalServiceProvider != null && opt.isEmpty() && globalServiceProvider.isRegistered(type)) {
             opt = globalServiceProvider.getService(type);
         }
@@ -69,7 +85,12 @@ public class DelegatingBeanRegistry implements BeanRegistry {
      */
     @Override
     public <T> T getBeanNullable(Class<T> type) {
-        return getBean(type).orElse(null); //this.beans.containsKey(type) ? ReflectionUtils.castIfNecessary(type, this.beans.get(type)) : null;
+        return getBean(type).orElse(null);
+    }
+
+    @Override
+    public <T> @Nullable T getBeanNullable(Class<T> type, String qualifier) {
+        return getBean(type, qualifier).orElse(null);
     }
 
     /**
@@ -77,32 +98,49 @@ public class DelegatingBeanRegistry implements BeanRegistry {
      */
     @Override
     public boolean isRegistered(Class<?> type) {
+        return isRegistered(type, QualifierKey.getQualifier(type));
+    }
+
+    @Override
+    public boolean isRegistered(Class<?> type, String qualifier) {
         final GlobalServiceProvider globalServiceProvider = application.getGlobalServiceProvider();
-        return this.beans.containsKey(type) || (globalServiceProvider != null && globalServiceProvider.isRegistered(type));
+        return this.beans.containsKey(new QualifierKey(type, qualifier)) || (globalServiceProvider != null && globalServiceProvider.isRegistered(type));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void registerBean(Class<?> type, Object object) {
+    public void registerBean(Class<?> type, Object object) throws MultipleInstanceException {
+        registerBean(type, object, QualifierKey.getQualifier(type));
+    }
+
+    @Override
+    public void registerBean(Class<?> type, Object object, String qualifier) throws MultipleInstanceException  {
         Asserts.isTrue(type != String.class && !type.isPrimitive(), "Strings and primitives cannot be registered as a bean!");
 
-        if (!isRegistered(type)) {
-            beans.put(type, object);
-            logger.debug("Registered bean of type: {}", type.getName());
+        if (!isRegistered(type, qualifier)) {
+            beans.put(new QualifierKey(type, qualifier), object);
+            // System.out.printf("Registered bean of type: %s. Qualifier: %s\n", type.getName(), qualifier);
+            logger.debug("Registered bean of type: {}. Qualifier: {}", type.getName(), qualifier);
             return;
         }
 
-        logger.warn("Bean with type {} already registered! Ignoring...", type.getName());
+        // logger.warn("Bean with type {} and qualifier {} already registered! Ignoring...", type.getName(), qualifier);
+        throw new MultipleInstanceException(String.format("Bean (type: %s | qualifier: %s) already registered!", type.getName(), qualifier));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void registerBean(Object object) {
+    public void registerBean(Object object) throws MultipleInstanceException {
         this.registerBean(object.getClass(), object);
+    }
+
+    @Override
+    public void registerBean(Object object, String qualifier) throws MultipleInstanceException {
+        this.registerBean(object.getClass(), object, qualifier);
     }
 
     /**
@@ -110,8 +148,13 @@ public class DelegatingBeanRegistry implements BeanRegistry {
      */
     @Override
     public void unregisterBean(Class<?> type) {
-        logger.debug("Unregistering bean of type {}", type.getName());
-        this.beans.remove(type);
+        unregisterBean(type, QualifierKey.getQualifier(type));
+    }
+
+    @Override
+    public void unregisterBean(Class<?> type, String qualifier) {
+        logger.debug("Unregistering bean of type {} and qualifier {}", type.getName(), qualifier);
+        this.beans.remove(new QualifierKey(type, qualifier));
     }
 
     /**

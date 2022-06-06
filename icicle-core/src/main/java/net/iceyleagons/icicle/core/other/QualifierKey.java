@@ -24,42 +24,54 @@
 
 package net.iceyleagons.icicle.core.other;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.service.Service;
-import net.iceyleagons.icicle.core.beans.BeanRegistry;
-import org.jetbrains.annotations.NotNull;
+import net.iceyleagons.icicle.core.annotations.Qualifier;
 
-import java.lang.annotation.Annotation;
-import java.util.Collections;
-import java.util.Set;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Mar. 25, 2022
+ * @since Jun. 06, 2022
  */
-@AnnotationHandler
+@Getter
+@EqualsAndHashCode
 @RequiredArgsConstructor
-public class ServiceAnnotationHandler implements CustomAutoCreateAnnotationHandler {
+public final class QualifierKey {
+    public static final String DEFAULT_NAME = "NON_SPECIFIED";
 
-    private final BeanRegistry beanRegistry;
+    private final Class<?> clazz;
+    private final String name;
 
-    @Override
-    public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
-        return Collections.singleton(Service.class);
+    public static String getQualifier(Parameter param) {
+        if (param.isAnnotationPresent(Qualifier.class)) {
+            return getIfEmptyUseDefault(param.getAnnotation(Qualifier.class).value());
+        }
+
+        return DEFAULT_NAME;
     }
 
-    @Override
-    public void onCreated(Object bean, Class<?> type) throws Exception {
-        String qualifier = QualifierKey.getQualifier(type);
-        for (Class<?> anInterface : type.getInterfaces()) {
-            if (this.beanRegistry.isRegistered(anInterface, qualifier)) {
-                throw new IllegalStateException("Service " + anInterface.getName() + " is already registered! (Qualifier: " + qualifier + ")");
-            }
-
-            this.beanRegistry.registerBean(anInterface, bean, qualifier);
+    public static String getQualifier(Class<?> beanClass) {
+        if (beanClass.isAnnotationPresent(Qualifier.class)) {
+            return getIfEmptyUseDefault(beanClass.getAnnotation(Qualifier.class).value());
         }
+
+        return DEFAULT_NAME;
+    }
+
+    public static String getQualifier(Method method) {
+        if (method.isAnnotationPresent(Qualifier.class)) {
+            return getIfEmptyUseDefault(method.getAnnotation(Qualifier.class).value());
+        }
+
+        return DEFAULT_NAME;
+    }
+
+    private static String getIfEmptyUseDefault(String value) {
+        return value.isEmpty() ? DEFAULT_NAME : value;
     }
 }
+

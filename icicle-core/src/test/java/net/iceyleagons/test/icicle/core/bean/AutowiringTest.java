@@ -29,9 +29,10 @@ import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
-import net.iceyleagons.test.icicle.core.bean.resolvable.CustomAutowiringHandlerService;
+import net.iceyleagons.test.icicle.core.bean.resolvable.custom.CustomAutowiringHandlerService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.DependantConstructorService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.EmptyConstructorService;
+import net.iceyleagons.test.icicle.core.bean.resolvable.qualifier.QualificationTestService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -50,7 +51,7 @@ public class AutowiringTest {
 
     @BeforeAll
     public static void setupIcicle() {
-        Icicle.loadIcicle(null);
+        if (!Icicle.LOADED) Icicle.loadIcicle(null);
         application = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.resolvable", ExecutionUtils.debugHandler(), null) {
             @Override
             public String getName() {
@@ -99,5 +100,16 @@ public class AutowiringTest {
 
         Assertions.assertEquals("should", service.should);
         Assertions.assertEquals("asd", service.asd);
+    }
+
+    @Test
+    @DisplayName("Qualification Test")
+    public void testQualifications() {
+        QualificationTestService service = registry.getBeanNullable(QualificationTestService.class);
+        Assertions.assertNotNull(service);
+
+        Assertions.assertEquals("notQualified", service.getNonQualified().id());
+        Assertions.assertEquals("qualified", service.getQualified().id());
+        Assertions.assertEquals("qualified2", service.getQualified2().id());
     }
 }
