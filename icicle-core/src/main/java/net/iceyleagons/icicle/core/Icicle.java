@@ -99,7 +99,6 @@ public class Icicle {
      * Initializes Icicle.
      *
      * @throws IllegalStateException if Icicle was already loaded.
-     * @deprecated internal use only.
      */
     @Internal
     public static void loadIcicle(@Nullable ClassLoader classLoader) {

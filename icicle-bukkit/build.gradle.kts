@@ -36,6 +36,7 @@ repositories {
     mavenCentral()
     spigot()
     jitpack()
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
@@ -49,7 +50,22 @@ dependencies {
     shadow(project(":icicle-protocol"))
     shadow(project(":icicle-nms"))
     compileOnly(project(":icicle-utilities"))
+
     testImplementation("com.github.seeseemelk:${findProperty("mockBukkitVersion")}")
+    testImplementation("me.carleslc.Simple-YAML:Simple-Yaml:${findProperty("simpleYamlVersion")}")
+
+    testCompileOnly("org.jetbrains:annotations:${findProperty("jetbrainsAnnotationVersion")}")
+    testImplementation("org.jetbrains.kotlin:kotlin-reflect:${findProperty("kotlinReflectVersion")}")
+    testImplementation("org.jetbrains.kotlin:kotlin-stdlib:${findProperty("kotlinStdlibVersion")}")
+
+    testImplementation("org.slf4j:slf4j-api:${findProperty("slf4jApiVersion")}")
+    testImplementation("ch.qos.logback:logback-core:${findProperty("logbackVersion")}")
+
+    testImplementation("net.bytebuddy:byte-buddy:${findProperty("byteBuddyVersion")}")
+    testImplementation("net.bytebuddy:byte-buddy-agent:${findProperty("byteBuddyAgentVersion")}")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${findProperty("jupiterApiVersion")}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${findProperty("jupiterEngineVersion")}")
 }
 
 icicle {

@@ -41,6 +41,7 @@ public class BukkitApplication extends AbstractIcicleApplication {
 
     private final JavaPlugin javaPlugin;
 
+    @SneakyThrows
     public BukkitApplication(String rootPackage, JavaPlugin javaPlugin) {
         super(rootPackage, new BukkitExecutionHandler(javaPlugin), new BukkitServiceProvider(), javaPlugin.getDataFolder());
         this.javaPlugin = javaPlugin;

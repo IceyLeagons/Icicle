@@ -29,13 +29,28 @@ import net.iceyleagons.icicle.bukkit.listeners.PluginStatusListener;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.annotations.IcicleApplication;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 @IcicleApplication("net.iceyleagons.icicle.bukkit")
 public class IcicleBukkit extends JavaPlugin {
+
+    public boolean isTestingEnvironment = false;
+
+    public IcicleBukkit() {
+        super();
+    }
+
+    // Only invoked in Unit tests
+    public IcicleBukkit(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+        super(loader, description, dataFolder, file);
+        isTestingEnvironment = true;
+    }
 
     public static final Map<JavaPlugin, BukkitApplication> RUNNING_APPLICATIONS = new HashMap<>();
 
@@ -70,8 +85,11 @@ public class IcicleBukkit extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        Icicle.loadIcicle(this.getClassLoader());
-
+        if (isTestingEnvironment) {
+            Icicle.loadIcicle(null);
+        } else {
+            Icicle.loadIcicle(this.getClassLoader());
+        }
     }
 
     @SneakyThrows
