@@ -29,8 +29,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
 
-import java.util.function.Consumer;
-
 /**
  * @author TOTHTOMI
  * @version 1.0.0

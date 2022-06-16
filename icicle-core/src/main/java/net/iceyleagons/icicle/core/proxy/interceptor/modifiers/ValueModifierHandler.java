@@ -29,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.implementation.attribute.AnnotationAppender;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;

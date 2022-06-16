@@ -24,7 +24,6 @@
 
 package net.iceyleagons.icicle.serialization;
 
-import lombok.SneakyThrows;
 import net.iceyleagons.icicle.serialization.converters.Convert;
 import net.iceyleagons.icicle.serialization.converters.ConverterAnnotationHandler;
 import net.iceyleagons.icicle.serialization.converters.ValueConverter;
@@ -36,13 +35,13 @@ import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
 import net.iceyleagons.icicle.serialization.serializers.SerializationProvider;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 
-import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**

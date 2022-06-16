@@ -27,7 +27,18 @@ package net.iceyleagons.icicle.extensions
 import net.iceyleagons.icicle.utilities.ListUtils
 import net.iceyleagons.icicle.utilities.datastores.tuple.UnmodifiableTuple
 
+/**
+ * Merges multiple lists into one.
+ *
+ * @param lists the lists we want to merge into the one specified.
+ * @return all the lists combined into one.
+ */
 fun <T> List<T>.merge(vararg lists: List<T>): MutableList<T> =
     ListUtils.mergeLists(this, *lists)
 
+/**
+ * Converts the pair into an unmodifiable tuple.
+ *
+ * @return an unmodifiable tuple.
+ */
 fun <A, B> Pair<A, B>.asTuple(): UnmodifiableTuple<A, B> = UnmodifiableTuple(first, second)

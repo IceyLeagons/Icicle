@@ -2,6 +2,11 @@ package net.iceyleagons.icicle.extensions
 
 import net.iceyleagons.icicle.protocol.action.Settings
 
+/**
+ * Creates a new settings builder object and returns a protocol settings object.
+ *
+ * @return protocol settings.
+ */
 fun newSettings(settingsLambda: SettingsBuilder.() -> Unit): Settings {
     val settings = SettingsBuilder()
     settingsLambda.invoke(settings)
@@ -10,6 +15,11 @@ fun newSettings(settingsLambda: SettingsBuilder.() -> Unit): Settings {
     return rs
 }
 
+/**
+ * The class responsible for the lambda-like creation of Protocol settings.
+ * @author Gábe
+ * @since 0.1
+ */
 class SettingsBuilder {
     val settings = HashMap<Int, Any>()
 

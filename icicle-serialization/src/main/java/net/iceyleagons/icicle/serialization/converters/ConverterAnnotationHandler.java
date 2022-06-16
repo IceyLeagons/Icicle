@@ -26,7 +26,6 @@ package net.iceyleagons.icicle.serialization.converters;
 
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
-import net.iceyleagons.icicle.serialization.mapping.PropertyMapper;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;

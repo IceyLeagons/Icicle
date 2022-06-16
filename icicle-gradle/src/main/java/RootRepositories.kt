@@ -24,23 +24,44 @@
 
 import net.iceyleagons.gradle.IcicleRepositoryHelper
 
+/**
+ * The repository of IceyLeagons' RELEASED libraries.
+ */
 fun igloo() =
     IcicleRepositoryHelper.igloo()
 
+/**
+ * The repository of IceyLeagons' WIP or UNSTABLE libraries/library versions.
+ */
 fun iglooSnapshots() =
     IcicleRepositoryHelper.iglooSnapshots()
 
+/**
+ * The repository of Sonatype.
+ */
 fun sonatype() =
     IcicleRepositoryHelper.sonatype()
 
+/**
+ * Repository containing NMS dependencies.
+ */
 fun codemc() =
     IcicleRepositoryHelper.codemc()
 
+/**
+ * The repository that's responsible for the Spigot libraries.
+ */
 fun spigot() =
     IcicleRepositoryHelper.spigot()
 
+/**
+ * The repository that's responsible for the Paper libraries.
+ */
 fun paper() =
     IcicleRepositoryHelper.paper()
 
+/**
+ * Repository of libraries compiled from common Git sources. Needed for lots of dependencies.
+ */
 fun jitpack() =
     IcicleRepositoryHelper.jitpack()

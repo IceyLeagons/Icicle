@@ -24,26 +24,50 @@
 
 import net.iceyleagons.gradle.IcicleDependencyHelper
 
+/**
+ * Adds the icicle-core dependency into the project it is called in.
+ */
 fun icicle() =
     IcicleDependencyHelper.icicleCore()
 
+/**
+ * Adds lombok into annotationProcessor and compileOnly.
+ */
 fun lombok() =
     IcicleDependencyHelper.lombok()
 
+/**
+ * Adds the spigot api into the project it is called in as implementation.
+ */
 fun spigotApi() =
     IcicleDependencyHelper.spigotApi()
 
+/**
+ * Adds the spigot api into the project it is called in as implementation with the specified version.
+ */
 fun spigotApi(version: String) =
     IcicleDependencyHelper.spigotApi(version)
 
+/**
+ * Adds the paper api into the project it is called in as implementation.
+ */
 fun paperApi() =
     IcicleDependencyHelper.paperApi()
 
+/**
+ * Adds the paper api into the project it is called in as implementation with the specified version.
+ */
 fun paperApi(version: String) =
     IcicleDependencyHelper.paperApi(version)
 
+/**
+ * Adds the minecraft sources into the project it is called in as implementation.
+ */
 fun nms() =
     IcicleDependencyHelper.nms()
 
+/**
+ * Adds the minecraft sources into the project it is called in as implementation with the specified version.
+ */
 fun nms(version: String) =
     IcicleDependencyHelper.nms(version)

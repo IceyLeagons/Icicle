@@ -60,7 +60,7 @@ public class Animation {
 
         this.frameIterator = this.frames.iterator();
         this.task = async ? Bukkit.getScheduler().runTaskTimerAsynchronously(this.javaPlugin, this::onTick, 0L, 1L) :
-            Bukkit.getScheduler().runTaskTimer(this.javaPlugin, this::onTick, 0L, 1L);
+                Bukkit.getScheduler().runTaskTimer(this.javaPlugin, this::onTick, 0L, 1L);
 
         return this;
     }

@@ -24,7 +24,7 @@
 
 package net.iceyleagons.test.icicle;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
+/*import be.seeseemelk.mockbukkit.MockBukkit;
 import net.iceyleagons.icicle.bukkit.IcicleBukkit;
 import net.iceyleagons.icicle.core.Icicle;
 import org.junit.jupiter.api.AfterAll;
@@ -32,7 +32,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;*/
 
 /**
  * @author TOTHTOMI
@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class TestMain {
 
-    // Temporarily commented out, to have a successful build on github
+    // Temporarily commented out, to have a successful build on GitHub
 
     /*
     private static IcicleTestPlugin plugin;

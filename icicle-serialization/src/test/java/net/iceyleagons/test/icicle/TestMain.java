@@ -26,18 +26,18 @@ package net.iceyleagons.test.icicle;
 
 import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.annotations.EnumSerialization;
-import net.iceyleagons.icicle.serialization.annotations.SerializedName;
 import net.iceyleagons.icicle.serialization.converters.Convert;
 import net.iceyleagons.icicle.serialization.converters.ConverterAnnotationHandler;
 import net.iceyleagons.icicle.serialization.converters.ValueConverter;
 import net.iceyleagons.icicle.serialization.mapping.PropertyMapperAnnotationHandler;
 import net.iceyleagons.icicle.serialization.mapping.impl.*;
-import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
 import net.iceyleagons.icicle.utilities.Benchmark;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author TOTHTOMI

@@ -27,7 +27,6 @@ package net.iceyleagons.icicle.serialization.mapping;
 import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
-import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.generic.acessors.OneTypeAccessor;
 
 import java.lang.annotation.Annotation;

@@ -85,15 +85,16 @@ public class TestCommand {
                 .addComponent(
                         new Slider(1, 1, 4, 1,
                                 new ItemStack(Material.GREEN_STAINED_GLASS_PANE),
-                                new ItemStack(Material.GRAY_STAINED_GLASS_PANE), (value, event) -> {}).setValue(5)
+                                new ItemStack(Material.GRAY_STAINED_GLASS_PANE), (value, event) -> {
+                        }).setValue(5)
                 )
                 .addComponent(button)
                 .addComponent(new ToggleButton(1, 3, 1, 1,
                         new ItemStack(Material.GREEN_DYE),
                         new ItemStack(Material.RED_DYE),
                         (val, e) -> {
-                    e.getEvent().getWhoClicked().sendMessage("new value: " + val);
-                }));
+                            e.getEvent().getWhoClicked().sendMessage("new value: " + val);
+                        }));
 
         update();
     }

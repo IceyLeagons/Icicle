@@ -39,7 +39,7 @@ import java.util.Map;
 
 @IcicleApplication("net.iceyleagons.icicle.bukkit")
 public class IcicleBukkit extends JavaPlugin {
-
+    public static final Map<JavaPlugin, BukkitApplication> RUNNING_APPLICATIONS = new HashMap<>();
     public boolean isTestingEnvironment = false;
 
     public IcicleBukkit() {
@@ -51,8 +51,6 @@ public class IcicleBukkit extends JavaPlugin {
         super(loader, description, dataFolder, file);
         isTestingEnvironment = true;
     }
-
-    public static final Map<JavaPlugin, BukkitApplication> RUNNING_APPLICATIONS = new HashMap<>();
 
     public static void startNewApplication(JavaPlugin javaPlugin) {
         try {

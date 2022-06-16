@@ -27,6 +27,8 @@ package net.iceyleagons.icicle.core.translations.code.functions.impl;
 import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
 import net.iceyleagons.icicle.core.translations.code.functions.CodeFunction;
 
+import java.util.Objects;
+
 /**
  * @author TOTHTOMI
  * @version 1.0.0
@@ -41,7 +43,7 @@ public class IsEmptyFunction extends AbstractCodeFunction {
 
     @Override
     public String parse(String input) {
-        if (input == "error") return "error";
-        return (input == null || input.isEmpty()) ? "true" : "false";
+        if (Objects.equals(input, "error")) return "error";
+        return (input.isEmpty()) ? "true" : "false";
     }
 }

@@ -24,7 +24,6 @@
 
 package net.iceyleagons.icicle.core.beans;
 
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.exceptions.MultipleInstanceException;
@@ -35,10 +34,8 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

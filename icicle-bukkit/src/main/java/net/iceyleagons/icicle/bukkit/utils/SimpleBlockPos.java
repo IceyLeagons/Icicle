@@ -85,6 +85,6 @@ public class SimpleBlockPos {
 
     @Override
     public int hashCode() {
-        return (int) MathUtils.better3DHash(x,y,z);
+        return (int) MathUtils.better3DHash(x, y, z);
     }
 }
