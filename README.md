@@ -61,11 +61,10 @@
 Icicle is split into separate modules, which all add additional functionality to the core. These modules don't need to
 be downloaded: when the core reads the metadata of a project that is built around Icicle it will download and load the necessary Icicle modules for it automagically.
 
-Icicle currently has the following official modules (if the "Dependencies" column is empty, then the module can be used
-standalone):
-|✅|⚠️|☢️|📝|💀|
+Icicle currently has the following official modules:
+| ✅ | ⚠️| ☢️ | 📝 | 💀 |
 |:-:|:-:|:-:|:-:|:-:|
-|**RELEASE**<br>Ready for use.|**BETA**<br>Unstable.|**ALPHA**<br>Use with caution!|**PLANNED**<br>Stubs, or just plans.|**DROPPED**<br>Support is non-existent.|
+| **RELEASE**<br>Ready for use. | **BETA**<br>Unstable. | **ALPHA**<br>Use with caution! | **PLANNED**<br>Stubs, or just plans. | **DROPPED**<br>Support is non-existent. |
 
 | Status | Name | Description | Recommended Version |
 |-:|:-:|:-|-:|
