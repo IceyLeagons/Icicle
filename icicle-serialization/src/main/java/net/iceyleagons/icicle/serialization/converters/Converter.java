@@ -22,17 +22,22 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization.serializers;
+package net.iceyleagons.icicle.serialization.converters;
+
+import net.iceyleagons.icicle.core.annotations.AutoCreate;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 27, 2022
+ * @since Jun. 13, 2022
  */
-public interface StringSerializer {
-
-    String serializeToString(Object object);
-
-    <T> T deserializeFromString(String string, Class<T> type);
-
+@AutoCreate
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Converter {
 }

@@ -22,28 +22,39 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization.serializers;
+package net.iceyleagons.icicle.serialization.converters;
 
-import java.io.File;
-import java.nio.file.Path;
+import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.serialization.mapping.PropertyMapper;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 27, 2022
+ * @since Jun. 13, 2022
  */
-public interface FileSerializer {
+@AnnotationHandler
+public class ConverterAnnotationHandler implements CustomAutoCreateAnnotationHandler {
 
-    default void serializeToFile(Object object, File file) {
-        serializeToPath(object, file.toPath());
+    public static final Set<ValueConverter<?,?>> REGISTERED_CONVERTERS = new HashSet<>();
+
+    @Override
+    public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
+        return Collections.singleton(Converter.class);
     }
 
-    void serializeToPath(Object object, Path path);
+    @Override
+    public void onCreated(Object bean, Class<?> type) throws Exception {
+        if (!(bean instanceof ValueConverter<?,?>)) {
+            throw new IllegalStateException("Bean must extend ValueConverter interface!");
+        }
 
-    default <T> T deserializeFromFile(File file, Class<T> type) {
-        return deserializeFromPath(file.toPath(), type);
+        REGISTERED_CONVERTERS.add((ValueConverter<?,?>) bean);
     }
-
-    <T> T deserializeFromPath(Path path, Class<T> type);
-
 }

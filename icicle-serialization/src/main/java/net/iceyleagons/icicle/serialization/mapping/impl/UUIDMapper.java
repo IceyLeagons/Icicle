@@ -22,18 +22,37 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization;
+package net.iceyleagons.icicle.serialization.mapping.impl;
 
-import java.lang.reflect.Field;
+import net.iceyleagons.icicle.serialization.ObjectMapper;
+import net.iceyleagons.icicle.serialization.dto.ObjectValue;
+import net.iceyleagons.icicle.serialization.mapping.PropertyMapper;
+import net.iceyleagons.icicle.serialization.mapping.SerializationPropertyMapper;
+
+import java.lang.annotation.Annotation;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Jun. 14, 2022
  */
-@FunctionalInterface
-public interface ValueProvider {
+@SerializationPropertyMapper
+public class UUIDMapper extends PropertyMapper<UUID> {
 
-    Object getValue(Field field, String key);
+    @Override
+    public UUID deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
+        return UUID.fromString((String) object);
+    }
 
+    @Override
+    protected ObjectValue mapCasted(UUID object, String key, Class<?> javaType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
+        return new ObjectValue(String.class, key, object.toString());
+    }
+
+    @Override
+    public boolean supports(Class<?> type) {
+        return UUID.class.isAssignableFrom(type);
+    }
 }

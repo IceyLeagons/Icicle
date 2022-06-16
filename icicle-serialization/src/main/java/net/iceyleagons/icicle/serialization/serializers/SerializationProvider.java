@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,24 +22,23 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization.converters;
+package net.iceyleagons.icicle.serialization.serializers;
 
-import net.iceyleagons.icicle.utilities.generic.acessors.TwoTypeAccessor;
+import net.iceyleagons.icicle.serialization.dto.MappedObject;
+
+import java.nio.file.Path;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 21, 2021
+ * @since Jun. 14, 2022
  */
-public abstract class AbstractConverter<A, B> extends TwoTypeAccessor<A, B> implements ValueConverter<A, B> {
+public interface SerializationProvider {
 
-    @Override
-    public Class<A> getAClass() {
-        return super.getATypeClass();
-    }
+    String writeAsString(MappedObject object);
+    void writeToFile(MappedObject object, Path file);
 
-    @Override
-    public Class<B> getBClass() {
-        return super.getBTypeClass();
-    }
+    MappedObject readFromString(String string);
+    MappedObject readFromFile(Path file);
+
 }

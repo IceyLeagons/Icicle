@@ -24,198 +24,122 @@
 
 package net.iceyleagons.icicle.serialization;
 
-
 import lombok.SneakyThrows;
-import net.iceyleagons.icicle.core.utils.BeanUtils;
-import net.iceyleagons.icicle.serialization.annotations.Convert;
+import net.iceyleagons.icicle.serialization.converters.Convert;
+import net.iceyleagons.icicle.serialization.converters.ConverterAnnotationHandler;
 import net.iceyleagons.icicle.serialization.converters.ValueConverter;
+import net.iceyleagons.icicle.serialization.dto.MappedObject;
+import net.iceyleagons.icicle.serialization.dto.ObjectValue;
+import net.iceyleagons.icicle.serialization.mapping.PropertyMapper;
+import net.iceyleagons.icicle.serialization.mapping.PropertyMapperAnnotationHandler;
+import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
+import net.iceyleagons.icicle.serialization.serializers.SerializationProvider;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
-import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
+import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
-
-import static net.iceyleagons.icicle.utilities.generic.GenericUtils.genericArrayToNormalArray;
-
+import java.util.stream.Collectors;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Jun. 13, 2022
  */
 public class ObjectMapper {
 
-    private final Map<Class<?>, ValueConverter<?, ?>> converters = new HashMap<>();
+    private final SerializationProvider serializationProvider;
 
-    @SneakyThrows
-    public <T> T demapObject(SerializedObject serializedObject, Class<T> wantedType) {
-        final Class<?> type = serializedObject.getJavaType();
-        if (!wantedType.isAssignableFrom(type))
-            throw new IllegalArgumentException("Wanted type is not assignable from the mapped object!");
-
-        Constructor<?> constructor = BeanUtils.getResolvableConstructor(type);
-        if (constructor.getParameterTypes().length != 0)
-            throw new IllegalStateException("Object must have an empty constructor!");
-
-        Object object = BeanUtils.instantiateClass(constructor, null);
-
-        for (ObjectValue value : serializedObject.getValues()) {
-            if (value.shouldConvert()) {
-                Object converted = convert(value.getValue(), value.getField(), false);
-                ReflectionUtils.set(value.getField(), object, converted);
-            } else if (value.isValuePrimitiveOrString()) {
-                ReflectionUtils.set(value.getField(), object, value.getValue());
-            } else if (value.isArray() && !value.isCollection()) {
-                Object demapped = demapArray(genericArrayToNormalArray(value.getValue(), Object.class), value.getJavaType().getComponentType());
-                ReflectionUtils.set(value.getField(), object, demapped);
-            } else if (value.isEnum()) {
-                ReflectionUtils.set(value.getField(), object, value.getJavaType().getEnumConstants()[(int) value.getValue()]);
-            } else if (value.isCollection()) {
-                Object demapped = demapArray(genericArrayToNormalArray(value.getValue(), Object.class), Object.class);
-
-                Collection<Object> collection = (Collection<Object>) SerializationUtils.createCollectionFromType(value.getJavaType());
-                collection.addAll(Arrays.asList(genericArrayToNormalArray(demapped, Object.class)));
-                ReflectionUtils.set(value.getField(), object, collection);
-            } else if (value.isMap()) {
-                Object demapped = demapMap(genericArrayToNormalArray(value.getValue(), Object.class), value.getJavaType());
-                ReflectionUtils.set(value.getField(), object, demapped);
-            } else if (value.isSubObject()) {
-                Object demapped = demapObject((SerializedObject) value.getValue(), Object.class);
-                ReflectionUtils.set(value.getField(), object, demapped);
-            }
-        }
-
-        return wantedType.cast(object);
+    public ObjectMapper() {
+        this.serializationProvider = new JsonSerializer();
     }
 
-    public SerializedObject mapObject(Object object) {
+    public ObjectMapper(SerializationProvider serializationProvider) {
+        this.serializationProvider = serializationProvider;
+    }
+
+    public MappedObject mapObject(Object object) {
+        // TODO check if object is not a class, but rather a direct subobject like Map or list etc.
+
         if (object == null) return null;
 
-        Class<?> clazz = object.getClass();
-        Set<ObjectValue> values = SerializationUtils.getValuesForClass(clazz, (f, k) -> ReflectionUtils.get(f, object, Object.class));
+        final Class<?> clazz = object.getClass();
+        final Set<ObjectValue> values = new HashSet<>();
 
-        for (ObjectValue value : values) {
-            if (value.isValuePrimitiveOrString()) continue;
-            if (value.shouldConvert()) {
-                Object converted = convert(value.getValue(), value.getField(), true);
-                value.setValue(SerializationUtils.isValuePrimitiveOrString(converted.getClass()) ? converted : mapObject(converted));
-            } else if (value.isEnum()) {
-                value.setValue(value.getValueAs(Enum.class).ordinal());
-            } else if (value.isArray() && !value.isCollection()) {
-                value.setValue(mapArray(genericArrayToNormalArray(value.getValue(), Object.class)));
-            } else if (value.isCollection()) {
-                Object[] collection = value.getValueAs(Collection.class).toArray();
-                value.setValue(mapArray(collection));
-            } else if (value.isMap()) {
-                Map<?, ?> map = value.getValueAs(Map.class);
-                value.setValue(mapMap(map));
-            } else if (value.isSubObject()) {
-                value.setValue(mapObject(value.getValue()));
-            }
+        for (Field declaredField : clazz.getDeclaredFields()) {
+            // check ignorance
+
+            final String name = SerializationUtils.getCustomNameOrDefault(declaredField, declaredField.getName());
+            final Map<Class<? extends Annotation>, Annotation> annotations = Arrays.stream(declaredField.getAnnotations()).collect(Collectors.toMap(Annotation::annotationType, a -> a));
+
+            mapObjectProperty(ReflectionUtils.get(declaredField, object, Object.class), name, declaredField.getType(), annotations, values);
         }
 
-        SerializedObject obj = new SerializedObject(clazz);
-        obj.getValues().addAll(values);
-
-        return obj;
+        return new MappedObject(clazz, values);
     }
 
-    private Object demapMap(Object[] array, Class<?> type) {
-        Map<Object, Object> map = (Map<Object, Object>) SerializationUtils.createMapFromType(type);
-        for (Object o : array) {
-            Map.Entry<Object, Object> entry = (Map.Entry<Object, Object>) o;
-            if (!SerializationUtils.isSubObject(entry.getValue().getClass())) {
-                map.put(entry.getKey(), entry.getValue());
-                continue;
-            }
+    private void mapObjectProperty(Object value, String key, Class<?> javaType, Map<Class<? extends Annotation>, Annotation> annotations, Set<ObjectValue> values) {
+        // TODO: Convert
+        boolean converted = false;
+        if (annotations.containsKey(Convert.class)) {
+            Class<?> conv = ((Convert) annotations.get(Convert.class)).converter();
+            for (ValueConverter<?,?> converter : ConverterAnnotationHandler.REGISTERED_CONVERTERS) {
+                if (converter.supports(javaType) && conv.equals(converter.getClass())) {
+                    Object result = converter.convert(value, true);
 
-            map.put(entry.getKey(), demapObject((SerializedObject) entry.getKey(), Object.class));
-        }
+                    if (SerializationUtils.isValuePrimitiveOrString(result.getClass())) {
+                        values.add(new ObjectValue(result.getClass(), key, result));
+                        return;
+                    }
 
-        return map;
-    }
-
-    private Object[] mapMap(Map<?, ?> map) {
-        Set<Map.Entry<?, ?>> entries = new HashSet<>(map.size());
-
-        for (Map.Entry<?, ?> entry : map.entrySet()) {
-            Object value = entry.getValue();
-            if (!SerializationUtils.isValuePrimitiveOrString(entry.getKey().getClass())) {
-                throw new IllegalStateException("Maps can only have a key of a string or a primitive type object representation. Consider using converters.");
-            }
-
-            if (!SerializationUtils.isSubObject(value.getClass())) {
-                entries.add(new AbstractMap.SimpleEntry<>(entry.getKey(), value));
-                continue;
-            }
-
-            entries.add(new AbstractMap.SimpleEntry<>(entry.getKey(), mapObject(value)));
-        }
-
-        return entries.toArray(Map.Entry<?, ?>[]::new);
-    }
-
-    private Object[] mapArray(Object[] original) {
-        if (!SerializationUtils.isSubObject(original.getClass().getComponentType())) return original;
-
-        Object[] clone = new Object[original.length];
-        for (int i = 0; i < original.length; i++) {
-            if (!SerializationUtils.isSubObject(original[i].getClass())) {
-                clone[i] = original[i];
-                continue;
-            }
-
-            clone[i] = mapObject(original[i]);
-        }
-
-        return clone;
-    }
-
-    private Object demapArray(Object[] mapped, Class<?> originalType) {
-        if (!SerializationUtils.isSubObject(mapped.getClass().getComponentType())) return mapped;
-
-        Object clone = GenericUtils.createGenericArrayWithoutCasting(originalType, mapped.length);
-        for (int i = 0; i < mapped.length; i++) {
-            if (!SerializationUtils.isSubObject(mapped[i].getClass())) {
-                Array.set(clone, i, mapped[i]);
-                continue;
-            }
-
-            Array.set(clone, i, demapObject((SerializedObject) mapped[i], originalType));
-        }
-
-        return clone;
-    }
-
-    private Object convert(Object input, Field field, boolean serialize) {
-        Class<?> converterClass = field.getAnnotation(Convert.class).value();
-
-        if (!converters.containsKey(converterClass)) {
-            try {
-                // We could use the core to handle the Converters for us via @AnnotationHandlers (auto-creation), but
-                // I think it's much better to have Converters isolated per ObjectMapper, so we create them here, but one caveat
-                // is that you cannot autowire them.
-                // Maybe???? a TODO: implement it via @AutoCreate (p.s: tried but there's a null pointer and I don't have time to figure it out, so will do it later down the line)
-                Object converter = BeanUtils.getResolvableConstructor(converterClass).newInstance();
-                if (!(converter instanceof ValueConverter)) {
-                    throw new IllegalStateException(converterClass.getName() + " does not implement ValueConverter (extend AbstractConverter)!");
+                    value = result;
+                    javaType = result.getClass();
+                    converted = true;
                 }
-
-                converters.put(converterClass, (ValueConverter<?, ?>) converter);
-            } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
-                throw new IllegalStateException("Could not create Converter " + converterClass.getName());
+            }
+            if (!converted) {
+                throw new IllegalStateException("Converter not found. Converter required: " + conv);
             }
         }
 
-        ValueConverter<Object, Object> converter = (ValueConverter<Object, Object>) converters.get(converterClass);
-
-        try {
-            return serialize ? converter.serialize(input) : converter.fromSerialized(input);
-        } catch (Exception e) {
-            throw new IllegalStateException("Could not convert field.", e);
+        if (SerializationUtils.isValuePrimitiveOrString(javaType) && !converted) {
+            values.add(new ObjectValue(javaType, key, value));
+            return;
         }
+
+        for (PropertyMapper<?> registeredPropertyMapper : PropertyMapperAnnotationHandler.REGISTERED_PROPERTY_MAPPERS) {
+            if (registeredPropertyMapper.supports(javaType)) {
+                values.add(registeredPropertyMapper.map(value, key, javaType, this, annotations));
+                return;
+            }
+        }
+
+        if (SerializationUtils.isSubObject(javaType)) {
+            values.add(new ObjectValue(javaType, key, mapObject(value)));
+        }
+    }
+
+    public <T> T demapObject(MappedObject mappedObject, Class<T> wantedType) {
+        return null;
+    }
+
+    public String writeValueAsString(Object object) {
+        return serializationProvider.writeAsString(mapObject(object));
+    }
+
+    public void writeValueToFile(Object object, Path file) {
+        serializationProvider.writeToFile(mapObject(object), file);
+    }
+
+    public <T> T readValueFromString(String string, Class<T> type) {
+        return demapObject(serializationProvider.readFromString(string), type);
+    }
+
+    public <T> T readValueFromFile(Path file, Class<T> type) {
+        return demapObject(serializationProvider.readFromFile(file), type);
     }
 }

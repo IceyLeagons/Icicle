@@ -22,32 +22,24 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.test.icicle.serialization;
+package net.iceyleagons.icicle.serialization.annotations;
 
-import net.iceyleagons.icicle.serialization.annotations.Convert;
-import net.iceyleagons.icicle.serialization.converters.builtin.UUIDConverter;
+import net.iceyleagons.icicle.serialization.mapping.impl.EnumMapper;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Apr. 06, 2022
+ * @since Jun. 13, 2022
  */
-public class TestClass {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
+public @interface EnumSerialization {
 
-    @Convert(UUIDConverter.class)
-    public UUID uuid = UUID.randomUUID();
-    public TestEnum testEnum = TestEnum.ENUM2;
-    public String name = "Hello";
-    public String[] list = new String[]{"asd", "asd2"};
-    public int number = 4;
-    public int[] numberList = new int[]{1, 2, 3};
-    public List<String> stringList = Arrays.asList("test1", "test2", "test3");
-    public TestSubClass subObject = new TestSubClass();
-    public Map<String, String> mapTest = Map.of("testkey", "testvalue", "key2", "value2");
+    EnumMapper.EnumMappingType value();
 
 }

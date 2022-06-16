@@ -22,30 +22,36 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization.converters;
+package net.iceyleagons.icicle.serialization.mapping;
 
+import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
-import net.iceyleagons.icicle.utilities.generic.acessors.TwoTypeAccessor;
+import net.iceyleagons.icicle.serialization.dto.ObjectValue;
+import net.iceyleagons.icicle.utilities.ReflectionUtils;
+import net.iceyleagons.icicle.utilities.generic.acessors.OneTypeAccessor;
+
+import java.lang.annotation.Annotation;
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jun. 16, 2022
+ * @since Jun. 13, 2022
  */
-public abstract class ValueConverter<FIELD, SER> extends TwoTypeAccessor<FIELD, SER> {
+public abstract class PropertyMapper<A> extends OneTypeAccessor<A> {
 
-    protected abstract SER convertToSerializedValue(FIELD input);
-    protected abstract FIELD convertToObjectValue(SER serialized);
+    public abstract A deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations);
 
-    public Object convert(Object input, boolean serializing) {
-        if (serializing) {
-            return convertToSerializedValue(SerializationUtils.getValueAs(getATypeClass(), input));
-        }
+    public ObjectValue map(Object object, String key, Class<?> javaType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
+        // System.out.println("Wanted type: " + super.getATypeClass().getName());
+        // System.out.println("Currnet: " + javaType.getName());
 
-        return convertToObjectValue(SerializationUtils.getValueAs(getBTypeClass(), input));
+        return mapCasted(SerializationUtils.getValueAs(super.getATypeClass(), object), key, javaType, context, annotations);
     }
 
-    public boolean supports(Class<?> fieldType) {
-        return super.getATypeClass().isAssignableFrom(fieldType);
-    }
+    protected abstract ObjectValue mapCasted(A object, String key, Class<?> javaType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations);
+
+
+    public abstract boolean supports(Class<?> type);
+
 }

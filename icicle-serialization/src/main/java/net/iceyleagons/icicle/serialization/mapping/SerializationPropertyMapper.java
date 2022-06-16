@@ -22,13 +22,22 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.test.icicle.serialization;
+package net.iceyleagons.icicle.serialization.mapping;
+
+import net.iceyleagons.icicle.core.annotations.AutoCreate;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Apr. 06, 2022
+ * @since Jun. 13, 2022
  */
-public class TestSubClass {
-    public String name = "Test2 field";
+@AutoCreate
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SerializationPropertyMapper {
 }

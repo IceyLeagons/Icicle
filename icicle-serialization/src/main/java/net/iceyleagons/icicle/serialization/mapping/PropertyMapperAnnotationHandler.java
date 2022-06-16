@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,38 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization.annotations;
+package net.iceyleagons.icicle.serialization.mapping;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import org.jetbrains.annotations.NotNull;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 21, 2021
+ * @since Jun. 13, 2022
  */
-@Target(FIELD)
-@Retention(RUNTIME)
-public @interface Convert {
+@AnnotationHandler
+public class PropertyMapperAnnotationHandler implements CustomAutoCreateAnnotationHandler {
 
-    /**
-     * @return the class of the converter
-     */
-    Class<?> value();
+    public static final Set<PropertyMapper<?>> REGISTERED_PROPERTY_MAPPERS = new HashSet<>();
 
+    @Override
+    public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
+        return Collections.singleton(SerializationPropertyMapper.class);
+    }
+
+    @Override
+    public void onCreated(Object bean, Class<?> type) throws Exception {
+        if (!(bean instanceof PropertyMapper)) {
+            throw new IllegalStateException("Bean must extend PropertyMapper interface!");
+        }
+
+        REGISTERED_PROPERTY_MAPPERS.add((PropertyMapper<?>) bean);
+    }
 }

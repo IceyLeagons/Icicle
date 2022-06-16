@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,28 +22,26 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization.converters.builtin;
+package net.iceyleagons.icicle.serialization.dto;
 
-import net.iceyleagons.icicle.serialization.annotations.Converter;
-import net.iceyleagons.icicle.serialization.converters.AbstractConverter;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 21, 2021
+ * @since Jun. 13, 2022
  */
-@Converter
-public class UUIDConverter extends AbstractConverter<UUID, String> {
+@Getter
+@EqualsAndHashCode
+@RequiredArgsConstructor
+public class MappedObject {
 
-    @Override
-    public UUID fromSerialized(String serialized) throws Exception {
-        return UUID.fromString(serialized);
-    }
+    private final Class<?> javaType;
+    private final Set<ObjectValue> values;
 
-    @Override
-    public String serialize(UUID toSerialize) throws Exception {
-        return toSerialize.toString();
-    }
 }

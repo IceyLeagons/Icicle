@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,12 +27,16 @@ package net.iceyleagons.icicle.serialization.annotations;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Jun. 13, 2022
+ */
+@Target({FIELD, METHOD})
 @Retention(RUNTIME)
-@Target(TYPE)
 public @interface SerializedName {
 
     String value();

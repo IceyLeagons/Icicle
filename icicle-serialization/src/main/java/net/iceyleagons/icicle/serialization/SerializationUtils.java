@@ -24,12 +24,10 @@
 
 package net.iceyleagons.icicle.serialization;
 
-import net.iceyleagons.icicle.serialization.annotations.Convert;
-import net.iceyleagons.icicle.serialization.annotations.SerializeIgnore;
 import net.iceyleagons.icicle.serialization.annotations.SerializedName;
 
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,16 +36,16 @@ import static net.iceyleagons.icicle.utilities.StringUtils.containsIgnoresCase;
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Jun. 13, 2022
  */
-public final class SerializationUtils {
+public class SerializationUtils {
 
     public static boolean shouldIgnore(Field field) {
-        return Modifier.isTransient(field.getModifiers()) || field.isAnnotationPresent(SerializeIgnore.class);
+        return false; //Modifier.isTransient(field.getModifiers()) || field.isAnnotationPresent(SerializeIgnore.class);
     }
 
-    public static String getName(Field field) {
-        return field.isAnnotationPresent(SerializedName.class) ? field.getAnnotation(SerializedName.class).value() : field.getName().toLowerCase();
+    public static String getCustomNameOrDefault(AccessibleObject obj, String defaultValue) {
+        return obj.isAnnotationPresent(SerializedName.class) ? obj.getAnnotation(SerializedName.class).value() : defaultValue;
     }
 
     public static boolean isValuePrimitiveOrString(Class<?> type) {
@@ -70,8 +68,33 @@ public final class SerializationUtils {
         return Map.class.isAssignableFrom(type);
     }
 
+    public static Object createMapFromType(Class<?> t) {
+        if (t.equals(Map.class)) {
+            return new HashMap<>();
+        } else if (t.equals(ConcurrentHashMap.class)) {
+            return new ConcurrentHashMap<>();
+        } else {
+            throw new IllegalStateException("Unsupported type for collection (deserialization): " + t.getName());
+        }
+    }
+
+    public static <T> T getValueAs(Class<T> clazz, Object object) {
+        return clazz.isInstance(object) ? clazz.cast(object) : null;
+    }
+
+    public static Object createCollectionFromType(Class<?> t) {
+        if (t.equals(List.class) || t.equals(Collection.class) || t.equals(ArrayList.class)) {
+            return new ArrayList<>();
+        } else if (t.equals(Set.class) || t.equals(HashSet.class)) {
+            return new HashSet<>();
+        } else {
+            throw new IllegalStateException("Unsupported type for collection (deserialization): " + t.getName());
+        }
+    }
+
+
     public static boolean isSubObject(Class<?> type) {
-        if (type.equals(SerializedObject.class)) return true;
+        //if (type.equals(SerializedObject.class)) return true;
 
         // We check for types like this due to arrays. We could check with conventional stuff (#isArray(), etc.), but because primitives and objects can also be used
         // (int[], Integer[]), we rather do it this way to save space in code, and make the code more readable.
@@ -87,41 +110,4 @@ public final class SerializationUtils {
                 !containsIgnoresCase(typeName, "char");
     }
 
-    public static Set<ObjectValue> getValuesForClass(Class<?> clazz, ValueProvider provider) {
-        Set<ObjectValue> values = new HashSet<>();
-
-        for (Field field : clazz.getDeclaredFields()) {
-            if (shouldIgnore(field)) continue;
-
-            ObjectValue objectValue = new ObjectValue(field.getType(), field, SerializationUtils.getName(field));
-            objectValue.setValue(provider.getValue(field, objectValue.getKey()));
-            values.add(objectValue);
-        }
-
-        return values;
-    }
-
-    public static boolean shouldConvert(Field field) {
-        return field.isAnnotationPresent(Convert.class);
-    }
-
-    public static Object createMapFromType(Class<?> t) {
-        if (t.equals(Map.class)) {
-            return new HashMap<>();
-        } else if (t.equals(ConcurrentHashMap.class)) {
-            return new ConcurrentHashMap<>();
-        } else {
-            throw new IllegalStateException("Unsupported type for collection (deserialization): " + t.getName());
-        }
-    }
-
-    public static Object createCollectionFromType(Class<?> t) {
-        if (t.equals(List.class) || t.equals(Collection.class) || t.equals(ArrayList.class)) {
-            return new ArrayList<>();
-        } else if (t.equals(Set.class) || t.equals(HashSet.class)) {
-            return new HashSet<>();
-        } else {
-            throw new IllegalStateException("Unsupported type for collection (deserialization): " + t.getName());
-        }
-    }
 }

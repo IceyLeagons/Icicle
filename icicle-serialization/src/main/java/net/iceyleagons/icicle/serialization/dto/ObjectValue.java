@@ -22,19 +22,19 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization;
+package net.iceyleagons.icicle.serialization.dto;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import net.iceyleagons.icicle.serialization.SerializationUtils;
 
-import java.lang.reflect.Field;
+import java.util.function.Consumer;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 26, 2022
+ * @since Jun. 13, 2022
  */
 @Getter
 @EqualsAndHashCode
@@ -42,18 +42,15 @@ import java.lang.reflect.Field;
 public class ObjectValue {
 
     private final Class<?> javaType;
-    private final Field field;
     private final String key; //name
-
-    @Setter
-    private Object value;
+    private final Object value;
 
     public <T> T getValueAs(Class<T> clazz) {
-        return clazz.isInstance(value) ? clazz.cast(value) : null;
+        return SerializationUtils.getValueAs(clazz, value);
     }
 
     public boolean shouldConvert() {
-        return SerializationUtils.shouldConvert(this.field);
+        return false;
     }
 
     public boolean isValuePrimitiveOrString() {
@@ -79,4 +76,5 @@ public class ObjectValue {
     public boolean isSubObject() {
         return SerializationUtils.isSubObject(this.javaType);
     }
+
 }
