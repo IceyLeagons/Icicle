@@ -32,6 +32,7 @@ import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import net.iceyleagons.test.icicle.core.bean.resolvable.custom.CustomAutowiringHandlerService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.DependantConstructorService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.EmptyConstructorService;
+import net.iceyleagons.test.icicle.core.bean.resolvable.modifiers.DefaultValueService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.qualifier.QualificationTestService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -66,16 +67,23 @@ public class AutowiringTest {
     @DisplayName("Empty constructor bean")
     public void testEmptyConstructor() {
         Assertions.assertNotNull(registry.getBeanNullable(EmptyConstructorService.class));
-        EmptyConstructorService emptyConstructorService = registry.getBeanNullable(EmptyConstructorService.class);
-        emptyConstructorService.testModifiers("hello");
-        emptyConstructorService.testModifiers(null);
+    }
 
+    @Test
+    @DisplayName("Value modification")
+    public void testModifiers() {
+        DefaultValueService emptyConstructorService = registry.getBeanNullable(DefaultValueService.class);
+        Assertions.assertNotNull(emptyConstructorService);
+
+        Assertions.assertEquals(emptyConstructorService.testModifiers("0"), "0");
+        Assertions.assertEquals(emptyConstructorService.testModifiers(null), "1");
     }
 
     @Test
     @DisplayName("Dependency required constructor bean")
     public void testDependencyRequiredConstructor() {
         DependantConstructorService service = registry.getBeanNullable(DependantConstructorService.class);
+
         Assertions.assertNotNull(service);
         Assertions.assertNotNull(service.application);
         Assertions.assertNotNull(service.emptyConstructorService);

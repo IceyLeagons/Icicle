@@ -26,8 +26,6 @@ package net.iceyleagons.test.icicle.core.bean.resolvable;
 
 import net.iceyleagons.icicle.core.annotations.Bean;
 import net.iceyleagons.icicle.core.annotations.service.Service;
-import net.iceyleagons.icicle.core.modifiers.impl.DefaultValue;
-import net.iceyleagons.icicle.core.proxy.interceptor.modifiers.ModifiersActive;
 
 import java.util.UUID;
 
@@ -39,10 +37,6 @@ import java.util.UUID;
 @Service
 public class EmptyConstructorService {
 
-    @ModifiersActive
-    public void testModifiers(@DefaultValue("Modified because it's null.") String input) {
-        System.out.println("Output: " + input);
-    }
     @Bean
     public TestBean testBean() {
         return new TestBean();
