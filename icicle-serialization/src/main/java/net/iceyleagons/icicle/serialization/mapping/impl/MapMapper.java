@@ -44,7 +44,7 @@ import java.util.Set;
  * @since Jun. 13, 2022
  */
 @SerializationPropertyMapper
-public class MapMapper extends PropertyMapper<Map<?,?>> {
+public class MapMapper extends PropertyMapper<Map<?, ?>> {
 
     @Override
     public Map<?, ?> deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
@@ -60,7 +60,7 @@ public class MapMapper extends PropertyMapper<Map<?,?>> {
             final Object value = entry.getValue();
 
             if (!SerializationUtils.isSubObject(value.getClass())) {
-                result.put(entry.getKey(),value);
+                result.put(entry.getKey(), value);
                 continue;
             }
 

@@ -50,7 +50,7 @@ public class Settings {
 
     // ARGUMENT - 3xx
     public static final int MATERIAL = 300;
-    public static final int LENGTH =  301;
+    public static final int LENGTH = 301;
 
     private final Map<Integer, Object> settings = new ConcurrentHashMap<>();
 

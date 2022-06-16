@@ -52,9 +52,9 @@ public interface BeanRegistry {
     /**
      * Returns the bean for the supplied class or an empty optional.
      *
-     * @param type the class of the wanted bean
+     * @param type      the class of the wanted bean
      * @param qualifier the name of the implementation
-     * @param <T>  type of the bean
+     * @param <T>       type of the bean
      * @return the Optional containing the bean (if exists) or empty
      * @see Optional
      */
@@ -72,9 +72,9 @@ public interface BeanRegistry {
     /**
      * Returns the bean for the supplied class or null.
      *
-     * @param type the class of the wanted bean
+     * @param type      the class of the wanted bean
      * @param qualifier the name of the implementation
-     * @param <T>  type of the bean
+     * @param <T>       type of the bean
      * @return the bean (if exists) or null
      */
     @Nullable <T> T getBeanNullable(Class<T> type, String qualifier);
@@ -90,7 +90,7 @@ public interface BeanRegistry {
     /**
      * Checks whether a bean instance has been registered for the supplied class.
      *
-     * @param type the class to check
+     * @param type      the class to check
      * @param qualifier the name of the implementation
      * @return true if a bean instance is registered for this class
      */
@@ -107,9 +107,9 @@ public interface BeanRegistry {
     /**
      * Registers a bean with the specified class (type).
      *
-     * @param type   the type to register the bean as
+     * @param type      the type to register the bean as
      * @param qualifier the name of the implementation
-     * @param object the bean
+     * @param object    the bean
      */
     void registerBean(Class<?> type, Object object, String qualifier) throws MultipleInstanceException;
 
@@ -123,7 +123,7 @@ public interface BeanRegistry {
     /**
      * Registers a bean using {@link Object#getClass()} as its type.
      *
-     * @param object the bean
+     * @param object    the bean
      * @param qualifier the name of the implementation
      */
     void registerBean(Object object, String qualifier) throws MultipleInstanceException;
@@ -146,7 +146,7 @@ public interface BeanRegistry {
      * <b>WARNING!</b>
      * Should only be called internally, otherwise it may cause serious issues with dependency tree resolving.
      *
-     * @param type the type to unregister
+     * @param type      the type to unregister
      * @param qualifier the name of the implementation
      * @see Internal
      */

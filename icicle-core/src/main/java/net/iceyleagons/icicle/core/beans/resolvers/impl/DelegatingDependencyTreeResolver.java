@@ -67,9 +67,9 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
     /**
      * Formats a human-friendly "graph" of the dependency circle.
      *
-     * @param rawTree  the dependencies that form a circle
-     * @param start the starting point of the circle
-     * @param end   the ending point of the circle (the one that references the starting point --> making a circle)
+     * @param rawTree the dependencies that form a circle
+     * @param start   the starting point of the circle
+     * @param end     the ending point of the circle (the one that references the starting point --> making a circle)
      * @return the formatted "graph" to use in {@link CircularDependencyException}
      */
     private static String getCycleString(LinkedList<QualifierKey> rawTree, Class<?> start, Class<?> end) {
@@ -109,7 +109,8 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
 
         while (!stack.isEmpty()) {
             Class<?> bean = stack.pop();
-            if (beanRegistry.isRegistered(bean, QualifierKey.getQualifier(bean))) continue; //making sure it's already registered to not spend time
+            if (beanRegistry.isRegistered(bean, QualifierKey.getQualifier(bean)))
+                continue; //making sure it's already registered to not spend time
 
             Parameter[] dependencies = BeanUtils.getResolvableConstructor(bean).getParameters();
             x:

@@ -41,7 +41,7 @@ import java.util.Set;
 @AnnotationHandler
 public class ConverterAnnotationHandler implements CustomAutoCreateAnnotationHandler {
 
-    public static final Set<ValueConverter<?,?>> REGISTERED_CONVERTERS = new HashSet<>();
+    public static final Set<ValueConverter<?, ?>> REGISTERED_CONVERTERS = new HashSet<>();
 
     @Override
     public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
@@ -50,10 +50,10 @@ public class ConverterAnnotationHandler implements CustomAutoCreateAnnotationHan
 
     @Override
     public void onCreated(Object bean, Class<?> type) throws Exception {
-        if (!(bean instanceof ValueConverter<?,?>)) {
+        if (!(bean instanceof ValueConverter<?, ?>)) {
             throw new IllegalStateException("Bean must extend ValueConverter interface!");
         }
 
-        REGISTERED_CONVERTERS.add((ValueConverter<?,?>) bean);
+        REGISTERED_CONVERTERS.add((ValueConverter<?, ?>) bean);
     }
 }

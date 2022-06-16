@@ -2,118 +2,121 @@
 <html lang="en">
 
 <head>
-	<!-- Charsets, Compatibility, Responsive -->
-	<meta charset="utf-8">
-	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-	<meta name="viewport" content="width=device-width, initial-scale=1" >
+    <!-- Charsets, Compatibility, Responsive -->
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<!-- Generic Meta -->
-	<title>Icicle Framework - Plugin creation made easy</title>
+    <!-- Generic Meta -->
+    <title>Icicle Framework - Plugin creation made easy</title>
 
-	<meta name="description" content="Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development.
+    <meta name="description" content="Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development.
 		 It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form. Its sole purpose is to make plugin development an easy task."
-		 />
+    />
 
-	<meta name="keywords" content="spigot, bukkit, plugin, development, framework, easy, light-weight, free, open-source, IceyLeagons, icicle, spring," />
-	<meta name="author" content="IceyLeagons" />
-	<meta name="robots" content="index, follow" />
+    <meta name="keywords"
+          content="spigot, bukkit, plugin, development, framework, easy, light-weight, free, open-source, IceyLeagons, icicle, spring,"/>
+    <meta name="author" content="IceyLeagons"/>
+    <meta name="robots" content="index, follow"/>
 
-	<meta name="copyright" content="IceyLeagons" />
-	<meta name="application-name" content="Icicle Framework" />
-	<meta name="theme-color" content="#3e9ce3" />
-	<!--  -->
+    <meta name="copyright" content="IceyLeagons"/>
+    <meta name="application-name" content="Icicle Framework"/>
+    <meta name="theme-color" content="#3e9ce3"/>
+    <!--  -->
 
-	<!-- Icons -->
-	<link href="assets/imgs/icon_144.png" rel="apple-touch-icon-precomposed" sizes="144x144" />
-	<link href="assets/imgs/icon_152.png" rel="apple-touch-icon-precomposed" sizes="152x152" />
-	<link href="assets/imgs/icon_32.png" rel="icon" sizes="32x32" type="image/png" />
-	<link href="assets/imgs/icon_16.png" rel="icon" sizes="16x16" type="image/png" />
+    <!-- Icons -->
+    <link href="assets/imgs/icon_144.png" rel="apple-touch-icon-precomposed" sizes="144x144"/>
+    <link href="assets/imgs/icon_152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/>
+    <link href="assets/imgs/icon_32.png" rel="icon" sizes="32x32" type="image/png"/>
+    <link href="assets/imgs/icon_16.png" rel="icon" sizes="16x16" type="image/png"/>
 
-	<!-- Pinned Website Icon (after Windows 8) -->
-	<meta name="msapplication-TileColor" content="#3e9ce3" />
-	<meta name="msapplication-TileImage" content="assets/imgs/icon_144.png" />
+    <!-- Pinned Website Icon (after Windows 8) -->
+    <meta name="msapplication-TileColor" content="#3e9ce3"/>
+    <meta name="msapplication-TileImage" content="assets/imgs/icon_144.png"/>
 
-	<!-- Twitter Stuff -->
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:description" content="Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development. It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form. Its sole purpose is to make plugin development an easy task."/>
-	<meta name="twitter:title" content="Icicle Framework - Plugin creation made easy" />
-	<meta name="twitter:image" content="assets/social_image.png" /> <!-- TODO: Social Image -->
+    <!-- Twitter Stuff -->
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:description"
+          content="Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development. It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form. Its sole purpose is to make plugin development an easy task."/>
+    <meta name="twitter:title" content="Icicle Framework - Plugin creation made easy"/>
+    <meta name="twitter:image" content="assets/social_image.png"/> <!-- TODO: Social Image -->
 
-	<!-- OG Stuff (aka. other social media) -->
-	<meta property="og:title" content="Icicle Framework - Plugin creation made easy" />
-	<meta property="og:description" content="Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development. It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form. Its sole purpose is to make plugin development an easy task." />
-	<meta property="og:url" content="https://icicle.iceyleagons.net/" />
-	<meta property="og:site_name" content="Icicle Framework" />
-	<meta property="og:locale" content="en_GB" />
-	<meta property="og:type" content="website" />
-	<meta property="og:image" content="assets/social_image.png" /> <!-- TODO: Social Image -->
+    <!-- OG Stuff (aka. other social media) -->
+    <meta property="og:title" content="Icicle Framework - Plugin creation made easy"/>
+    <meta property="og:description"
+          content="Icicle is a Spring inspired framework designed for Bukkit/Spigot plugin development. It aims to improve productivity of developers by providing frequently used tools in an easy-to-use form. Its sole purpose is to make plugin development an easy task."/>
+    <meta property="og:url" content="https://icicle.iceyleagons.net/"/>
+    <meta property="og:site_name" content="Icicle Framework"/>
+    <meta property="og:locale" content="en_GB"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content="assets/social_image.png"/> <!-- TODO: Social Image -->
 
-	<!-- Links -->
-	<link href="/" rel="canonical" />
+    <!-- Links -->
+    <link href="/" rel="canonical"/>
 
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" rel="stylesheet"
-		type="text/css" />
-	<link href="https://fonts.cdnfonts.com/css/open-sans" rel="stylesheet">
-	<link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
-		integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
-		referrerpolicy="no-referrer" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="https://fonts.cdnfonts.com/css/open-sans" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+          integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+          referrerpolicy="no-referrer" rel="stylesheet"/>
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism.min.css"
-		integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-		crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism-okaidia.min.css"
-		integrity="sha512-mIs9kKbaw6JZFfSuo+MovjU+Ntggfoj8RwAmJbVXQ5mkAX5LlgETQEweFPI18humSPHymTb5iikEOKWF7I8ncQ=="
-		crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="stylesheet"
-		href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.css"
-		integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ=="
-		crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="stylesheet"
-		href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/match-braces/prism-match-braces.min.css"
-		integrity="sha512-SwPHdIEEQ3lKazpLV9+r1UH4HnpNVlYVdKYgBwD/8QuougtQj6xm5x2xladh3mC/bz+jVWkvYTpKCI1KWD1MWQ=="
-		crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.3.0/css/flag-icons.min.css"
-		integrity="sha512-uvXdJud8WaOlQFjlz9B15Yy2Au/bMAvz79F7Xa6OakCl2jvQPdHD0hb3dEqZRdSwG4/sknePXlE7GiarwA/9Wg=="
-		crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="stylesheet" href="plugins/line-numbers/prism-line-numbers.css" data-noprefix />
-	<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism.min.css"
+          integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism-okaidia.min.css"
+          integrity="sha512-mIs9kKbaw6JZFfSuo+MovjU+Ntggfoj8RwAmJbVXQ5mkAX5LlgETQEweFPI18humSPHymTb5iikEOKWF7I8ncQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.css"
+          integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/match-braces/prism-match-braces.min.css"
+          integrity="sha512-SwPHdIEEQ3lKazpLV9+r1UH4HnpNVlYVdKYgBwD/8QuougtQj6xm5x2xladh3mC/bz+jVWkvYTpKCI1KWD1MWQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.3.0/css/flag-icons.min.css"
+          integrity="sha512-uvXdJud8WaOlQFjlz9B15Yy2Au/bMAvz79F7Xa6OakCl2jvQPdHD0hb3dEqZRdSwG4/sknePXlE7GiarwA/9Wg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="plugins/line-numbers/prism-line-numbers.css" data-noprefix/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
 
-	<link rel='stylesheet' href='/global.css'>
-	<link rel='stylesheet' href='/build/bundle.css'>
+    <link rel='stylesheet' href='/global.css'>
+    <link rel='stylesheet' href='/build/bundle.css'>
 
-	<script defer src='/build/bundle.js'></script>
+    <script defer src='/build/bundle.js'></script>
 </head>
 
 <body style="overflow-y: hidden;" class="line-numbers">
-	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-core.min.js"
-		integrity="sha512-LCKPTo0gtJ74zCNMbWw04ltmujpzSR4oW+fgN+Y1YclhM5ZrHCZQAJE4quEodcI/G122sRhSGU2BsSRUZ2Gu3w=="
-		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/autoloader/prism-autoloader.min.js"
-		integrity="sha512-GP4x8UWxWyh4BMbyJGOGneiTbkrWEF5izsVJByzVLodP8CuJH/n936+yQDMJJrOPUHLgyPbLiGw2rXmdvGdXHA=="
-		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.js"
-		integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ=="
-		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/match-braces/prism-match-braces.min.js"
-		integrity="sha512-1V2DjbHHHr8KzGoafg/R5GoT/+5A5WJBvno03LEL1unbfCLy4PLTQ2Trcrp+qfvTEtyI9Uj825deuInXoRkOyA=="
-		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-core.min.js"
+        integrity="sha512-LCKPTo0gtJ74zCNMbWw04ltmujpzSR4oW+fgN+Y1YclhM5ZrHCZQAJE4quEodcI/G122sRhSGU2BsSRUZ2Gu3w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/autoloader/prism-autoloader.min.js"
+        integrity="sha512-GP4x8UWxWyh4BMbyJGOGneiTbkrWEF5izsVJByzVLodP8CuJH/n936+yQDMJJrOPUHLgyPbLiGw2rXmdvGdXHA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.js"
+        integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/match-braces/prism-match-braces.min.js"
+        integrity="sha512-1V2DjbHHHr8KzGoafg/R5GoT/+5A5WJBvno03LEL1unbfCLy4PLTQ2Trcrp+qfvTEtyI9Uj825deuInXoRkOyA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-	<!-- Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-SC44ZYPS6Y"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SC44ZYPS6Y"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
 
-		function gtag() {
-			dataLayer.push(arguments);
-		}
+    function gtag() {
+        dataLayer.push(arguments);
+    }
 
-		gtag('js', new Date());
+    gtag('js', new Date());
 
-		gtag('config', 'G-SC44ZYPS6Y');
-	</script>
+    gtag('config', 'G-SC44ZYPS6Y');
+</script>
 </body>
 
 </html>

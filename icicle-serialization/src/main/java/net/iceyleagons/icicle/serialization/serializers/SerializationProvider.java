@@ -36,9 +36,11 @@ import java.nio.file.Path;
 public interface SerializationProvider {
 
     String writeAsString(MappedObject object);
+
     void writeToFile(MappedObject object, Path file);
 
     MappedObject readFromString(String string);
+
     MappedObject readFromFile(Path file);
 
 }

@@ -35,6 +35,7 @@ import net.iceyleagons.icicle.utilities.generic.acessors.TwoTypeAccessor;
 public abstract class ValueConverter<FIELD, SER> extends TwoTypeAccessor<FIELD, SER> {
 
     protected abstract SER convertToSerializedValue(FIELD input);
+
     protected abstract FIELD convertToObjectValue(SER serialized);
 
     public Object convert(Object input, boolean serializing) {

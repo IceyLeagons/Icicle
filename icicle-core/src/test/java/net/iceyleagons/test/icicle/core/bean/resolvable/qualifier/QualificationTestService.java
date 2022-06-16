@@ -43,7 +43,7 @@ public class QualificationTestService {
             @Qualifier("qualified") TestService test, // Should be QualifiedService
             @Qualifier("qualified2") TestService test2, // Should be SecondQualifiedService
             TestService test3 // Should be NotQualifiedService
-    ){
+    ) {
         this.test = test;
         this.test2 = test2;
         this.test3 = test3;

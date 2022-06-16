@@ -61,7 +61,7 @@ public class ProtocolPlayer {
                     // event??
                     PacketOutEvent event = new PacketOutEvent(pp, msg);
                     if (msg != null && !event.isCancelled())
-                            super.write(ctx, msg, promise);
+                        super.write(ctx, msg, promise);
                 }
 
                 @Override

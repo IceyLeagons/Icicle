@@ -42,7 +42,8 @@ import java.util.TreeMap;
 @Utility
 public final class Predictor {
 
-    private Predictor() {}
+    private Predictor() {
+    }
 
     @Internal
     public static Optional<RegisteredCommand> predict(RegisteredCommandManager manager, String[] inputArgs) {
@@ -54,7 +55,7 @@ public final class Predictor {
             String[] args = new String[cmd.split(" ").length];
             System.arraycopy(inputArgs, 0, args, 0, Math.min(inputArgs.length, args.length));
 
-            String cmdArgs = StringUtils.join( args, " ");
+            String cmdArgs = StringUtils.join(args, " ");
             possibilities.put((1D - (StringUtils.getLevenshteinDistance(cmdArgs, cmd) / (Math.max(cmdArgs.length(), cmd.length()) * 1D))) * 100D, command.getValue());
         }
 

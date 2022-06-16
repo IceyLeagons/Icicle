@@ -41,6 +41,7 @@ public @interface FieldWrapping {
     String value();
 
     boolean isSetter() default false;
+
     boolean isStatic() default false;
 
 }

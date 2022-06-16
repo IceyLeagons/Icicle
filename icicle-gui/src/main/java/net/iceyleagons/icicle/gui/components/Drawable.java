@@ -32,8 +32,8 @@ import net.iceyleagons.icicle.gui.Pane;
  *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Apr. 17, 2022
  * @see GuiComponent
+ * @since Apr. 17, 2022
  */
 public interface Drawable {
 

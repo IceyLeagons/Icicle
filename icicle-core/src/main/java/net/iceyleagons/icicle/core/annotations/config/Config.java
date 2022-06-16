@@ -48,8 +48,11 @@ public @interface Config {
     String[] headerLines() default {};
 
     String headerPrefixFirst() default "";
+
     String headerCommentPrefix() default "";
+
     String headerCommentSuffix() default "";
+
     String headerSuffixLast() default "";
 
 }

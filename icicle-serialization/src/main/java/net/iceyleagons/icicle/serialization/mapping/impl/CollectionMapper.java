@@ -48,14 +48,16 @@ public class CollectionMapper extends PropertyMapper<Collection<?>> {
     public Collection<?> deMap(Object genericArray, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
         final Object[] array = GenericUtils.genericArrayToNormalArray(genericArray, Object.class);
 
-        if (!SerializationUtils.isSubObject(array.getClass().getComponentType())) return toCollection(originalType, array);
+        if (!SerializationUtils.isSubObject(array.getClass().getComponentType()))
+            return toCollection(originalType, array);
         return toCollection(originalType, ArrayMapper.deMapArray(array, originalType, context));
     }
 
     @Override
     public ObjectValue mapCasted(Collection<?> object, String key, Class<?> javaType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
         final Object[] array = object.toArray();
-        if (!SerializationUtils.isSubObject(array.getClass().getComponentType())) return ArrayMapper.arrayToMappedObject(array, key, javaType);
+        if (!SerializationUtils.isSubObject(array.getClass().getComponentType()))
+            return ArrayMapper.arrayToMappedObject(array, key, javaType);
 
         return ArrayMapper.arrayToMappedObject(ArrayMapper.mapArray(array, context), key, javaType);
     }

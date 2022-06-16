@@ -109,7 +109,8 @@ public abstract class AbstractIcicleApplication implements Application {
         this.configurationEnvironment.cleanUp();
     }
 
-    protected void onConstructed() {}
+    protected void onConstructed() {
+    }
 
     /**
      * @return the bean manager used by this application.

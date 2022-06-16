@@ -7,7 +7,7 @@
 
     --bg2-color: blue;
     --action-color: #3e9ce3;
-    
+
     --hero-box: rgba(222, 222, 222, 0.2);
     --bg-img: url("../assets/imgs/bg-light.png");
 
@@ -104,9 +104,11 @@ p {
 .token.annotation {
     color: rgb(0, 245, 110);
 }
+
 .token.string {
     color: #b9d343;
 }
+
 .token.operator {
     background: none;
     text-shadow: none;

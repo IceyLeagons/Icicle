@@ -1,4 +1,3 @@
-
 package net.iceyleagons.icicle.protocol.events;
 
 import lombok.Getter;

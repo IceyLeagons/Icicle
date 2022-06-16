@@ -188,7 +188,7 @@ public class NMSHandler {
             if (method.isAnnotationPresent(FieldWrapping.class)) {
                 //if (method.getAnnotation(FieldWrapping.class).isSetter()) {
                 builder = builder.define(method).intercept(MethodDelegation.to(new MethodDelegator(supplier)));
-               // }
+                // }
 
                 // This is probably not needed as the one above is more general and hopefully works. Famous last word ~TOTH
                 // builder = builder.define(method).intercept(FixedValue.value(supplier.supply(null)));

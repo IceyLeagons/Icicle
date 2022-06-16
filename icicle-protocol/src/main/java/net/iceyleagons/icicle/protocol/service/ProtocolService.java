@@ -38,8 +38,11 @@ import org.bukkit.entity.Player;
 public interface ProtocolService {
 
     ProtocolPlayer getProtocolPlayer(Player player);
+
     void executeAction(Action action);
+
     ExecutionHandler getExecutionHandler();
+
     NMSHandler getNMSHandler();
 
 }

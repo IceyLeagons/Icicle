@@ -131,8 +131,8 @@ public final class BeanUtils {
                 return Kotlin.instantiateKotlinClass(constructor, argObjects);
             }
 
-           // T value = constructor.newInstance(argObjects); //beanProxyHandler == null ? constructor.newInstance(argObjects) : beanProxyHandler.createEnhancedBean(constructor, argObjects);
-           // if (value == null)
+            // T value = constructor.newInstance(argObjects); //beanProxyHandler == null ? constructor.newInstance(argObjects) : beanProxyHandler.createEnhancedBean(constructor, argObjects);
+            // if (value == null)
             //    throw new BeanCreationException(constructor, "Resulting value from instance generation is null."); //just in case
 
             return constructor.newInstance(argObjects);

@@ -151,7 +151,8 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
                 params[i] = param.getType().isInstance(commandSender) ? param.getType().cast(commandSender) : null;
             } else if (param.isAnnotationPresent(Concat.class)) {
                 String[] array = new String[args.length - argsCounter];
-                if (args.length - argsCounter >= 0) System.arraycopy(args, argsCounter, array, 0, args.length - argsCounter);
+                if (args.length - argsCounter >= 0)
+                    System.arraycopy(args, argsCounter, array, 0, args.length - argsCounter);
 
                 params[i] = String.join(" ", array);
             } else if (param.isAnnotationPresent(FlagOptional.class)) {
@@ -245,7 +246,7 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
         if (page > pages) page = pages;
 
         String title = translationService.getTranslation(HELP_TEXT, translationService.getLanguageProvider().getLanguage(sender), "&6Help for &b {cmd}", Map.of("cmd", this.getCommandManager().value()));
-        String lines = ChatColor.GOLD + StringUtils.repeat("=", title.length()/4);
+        String lines = ChatColor.GOLD + StringUtils.repeat("=", title.length() / 4);
         String index = translationService.getTranslation(HELP_TEXT, translationService.getLanguageProvider().getLanguage(sender), "{lines} &fHelp index: {current}/{max} {lines}",
                 Map.of("lines", lines,
                         "current", String.valueOf(page + 1),
@@ -315,7 +316,7 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
             if (this.commandManager.printExceptionStackTrace())
                 e.printStackTrace();
 
-            sender.sendMessage(color( ChatColor.RED + e.getMessage()));
+            sender.sendMessage(color(ChatColor.RED + e.getMessage()));
             return true;
         }
 

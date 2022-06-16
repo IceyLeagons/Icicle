@@ -39,7 +39,8 @@ import java.util.Base64;
 @Utility
 public final class Base64Utils {
 
-    private Base64Utils() { }
+    private Base64Utils() {
+    }
 
     public static String toBase64(byte[] data) {
         return Base64.getEncoder().encodeToString(data);

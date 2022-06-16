@@ -128,7 +128,7 @@ public class Pane implements StateAware {
         return false;
     }
 
-    public Pane setItem(int x, int y, ItemStack itemStack ) {
+    public Pane setItem(int x, int y, ItemStack itemStack) {
         return setItem(new Pos2i(x, y), itemStack);
     }
 

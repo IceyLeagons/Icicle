@@ -94,6 +94,7 @@ public class TestMain {
     static class Test3 {
 
         public String name;
+
         public Test3(String name) {
             this.name = name;
         }

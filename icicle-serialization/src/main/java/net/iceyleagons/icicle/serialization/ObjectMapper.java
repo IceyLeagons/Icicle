@@ -86,7 +86,7 @@ public class ObjectMapper {
         boolean converted = false;
         if (annotations.containsKey(Convert.class)) {
             Class<?> conv = ((Convert) annotations.get(Convert.class)).converter();
-            for (ValueConverter<?,?> converter : ConverterAnnotationHandler.REGISTERED_CONVERTERS) {
+            for (ValueConverter<?, ?> converter : ConverterAnnotationHandler.REGISTERED_CONVERTERS) {
                 if (converter.supports(javaType) && conv.equals(converter.getClass())) {
                     Object result = converter.convert(value, true);
 

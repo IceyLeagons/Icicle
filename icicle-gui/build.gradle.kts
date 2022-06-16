@@ -1,4 +1,3 @@
-
 // Fuck IntelliJ...
 // Without this we would get an error about implicit usage not being valid here.
 // Which... according to gradle documentation is perfectly valid.

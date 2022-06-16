@@ -113,7 +113,7 @@ public class DelegatingBeanRegistry implements BeanRegistry {
     }
 
     @Override
-    public void registerBean(Class<?> type, Object object, String qualifier) throws MultipleInstanceException  {
+    public void registerBean(Class<?> type, Object object, String qualifier) throws MultipleInstanceException {
         Asserts.isTrue(type != String.class && !type.isPrimitive(), "Strings and primitives cannot be registered as a bean!");
 
         if (!isRegistered(type, qualifier)) {

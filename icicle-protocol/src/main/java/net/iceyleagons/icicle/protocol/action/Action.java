@@ -69,6 +69,7 @@ public abstract class Action {
     }
 
     protected abstract void onExecute(ProtocolService protocolService);
+
     protected abstract void validateSettings();
 
     protected ProtocolPlayer getProtocolPlayerFromSettings(ProtocolService service) {

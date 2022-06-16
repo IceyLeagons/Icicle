@@ -36,7 +36,9 @@ import java.util.Optional;
 public interface GlobalServiceProvider {
 
     <T> Optional<T> getService(Class<T> type);
+
     boolean isRegistered(Class<?> type);
+
     void registerService(Class<?> interfaceType, Class<?> providerType, Object object, Application registrar) throws Exception;
 
 }

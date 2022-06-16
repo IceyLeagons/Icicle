@@ -43,7 +43,7 @@ public class UnsatisfiedDependencyTest {
     @Test
     @DisplayName("Circular dependency")
     public void testCircularDependency() {
-        if(!Icicle.LOADED)
+        if (!Icicle.LOADED)
             Icicle.loadIcicle(null);
         Application app = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.unsatisfied", ExecutionUtils.debugHandler(), null) {
             @Override
