@@ -22,9 +22,15 @@
  * SOFTWARE.
  */
 
+// Fuck IntelliJ...
+// Without this we would get an error about implicit usage not being valid here.
+// Which... according to gradle documentation is perfectly valid.
+// There is a ticket open, that's 8 MONTHS OLD.
+@Suppress("DSL_SCOPE_VIOLATION")
+
 plugins {
     java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
+    alias(libs.plugins.icicle)
 }
 
 group = "net.iceyleagons"
@@ -41,9 +47,9 @@ repositories {
 dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
-    compileOnly("org.jetbrains:annotations:${findProperty("jetbrainsAnnotationVersion")}")
-    compileOnly("org.slf4j:slf4j-api:${findProperty("slf4jApiVersion")}")
-    spigotApi(spigotVersion)
+    compileOnly(libs.jetbrainsannotations)
+    compileOnly(libs.slf4j)
+    spigotApi(libs.versions.spigot.get())
     lombok()
 }
 

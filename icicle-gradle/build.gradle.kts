@@ -22,9 +22,15 @@
  * SOFTWARE.
  */
 
+// Fuck IntelliJ...
+// Without this we would get an error about implicit usage not being valid here.
+// Which... according to gradle documentation is perfectly valid.
+// There is a ticket open, that's 8 MONTHS OLD.
+@Suppress("DSL_SCOPE_VIOLATION")
+
 plugins {
     java
-    kotlin("jvm") version "1.5.30"
+    kotlin("jvm") version libs.versions.kotlin.asProvider()
     id("java-gradle-plugin")
 }
 

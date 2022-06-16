@@ -1,0 +1,49 @@
+[versions]
+kotlin = "1.7.0"
+icicle = "1.5-SNAPSHOT"
+reflections = "0.9.12"
+spigot = "1.18.2"
+simple-yaml = "1.8"
+jetbrains-annotations = "23.0.0"
+netty = "4.1.72.Final"
+guava = "31.1-jre"
+bytebuddy = "1.11.15"
+# bytebuddy-agent = "1.11.15"
+kotlin-reflect = "1.5.31"
+# kotlin-std = "1.7.0"
+slf4j = "1.7.32"
+logback = "1.2.9"
+nbt = "1.2-SNAPSHOT"
+json = "20210307"
+bson = "4.5.0"
+mockbukkit = "1.15.0"
+jupiter = "5.7.2"
+# jupiter-engine = "5.7.2"
+
+[libraries]
+reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+bytebuddy = { module = "net.bytebuddy:byte-buddy", version.ref = "bytebuddy" }
+bytebuddy-agent = { module = "net.bytebuddy:byte-buddy-agent", version.ref = "bytebuddy" }
+kreflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin-reflect" }
+kstdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+jetbrainsannotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
+logback = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
+yaml = { module = "me.carleslc.Simple-YAML:Simple-Yaml", version.ref = "simple-yaml" }
+junit_api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jupiter" }
+junit_engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "jupiter" }
+netty = { module = "io.netty:netty-all", version.ref = "netty" }
+mockbukkit = { module = "com.github.seeseemelk:MockBukkit-v1.18", version.ref = "mockbukkit" }
+nbt = { module = "net.iceyleagons:nbtlib", version.ref = "nbt" }
+json = { module = "org.json:json", version.ref = "json" }
+bson = { module = "org.mongodb:bson", version.ref = "bson" }
+
+[bundles]
+logging = ["slf4j", "logback"]
+junit = ["junit_api", "junit_engine"]
+bytebuddy = ["bytebuddy", "bytebuddy-agent"]
+kotlin = ["kreflect", "kstdlib"]
+
+[plugins]
+icicle = { id = "net.iceyleagons.icicle-gradle", version.ref = "icicle" }

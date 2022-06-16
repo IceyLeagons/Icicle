@@ -22,15 +22,19 @@
  * SOFTWARE.
  */
 
+// Fuck IntelliJ...
+// Without this we would get an error about implicit usage not being valid here.
+// Which... according to gradle documentation is perfectly valid.
+// There is a ticket open, that's 8 MONTHS OLD.
+@Suppress("DSL_SCOPE_VIOLATION")
+
 plugins {
     java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
+    alias(libs.plugins.icicle)
 }
 
 group = "net.iceyleagons"
 version = "0.1-SNAPSHOT"
-
-val spigotVersion = findProperty("spigotVersion") as String
 
 repositories {
     mavenCentral()
@@ -41,8 +45,8 @@ repositories {
 
 dependencies {
     lombok()
-    compileOnly("io.netty:netty-all:${findProperty("nettyVersion")}")
-    spigotApi(spigotVersion)
+    compileOnly(libs.netty)
+    spigotApi(libs.versions.spigot.get())
 
     shadow(project(":icicle-gui"))
     shadow(project(":icicle-core"))
@@ -51,21 +55,17 @@ dependencies {
     shadow(project(":icicle-nms"))
     compileOnly(project(":icicle-utilities"))
 
-    testImplementation("com.github.seeseemelk:${findProperty("mockBukkitVersion")}")
-    testImplementation("me.carleslc.Simple-YAML:Simple-Yaml:${findProperty("simpleYamlVersion")}")
+    testImplementation(libs.mockbukkit)
+    testImplementation(libs.yaml)
 
-    testCompileOnly("org.jetbrains:annotations:${findProperty("jetbrainsAnnotationVersion")}")
-    testImplementation("org.jetbrains.kotlin:kotlin-reflect:${findProperty("kotlinReflectVersion")}")
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib:${findProperty("kotlinStdlibVersion")}")
+    testCompileOnly(libs.jetbrainsannotations)
+    testImplementation(libs.bundles.kotlin)
 
-    testImplementation("org.slf4j:slf4j-api:${findProperty("slf4jApiVersion")}")
-    testImplementation("ch.qos.logback:logback-core:${findProperty("logbackVersion")}")
+    testImplementation(libs.bundles.logging)
 
-    testImplementation("net.bytebuddy:byte-buddy:${findProperty("byteBuddyVersion")}")
-    testImplementation("net.bytebuddy:byte-buddy-agent:${findProperty("byteBuddyAgentVersion")}")
+    testImplementation(libs.bundles.bytebuddy)
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${findProperty("jupiterApiVersion")}")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${findProperty("jupiterEngineVersion")}")
+    testImplementation(libs.bundles.junit)
 }
 
 icicle {

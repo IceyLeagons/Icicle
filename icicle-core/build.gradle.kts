@@ -22,9 +22,15 @@
  * SOFTWARE.
  */
 
+// Fuck IntelliJ...
+// Without this we would get an error about implicit usage not being valid here.
+// Which... according to gradle documentation is perfectly valid.
+// There is a ticket open, that's 8 MONTHS OLD.
+@Suppress("DSL_SCOPE_VIOLATION")
+
 plugins {
     java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
+    alias(libs.plugins.icicle)
 }
 
 group = "net.iceyleagons"
@@ -40,37 +46,25 @@ dependencies {
     shadow(project(":icicle-utilities"))
     annotationProcessor(project(":icicle-utilities"))
 
-    implementation("org.reflections:reflections:${findProperty("reflectionsVersion")}")
-    compileOnly("com.google.guava:guava:${findProperty("guavaVersion")}")
-    compileOnly("org.slf4j:slf4j-api:${findProperty("slf4jApiVersion")}")
+    implementation(libs.reflections)
 
-    compileOnly("net.bytebuddy:byte-buddy:${findProperty("byteBuddyVersion")}")
-    compileOnly("net.bytebuddy:byte-buddy-agent:${findProperty("byteBuddyAgentVersion")}")
+    // FIXME: Try to get rid of this one!
+    compileOnly(libs.guava)
 
-    compileOnly("org.jetbrains.kotlin:kotlin-reflect:${findProperty("kotlinReflectVersion")}")
-    compileOnly("org.jetbrains.kotlin:kotlin-stdlib:${findProperty("kotlinStdlibVersion")}")
+    compileOnly(libs.bundles.logging)
+    compileOnly(libs.bundles.bytebuddy)
+    compileOnly(libs.bundles.kotlin)
+    compileOnly(libs.jetbrainsannotations)
+    compileOnly(libs.yaml)
 
-    // https://mvnrepository.com/artifact/org.jetbrains/annotations
-    compileOnly("org.jetbrains:annotations:${findProperty("jetbrainsAnnotationVersion")}")
-
-
-    compileOnly("ch.qos.logback:logback-core:${findProperty("logbackVersion")}")
-    compileOnly("me.carleslc.Simple-YAML:Simple-Yaml:${findProperty("simpleYamlVersion")}")
-
-    testImplementation("me.carleslc.Simple-YAML:Simple-Yaml:${findProperty("simpleYamlVersion")}")
-
-    testCompileOnly("org.jetbrains:annotations:${findProperty("jetbrainsAnnotationVersion")}")
-    testImplementation("org.jetbrains.kotlin:kotlin-reflect:${findProperty("kotlinReflectVersion")}")
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib:${findProperty("kotlinStdlibVersion")}")
-
-    testImplementation("org.slf4j:slf4j-api:${findProperty("slf4jApiVersion")}")
-    testImplementation("ch.qos.logback:logback-core:${findProperty("logbackVersion")}")
-
-    testImplementation("net.bytebuddy:byte-buddy:${findProperty("byteBuddyVersion")}")
-    testImplementation("net.bytebuddy:byte-buddy-agent:${findProperty("byteBuddyAgentVersion")}")
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${findProperty("jupiterApiVersion")}")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${findProperty("jupiterEngineVersion")}")
+    testCompileOnly(libs.jetbrainsannotations)
+    testImplementation(libs.bundles.kotlin)
+    testImplementation(libs.bundles.bytebuddy)
+    testImplementation(libs.yaml)
+    testImplementation(libs.bundles.logging)
+    testImplementation(libs.guava)
+    testImplementation(libs.reflections)
+    testImplementation(libs.bundles.junit)
 }
 
 icicle {

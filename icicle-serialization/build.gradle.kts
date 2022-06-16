@@ -22,9 +22,15 @@
  * SOFTWARE.
  */
 
+// Fuck IntelliJ...
+// Without this we would get an error about implicit usage not being valid here.
+// Which... according to gradle documentation is perfectly valid.
+// There is a ticket open, that's 8 MONTHS OLD.
+@Suppress("DSL_SCOPE_VIOLATION")
+
 plugins {
     java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
+    alias(libs.plugins.icicle)
 }
 
 version = "0.1-SNAPSHOT"
@@ -39,34 +45,26 @@ dependencies {
     compileOnly(project(":icicle-utilities"))
     compileOnly(project(":icicle-core"))
 
-
-    compileOnly("org.slf4j:slf4j-api:${findProperty("slf4jApiVersion")}")
-    compileOnly("org.jetbrains:annotations:${findProperty("jetbrainsAnnotationVersion")}")
-
-    shadow("net.iceyleagons:nbtlib:${findProperty("nbtLibVersion")}")
-    shadow("org.json:json:${findProperty("jsonVersion")}")
-
-    compileOnly("me.carleslc.Simple-YAML:Simple-Yaml:${findProperty("simpleYamlVersion")}")
-    compileOnly("org.mongodb:bson:${findProperty("bsonVersion")}")
-
+    compileOnly(libs.slf4j)
+    compileOnly(libs.jetbrainsannotations)
+    shadow(libs.nbt)
+    shadow(libs.json)
+    compileOnly(libs.yaml)
+    compileOnly(libs.bson)
     lombok()
 
-
-    testImplementation("org.slf4j:slf4j-api:${findProperty("slf4jApiVersion")}")
-    testImplementation("org.jetbrains.kotlin:kotlin-reflect:${findProperty("kotlinReflectVersion")}")
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib:${findProperty("kotlinStdlibVersion")}")
-    testImplementation("com.google.guava:guava:${findProperty("guavaVersion")}")
+    testImplementation(libs.slf4j)
+    testImplementation(libs.bundles.kotlin)
+    testImplementation(libs.guava)
 
     testImplementation(project(":icicle-utilities"))
     testImplementation(project(":icicle-core"))
 
-    testImplementation("net.bytebuddy:byte-buddy:${findProperty("byteBuddyVersion")}")
-    testImplementation("net.bytebuddy:byte-buddy-agent:${findProperty("byteBuddyAgentVersion")}")
-    testImplementation("org.mongodb:bson:${findProperty("bsonVersion")}")
-    testImplementation("org.json:json:${findProperty("jsonVersion")}")
-    testImplementation("me.carleslc.Simple-YAML:Simple-Yaml:${findProperty("simpleYamlVersion")}")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${findProperty("jupiterApiVersion")}")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${findProperty("jupiterEngineVersion")}")
+    testImplementation(libs.bundles.bytebuddy)
+    testImplementation(libs.bson)
+    testImplementation(libs.json)
+    testImplementation(libs.yaml)
+    testImplementation(libs.bundles.junit)
 }
 
 icicle {

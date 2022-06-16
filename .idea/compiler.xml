@@ -33,6 +33,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
+      <module name="icicle.icicle-addon-server" target="16" />
+      <module name="icicle.icicle-addon-server.main" target="16" />
+      <module name="icicle.icicle-addon-server.test" target="16" />
       <module name="icicle.icicle-database" target="16" />
       <module name="icicle.icicle-database.main" target="16" />
       <module name="icicle.icicle-database.test" target="16" />

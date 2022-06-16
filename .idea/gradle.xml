@@ -10,7 +10,6 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/icicle-addon-server" />
             <option value="$PROJECT_DIR$/icicle-bukkit" />
             <option value="$PROJECT_DIR$/icicle-commands" />
             <option value="$PROJECT_DIR$/icicle-core" />

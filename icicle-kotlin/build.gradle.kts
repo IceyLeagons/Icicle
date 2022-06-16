@@ -22,10 +22,16 @@
  * SOFTWARE.
  */
 
+// Fuck IntelliJ...
+// Without this we would get an error about implicit usage not being valid here.
+// Which... according to gradle documentation is perfectly valid.
+// There is a ticket open, that's 8 MONTHS OLD.
+@Suppress("DSL_SCOPE_VIOLATION")
+
 plugins {
     java
-    kotlin("jvm") version "1.6.0"
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
+    kotlin("jvm") version libs.versions.kotlin.asProvider()
+    alias(libs.plugins.icicle)
 }
 
 group = "net.iceyleagons"
@@ -37,14 +43,12 @@ repositories {
     spigot()
 }
 
-val spigotVersion = findProperty("spigotVersion") as String
-
 dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
     implementation(project(":icicle-protocol"))
     shadow(kotlin("stdlib"))
-    spigotApi(spigotVersion)
+    spigotApi(libs.versions.spigot.get())
 }
 
 icicle {

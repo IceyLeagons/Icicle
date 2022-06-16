@@ -21,6 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+enableFeaturePreview("VERSION_CATALOGS")
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -33,14 +35,12 @@ pluginManagement {
 
 rootProject.name = "icicle"
 
-
 include("icicle-core")
 include("icicle-utilities")
 include("icicle-serialization")
 include("icicle-gradle")
 include("icicle-bukkit")
 include("icicle-kotlin")
-include("icicle-addon-server")
 include("icicle-commands")
 include("icicle-protocol")
 include("icicle-nms")

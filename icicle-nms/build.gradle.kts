@@ -22,13 +22,18 @@
  * SOFTWARE.
  */
 
+// Fuck IntelliJ...
+// Without this we would get an error about implicit usage not being valid here.
+// Which... according to gradle documentation is perfectly valid.
+// There is a ticket open, that's 8 MONTHS OLD.
+@Suppress("DSL_SCOPE_VIOLATION")
+
 plugins {
     java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
+    alias(libs.plugins.icicle)
 }
 
 version = "0.1-SNAPSHOT"
-val spigotVersion = findProperty("spigotVersion") as String
 
 repositories {
     mavenCentral()
@@ -39,13 +44,13 @@ repositories {
 dependencies {
     lombok()
     // https://mvnrepository.com/artifact/io.netty/netty-all
-    compileOnly("io.netty:netty-all:${findProperty("nettyVersion")}")
+    compileOnly(libs.netty)
+    compileOnly(libs.bytebuddy)
 
-    compileOnly("net.bytebuddy:byte-buddy:${findProperty("byteBuddyVersion")}")
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
 
-    spigotApi(spigotVersion)
+    spigotApi(libs.versions.spigot.get())
 }
 
 icicle {

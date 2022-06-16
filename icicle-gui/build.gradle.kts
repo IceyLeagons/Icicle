@@ -1,12 +1,17 @@
+
+// Fuck IntelliJ...
+// Without this we would get an error about implicit usage not being valid here.
+// Which... according to gradle documentation is perfectly valid.
+// There is a ticket open, that's 8 MONTHS OLD.
+@Suppress("DSL_SCOPE_VIOLATION")
+
 plugins {
     java
-    id("net.iceyleagons.icicle-gradle") version "1.5-SNAPSHOT"
+    alias(libs.plugins.icicle)
 }
 
 group = "net.iceyleagons"
 version = "0.1-SNAPSHOT"
-
-val spigotVersion = findProperty("spigotVersion") as String
 
 repositories {
     mavenCentral()
@@ -17,8 +22,8 @@ repositories {
 dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
-    compileOnly("org.jetbrains:annotations:${findProperty("jetbrainsAnnotationVersion")}")
-    spigotApi(spigotVersion)
+    compileOnly(libs.jetbrainsannotations)
+    spigotApi(libs.versions.spigot.get())
     lombok()
 }
 
