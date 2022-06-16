@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization.annotations;
+package net.iceyleagons.icicle.bukkit.modifiers;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -32,9 +32,12 @@ import java.lang.annotation.Target;
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 21, 2021
+ * @since Jun. 16, 2022
  */
-@Target(ElementType.TYPE)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Converter {
+public @interface ParseColors {
+
+    char value() default '&';
+
 }

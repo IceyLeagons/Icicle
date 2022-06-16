@@ -22,33 +22,19 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.test.icicle.core.bean.resolvable;
+package net.iceyleagons.icicle.core.proxy.interceptor.modifiers;
 
-import net.iceyleagons.icicle.core.annotations.Bean;
-import net.iceyleagons.icicle.core.annotations.service.Service;
-import net.iceyleagons.icicle.core.modifiers.impl.DefaultValue;
-import net.iceyleagons.icicle.core.proxy.interceptor.modifiers.ModifiersActive;
-
-import java.util.UUID;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 01, 2022
+ * @since Jun. 16, 2022
  */
-@Service
-public class EmptyConstructorService {
-
-    @ModifiersActive
-    public void testModifiers(@DefaultValue("Modified because it's null.") String input) {
-        System.out.println("Output: " + input);
-    }
-    @Bean
-    public TestBean testBean() {
-        return new TestBean();
-    }
-
-    public static class TestBean {
-        public final UUID uuid = UUID.randomUUID();
-    }
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ModifiersActive {
 }

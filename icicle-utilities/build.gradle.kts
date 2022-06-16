@@ -53,6 +53,12 @@ icicle {
     developers = listOf("TOTHTOMI", "Gabe")
 }
 
+tasks.jar {
+    from("./src/main/resources") {
+        include("META-INF/services/javax.annotation.processing.Processor")
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
 }

@@ -22,33 +22,28 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.test.icicle.core.bean.resolvable;
+package net.iceyleagons.icicle.bukkit.modifiers;
 
-import net.iceyleagons.icicle.core.annotations.Bean;
-import net.iceyleagons.icicle.core.annotations.service.Service;
-import net.iceyleagons.icicle.core.modifiers.impl.DefaultValue;
-import net.iceyleagons.icicle.core.proxy.interceptor.modifiers.ModifiersActive;
+import net.iceyleagons.icicle.core.modifiers.MethodValueModifier;
+import net.iceyleagons.icicle.core.modifiers.ValueModifier;
+import org.bukkit.ChatColor;
 
-import java.util.UUID;
+import java.lang.reflect.Parameter;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Feb. 01, 2022
+ * @since Jun. 16, 2022
  */
-@Service
-public class EmptyConstructorService {
+@MethodValueModifier(ParseColors.class)
+public class ColorModifier implements ValueModifier {
 
-    @ModifiersActive
-    public void testModifiers(@DefaultValue("Modified because it's null.") String input) {
-        System.out.println("Output: " + input);
-    }
-    @Bean
-    public TestBean testBean() {
-        return new TestBean();
-    }
+    @Override
+    public Object modify(Object input, Parameter parameter) {
+        if (!parameter.getType().equals(String.class)) {
+            throw new IllegalStateException("@ParseColors can only be used on String.");
+        }
 
-    public static class TestBean {
-        public final UUID uuid = UUID.randomUUID();
+        return ChatColor.translateAlternateColorCodes(parameter.getAnnotation(ParseColors.class).value(), (String) input);
     }
 }

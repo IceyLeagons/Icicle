@@ -38,6 +38,7 @@ repositories {
 dependencies {
     lombok()
     shadow(project(":icicle-utilities"))
+    annotationProcessor(project(":icicle-utilities"))
 
     implementation("org.reflections:reflections:${findProperty("reflectionsVersion")}")
     compileOnly("com.google.guava:guava:${findProperty("guavaVersion")}")

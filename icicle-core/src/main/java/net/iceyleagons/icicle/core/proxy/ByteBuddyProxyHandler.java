@@ -29,6 +29,9 @@ import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
+import net.bytebuddy.implementation.attribute.AnnotationAppender;
+import net.bytebuddy.implementation.attribute.AnnotationRetention;
+import net.bytebuddy.implementation.attribute.TypeAttributeAppender;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
@@ -82,6 +85,7 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
     public <T> Constructor<T> getEnhancedBean(Constructor<T> constructor) throws BeanCreationException {
         //.with(Implementation.Context.Disabled.Factory.INSTANCE);
         DynamicType.Builder<T> builder = byteBuddy
+                .with(AnnotationRetention.ENABLED)
                 .subclass(constructor.getDeclaringClass());
 
         for (MethodAdviceHandlerTemplate asmVisitorHandler : adviceHandlers) {

@@ -109,7 +109,7 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
 
         while (!stack.isEmpty()) {
             Class<?> bean = stack.pop();
-            if (beanRegistry.isRegistered(bean)) continue; //making sure it's already registered to not spend time
+            if (beanRegistry.isRegistered(bean, QualifierKey.getQualifier(bean))) continue; //making sure it's already registered to not spend time
 
             Parameter[] dependencies = BeanUtils.getResolvableConstructor(bean).getParameters();
             x:

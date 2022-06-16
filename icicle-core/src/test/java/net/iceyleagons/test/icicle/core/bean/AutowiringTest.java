@@ -66,6 +66,10 @@ public class AutowiringTest {
     @DisplayName("Empty constructor bean")
     public void testEmptyConstructor() {
         Assertions.assertNotNull(registry.getBeanNullable(EmptyConstructorService.class));
+        EmptyConstructorService emptyConstructorService = registry.getBeanNullable(EmptyConstructorService.class);
+        emptyConstructorService.testModifiers("hello");
+        emptyConstructorService.testModifiers(null);
+
     }
 
     @Test
