@@ -28,11 +28,13 @@ import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
 import net.iceyleagons.icicle.serialization.annotations.EnumSerialization;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
+import net.iceyleagons.icicle.serialization.dto.ValueGetter;
 import net.iceyleagons.icicle.serialization.mapping.PropertyMapper;
 import net.iceyleagons.icicle.serialization.mapping.SerializationPropertyMapper;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * @author TOTHTOMI
@@ -62,22 +64,22 @@ public class EnumMapper extends PropertyMapper<Enum<?>> {
     }
 
     @Override
-    protected ObjectValue mapCasted(Enum<?> object, String key, Class<?> javaType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
-        if (annotations.containsKey(EnumSerialization.class)) {
-            EnumSerialization enumSerialization = (EnumSerialization) annotations.get(EnumSerialization.class);
+    protected ObjectValue mapCasted(Enum<?> object, Class<?> javaType, ObjectMapper context, ObjectValue old) {
+        if (old.getAnnotations().containsKey(EnumSerialization.class)) {
+            EnumSerialization enumSerialization = (EnumSerialization) old.getAnnotations().get(EnumSerialization.class);
 
             switch (enumSerialization.value()) {
                 case NAME -> {
-                    return new ObjectValue(javaType, key, object.name());
+                    return old.copyWithNewValueAndType(object.name(), javaType);
                 }
 
                 case ORDINAL -> {
-                    return new ObjectValue(javaType, key, object.ordinal());
+                    return old.copyWithNewValueAndType(object.ordinal(), javaType);
                 }
             }
         }
 
-        return new ObjectValue(javaType, key, object.name());
+        return old.copyWithNewValueAndType(object.name(), javaType);
     }
 
     @Override

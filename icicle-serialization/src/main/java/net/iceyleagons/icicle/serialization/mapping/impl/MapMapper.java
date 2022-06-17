@@ -28,6 +28,7 @@ import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
 import net.iceyleagons.icicle.serialization.dto.MappedObject;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
+import net.iceyleagons.icicle.serialization.dto.ValueGetter;
 import net.iceyleagons.icicle.serialization.mapping.PropertyMapper;
 import net.iceyleagons.icicle.serialization.mapping.SerializationPropertyMapper;
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
@@ -37,6 +38,7 @@ import java.util.AbstractMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 /**
  * @author TOTHTOMI
@@ -75,7 +77,7 @@ public class MapMapper extends PropertyMapper<Map<?, ?>> {
     }
 
     @Override
-    public ObjectValue mapCasted(Map<?, ?> map, String key, Class<?> javaType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
+    public ObjectValue mapCasted(Map<?, ?> map, Class<?> javaType, ObjectMapper context, ObjectValue old) {
         final Set<Map.Entry<?, ?>> entries = new HashSet<>(map.size());
 
         for (Map.Entry<?, ?> entry : map.entrySet()) {
@@ -93,7 +95,7 @@ public class MapMapper extends PropertyMapper<Map<?, ?>> {
             entries.add(new AbstractMap.SimpleEntry<>(entry.getKey(), context.mapObject(value)));
         }
 
-        return ArrayMapper.arrayToMappedObject(entries.toArray(Map.Entry<?, ?>[]::new), key, javaType);
+        return old.copyWithNewValueAndType(entries.toArray(Map.Entry<?, ?>[]::new), javaType);  //ArrayMapper.arrayToMappedObject(entries.toArray(Map.Entry<?, ?>[]::new), key, javaType, annotations, setter, getter);
     }
 
     @Override
