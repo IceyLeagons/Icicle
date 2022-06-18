@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.other;
 
+import it.unimi.dsi.fastutil.objects.ObjectSets;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
@@ -48,7 +49,7 @@ public class ServiceAnnotationHandler implements CustomAutoCreateAnnotationHandl
 
     @Override
     public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
-        return Collections.singleton(Service.class);
+        return ObjectSets.singleton(Service.class);
     }
 
     @Override

@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.proxy;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.builder.AgentBuilder;
@@ -46,8 +47,8 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ByteBuddyProxyHandler.class);
 
-    private final Set<MethodAdviceHandlerTemplate> adviceHandlers = new HashSet<>();
-    private final Set<MethodInterceptorHandlerTemplate> interceptorHandlers = new HashSet<>();
+    private final Set<MethodAdviceHandlerTemplate> adviceHandlers = new ObjectOpenHashSet<>();
+    private final Set<MethodInterceptorHandlerTemplate> interceptorHandlers = new ObjectOpenHashSet<>();
     private final ByteBuddy byteBuddy = getNewByteBuddyInstance();
 
     public static ByteBuddy getNewByteBuddyInstance() {

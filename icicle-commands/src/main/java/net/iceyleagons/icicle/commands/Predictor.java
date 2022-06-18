@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.commands;
 
+import it.unimi.dsi.fastutil.doubles.Double2ObjectRBTreeMap;
 import net.iceyleagons.icicle.commands.command.RegisteredCommand;
 import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
 import net.iceyleagons.icicle.utilities.lang.Internal;
@@ -47,7 +48,7 @@ public final class Predictor {
 
     @Internal
     public static Optional<RegisteredCommand> predict(RegisteredCommandManager manager, String[] inputArgs) {
-        final TreeMap<Double, RegisteredCommand> possibilities = new TreeMap<>();
+        final Double2ObjectRBTreeMap<RegisteredCommand> possibilities = new Double2ObjectRBTreeMap<>(); // Insertions > Searching
 
         for (Map.Entry<String, RegisteredCommand> command : manager.getCommandRegistry().getAllChildCommands(manager.getCommandManager().value())) {
             String cmd = command.getKey();
@@ -59,6 +60,6 @@ public final class Predictor {
             possibilities.put((1D - (StringUtils.getLevenshteinDistance(cmdArgs, cmd) / (Math.max(cmdArgs.length(), cmd.length()) * 1D))) * 100D, command.getValue());
         }
 
-        return possibilities.size() > 0 ? Optional.ofNullable(possibilities.pollLastEntry().getValue()) : Optional.empty();
+        return possibilities.size() > 0 ? Optional.ofNullable(possibilities.get(possibilities.lastDoubleKey())) : Optional.empty();
     }
 }

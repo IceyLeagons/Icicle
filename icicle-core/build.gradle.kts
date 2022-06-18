@@ -51,6 +51,7 @@ dependencies {
     // FIXME: Try to get rid of this one!
     compileOnly(libs.guava)
 
+    compileOnly(libs.fastutil)
     compileOnly(libs.bundles.logging)
     compileOnly(libs.bundles.bytebuddy)
     compileOnly(libs.bundles.kotlin)

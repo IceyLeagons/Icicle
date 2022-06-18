@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.gui.utils;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -53,7 +54,7 @@ public class ItemFactory {
     private final ItemStack item;
 
     private ItemMeta itemMeta;
-    private List<String> lores = new ArrayList<>();
+    private List<String> lores = new ObjectArrayList<>();
 
     public ItemFactory(Material material) {
         this(material, 1);

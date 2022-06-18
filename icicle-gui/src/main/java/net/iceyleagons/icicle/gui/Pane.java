@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.gui;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,7 +53,7 @@ import static net.iceyleagons.icicle.utilities.ErrorUtils.ILLEGAL;
 public class Pane implements StateAware {
 
     @Getter
-    private final Set<GuiComponent> components = new HashSet<>();
+    private final Set<GuiComponent> components = new ObjectOpenHashSet<>();
 
     @Setter
     @Getter

@@ -52,6 +52,7 @@ public class CommandRegistry {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandRegistry.class);
 
     private final RegisteredCommandManager commandManager;
+
     @Getter
     private final Map<String, RegisteredCommand> commands = new ConcurrentHashMap<>();
     @Getter
@@ -65,9 +66,7 @@ public class CommandRegistry {
     public Set<Map.Entry<String, RegisteredCommand>> getAllChildCommands(String rootCommand) {
         final Set<Map.Entry<String, RegisteredCommand>> cmds = new HashSet<>();
 
-        this.commands.forEach((s, c) -> {
-            cmds.add(Map.entry(rootCommand + " " + s, c));
-        });
+        this.commands.forEach((s, c) -> cmds.add(Map.entry(rootCommand + " " + s, c)));
 
         this.subCommands.forEach((s, manager) -> {
             String root = rootCommand + " " + s;

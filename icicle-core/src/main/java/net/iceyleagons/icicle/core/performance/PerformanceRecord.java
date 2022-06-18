@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.performance;
 
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -40,7 +41,7 @@ public class PerformanceRecord {
     private final String name;
     private final long startMs;
     private final Class<?> clazz;
-    private final LinkedHashSet<PerformanceRecord> children = new LinkedHashSet<>();
+    private final ObjectLinkedOpenHashSet<PerformanceRecord> children = new ObjectLinkedOpenHashSet<>();
 
     @Setter
     private long endMs;

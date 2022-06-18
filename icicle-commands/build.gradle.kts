@@ -47,6 +47,7 @@ repositories {
 dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
+    compileOnly(libs.fastutil)
     compileOnly(libs.jetbrainsannotations)
     compileOnly(libs.slf4j)
     spigotApi(libs.versions.spigot.get())

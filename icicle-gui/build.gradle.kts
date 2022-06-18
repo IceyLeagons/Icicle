@@ -21,6 +21,7 @@ repositories {
 dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
+    compileOnly(libs.fastutil)
     compileOnly(libs.jetbrainsannotations)
     spigotApi(libs.versions.spigot.get())
     lombok()

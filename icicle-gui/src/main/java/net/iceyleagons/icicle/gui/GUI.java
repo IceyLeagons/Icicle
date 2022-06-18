@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.gui;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,8 +51,8 @@ public abstract class GUI implements Listener {
     private final int size;
     private final boolean global;
 
-    private final Map<Player, Inventory> viewers = new HashMap<>();
-    private final List<Pane> panes = new ArrayList<>();
+    private final Map<Player, Inventory> viewers = new Object2ObjectOpenHashMap<>();
+    private final List<Pane> panes = new ObjectArrayList<>();
 
     private Inventory globalInventory = null;
     private Pane activePane = null;

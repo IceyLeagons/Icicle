@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.utils;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.iceyleagons.icicle.core.annotations.PostConstruct;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
@@ -57,7 +58,7 @@ public final class BeanUtils {
     public static List<Class<?>> getImplementationsOfInterface(Class<?> interfaceClass, Reflections reflections) {
         if (!interfaceClass.isInterface())
             throw new IllegalArgumentException("Non-interface class passed to interfaceClass argument.");
-        List<Class<?>> set = new ArrayList<>();
+        List<Class<?>> set = new ObjectArrayList<>();
         Stack<Class<?>> stack = new Stack<>();
         stack.push(interfaceClass);
 

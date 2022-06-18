@@ -75,6 +75,7 @@ public class Icicle {
             new MavenDependency("ch.qos.logback", "logback-core", "1.2.9", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("org.jetbrains.kotlin", "kotlin-reflect", "1.5.31", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("org.jetbrains.kotlin", "kotlin-stdlib", "1.6.20", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
+            new MavenDependency("it.unimi.dsi", "fastutil-core", "8.5.8", MavenLibraryLoader.MAVEN_CENTRAL_REPO)
     };
     /**
      * Whether Icicle is currently loaded.

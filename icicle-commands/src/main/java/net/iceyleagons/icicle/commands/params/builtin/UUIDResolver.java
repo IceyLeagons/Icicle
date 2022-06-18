@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.commands.params.builtin;
 
+import it.unimi.dsi.fastutil.objects.ObjectLists;
 import net.iceyleagons.icicle.commands.annotations.CommandParamResolver;
 import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
 import net.iceyleagons.icicle.commands.params.CommandParameterResolverTemplate;
@@ -56,6 +57,6 @@ public class UUIDResolver implements CommandParameterResolverTemplate {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return Collections.emptyList();
+        return ObjectLists.emptyList();
     }
 }

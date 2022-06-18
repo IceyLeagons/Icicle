@@ -24,10 +24,10 @@
 
 package net.iceyleagons.icicle.commands.validators;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -38,7 +38,7 @@ import java.util.Map;
 public class ValidatorStore {
 
     @Getter
-    private final Map<Class<? extends Annotation>, CommandParameterValidator> validators = new HashMap<>();
+    private final Map<Class<? extends Annotation>, CommandParameterValidator> validators = new Object2ObjectOpenHashMap<>(16);
 
     public void registerValidator(CommandParameterValidator validator, CommandValidator commandValidator) {
         final Class<? extends Annotation> validatorClass = commandValidator.value();

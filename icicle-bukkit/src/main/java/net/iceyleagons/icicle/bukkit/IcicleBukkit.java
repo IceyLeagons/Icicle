@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.bukkit;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.bukkit.listeners.PluginStatusListener;
 import net.iceyleagons.icicle.core.Icicle;
@@ -34,12 +35,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 
 @IcicleApplication("net.iceyleagons.icicle.bukkit")
 public class IcicleBukkit extends JavaPlugin {
-    public static final Map<JavaPlugin, BukkitApplication> RUNNING_APPLICATIONS = new HashMap<>();
+    public static final Map<JavaPlugin, BukkitApplication> RUNNING_APPLICATIONS = new Object2ObjectOpenHashMap<>(4);
     public boolean isTestingEnvironment = false;
 
     public IcicleBukkit() {

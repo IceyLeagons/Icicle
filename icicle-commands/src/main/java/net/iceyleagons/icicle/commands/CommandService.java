@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.commands;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
 import net.iceyleagons.icicle.commands.middleware.MiddlewareStore;
@@ -60,7 +61,7 @@ public class CommandService {
     private final TranslationService translationService;
     private final CommandInjector injector;
     private final Set<RegisteredCommandManager> commandManagers = new HashSet<>();
-    private final Map<Class<?>, CommandParameterResolverTemplate> paramResolvers = new HashMap<>();
+    private final Map<Class<?>, CommandParameterResolverTemplate> paramResolvers = new Object2ObjectOpenHashMap<>(8);
 
     @Autowired
     public CommandService(Application application, JavaPlugin javaPlugin, TranslationService translationService) {

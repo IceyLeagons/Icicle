@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.translations.impl.file;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.iceyleagons.icicle.core.translations.TranslationStringProvider;
 
 import java.util.HashMap;
@@ -36,7 +37,7 @@ import java.util.Map;
  */
 public class FileStringProvider implements TranslationStringProvider {
 
-    private final Map<String, LanguageFile> languageFiles = new HashMap<>();
+    private final Map<String, LanguageFile> languageFiles = new Object2ObjectOpenHashMap<>();
 
     public FileStringProvider(LanguageFile... files) {
         for (LanguageFile file : files) {

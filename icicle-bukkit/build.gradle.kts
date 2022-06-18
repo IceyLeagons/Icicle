@@ -46,6 +46,7 @@ repositories {
 dependencies {
     lombok()
     compileOnly(libs.netty)
+    compileOnly(libs.fastutil)
     spigotApi(libs.versions.spigot.get())
 
     shadow(project(":icicle-gui"))

@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.core.modules;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
@@ -44,8 +46,8 @@ public class IcicleModuleLoader {
 
     //This map keeps track of all loaded modules' classloaders, so when a plugin is dependent on the module
     //its reflections can use that ClassLoader as well
-    private final Set<DependencyNotation> loadedDependencies = new HashSet<>();
-    private final List<ModuleMetadata> loadedModules = new ArrayList<>();
+    private final Set<DependencyNotation> loadedDependencies = new ObjectOpenHashSet<>();
+    private final List<ModuleMetadata> loadedModules = new ObjectArrayList<>();
 
     public IcicleModuleLoader(AdvancedFile folder) {
         Asserts.state(folder.isDirectory(), "Folder must be a folder!");

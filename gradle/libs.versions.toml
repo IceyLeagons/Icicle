@@ -19,6 +19,7 @@ bson = "4.5.0"
 mockbukkit = "1.15.0"
 jupiter = "5.7.2"
 # jupiter-engine = "5.7.2"
+fastutil = "8.5.8"
 
 [libraries]
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
@@ -38,6 +39,8 @@ mockbukkit = { module = "com.github.seeseemelk:MockBukkit-v1.18", version.ref = 
 nbt = { module = "net.iceyleagons:nbtlib", version.ref = "nbt" }
 json = { module = "org.json:json", version.ref = "json" }
 bson = { module = "org.mongodb:bson", version.ref = "bson" }
+# Fastutil-core because standard fastutil is thrice this...
+fastutil = { module = "it.unimi.dsi:fastutil-core", version.ref = "fastutil" }
 
 [bundles]
 logging = ["slf4j", "logback"]

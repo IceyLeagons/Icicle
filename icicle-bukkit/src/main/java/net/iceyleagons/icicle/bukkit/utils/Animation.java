@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.bukkit.utils;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -44,7 +44,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Animation {
 
-    private final List<Frame> frames = new ArrayList<>();
+    private final List<Frame> frames = new ObjectArrayList<>();
     private final JavaPlugin javaPlugin;
 
     private boolean running = false;

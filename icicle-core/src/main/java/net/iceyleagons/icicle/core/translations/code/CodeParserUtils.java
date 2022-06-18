@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.core.translations.code;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -148,7 +150,7 @@ public class CodeParserUtils {
 
     public static List<String> parseFunctionList(String input) {
         int start = 0;
-        List<String> list = new ArrayList<>();
+        List<String> list = new ObjectArrayList<>();
 
         while (input.indexOf(",", start) != -1) {
             String body = getFunctionBody(input, start);

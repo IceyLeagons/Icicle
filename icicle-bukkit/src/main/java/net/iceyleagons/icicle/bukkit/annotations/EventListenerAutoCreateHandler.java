@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.bukkit.annotations;
 
+import it.unimi.dsi.fastutil.objects.ObjectSets;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.utilities.lang.Autowired;
@@ -51,7 +52,7 @@ public class EventListenerAutoCreateHandler implements CustomAutoCreateAnnotatio
 
     @Override
     public Set<Class<? extends Annotation>> getSupportedAnnotations() {
-        return Collections.singleton(EventListener.class);
+        return ObjectSets.singleton(EventListener.class);
     }
 
     @Override

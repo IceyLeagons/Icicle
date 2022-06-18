@@ -31,6 +31,6 @@ package net.iceyleagons.icicle.commands.command;
  */
 public enum CommandType {
 
-    FIELD, METHOD;
+    FIELD, METHOD
 
 }

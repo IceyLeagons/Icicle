@@ -61,7 +61,7 @@ public class SimpleBlockPos {
     }
 
     public Set<SimpleBlockPos> getNeighbors() {
-        Set<SimpleBlockPos> set = new HashSet<>();
+        Set<SimpleBlockPos> set = new HashSet<>(27);
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
                 for (int y = -1; y <= 1; y++) {

@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.annotations;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.reflections.Reflections;
@@ -50,7 +51,7 @@ public class MergedAnnotationResolver {
     }
 
     public Set<Class<?>> getAllTypesAnnotated() {
-        Set<Class<?>> result = new HashSet<>();
+        Set<Class<?>> result = new ObjectOpenHashSet<>();
 
         for (Class<? extends Annotation> childrenAnnotation : childrenAnnotations) {
             result.addAll(
@@ -77,7 +78,7 @@ public class MergedAnnotationResolver {
 
     @SuppressWarnings("unchecked")
     private Set<Class<? extends Annotation>> getChildren(Reflections reflections) {
-        Set<Class<? extends Annotation>> children = new HashSet<>();
+        Set<Class<? extends Annotation>> children = new ObjectOpenHashSet<>();
         Stack<Class<? extends Annotation>> stack = new Stack<>();
 
         stack.add(annotation);
