@@ -22,25 +22,16 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.serialization.serializers;
-
-import net.iceyleagons.icicle.serialization.dto.MappedObject;
-
-import java.nio.file.Path;
+package net.iceyleagons.icicle.serialization.dto;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jun. 14, 2022
+ * @since Jun. 17, 2022
  */
-public interface SerializationProvider {
+@FunctionalInterface
+public interface ValueGetter {
 
-    String writeAsString(MappedObject object);
-
-    void writeToFile(MappedObject object, Path file);
-
-    MappedObject readFromString(String string, Class<?> javaType);
-
-    MappedObject readFromFile(Path file, Class<?> javaType);
+    Object get(Object parent);
 
 }

@@ -27,7 +27,14 @@ package net.iceyleagons.icicle.serialization.dto;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
+import net.iceyleagons.icicle.serialization.converters.Convert;
+
+import java.lang.annotation.Annotation;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * @author TOTHTOMI
@@ -41,14 +48,21 @@ public class ObjectValue {
 
     private final Class<?> javaType;
     private final String key; //name
-    private final Object value;
+
+    @Setter
+    private Object value;
+    private final Map<Class<? extends Annotation>, Annotation> annotations;
+
+    private final BiConsumer<Object, Object> setter;
+    private final ValueGetter getter;
+    private final GenericGetter genericGetter;
 
     public <T> T getValueAs(Class<T> clazz) {
         return SerializationUtils.getValueAs(clazz, value);
     }
 
     public boolean shouldConvert() {
-        return false;
+        return annotations.containsKey(Convert.class);
     }
 
     public boolean isValuePrimitiveOrString() {
@@ -75,4 +89,9 @@ public class ObjectValue {
         return SerializationUtils.isSubObject(this.javaType);
     }
 
+    public ObjectValue copyWithNewValueAndType(Object newValue, Class<?> newType) {
+        ObjectValue obj = new ObjectValue(newType, key, annotations, setter, getter, genericGetter);
+        obj.setValue(newValue);
+        return obj;
+    }
 }

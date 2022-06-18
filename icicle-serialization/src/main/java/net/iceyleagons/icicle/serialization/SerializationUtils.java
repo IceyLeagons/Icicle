@@ -25,11 +25,16 @@
 package net.iceyleagons.icicle.serialization;
 
 import net.iceyleagons.icicle.serialization.annotations.SerializedName;
+import net.iceyleagons.icicle.serialization.dto.ObjectValue;
+import net.iceyleagons.icicle.utilities.ReflectionUtils;
+import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static net.iceyleagons.icicle.utilities.StringUtils.containsIgnoresCase;
 
@@ -39,6 +44,28 @@ import static net.iceyleagons.icicle.utilities.StringUtils.containsIgnoresCase;
  * @since Jun. 13, 2022
  */
 public class SerializationUtils {
+
+    public static Set<ObjectValue> getObjectValues(Class<?> javaType) {
+        Set<ObjectValue> set = new HashSet<>();
+
+        for (Field declaredField : javaType.getDeclaredFields()) {
+            final String name = SerializationUtils.getCustomNameOrDefault(declaredField, declaredField.getName());
+            final Map<Class<? extends Annotation>, Annotation> annotations = SerializationUtils.getAnnotations(declaredField);
+
+            ObjectValue obj = new ObjectValue(declaredField.getType(), name, getAnnotations(declaredField),
+                    (parent, value) -> ReflectionUtils.set(declaredField, parent, value),
+                    parent -> ReflectionUtils.get(declaredField, parent, Object.class),
+                    index -> GenericUtils.getGenericTypeClass(declaredField, index));
+
+            set.add(obj);
+        }
+
+        return set;
+    }
+
+    public static Map<Class<? extends Annotation>, Annotation> getAnnotations(AccessibleObject object) {
+        return Arrays.stream(object.getAnnotations()).collect(Collectors.toMap(Annotation::annotationType, a -> a));
+    }
 
     public static boolean shouldIgnore(Field field) {
         return false; //Modifier.isTransient(field.getModifiers()) || field.isAnnotationPresent(SerializeIgnore.class);

@@ -32,6 +32,7 @@ import net.iceyleagons.icicle.serialization.converters.ValueConverter;
 import net.iceyleagons.icicle.serialization.mapping.PropertyMapperAnnotationHandler;
 import net.iceyleagons.icicle.serialization.mapping.impl.*;
 import net.iceyleagons.icicle.utilities.Benchmark;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.Arrays;
@@ -60,34 +61,89 @@ public class TestMain {
     @org.junit.jupiter.api.Test
     public void test() {
         ObjectMapper objectMapper = new ObjectMapper();
-        String asd = Benchmark.run(() -> objectMapper.writeValueAsString(new Test()), "Serialization");
 
-        System.out.println(asd);
+        Test original = new Test("asd", 4, UUID.randomUUID(),
+                new String[]{"value1", "value2", "value3"}, new int[]{35, 65, 45},
+                List.of("asd", "asd3"), Map.of("testkey", "testvalue", "key2", "value2"),
+                new Test2(), new Test3());
+
+        String ser1 = Benchmark.run(() -> objectMapper.writeValueAsString(original), "Serialization");
+        System.out.println(ser1);
+        Test test = Benchmark.run(() -> objectMapper.readValueFromString(ser1, Test.class), "DeSerialization");
+
+
+        compare(original, test);
+    }
+
+    public void compare(String key, Object a, Object b) {
+        boolean value = a.equals(b);
+        System.out.printf("[%s] %s: %s <--> %s\n",value ? "CHECK" : "ERROR", key, a, b);
+        Assertions.assertTrue(value);
+    }
+
+    public boolean compareMaps(Map<?,?> a, Map<?,?> b) {
+        for (Map.Entry<?, ?> entry : a.entrySet()) {
+            if (!b.containsKey(entry.getKey()) || !entry.getValue().equals(b.get(entry.getKey()))) {
+                Assertions.fail();
+            }
+        }
+        return true;
+    }
+
+    public void compare(Test a, Test b) {
+        compare("Name", a.name, b.name);
+        compare("Number", a.number, b.number);
+        compare("UUID", a.uuid.toString(), b.uuid.toString());
+        compare("List", Arrays.toString(a.list), Arrays.toString(b.list));
+        compare("NumberList", Arrays.toString(a.numberList), Arrays.toString(b.numberList));
+        compare("List", Arrays.toString(a.stringList.toArray()), Arrays.toString(b.stringList.toArray()));
+        compare("subObject - name", a.subObject.name, b.subObject.name);
+        compare("subObject - list", Arrays.toString(a.subObject.list), Arrays.toString(a.subObject.list));
+        compare("subObject - testEnum", a.subObject.testEnum.name(), b.subObject.testEnum.name());
+        compare("test3 - name", a.test3.name, b.test3.name);
+
+        System.out.printf("[%s] Comparing mapTest", compareMaps(a.mapTest, b.mapTest) ? "CHECK" : "ERROR");
     }
 
     static class Test {
-        public String name = "Hello";
+        public String name;
 
-        public int number = 4;
-        public UUID uuid = UUID.randomUUID();
+        public int number;
+        public UUID uuid;
 
-        public String[] list = new String[]{"asd", "asd2"};
-        public int[] numberList = new int[]{1, 2, 3};
+        public String[] list;
+        public int[] numberList;
 
-        public List<String> stringList = Arrays.asList("test1", "test2", "test3");
-        public Map<String, String> mapTest = Map.of("testkey", "testvalue", "key2", "value2");
+        public List<String> stringList;
+        public Map<String, String> mapTest;
 
-        public Test2 subObject = new Test2();
+        public Test2 subObject;
 
         @Convert(converter = Test3Converter.class)
-        public Test3 test3 = new Test3();
+        public Test3 test3;
+
+        public Test(String name, int number, UUID uuid, String[] list, int[] numberList, List<String> stringList, Map<String, String> mapTest, Test2 subObject, Test3 test3) {
+            this.name = name;
+            this.number = number;
+            this.uuid = uuid;
+            this.list = list;
+            this.numberList = numberList;
+            this.stringList = stringList;
+            this.mapTest = mapTest;
+            this.subObject = subObject;
+            this.test3 = test3;
+        }
+
+        public Test() {
+
+        }
     }
 
     static class Test2 {
         public String name = "Hello2";
         public String[] list = new String[]{"ranomd", "random2"};
 
-        @EnumSerialization(EnumMapper.EnumMappingType.ORDINAL)
+        @EnumSerialization(EnumMapper.EnumMappingType.NAME)
         public TestEnum testEnum = TestEnum.HELLO2;
     }
 

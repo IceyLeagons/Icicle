@@ -39,16 +39,22 @@ import java.util.Map;
  */
 public abstract class PropertyMapper<A> extends OneTypeAccessor<A> {
 
-    public abstract A deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations);
+    protected A deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
+        return null;
+    }
 
-    public ObjectValue map(Object object, String key, Class<?> javaType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
+    public A deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations, ObjectValue objectValue) {
+        return deMap(object, originalType, context, annotations);
+    }
+
+    public ObjectValue map(Object newValue, Class<?> newJavaType, ObjectMapper context, ObjectValue old) {
         // System.out.println("Wanted type: " + super.getATypeClass().getName());
         // System.out.println("Currnet: " + javaType.getName());
 
-        return mapCasted(SerializationUtils.getValueAs(super.getATypeClass(), object), key, javaType, context, annotations);
+        return mapCasted(SerializationUtils.getValueAs(super.getATypeClass(), newValue), newJavaType, context, old);
     }
 
-    protected abstract ObjectValue mapCasted(A object, String key, Class<?> javaType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations);
+    protected abstract ObjectValue mapCasted(A newValue, Class<?> newJavaType, ObjectMapper context, ObjectValue old);
 
 
     public abstract boolean supports(Class<?> type);

@@ -24,15 +24,22 @@
 
 package net.iceyleagons.icicle.serialization.serializers;
 
+import lombok.SneakyThrows;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
 import net.iceyleagons.icicle.serialization.dto.MappedObject;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
+import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.reflect.Array;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author TOTHTOMI
@@ -45,6 +52,7 @@ public class JsonSerializer implements SerializationProvider {
         for (ObjectValue value : mappedObject.getValues()) {
             if (value.shouldConvert()) {
                 Class<?> vClass = value.getValue().getClass();
+                System.out.println("Called for JSON: " + vClass);
                 root.put(value.getKey(), SerializationUtils.isSubObject(vClass) ? serialize((MappedObject) value.getValue(), new JSONObject()) : value.getValue());
             } else if (value.isValuePrimitiveOrString() || value.isEnum()) {
                 root.put(value.getKey(), value.getValue());
@@ -60,6 +68,61 @@ public class JsonSerializer implements SerializationProvider {
         }
 
         return root;
+    }
+
+    private MappedObject deserialize(JSONObject jsonObject, Class<?> javaType) {
+        final Set<ObjectValue> values = SerializationUtils.getObjectValues(javaType)
+                .stream()
+                .map(o -> deserializeValue(o, jsonObject))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        return new MappedObject(javaType, values);
+    }
+
+    private ObjectValue deserializeValue(ObjectValue objectValue, JSONObject jsonObject) {
+        if (objectValue.shouldConvert()) {
+            Object obj = jsonObject.get(objectValue.getKey());
+            if (obj instanceof JSONObject) {
+                Object result = deserialize((JSONObject) obj, objectValue.getJavaType());
+                return objectValue.copyWithNewValueAndType(result, objectValue.getJavaType());
+            }
+
+            return objectValue.copyWithNewValueAndType(obj, objectValue.getJavaType());
+        }
+
+        if (objectValue.isValuePrimitiveOrString() || objectValue.isEnum()) {
+            return objectValue.copyWithNewValueAndType(jsonObject.get(objectValue.getKey()), objectValue.getJavaType());
+        }
+
+        if (objectValue.isArray()) {
+            JSONArray jsonArray = jsonObject.getJSONArray(objectValue.getKey());
+            return objectValue.copyWithNewValueAndType(
+                    fromJsonArray(jsonArray,  objectValue.getJavaType().getComponentType()), objectValue.getJavaType()
+            );
+        }
+
+        if (objectValue.isCollection()) {
+            JSONArray jsonArray = jsonObject.getJSONArray(objectValue.getKey());
+            return objectValue.copyWithNewValueAndType(
+                    fromJsonArray(jsonArray,  objectValue.getGenericGetter().getGenericClass(0)), objectValue.getJavaType()
+            );
+        }
+
+        if (objectValue.isMap()) {
+            return objectValue.copyWithNewValueAndType(
+                    deMapMap(jsonObject.getJSONObject(objectValue.getKey()), objectValue.getGenericGetter().getGenericClass(1)), objectValue.getJavaType()
+            );
+        }
+
+        if (objectValue.isSubObject()) {
+            Object obj = jsonObject.get(objectValue.getKey());
+            if (obj instanceof JSONObject) {
+                return objectValue.copyWithNewValueAndType(deserialize((JSONObject) obj, objectValue.getJavaType()), objectValue.getJavaType());
+            }
+        }
+
+        return objectValue.copyWithNewValueAndType(jsonObject.get(objectValue.getKey()), objectValue.getJavaType());
     }
 
     private JSONObject mapMap(Object array) {
@@ -80,6 +143,36 @@ public class JsonSerializer implements SerializationProvider {
         return obj;
     }
 
+    private Object deMapMap(JSONObject object, Class<?> valueType) {
+        Object array = GenericUtils.createGenericArrayWithoutCasting(Map.Entry.class, object.length());
+
+        int i = 0;
+        for (Map.Entry<String, Object> entry : object.toMap().entrySet()) {
+            Object entryValue = entry.getValue();
+            Object value = SerializationUtils.isSubObject(valueType) ? deserialize((JSONObject) entryValue, valueType) : entryValue;
+
+            Array.set(array, i++, Map.entry(entry.getKey(), value));
+        }
+
+        return array;
+    }
+
+    private Object fromJsonArray(JSONArray array, Class<?> javaType) {
+        Object obj = GenericUtils.createGenericArrayWithoutCasting(javaType, array.length());
+        for (int i = 0; i < array.length(); i++) {
+            Object o = array.get(i);
+
+            if (o instanceof JSONObject) {
+                Array.set(obj, i, deserialize((JSONObject) o, javaType));
+                continue;
+            }
+
+            Array.set(obj, i, o);
+        }
+
+        return obj;
+    }
+
     private JSONArray toJsonArray(Object array) {
         JSONArray jsonArray = new JSONArray();
         for (int i = 0; i < Array.getLength(array); i++) {
@@ -95,23 +188,27 @@ public class JsonSerializer implements SerializationProvider {
         return jsonArray;
     }
 
+
+
     @Override
     public String writeAsString(MappedObject object) {
         return serialize(object, new JSONObject()).toString(2);
     }
 
     @Override
+    @SneakyThrows
     public void writeToFile(MappedObject object, Path file) {
-
+        Files.writeString(file, writeAsString(object), StandardOpenOption.WRITE);
     }
 
     @Override
-    public MappedObject readFromString(String string) {
-        return null;
+    public MappedObject readFromString(String string, Class<?> javaType) {
+        return deserialize(new JSONObject(string), javaType);
     }
 
     @Override
-    public MappedObject readFromFile(Path file) {
-        return null;
+    @SneakyThrows
+    public MappedObject readFromFile(Path file, Class<?> javaType) {
+        return readFromString(String.join("\n", Files.readAllLines(file)), javaType);
     }
 }

@@ -27,14 +27,17 @@ package net.iceyleagons.icicle.serialization.mapping.impl;
 import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
+import net.iceyleagons.icicle.serialization.dto.ValueGetter;
 import net.iceyleagons.icicle.serialization.mapping.PropertyMapper;
 import net.iceyleagons.icicle.serialization.mapping.SerializationPropertyMapper;
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * @author TOTHTOMI
@@ -45,21 +48,21 @@ import java.util.Map;
 public class CollectionMapper extends PropertyMapper<Collection<?>> {
 
     @Override
-    public Collection<?> deMap(Object genericArray, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
+    public Collection<?> deMap(Object genericArray, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations, ObjectValue objectValue) {
         final Object[] array = GenericUtils.genericArrayToNormalArray(genericArray, Object.class);
 
         if (!SerializationUtils.isSubObject(array.getClass().getComponentType()))
             return toCollection(originalType, array);
-        return toCollection(originalType, ArrayMapper.deMapArray(array, originalType, context));
+        return toCollection(originalType, ArrayMapper.deMapArray(array, objectValue.getGenericGetter().getGenericClass(0), context));
     }
 
     @Override
-    public ObjectValue mapCasted(Collection<?> object, String key, Class<?> javaType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
+    public ObjectValue mapCasted(Collection<?> object, Class<?> javaType, ObjectMapper context, ObjectValue old) {
         final Object[] array = object.toArray();
         if (!SerializationUtils.isSubObject(array.getClass().getComponentType()))
-            return ArrayMapper.arrayToMappedObject(array, key, javaType);
+            return old.copyWithNewValueAndType(array, javaType); // ArrayMapper.arrayToMappedObject(array, key, javaType, annotations, setter, getter);
 
-        return ArrayMapper.arrayToMappedObject(ArrayMapper.mapArray(array, context), key, javaType);
+        return old.copyWithNewValueAndType(ArrayMapper.mapArray(array, context), javaType); // ArrayMapper.arrayToMappedObject(ArrayMapper.mapArray(array, context), key, javaType, annotations, setter, getter);
     }
 
 
@@ -68,10 +71,13 @@ public class CollectionMapper extends PropertyMapper<Collection<?>> {
         return SerializationUtils.isCollection(type);
     }
 
-    private static Collection<?> toCollection(Class<?> type, Object[] array) {
+    private static Collection<?> toCollection(Class<?> type, Object array) {
         final Collection<Object> collection = (Collection<Object>) SerializationUtils.createCollectionFromType(type);
 
-        collection.addAll(Collections.singleton(array));
+        for (int i = 0; i < Array.getLength(array); i++) {
+            collection.add(Array.get(array, i));
+        }
+
         return collection;
     }
 }

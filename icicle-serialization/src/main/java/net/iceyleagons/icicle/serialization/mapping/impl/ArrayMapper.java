@@ -28,12 +28,15 @@ import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
 import net.iceyleagons.icicle.serialization.dto.MappedObject;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
+import net.iceyleagons.icicle.serialization.dto.ValueGetter;
 import net.iceyleagons.icicle.serialization.mapping.PropertyMapper;
 import net.iceyleagons.icicle.serialization.mapping.SerializationPropertyMapper;
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * @author TOTHTOMI
@@ -43,13 +46,13 @@ import java.util.Map;
 @SerializationPropertyMapper
 public class ArrayMapper extends PropertyMapper<Object> {
     @Override
-    public Object[] deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
-        return deMapArray(GenericUtils.genericArrayToNormalArray(object, Object.class), originalType, context);
+    public Object deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
+        return deMapArray(GenericUtils.genericArrayToNormalArray(object, Object.class), originalType.getComponentType(), context);
     }
 
     @Override
-    public ObjectValue mapCasted(Object object, String key, Class<?> javaType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
-        return arrayToMappedObject(mapArray(object, context), key, javaType);
+    public ObjectValue mapCasted(Object object, Class<?> javaType, ObjectMapper context, ObjectValue old) {
+        return old.copyWithNewValueAndType(mapArray(object, context), javaType);
     }
 
     @Override
@@ -76,14 +79,15 @@ public class ArrayMapper extends PropertyMapper<Object> {
         return clone;
     }
 
-    static Object[] deMapArray(Object[] array, Class<?> originalType, ObjectMapper context) {
-        final Object[] clone = GenericUtils.createGenericArray(originalType, array.length);
+    static Object deMapArray(Object array, Class<?> arrayType, ObjectMapper context) {
+        final int length = Array.getLength(array);
+        final Object clone = GenericUtils.createGenericArrayWithoutCasting(arrayType, length);
 
-        for (int i = 0; i < array.length; i++) {
-            final Object obj = array[i];
+        for (int i = 0; i < length; i++) {
+            final Object obj = Array.get(array, i);
 
             if (!SerializationUtils.isSubObject(obj.getClass())) {
-                clone[i] = obj;
+                Array.set(clone, i, obj);
                 continue;
             }
 
@@ -91,13 +95,9 @@ public class ArrayMapper extends PropertyMapper<Object> {
                 throw new IllegalStateException("Got non MappedObject!");
             }
 
-            clone[i] = context.demapObject((MappedObject) array[i], originalType);
+            Array.set(clone, i, context.demapObject((MappedObject) Array.get(array, i), arrayType));
         }
 
         return clone;
-    }
-
-    static ObjectValue arrayToMappedObject(Object[] value, String key, Class<?> javaType) {
-        return new ObjectValue(javaType, key, value);
     }
 }
