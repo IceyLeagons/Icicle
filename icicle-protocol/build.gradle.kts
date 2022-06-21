@@ -50,6 +50,7 @@ dependencies {
     implementation(project(":icicle-nms"))
     compileOnly(libs.bytebuddy)
     compileOnly(libs.netty)
+    compileOnly(libs.fastutil)
     compileOnly(kotlin("stdlib"))
     spigotApi(libs.versions.spigot.get())
 }

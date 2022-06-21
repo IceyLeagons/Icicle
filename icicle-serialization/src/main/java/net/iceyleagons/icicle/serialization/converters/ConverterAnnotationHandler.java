@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.serialization.converters;
 
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +42,7 @@ import java.util.Set;
 @AnnotationHandler
 public class ConverterAnnotationHandler implements CustomAutoCreateAnnotationHandler {
 
-    public static final Set<ValueConverter<?, ?>> REGISTERED_CONVERTERS = new HashSet<>();
+    public static final Set<ValueConverter<?, ?>> REGISTERED_CONVERTERS = new ObjectArraySet<>(8);
 
     @Override
     public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {

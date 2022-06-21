@@ -46,6 +46,7 @@ dependencies {
     // https://mvnrepository.com/artifact/io.netty/netty-all
     compileOnly(libs.netty)
     compileOnly(libs.bytebuddy)
+    compileOnly(libs.fastutil)
 
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))

@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.core.configuration.environment;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 
@@ -36,8 +38,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
 
-    private final Map<Class<?>, Configuration> configurations = new ConcurrentHashMap<>();
-    private final Map<String, Object> values = new ConcurrentHashMap<>();
+    private final Map<Class<?>, Configuration> configurations = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
+    private final Map<String, Object> values = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
     private final File configRootFolder;
 
     public ConfigurationEnvironmentImpl(File configRootFolder) {

@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.nms;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import net.iceyleagons.icicle.utilities.AdvancedClass;
 
@@ -38,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public abstract class WrapperClass {
 
-    private static final Map<String, AdvancedClass<?>> cache = new ConcurrentHashMap<>();
+    private static final Map<String, AdvancedClass<?>> cache = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>(32));
     private final AdvancedClass<?> clazz;
     private final Object origin;
 

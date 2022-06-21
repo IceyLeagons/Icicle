@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.beans;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.AutoCreate;
 import net.iceyleagons.icicle.core.annotations.Bean;
@@ -123,7 +124,7 @@ public class DefaultBeanManager implements BeanManager {
      */
     private static Set<Class<?>> getAndRemoveTypesAnnotatedWith(Class<? extends Annotation> annotation, Set<Class<?>> autoCreationTypes) {
         Iterator<Class<?>> iterator = autoCreationTypes.iterator(); //creating an iterator to avoid concurrent modification
-        Set<Class<?>> result = new HashSet<>();
+        Set<Class<?>> result = new ObjectOpenHashSet<>();
 
 
         while (iterator.hasNext()) {
@@ -165,14 +166,11 @@ public class DefaultBeanManager implements BeanManager {
             createAndRegisterBean(config);
             Object object = this.beanRegistry.getBeanNullable(config);
 
-            if (!(object instanceof Configuration)) {
+            if (!(object instanceof Configuration configuration)) {
                 LOGGER.warn("Config described by {} does not extend any Configuration instance. (Did you forget to extend AbstractConfiguration?)", config.getName());
                 this.beanRegistry.unregisterBean(config);
                 continue;
             }
-
-            Configuration configuration = (Configuration) object;
-
 
             configuration.setConfigFile(new AdvancedFile(new File(this.application.getConfigurationEnvironment().getConfigRootFolder(), annotation.value())));
 

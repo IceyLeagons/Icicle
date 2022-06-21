@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.modules;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.*;
 import net.iceyleagons.icicle.core.utils.Version;
 import net.iceyleagons.icicle.utilities.Asserts;
@@ -32,11 +33,9 @@ import org.simpleyaml.configuration.file.YamlFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.stream.Collectors;
 
 @EqualsAndHashCode
 @RequiredArgsConstructor
@@ -74,7 +73,7 @@ public class ModuleMetadata {
 
         var dependencies = yamlFile.getStringList("dependencies");
         if (dependencies == null)
-            dependencies = new ArrayList<>();
+            dependencies = new ObjectArrayList<>();
         // Commented out since load order isn't defined here.
         /*if (dependencies != null) {
             // Check if dependency is installed/has correct version.
@@ -95,14 +94,14 @@ public class ModuleMetadata {
 
         var developers = yamlFile.getStringList("developers");
         if (developers == null)
-            developers = new ArrayList<>();
+            developers = new ObjectArrayList<>();
 
         this.baseFile = file;
         this.name = name;
         this.version = version;
         this.developers = developers;
         this.description = description;
-        this.dependencies = dependencies.stream().map(DependencyNotation::fromString).collect(Collectors.toUnmodifiableList());
+        this.dependencies = dependencies.stream().map(DependencyNotation::fromString).toList();
         this.dependencyNotation = DependencyNotation.fromString(dependencyNotation);
         this.mainClass = mainClass;
     }

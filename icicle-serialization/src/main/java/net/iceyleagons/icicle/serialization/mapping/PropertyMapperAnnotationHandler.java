@@ -24,13 +24,13 @@
 
 package net.iceyleagons.icicle.serialization.mapping;
 
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -41,7 +41,7 @@ import java.util.Set;
 @AnnotationHandler
 public class PropertyMapperAnnotationHandler implements CustomAutoCreateAnnotationHandler {
 
-    public static final Set<PropertyMapper<?>> REGISTERED_PROPERTY_MAPPERS = new HashSet<>();
+    public static final Set<PropertyMapper<?>> REGISTERED_PROPERTY_MAPPERS = new ObjectArraySet<>(4);
 
     @Override
     public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {

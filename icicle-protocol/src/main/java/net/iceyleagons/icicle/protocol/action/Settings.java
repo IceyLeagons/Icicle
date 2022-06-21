@@ -24,10 +24,11 @@
 
 package net.iceyleagons.icicle.protocol.action;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author TOTHTOMI
@@ -52,7 +53,7 @@ public class Settings {
     public static final int MATERIAL = 300;
     public static final int LENGTH = 301;
 
-    private final Map<Integer, Object> settings = new ConcurrentHashMap<>();
+    private final Map<Integer, Object> settings = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>(4));
 
     public Settings with(int id, Object value) {
         settings.put(id, value);

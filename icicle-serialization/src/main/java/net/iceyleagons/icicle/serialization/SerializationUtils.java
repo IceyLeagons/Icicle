@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.serialization;
 
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.iceyleagons.icicle.serialization.annotations.SerializedName;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
@@ -46,7 +47,7 @@ import static net.iceyleagons.icicle.utilities.StringUtils.containsIgnoresCase;
 public class SerializationUtils {
 
     public static Set<ObjectValue> getObjectValues(Class<?> javaType) {
-        Set<ObjectValue> set = new HashSet<>();
+        Set<ObjectValue> set = new ObjectArraySet<>(8);
 
         for (Field declaredField : javaType.getDeclaredFields()) {
             final String name = SerializationUtils.getCustomNameOrDefault(declaredField, declaredField.getName());

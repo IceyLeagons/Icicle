@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.core.beans;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.exceptions.MultipleInstanceException;
@@ -50,7 +52,7 @@ public class DelegatingBeanRegistry implements BeanRegistry {
 
     private static final Logger logger = LoggerFactory.getLogger(DelegatingBeanRegistry.class);
 
-    private final Map<QualifierKey, Object> beans = new ConcurrentHashMap<>();
+    private final Map<QualifierKey, Object> beans = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
     private final Application application;
 
     // Global service providers can only supply one implementation for a service, therefore qualifiers don't need to be implemented.

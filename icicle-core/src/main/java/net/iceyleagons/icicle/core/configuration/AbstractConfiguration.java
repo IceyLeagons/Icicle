@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.core.configuration;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Setter;
 import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.config.ConfigComment;
@@ -191,7 +193,7 @@ public abstract class AbstractConfiguration implements Configuration {
     }
 
     private Set<Map.Entry<String, Object>> getValues(Set<Field> fields) {
-        Map<String, Object> values = new ConcurrentHashMap<>();
+        Map<String, Object> values = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 
         for (Field field : fields) {
             ConfigField configPath = field.getAnnotation(ConfigField.class);

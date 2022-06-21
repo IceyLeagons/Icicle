@@ -47,6 +47,7 @@ import net.iceyleagons.icicle.core.translations.TranslationService;
 import net.iceyleagons.icicle.core.utils.Defaults;
 import net.iceyleagons.icicle.utilities.ArrayUtils;
 import net.iceyleagons.icicle.utilities.ListUtils;
+import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
@@ -238,7 +239,7 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
 
     private void printHelp(CommandSender sender, int page) {
         final TranslationService translationService = this.commandService.getTranslationService();
-        final List<Map.Entry<String, RegisteredCommand>> commands = ListUtils.toList(this.getCommandRegistry().getAllChildCommands(this.commandManager.value()));
+        final List<Tuple<String, RegisteredCommand>> commands = ListUtils.toList(this.getCommandRegistry().getAllChildCommands(this.commandManager.value()));
 
         int pages = commands.size() / 10;
 
@@ -258,17 +259,17 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
 
         int p2 = (page + 1) * 10;
         for (int i = page * 10; i < Math.min(commands.size(), p2); i++) {
-            Map.Entry<String, RegisteredCommand> entry = commands.get(i);
-            Description description = entry.getValue().getDescription();
+            Tuple<String, RegisteredCommand> entry = commands.get(i);
+            Description description = entry.getB().getDescription();
 
             if (description == null) {
-                sender.sendMessage(ChatColor.GOLD + "/" + entry.getKey() + ChatColor.WHITE + " - N/A");
+                sender.sendMessage(ChatColor.GOLD + "/" + entry.getA() + ChatColor.WHITE + " - N/A");
                 continue;
             }
 
             String descriptionText = translationService.getTranslation(description.key(), translationService.getLanguageProvider().getLanguage(sender), "");
 
-            sender.sendMessage(ChatColor.GOLD + "/" + entry.getKey() + ChatColor.WHITE + " - " + descriptionText);
+            sender.sendMessage(ChatColor.GOLD + "/" + entry.getA() + ChatColor.WHITE + " - " + descriptionText);
         }
         sender.sendMessage(" ");
     }

@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.serialization.mapping.impl;
 
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
 import net.iceyleagons.icicle.serialization.dto.MappedObject;
@@ -78,7 +79,7 @@ public class MapMapper extends PropertyMapper<Map<?, ?>> {
 
     @Override
     public ObjectValue mapCasted(Map<?, ?> map, Class<?> javaType, ObjectMapper context, ObjectValue old) {
-        final Set<Map.Entry<?, ?>> entries = new HashSet<>(map.size());
+        final Set<Map.Entry<?, ?>> entries = new ObjectArraySet<>(map.size());
 
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             final Object value = entry.getValue();

@@ -47,6 +47,7 @@ dependencies {
 
     compileOnly(libs.slf4j)
     compileOnly(libs.jetbrainsannotations)
+    compileOnly(libs.fastutil)
     shadow(libs.nbt)
     shadow(libs.json)
     compileOnly(libs.yaml)

@@ -35,7 +35,9 @@ import java.util.Map;
  */
 public class MiddlewareStore {
 
-    private final Map<Class<?>, CommandMiddlewareTemplate> middlewares = new Object2ObjectArrayMap<>(8); // Array map is probably better, since there is not gonna be a large number of modifications, and there are going to be a lot of accesses.
+    private final Map<Class<?>, CommandMiddlewareTemplate> middlewares = new Object2ObjectArrayMap<>(8); // Array map is probably better, since
+                                                                                                                // there is not gonna be a large number of modifications,
+                                                                                                                // and there are going to be a lot of accesses.
 
     public void registerMiddleware(CommandMiddlewareTemplate commandMiddlewareTemplate, Class<?> middlewareClass, CommandMiddleware commandMiddleware) {
         Class<?> toReplace = commandMiddleware.replaces();

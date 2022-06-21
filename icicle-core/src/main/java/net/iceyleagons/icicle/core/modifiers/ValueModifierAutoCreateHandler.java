@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.core.modifiers;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
@@ -44,7 +46,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @AnnotationHandler
 public class ValueModifierAutoCreateHandler implements CustomAutoCreateAnnotationHandler {
 
-    private final Map<Class<? extends Annotation>, ValueModifier> modifiers = new ConcurrentHashMap<>();
+    private final Map<Class<? extends Annotation>, ValueModifier> modifiers = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 
     @Override
     public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {

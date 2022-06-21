@@ -25,6 +25,7 @@
 package net.iceyleagons.icicle.commands;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
 import net.iceyleagons.icicle.commands.middleware.MiddlewareStore;
@@ -60,7 +61,7 @@ public class CommandService {
     private final JavaPlugin javaPlugin;
     private final TranslationService translationService;
     private final CommandInjector injector;
-    private final Set<RegisteredCommandManager> commandManagers = new HashSet<>();
+    private final Set<RegisteredCommandManager> commandManagers = new ObjectOpenHashSet<>();
     private final Map<Class<?>, CommandParameterResolverTemplate> paramResolvers = new Object2ObjectOpenHashMap<>(8);
 
     @Autowired
@@ -78,9 +79,8 @@ public class CommandService {
                 return arg;
             }
 
-            @Nullable
             @Override
-            public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+            public @NotNull List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
                 return Collections.emptyList();
             }
         });

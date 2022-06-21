@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.core.beans.resolvers.impl;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.core.beans.resolvers.CustomAutoCreateAnnotationResolver;
 
@@ -33,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DelegatingCustomAutoCreateAnnotationResolver implements CustomAutoCreateAnnotationResolver {
 
-    private final Map<Class<? extends Annotation>, CustomAutoCreateAnnotationHandler> handlers = new ConcurrentHashMap<>();
+    private final Map<Class<? extends Annotation>, CustomAutoCreateAnnotationHandler> handlers = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 
     @Override
     public void registerCustomAutoCreateAnnotationHandler(CustomAutoCreateAnnotationHandler handler) {

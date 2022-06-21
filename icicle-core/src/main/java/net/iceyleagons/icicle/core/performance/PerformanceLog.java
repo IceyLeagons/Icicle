@@ -25,6 +25,8 @@
 package net.iceyleagons.icicle.core.performance;
 
 import com.google.common.base.Strings;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.Icicle;
 
@@ -37,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PerformanceLog {
 
     private static final long MS_THRESHOLD = 300;
-    private static final Map<Application, PerformanceRecord> currentNodes = new ConcurrentHashMap<>(4);
+    private static final Map<Application, PerformanceRecord> currentNodes = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>(4));
 
     public static void begin(Application application, String name, Class<?> clazz) {
         if (!Icicle.PERFORMANCE_LOG) return;

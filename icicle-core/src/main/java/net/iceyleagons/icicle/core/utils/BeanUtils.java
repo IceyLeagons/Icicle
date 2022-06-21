@@ -58,7 +58,7 @@ public final class BeanUtils {
     public static List<Class<?>> getImplementationsOfInterface(Class<?> interfaceClass, Reflections reflections) {
         if (!interfaceClass.isInterface())
             throw new IllegalArgumentException("Non-interface class passed to interfaceClass argument.");
-        List<Class<?>> set = new ObjectArrayList<>();
+        List<Class<?>> set = new ObjectArrayList<>(4);
         Stack<Class<?>> stack = new Stack<>();
         stack.push(interfaceClass);
 

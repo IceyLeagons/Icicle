@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.utils;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import kotlin.jvm.JvmClassMappingKt;
 import kotlin.reflect.KFunction;
 import kotlin.reflect.KParameter;
@@ -124,7 +125,7 @@ public final class Kotlin {
         }
 
         List<KParameter> params = kotlinConstructor.getParameters();
-        Map<KParameter, Object> objectParams = new HashMap<>(params.size());
+        Map<KParameter, Object> objectParams = new Object2ObjectOpenHashMap<>(params.size());
 
         for (int i = 0; i < args.length; i++) {
             if (!(params.get(i).isOptional() && args[i] == null)) {

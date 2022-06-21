@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.translations.code;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
@@ -51,8 +52,8 @@ public class CodeParser {
     public static final char FUNC_PART_END = ')';
     public static final char STRING_PART_INDICATOR = '\'';
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeParser.class);
-    private final Map<String, AbstractCodeFunction> dictionary = new HashMap<>();
-    private final Map<String, String> values = new HashMap<>();
+    private final Map<String, AbstractCodeFunction> dictionary = new Object2ObjectOpenHashMap<>(26);
+    private final Map<String, String> values = new Object2ObjectOpenHashMap<>(64);
 
     public CodeParser() {
         this(new AbstractCodeFunction[0]);

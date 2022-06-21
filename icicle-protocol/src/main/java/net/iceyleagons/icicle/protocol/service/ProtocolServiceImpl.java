@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.protocol.service;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
@@ -46,7 +48,7 @@ public class ProtocolServiceImpl implements ProtocolService {
     private final Application application;
     private final NMSHandler nms;
 
-    private final Map<Player, ProtocolPlayer> protocolPlayers = new ConcurrentHashMap<>();
+    private final Map<Player, ProtocolPlayer> protocolPlayers = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>(8));
 
     public ProtocolServiceImpl(Application application) {
         this.application = application;

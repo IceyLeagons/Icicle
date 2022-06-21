@@ -24,6 +24,9 @@
 
 package net.iceyleagons.icicle.commands.manager;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.commands.CommandInjectionException;
@@ -31,6 +34,8 @@ import net.iceyleagons.icicle.commands.annotations.Command;
 import net.iceyleagons.icicle.commands.annotations.meta.Alias;
 import net.iceyleagons.icicle.commands.command.RegisteredCommand;
 import net.iceyleagons.icicle.commands.exception.CommandNotFoundException;
+import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
+import net.iceyleagons.icicle.utilities.datastores.tuple.UnmodifiableTuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,19 +59,19 @@ public class CommandRegistry {
     private final RegisteredCommandManager commandManager;
 
     @Getter
-    private final Map<String, RegisteredCommand> commands = new ConcurrentHashMap<>();
+    private final Map<String, RegisteredCommand> commands = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
     @Getter
-    private final Map<String, RegisteredCommandManager> subCommands = new ConcurrentHashMap<>();
+    private final Map<String, RegisteredCommandManager> subCommands = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 
     private static String[] getAliases(Method method) {
         String[] aliases = method.isAnnotationPresent(Alias.class) ? method.getAnnotation(Alias.class).value() : new String[0];
         return Arrays.stream(aliases).map(String::toLowerCase).toArray(String[]::new);
     }
 
-    public Set<Map.Entry<String, RegisteredCommand>> getAllChildCommands(String rootCommand) {
-        final Set<Map.Entry<String, RegisteredCommand>> cmds = new HashSet<>();
+    public Set<Tuple<String, RegisteredCommand>> getAllChildCommands(String rootCommand) {
+        final Set<Tuple<String, RegisteredCommand>> cmds = new ObjectArraySet<>(4); // Array set is PROBABLY faster because we're not comparing.
 
-        this.commands.forEach((s, c) -> cmds.add(Map.entry(rootCommand + " " + s, c)));
+        this.commands.forEach((s, c) -> cmds.add(new UnmodifiableTuple<>(rootCommand + " " + s, c)));
 
         this.subCommands.forEach((s, manager) -> {
             String root = rootCommand + " " + s;

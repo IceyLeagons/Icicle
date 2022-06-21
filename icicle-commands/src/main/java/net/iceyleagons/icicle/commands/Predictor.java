@@ -27,6 +27,7 @@ package net.iceyleagons.icicle.commands;
 import it.unimi.dsi.fastutil.doubles.Double2ObjectRBTreeMap;
 import net.iceyleagons.icicle.commands.command.RegisteredCommand;
 import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
+import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 import net.iceyleagons.icicle.utilities.lang.Utility;
 import org.apache.commons.lang.StringUtils;
@@ -50,14 +51,14 @@ public final class Predictor {
     public static Optional<RegisteredCommand> predict(RegisteredCommandManager manager, String[] inputArgs) {
         final Double2ObjectRBTreeMap<RegisteredCommand> possibilities = new Double2ObjectRBTreeMap<>(); // Insertions > Searching
 
-        for (Map.Entry<String, RegisteredCommand> command : manager.getCommandRegistry().getAllChildCommands(manager.getCommandManager().value())) {
-            String cmd = command.getKey();
+        for (Tuple<String, RegisteredCommand> command : manager.getCommandRegistry().getAllChildCommands(manager.getCommandManager().value())) {
+            String cmd = command.getA();
 
             String[] args = new String[cmd.split(" ").length];
             System.arraycopy(inputArgs, 0, args, 0, Math.min(inputArgs.length, args.length));
 
             String cmdArgs = StringUtils.join(args, " ");
-            possibilities.put((1D - (StringUtils.getLevenshteinDistance(cmdArgs, cmd) / (Math.max(cmdArgs.length(), cmd.length()) * 1D))) * 100D, command.getValue());
+            possibilities.put((1D - (StringUtils.getLevenshteinDistance(cmdArgs, cmd) / (Math.max(cmdArgs.length(), cmd.length()) * 1D))) * 100D, command.getB());
         }
 
         return possibilities.size() > 0 ? Optional.ofNullable(possibilities.get(possibilities.lastDoubleKey())) : Optional.empty();

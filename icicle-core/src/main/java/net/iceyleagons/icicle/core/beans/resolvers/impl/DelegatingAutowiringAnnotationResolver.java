@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.core.beans.resolvers.impl;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 
@@ -33,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DelegatingAutowiringAnnotationResolver implements AutowiringAnnotationResolver {
 
-    private final Map<Class<? extends Annotation>, AutowiringAnnotationHandler> handlers = new ConcurrentHashMap<>();
+    private final Map<Class<? extends Annotation>, AutowiringAnnotationHandler> handlers = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 
     @Override
     public void registerAutowiringAnnotationHandler(AutowiringAnnotationHandler handler) {
