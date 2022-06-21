@@ -59,6 +59,7 @@ dependencies {
     compileOnly(libs.yaml)
 
     testCompileOnly(libs.jetbrainsannotations)
+    testImplementation(libs.fastutil)
     testImplementation(libs.bundles.kotlin)
     testImplementation(libs.bundles.bytebuddy)
     testImplementation(libs.yaml)

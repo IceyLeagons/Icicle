@@ -28,16 +28,14 @@ import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
+import net.iceyleagons.icicle.core.performance.PerformanceLog;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import net.iceyleagons.test.icicle.core.bean.resolvable.DependantConstructorService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.EmptyConstructorService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.custom.CustomAutowiringHandlerService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.modifiers.DefaultValueService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.qualifier.QualificationTestService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 /**
  * @author TOTHTOMI
@@ -61,6 +59,12 @@ public class AutowiringTest {
         };
         registry = application.getBeanManager().getBeanRegistry();
         Assertions.assertDoesNotThrow(application::start);
+    }
+    
+    @AfterAll
+    public static void printPerformance() {
+        String log = PerformanceLog.dumpExecutionLog(application);
+        System.out.println(log);
     }
 
     @Test

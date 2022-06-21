@@ -24,9 +24,30 @@
 
 package net.iceyleagons.icicle.utilities;
 
+import net.iceyleagons.icicle.utilities.lang.Utility;
+
 import java.util.Locale;
 
-public class StringUtils {
+@Utility
+public final class StringUtils {
+
+    public static int getLongestLength(String... lines) {
+        int longest = 0;
+        for (String line : lines) {
+            int length = line.length();
+            if (length > longest) {
+                longest = length;
+            }
+        }
+
+        return longest;
+    }
+
+    public static String putInCenter(String text, String toPutInCenter) {
+        StringBuilder stringBuilder = new StringBuilder(text);
+        stringBuilder.insert(text.length() / 2, toPutInCenter);
+        return stringBuilder.toString();
+    }
 
     public static boolean containsIgnoresCase(String inside, String toContain) {
         return inside.toLowerCase(Locale.ROOT).contains(toContain.toLowerCase(Locale.ROOT));
