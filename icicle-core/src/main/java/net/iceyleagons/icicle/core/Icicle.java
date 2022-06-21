@@ -113,8 +113,8 @@ public class Icicle {
         System.out.println("[==================[Icicle Loader]==================]");
         System.out.println();
 
-        System.out.printf("[Icicle] - %s", getLoadText());
-        System.out.println("[Icicle] - Downloading & loading core libraries... (This may take a while)");
+        System.out.printf("[Icicle] - %s\n", getLoadText());
+        System.out.println("[Icicle] - Downloading & loading core libraries... (This may take a while)\n");
         for (MavenDependency coreDependency : CORE_DEPENDENCIES) {
             MavenLibraryLoader.load(coreDependency);
         }

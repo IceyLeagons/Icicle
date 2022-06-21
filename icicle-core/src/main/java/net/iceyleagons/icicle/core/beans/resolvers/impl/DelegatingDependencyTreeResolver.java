@@ -81,14 +81,14 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         StringBuilder stringBuilder = new StringBuilder();
 
 
-        stringBuilder.append("\n\t\t|-----|").append("\n\r");
-        stringBuilder.append("\t\t|     |").append("\n\r");
+        stringBuilder.append("\n\t\t┌─────┐").append("\n\r");
+        stringBuilder.append("\t\t│     ↓").append("\n\r");
         for (int i = startIndex; i <= endIndex; i++) {
-            stringBuilder.append("\t\t|   ").append(tree.get(i).getName()).append("\n\r");
-            stringBuilder.append("\t\t|     |").append("\n\r");
+            stringBuilder.append("\t\t│   ").append(tree.get(i).getName()).append("\n\r");
+            stringBuilder.append("\t\t│     ↓").append("\n\r");
         }
 
-        stringBuilder.append("\t\t|_____|").append("\n\r");
+        stringBuilder.append("\t\t└─────┘").append("\n\r");
 
         return stringBuilder.toString();
     }
@@ -109,7 +109,7 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
 
         while (!stack.isEmpty()) {
             Class<?> bean = stack.pop();
-            if (beanRegistry.isRegistered(bean, QualifierKey.getQualifier(bean)))
+            if (beanRegistry.isRegistered(bean, QualifierKey.getQualifier(bean)) || bean.isInterface())
                 continue; //making sure it's already registered to not spend time
 
             Parameter[] dependencies = BeanUtils.getResolvableConstructor(bean).getParameters();
