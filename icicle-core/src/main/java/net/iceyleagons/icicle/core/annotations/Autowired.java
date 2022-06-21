@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.utilities.lang;
+package net.iceyleagons.icicle.core.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  * @version 1.0.0
  * @since Oct. 31, 2021
  */
-@Target(ElementType.CONSTRUCTOR)
-@Retention(RetentionPolicy.SOURCE)
+@Target({ElementType.CONSTRUCTOR, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Autowired {
 }

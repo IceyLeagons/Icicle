@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,41 +22,27 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.proxy.interceptor.bean;
+package net.iceyleagons.test.icicle.core.bean.resolvable;
 
-import net.bytebuddy.description.method.MethodDescription;
-import net.bytebuddy.implementation.Implementation;
-import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.matcher.ElementMatcher;
-import net.bytebuddy.matcher.ElementMatchers;
-import net.iceyleagons.icicle.core.annotations.Bean;
-import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;
-import net.iceyleagons.icicle.core.beans.BeanRegistry;
-import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 import net.iceyleagons.icicle.core.annotations.Autowired;
+import net.iceyleagons.icicle.core.annotations.Qualifier;
+import net.iceyleagons.icicle.core.annotations.service.Service;
+import net.iceyleagons.test.icicle.core.bean.resolvable.qualifier.TestService;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 28, 2021
+ * @since Jun. 21, 2022
  */
-@MethodInterceptionHandler
-public class BeanHandler implements MethodInterceptorHandlerTemplate {
+@Service
+public class SetterTesterService {
 
-    private final BeanRegistry beanRegistry;
+    public EmptyConstructorService.TestBean testBean;
+    public TestService testService;
 
     @Autowired
-    public BeanHandler(BeanRegistry beanRegistry) {
-        this.beanRegistry = beanRegistry;
-    }
-
-    @Override
-    public ElementMatcher<? super MethodDescription> getMatcher() {
-        return ElementMatchers.isAnnotatedWith(Bean.class);
-    }
-
-    @Override
-    public Implementation getImplementation() {
-        return MethodDelegation.to(new BeanDelegation(this.beanRegistry));
+    public void setTestBean(EmptyConstructorService.TestBean testBean, @Qualifier("qualified") TestService ts) {
+        this.testBean = testBean;
+        this.testService = ts;
     }
 }

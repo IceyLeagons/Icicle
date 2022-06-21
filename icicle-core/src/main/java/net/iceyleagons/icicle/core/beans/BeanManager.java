@@ -24,7 +24,7 @@
 
 package net.iceyleagons.icicle.core.beans;
 
-import net.iceyleagons.icicle.core.beans.resolvers.ConstructorParameterResolver;
+import net.iceyleagons.icicle.core.beans.resolvers.InjectionParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
@@ -36,7 +36,7 @@ import org.reflections.Reflections;
 /**
  * A BeanManager is the core of all operations related to beans.
  * It is also the one, that creates the instances of
- * {@link BeanRegistry}, {@link DependencyTreeResolver}, {@link ConstructorParameterResolver}
+ * {@link BeanRegistry}, {@link DependencyTreeResolver}, {@link InjectionParameterResolver}
  *
  * @author TOTHTOMI
  * @version 1.1.0
@@ -92,9 +92,9 @@ public interface BeanManager {
     DependencyTreeResolver getDependencyTreeResolver();
 
     /**
-     * @return the {@link ConstructorParameterResolver} used by the manager
+     * @return the {@link InjectionParameterResolver} used by the manager
      */
-    ConstructorParameterResolver getConstructorParameterResolver();
+    InjectionParameterResolver getConstructorParameterResolver();
 
     /**
      * @return the {@link Reflections} used by the manager

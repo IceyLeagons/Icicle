@@ -27,6 +27,7 @@ package net.iceyleagons.icicle.core.beans;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.AutoCreate;
+import net.iceyleagons.icicle.core.annotations.Autowired;
 import net.iceyleagons.icicle.core.annotations.Bean;
 import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
 import net.iceyleagons.icicle.core.annotations.config.Config;
@@ -36,11 +37,11 @@ import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotati
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodAdviceHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
-import net.iceyleagons.icicle.core.beans.resolvers.ConstructorParameterResolver;
+import net.iceyleagons.icicle.core.beans.resolvers.InjectionParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.CustomAutoCreateAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingAutowiringAnnotationResolver;
-import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingConstructorParameterResolver;
+import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingInjectionParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingCustomAutoCreateAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingDependencyTreeResolver;
 import net.iceyleagons.icicle.core.configuration.Configuration;
@@ -64,6 +65,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.*;
 
 /**
@@ -79,7 +81,7 @@ public class DefaultBeanManager implements BeanManager {
 
     private final BeanRegistry beanRegistry;
     private final DependencyTreeResolver dependencyTreeResolver;
-    private final ConstructorParameterResolver constructorParameterResolver;
+    private final InjectionParameterResolver constructorParameterResolver;
     private final Reflections reflections;
 
     private final BeanProxyHandler beanProxyHandler;
@@ -109,7 +111,7 @@ public class DefaultBeanManager implements BeanManager {
         this.dependencyTreeResolver = new DelegatingDependencyTreeResolver(this.beanRegistry, this.autowiringAnnotationResolver, this.autoCreationAnnotationResolver);
 
         this.beanProxyHandler = new ByteBuddyProxyHandler();
-        this.constructorParameterResolver = new DelegatingConstructorParameterResolver(autowiringAnnotationResolver);
+        this.constructorParameterResolver = new DelegatingInjectionParameterResolver(autowiringAnnotationResolver);
     }
 
     /**
@@ -309,7 +311,7 @@ public class DefaultBeanManager implements BeanManager {
      * {@inheritDoc}
      */
     @Override
-    public ConstructorParameterResolver getConstructorParameterResolver() {
+    public InjectionParameterResolver getConstructorParameterResolver() {
         return this.constructorParameterResolver;
     }
 
@@ -340,24 +342,53 @@ public class DefaultBeanManager implements BeanManager {
 
             if (constructor.getParameterTypes().length == 0) {
                 Object bean = BeanUtils.instantiateClass(constructor, this.beanProxyHandler);
-                this.registerBean(beanClass, bean);
+
+                autowireSetters(beanClass, bean);
+                BeanUtils.invokePostConstructor(beanClass, bean);
+                registerBean(beanClass, bean);
                 callBeanMethodsInsideBean(beanClass, bean);
                 return;
-            } else {
-                LinkedList<Class<?>> dependencies = this.dependencyTreeResolver.resolveDependencyTree(beanClass);
-
-                LOGGER.debug("Found {} dependencies for bean of type {}", dependencies.size(), beanClass.getName());
-                for (Class<?> dependency : dependencies) {
-                    createAndRegisterBean(dependency);
-                }
             }
+
+            resolveDependencyTree(beanClass);
 
             Object[] parameters = this.constructorParameterResolver.resolveConstructorParameters(constructor, getBeanRegistry());
             Object bean = BeanUtils.instantiateClass(constructor, this.beanProxyHandler, parameters);
 
+            autowireSetters(beanClass, bean);
             BeanUtils.invokePostConstructor(beanClass, bean);
-            this.registerBean(beanClass, bean);
+            registerBean(beanClass, bean);
             callBeanMethodsInsideBean(beanClass, bean);
+        }
+    }
+
+    private void resolveDependencyTree(Class<?> beanClass) throws Exception {
+        LinkedList<Class<?>> dependencies = this.dependencyTreeResolver.resolveDependencyTree(beanClass);
+
+        LOGGER.debug("Found {} dependencies for bean of type {}", dependencies.size(), beanClass.getName());
+        for (Class<?> dependency : dependencies) {
+            createAndRegisterBean(dependency);
+        }
+    }
+
+    private void resolveDependencyTree(Method method) throws Exception {
+        LinkedList<Class<?>> dependencies = this.dependencyTreeResolver.resolveDependencyTree(method);
+
+        LOGGER.debug("Found {} dependencies for setter {}", dependencies.size(), method.getName());
+        for (Class<?> dependency : dependencies) {
+            createAndRegisterBean(dependency);
+        }
+    }
+
+    private void autowireSetters(Class<?> beanClass, Object bean) throws Exception {
+        for (Method declaredMethod : beanClass.getDeclaredMethods()) {
+            if (!declaredMethod.isAnnotationPresent(Autowired.class)) continue;
+
+            resolveDependencyTree(declaredMethod);
+            Object[] parameters = this.constructorParameterResolver.resolveConstructorParameters(declaredMethod, getBeanRegistry());
+
+            declaredMethod.setAccessible(true);
+            declaredMethod.invoke(bean, parameters);
         }
     }
 

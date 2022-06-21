@@ -27,7 +27,7 @@ package net.iceyleagons.icicle.commands.params.builtin;
 import net.iceyleagons.icicle.commands.annotations.CommandParamResolver;
 import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
 import net.iceyleagons.icicle.commands.params.CommandParameterResolverTemplate;
-import net.iceyleagons.icicle.utilities.lang.Autowired;
+import net.iceyleagons.icicle.core.annotations.Autowired;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

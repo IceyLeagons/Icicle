@@ -36,13 +36,12 @@ import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.core.translations.TranslationService;
 import net.iceyleagons.icicle.core.utils.Defaults;
-import net.iceyleagons.icicle.utilities.lang.Autowired;
+import net.iceyleagons.icicle.core.annotations.Autowired;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;

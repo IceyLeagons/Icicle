@@ -27,6 +27,7 @@ package net.iceyleagons.icicle.core.beans.resolvers;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 
 /**
@@ -50,4 +51,16 @@ public interface DependencyTreeResolver {
      * @throws CircularDependencyException if the dependencies in the tree form a circle somewhere
      */
     LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException, UnsatisfiedDependencyException;
+
+    /**
+     * Resolves the dependency tree from the passed bean.
+     * <p>
+     * Returns a LinkedList of all bean classes, the supplied bean is in relation with in a reversed order:
+     * The bean with the least dependency should be the first element of the linked list.
+     *
+     * @param method the bean to start from (setter)
+     * @return the dependency tree
+     * @throws CircularDependencyException if the dependencies in the tree form a circle somewhere
+     */
+    LinkedList<Class<?>> resolveDependencyTree(Method method) throws CircularDependencyException, UnsatisfiedDependencyException;
 }

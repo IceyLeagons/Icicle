@@ -32,9 +32,11 @@ import net.iceyleagons.icicle.core.performance.PerformanceLog;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import net.iceyleagons.test.icicle.core.bean.resolvable.DependantConstructorService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.EmptyConstructorService;
+import net.iceyleagons.test.icicle.core.bean.resolvable.SetterTesterService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.custom.CustomAutowiringHandlerService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.modifiers.DefaultValueService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.qualifier.QualificationTestService;
+import net.iceyleagons.test.icicle.core.bean.resolvable.qualifier.QualifiedService;
 import org.junit.jupiter.api.*;
 
 /**
@@ -81,6 +83,16 @@ public class AutowiringTest {
 
         Assertions.assertEquals(emptyConstructorService.testModifiers("0"), "0");
         Assertions.assertEquals(emptyConstructorService.testModifiers(null), "1");
+    }
+
+    @Test
+    @DisplayName("Setter auto-wiring")
+    public void testSetterAutowiring() {
+        SetterTesterService service = registry.getBeanNullable(SetterTesterService.class);
+
+        Assertions.assertNotNull(service);
+        Assertions.assertNotNull(service.testBean);
+        Assertions.assertNotNull(service.testService);
     }
 
     @Test

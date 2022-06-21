@@ -26,27 +26,29 @@ package net.iceyleagons.icicle.core.beans.resolvers.impl;
 
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
-import net.iceyleagons.icicle.core.beans.resolvers.ConstructorParameterResolver;
+import net.iceyleagons.icicle.core.beans.resolvers.InjectionParameterResolver;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
 import net.iceyleagons.icicle.core.other.QualifierKey;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
 /**
- * Default implementation of {@link ConstructorParameterResolver}.
+ * Default implementation of {@link InjectionParameterResolver}.
  *
  * @author TOTHTOMI
  * @version 1.1.0
- * @see ConstructorParameterResolver
+ * @see InjectionParameterResolver
  * @since Aug. 23, 2021
  */
-public class DelegatingConstructorParameterResolver implements ConstructorParameterResolver {
+public class DelegatingInjectionParameterResolver implements InjectionParameterResolver {
 
     private final AutowiringAnnotationResolver autowiringAnnotationResolver;
 
-    public DelegatingConstructorParameterResolver(AutowiringAnnotationResolver autowiringAnnotationResolver) {
+    public DelegatingInjectionParameterResolver(AutowiringAnnotationResolver autowiringAnnotationResolver) {
         this.autowiringAnnotationResolver = autowiringAnnotationResolver;
     }
 
@@ -54,8 +56,8 @@ public class DelegatingConstructorParameterResolver implements ConstructorParame
      * {@inheritDoc}
      */
     @Override
-    public Object[] resolveConstructorParameters(Constructor<?> constructor, BeanRegistry beanRegistry) throws UnsatisfiedDependencyException {
-        Parameter[] parameters = constructor.getParameters();
+    public Object[] resolveConstructorParameters(Executable executable, BeanRegistry beanRegistry) throws UnsatisfiedDependencyException {
+        Parameter[] parameters = executable.getParameters();
         Object[] params = new Object[parameters.length];
 
         if (parameters.length == 0) return params;

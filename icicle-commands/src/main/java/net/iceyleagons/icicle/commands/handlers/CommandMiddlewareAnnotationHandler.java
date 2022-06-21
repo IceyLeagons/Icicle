@@ -29,7 +29,7 @@ import net.iceyleagons.icicle.commands.middleware.CommandMiddleware;
 import net.iceyleagons.icicle.commands.middleware.CommandMiddlewareTemplate;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
-import net.iceyleagons.icicle.utilities.lang.Autowired;
+import net.iceyleagons.icicle.core.annotations.Autowired;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;

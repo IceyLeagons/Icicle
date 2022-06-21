@@ -31,7 +31,7 @@ import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.core.performance.PerformanceLog;
-import net.iceyleagons.icicle.utilities.lang.Autowired;
+import net.iceyleagons.icicle.core.annotations.Autowired;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;

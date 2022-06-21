@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,6 +94,78 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         return stringBuilder.toString();
     }
 
+    private void handleDependencies(Parameter[] dependencies, Stack<Class<?>> stack, LinkedList<QualifierKey> tree, Class<?> bean) throws UnsatisfiedDependencyException, CircularDependencyException {
+        x:
+        for (Parameter param : dependencies) {
+            Class<?> dependency = param.getType();
+            for (Annotation annotation : param.getAnnotations()) {
+                if (autowiringAnnotationResolver.has(annotation.annotationType())) {
+                    continue x;
+                }
+            }
+
+            String qualifier = QualifierKey.getQualifier(param);
+
+            if (!beanRegistry.isRegistered(dependency, qualifier)) {
+                if (tree.contains(new QualifierKey(dependency, qualifier))) {
+                    logger.warn("Circular dependency found!");
+                    throw new CircularDependencyException(getCycleString(tree, dependency, bean));
+                } else if (!this.autoCreateResolver.isAnnotated(dependency)) {
+                    if (dependency.isInterface()) {
+                        // Maybe it's a Service or GlobalService interface
+                        List<Class<?>> impls =
+                                BeanUtils.getImplementationsOfInterface(dependency, this.autoCreateResolver.getReflections())
+                                        .stream().filter(c -> QualifierKey.getQualifier(c).equals(qualifier)).collect(Collectors.toList());
+
+                        if (impls.isEmpty()) {
+                            throw new UnsatisfiedDependencyException(param);
+                        }
+
+                        if (impls.size() > 1) {
+                            throw new IllegalStateException("Multiple implementations are found for type: " + dependency.getName());
+                        }
+
+                        final Class<?> impl = impls.get(0);
+                        tree.add(new QualifierKey(impl, QualifierKey.getQualifier(impl)));
+                        stack.add(impl);
+                        continue;
+                    } else {
+                        throw new UnsatisfiedDependencyException(param);
+                    }
+                }
+            }
+
+            tree.add(new QualifierKey(dependency, qualifier));
+            stack.add(dependency);
+        }
+    }
+
+    @Override
+    public LinkedList<Class<?>> resolveDependencyTree(Method method) throws CircularDependencyException, UnsatisfiedDependencyException {
+        logger.debug("Resolving dependency tree for bean-type: {}", method.getDeclaringClass().getName());
+
+        final LinkedList<QualifierKey> tree = new LinkedList<>();
+        final Stack<Class<?>> stack = new Stack<>();
+        final Parameter[] params = method.getParameters();
+
+        handleDependencies(params, stack, tree, method.getDeclaringClass());
+        resolveDependencyTreeForBean(tree, stack);
+
+        return ListUtils.reverseLinkedList(tree)
+                .stream().map(QualifierKey::getClazz).collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    private void resolveDependencyTreeForBean(LinkedList<QualifierKey> tree, Stack<Class<?>> stack) throws UnsatisfiedDependencyException, CircularDependencyException {
+        while (!stack.isEmpty()) {
+            Class<?> bean = stack.pop();
+            if (beanRegistry.isRegistered(bean, QualifierKey.getQualifier(bean)) || bean.isInterface())
+                continue; //making sure it's already registered to not spend time
+
+            Parameter[] dependencies = BeanUtils.getResolvableConstructor(bean).getParameters();
+            handleDependencies(dependencies, stack, tree, bean);
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -100,66 +173,17 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
     public LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException, UnsatisfiedDependencyException {
         logger.debug("Resolving dependency tree for bean-type: {}", currentBean.getName());
 
-        LinkedList<QualifierKey> tree = new LinkedList<>();
-        Stack<Class<?>> stack = new Stack<>();
+        final LinkedList<QualifierKey> tree = new LinkedList<>();
+        final Stack<Class<?>> stack = new Stack<>();
 
         QualifierKey cq = new QualifierKey(currentBean, QualifierKey.getQualifier(currentBean));
         tree.add(cq);
         stack.add(currentBean);
 
-        while (!stack.isEmpty()) {
-            Class<?> bean = stack.pop();
-            if (beanRegistry.isRegistered(bean, QualifierKey.getQualifier(bean)) || bean.isInterface())
-                continue; //making sure it's already registered to not spend time
-
-            Parameter[] dependencies = BeanUtils.getResolvableConstructor(bean).getParameters();
-            x:
-            for (Parameter param : dependencies) {
-                Class<?> dependency = param.getType();
-                for (Annotation annotation : param.getAnnotations()) {
-                    if (autowiringAnnotationResolver.has(annotation.annotationType())) {
-                        continue x;
-                    }
-                }
-
-                String qualifier = QualifierKey.getQualifier(param);
-
-                if (!beanRegistry.isRegistered(dependency, qualifier)) {
-                    if (tree.contains(new QualifierKey(dependency, qualifier))) {
-                        logger.warn("Circular dependency found!");
-                        throw new CircularDependencyException(getCycleString(tree, dependency, bean));
-                    } else if (!this.autoCreateResolver.isAnnotated(dependency)) {
-                        if (dependency.isInterface()) {
-                            // Maybe it's a Service or GlobalService interface
-                            List<Class<?>> impls =
-                                    BeanUtils.getImplementationsOfInterface(dependency, this.autoCreateResolver.getReflections())
-                                            .stream().filter(c -> QualifierKey.getQualifier(c).equals(qualifier)).collect(Collectors.toList());
-
-                            if (impls.isEmpty()) {
-                                throw new UnsatisfiedDependencyException(param);
-                            }
-
-                            if (impls.size() > 1) {
-                                throw new IllegalStateException("Multiple implementations are found for type: " + dependency.getName());
-                            }
-
-                            final Class<?> impl = impls.get(0);
-                            tree.add(new QualifierKey(impl, QualifierKey.getQualifier(impl)));
-                            stack.add(impl);
-                            continue;
-                        } else {
-                            throw new UnsatisfiedDependencyException(param);
-                        }
-                    }
-                }
-
-                tree.add(new QualifierKey(dependency, qualifier));
-                stack.add(dependency);
-            }
-        }
-
+        resolveDependencyTreeForBean(tree, stack);
         tree.remove(cq);
 
-        return ListUtils.reverseLinkedList(tree).stream().map(QualifierKey::getClazz).collect(Collectors.toCollection(LinkedList::new));
+        return ListUtils.reverseLinkedList(tree)
+                .stream().map(QualifierKey::getClazz).collect(Collectors.toCollection(LinkedList::new));
     }
 }
