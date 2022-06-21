@@ -45,7 +45,7 @@ import java.util.UUID;
  * @version 1.0.0
  * @since Jun. 13, 2022
  */
-public class TestMain {
+public class SerializationTest {
 
     @BeforeAll
     public static void registerMappers() {

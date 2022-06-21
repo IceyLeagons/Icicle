@@ -57,6 +57,7 @@ dependencies {
     testImplementation(libs.slf4j)
     testImplementation(libs.bundles.kotlin)
     testImplementation(libs.guava)
+    testImplementation(libs.fastutil)
 
     testImplementation(project(":icicle-utilities"))
     testImplementation(project(":icicle-core"))
