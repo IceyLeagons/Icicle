@@ -14,10 +14,10 @@ jobs:
     runs-on: [ self-hosted, linux ]
     steps:
       - uses: actions/checkout@v3.0.2
-      - name: Set up JDK 18 (Adopt)
+      - name: Set up JDK 16 (Adopt)
         uses: actions/setup-java@v3.4.0
         with:
-          java-version: '18'
+          java-version: '16' # I love you, Gradle!
           distribution: 'adopt'
           cache: gradle
           architecture: aarch64
