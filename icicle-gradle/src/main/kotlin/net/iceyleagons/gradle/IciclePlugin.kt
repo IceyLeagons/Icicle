@@ -1,18 +1,17 @@
 package net.iceyleagons.gradle
 
-import net.iceyleagons.gradle.utils.get
 import net.iceyleagons.gradle.catalogs.IcicleConfiguration
 import net.iceyleagons.gradle.catalogs.MinecraftCatalog
 import net.iceyleagons.gradle.catalogs.RepositoryCatalog
 import net.iceyleagons.gradle.tasks.IcicleConfigTask
 import net.iceyleagons.gradle.tasks.PluginYmlTask
+import net.iceyleagons.gradle.utils.get
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.artifacts.repositories.UrlArtifactRepository
 import org.gradle.api.file.DuplicatesStrategy
-import org.gradle.api.internal.file.copy.CopySpecInternal
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.jvm.tasks.Jar
@@ -52,14 +51,17 @@ class IciclePlugin : Plugin<Project> {
 
     private fun config() {
         if (config.modifyPluginYml) {
-            val pluginTask = target.tasks.register("modifyPluginYml", PluginYmlTask::class.java, object : Action<PluginYmlTask> {
-                override fun execute(t: PluginYmlTask) {
-                    t.description = "Modifies/Creates a plugin.yml in the resources folder of this project."
-                    t.group = "Icicle addon development"
+            val pluginTask = target.tasks.register(
+                Strings.TASK_NAME_PLUGIN_YML_MODIFICATION,
+                PluginYmlTask::class.java,
+                object : Action<PluginYmlTask> {
+                    override fun execute(t: PluginYmlTask) {
+                        t.description = "Modifies/Creates a plugin.yml in the resources folder of this project."
+                        t.group = "Icicle addon development"
 
-                    t.pluginYml = target.file("src/main/resources/plugin.yml")
-                }
-            })
+                        t.pluginYml = target.file("src/main/resources/plugin.yml")
+                    }
+                })
 
             target.tasks["processResources"].dependsOn(pluginTask)
         }
@@ -68,32 +70,45 @@ class IciclePlugin : Plugin<Project> {
             return
 
         val task =
-            target.tasks.register("generateIcicleYml", IcicleConfigTask::class.java, object : Action<IcicleConfigTask> {
-                override fun execute(t: IcicleConfigTask) {
-                    t.description = "Generates the icicle.yml file for the provided addon."
-                    t.group = "Icicle addon development"
+            target.tasks.register(
+                Strings.TASK_NAME_ICICLE_YML,
+                IcicleConfigTask::class.java,
+                object : Action<IcicleConfigTask> {
+                    override fun execute(t: IcicleConfigTask) {
+                        t.description = "Generates the icicle.yml file for the provided addon."
+                        t.group = "Icicle addon development"
 
-                    t.data = config
-                    t.outputDirectory.set(target.layout.buildDirectory.dir(t.name))
-                }
-            })
+                        if (config.registerRuntimeDownload) {
+                            for ((_, url) in getDependencyUrls(Strings.CONFIGURATION_RUNTIME_DOWNLOAD))
+                                config.dependencies += url.toString()
+
+                            for ((_, url) in getDependencyUrls(Strings.CONFIGURATION_ICICLE_ADDON))
+                                config.icicle_dependencies += url.toString()
+                        }
+
+                        t.data = config
+                        t.outputDirectory.set(target.layout.buildDirectory.dir(t.name))
+                    }
+                })
 
         if (config.generateIcicleYml)
             target.tasks.named("processResources", Copy::class.java, object : Action<Copy> {
                 override fun execute(t: Copy) {
-                    val copyIcicleFile: CopySpecInternal = t.rootSpec.addChild()
-                    copyIcicleFile.into("/")
-                    copyIcicleFile.from(task)
+                    t.rootSpec.addChild().let {
+                        it.duplicatesStrategy = DuplicatesStrategy.EXCLUDE // Hopefully fixes the duplicate files issue.
+                        it.into("/")
+                        it.from(task)
+                    }
                 }
 
             })
     }
 
     private fun dependencies() {
-        val compileOnly = target.configurations["compileOnly"]
+        val compileOnly = target.configurations[Strings.CONFIGURATION_EXTENDED_CONFIGURATION]
 
         if (config.registerShadow) {
-            val shadow = target.configurations.create("shadow")
+            val shadow = target.configurations.create(Strings.CONFIGURATION_SHADOW)
 
             target.tasks["jar"].doFirst(object : Action<Task> {
                 override fun execute(t: Task) {
@@ -112,10 +127,10 @@ class IciclePlugin : Plugin<Project> {
         }
 
         if (config.registerRuntimeDownload) {
-            val runtimeDownload = target.configurations.create("runtimeDownload")
+            val runtimeDownload = target.configurations.create(Strings.CONFIGURATION_RUNTIME_DOWNLOAD)
             compileOnly.extendsFrom(runtimeDownload)
 
-            val icicleAddon = target.configurations.create("icicleAddon")
+            val icicleAddon = target.configurations.create(Strings.CONFIGURATION_ICICLE_ADDON)
             compileOnly.extendsFrom(icicleAddon)
         }
     }

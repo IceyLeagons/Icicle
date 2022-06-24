@@ -1,9 +1,8 @@
 package net.iceyleagons.gradle.catalogs
 
-import net.iceyleagons.gradle.utils.UpdateType
 import com.amihaiemil.eoyaml.Yaml
 import com.amihaiemil.eoyaml.YamlMappingBuilder
-import com.amihaiemil.eoyaml.YamlSequenceBuilder
+import net.iceyleagons.gradle.utils.UpdateType
 import java.io.File
 import java.nio.charset.StandardCharsets
 
@@ -52,11 +51,11 @@ data class IcicleConfiguration(
     /**
      * The list of dependencies that will be downloaded at runtime.
      */
-    internal val dependencies: Map<String, String> = HashMap(8),
+    internal val dependencies: MutableList<String> = ArrayList(8),
     /**
      * The list of ICICLE MODULES that will be downloaded at runtime.
      */
-    internal val icicle_dependencies: Map<String, String> = HashMap(4),
+    internal val icicle_dependencies: MutableList<String> = ArrayList(4),
     /**
      * The class which you want to be called when an update is to be checked.
      */
@@ -78,28 +77,18 @@ data class IcicleConfiguration(
         var yamlBuilder: YamlMappingBuilder = Yaml.createYamlMappingBuilder().add("name", name)
 
         if (icicle_dependencies.isNotEmpty()) {
-            var mapping = Yaml.createYamlMappingBuilder()
-            val repositoryMap: MutableMap<String, YamlSequenceBuilder> = HashMap(4)
-            for ((repository, dependency) in icicle_dependencies) {
-                var sb = repositoryMap.getOrDefault(repository, Yaml.createYamlSequenceBuilder())
-                sb = sb.add(dependency)
-                repositoryMap[repository] = sb
-            }
+            var mapping = Yaml.createYamlSequenceBuilder()
+            for (dependency_url in icicle_dependencies)
+                mapping = mapping.add(dependency_url)
 
-            for ((key, value) in repositoryMap) mapping = mapping.add(key, value.build())
             yamlBuilder = yamlBuilder.add("icicle-dependencies", mapping.build())
         }
 
         if (dependencies.isNotEmpty()) {
-            var mapping = Yaml.createYamlMappingBuilder()
-            val repositoryMap: MutableMap<String, YamlSequenceBuilder> = HashMap(4)
-            for ((repository, dependency) in dependencies) {
-                var sb = repositoryMap.getOrDefault(repository, Yaml.createYamlSequenceBuilder())
-                sb = sb.add(dependency)
-                repositoryMap[repository] = sb
-            }
+            var mapping = Yaml.createYamlSequenceBuilder()
+            for (dependency_url in dependencies)
+                mapping = mapping.add(dependency_url)
 
-            for ((key, value) in repositoryMap) mapping = mapping.add(key, value.build())
             yamlBuilder = yamlBuilder.add("dependencies", mapping.build())
         }
 

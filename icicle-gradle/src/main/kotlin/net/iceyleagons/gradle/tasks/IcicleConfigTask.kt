@@ -12,13 +12,13 @@ import java.io.IOException
 import java.io.UncheckedIOException
 import javax.inject.Inject
 
-class IcicleConfigTask : DefaultTask() {
+internal class IcicleConfigTask : DefaultTask() {
 
     @OutputDirectory
-    val outputDirectory: DirectoryProperty
+    internal val outputDirectory: DirectoryProperty
 
     @Input
-    lateinit var data: IcicleConfiguration
+    internal lateinit var data: IcicleConfiguration
 
     init {
         val objectFactory = project.objects
@@ -26,12 +26,12 @@ class IcicleConfigTask : DefaultTask() {
     }
 
     @Inject
-    protected fun getDeleter(): Deleter {
+    internal fun getDeleter(): Deleter {
         throw UnsupportedOperationException("Decorator takes care of injection")
     }
 
     @TaskAction
-    fun generateIcicleConfig() {
+    internal fun generateIcicleConfig() {
         // Clean output directory
         val outputDir = outputDirectory.get().asFile
         clearOutputDirectory(outputDir)

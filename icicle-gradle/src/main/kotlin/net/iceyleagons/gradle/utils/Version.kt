@@ -1,6 +1,6 @@
 package net.iceyleagons.gradle.utils
 
-class Version(version: String) : Comparable<Version?> {
+internal class Version(version: String) : Comparable<Version?> {
     private val numbers: IntArray
 
     init {

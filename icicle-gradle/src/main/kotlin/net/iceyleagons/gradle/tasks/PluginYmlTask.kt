@@ -9,13 +9,13 @@ import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 
-class PluginYmlTask : DefaultTask() {
+internal class PluginYmlTask : DefaultTask() {
 
     @OutputFile
-    lateinit var pluginYml: File
+    internal lateinit var pluginYml: File
 
     @TaskAction
-    fun doTask() {
+    internal fun doTask() {
         try {
             if (pluginYml.exists()) {
                 val yamlBuilder = editPluginYml(pluginYml)
