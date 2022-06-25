@@ -26,16 +26,26 @@ package net.iceyleagons.icicle.core.modules;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import lombok.SneakyThrows;
+import net.iceyleagons.icicle.core.Icicle;
+import net.iceyleagons.icicle.core.maven.AdvancedClassLoaders;
+import net.iceyleagons.icicle.core.maven.MavenDependency;
 import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
+import net.iceyleagons.icicle.core.maven.loaders.AdvancedClassLoader;
 import net.iceyleagons.icicle.utilities.Asserts;
+import net.iceyleagons.icicle.utilities.datastores.tuple.UnmodifiableTuple;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.iceyleagons.icicle.utilities.lang.Experimental;
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.util.*;
+import java.net.URLClassLoader;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Experimental
 public class IcicleModuleLoader {
@@ -43,19 +53,20 @@ public class IcicleModuleLoader {
     private static final Logger LOGGER = LoggerFactory.getLogger(IcicleModuleLoader.class);
 
     private final AdvancedFile modulesFolder;
+    private final AdvancedClassLoader acl;
 
-    //This map keeps track of all loaded modules' classloaders, so when a plugin is dependent on the module
-    //its reflections can use that ClassLoader as well
-    private final Set<DependencyNotation> loadedDependencies = new ObjectOpenHashSet<>();
-    private final List<ModuleMetadata> loadedModules = new ObjectArrayList<>();
+    private final List<ModuleMetadata> loadedModules = new ObjectArrayList<>(4);
+    private final Set<UnmodifiableTuple<String, String>> loadedDependencies = new ObjectOpenHashSet<>(8);
 
-    public IcicleModuleLoader(AdvancedFile folder) {
+    public IcicleModuleLoader(AdvancedFile folder, ClassLoader classLoader) {
         Asserts.state(folder.isDirectory(), "Folder must be a folder!");
 
         this.modulesFolder = folder;
+        acl = AdvancedClassLoaders.get((URLClassLoader) classLoader);
         loadModulesInFolder();
     }
 
+    @SneakyThrows
     public void loadModulesInFolder() {
         for (File file : Objects.requireNonNull(modulesFolder.asFile().listFiles()))
             try {
@@ -64,21 +75,26 @@ public class IcicleModuleLoader {
                 LOGGER.warn("Could not load module from file {} due to {}", file.getPath(), e);
             }
 
-        final List<DependencyNotation> dependencyNotations = loadedModules.stream().map(ModuleMetadata::getDependencyNotation).toList();
-
-        for (DependencyNotation dependencyNotation : dependencyNotations) {
-            if (loadedDependencies.contains(dependencyNotation)) continue;
-
-            String groupId = dependencyNotation.getAuthor(); // Is this correct ?
-            String artifactId = dependencyNotation.getName(); // Is this correct ?
-            String version = dependencyNotation.getVersion().toString();
-
-            if (groupId == null) {
-                MavenLibraryLoader.load("net.iceyleagons", artifactId, version, "https://mvn.iceyleagons.net/");
-                continue;
+        for (ModuleMetadata moduleMetadata : loadedModules) {
+            for (MavenDependency library : moduleMetadata.getDependencies()) {
+                UnmodifiableTuple<String, String> depTuple = new UnmodifiableTuple<>(library.getGroupId(), library.getArtifactId());
+                if (!loadedDependencies.contains(depTuple)) {
+                    MavenLibraryLoader.load(library);
+                    loadedDependencies.add(depTuple);
+                }
             }
 
-            MavenLibraryLoader.load(groupId, artifactId, version); // Using central maven
+            for (MavenDependency library : moduleMetadata.getIcicleDependencies()) {
+                UnmodifiableTuple<String, String> depTuple = new UnmodifiableTuple<>(library.getGroupId(), library.getArtifactId());
+                if (!loadedDependencies.contains(depTuple)) {
+                    MavenLibraryLoader.load(library);
+                    loadedDependencies.add(depTuple);
+                }
+            }
+
+            acl.loadLibrary(moduleMetadata.getModuleFile());
+            Icicle.ICICLE_REFLECTIONS.merge(new Reflections(acl.getOrigin()));
+            Icicle.ICICLE_REFLECTIONS.expandSuperTypes();
         }
     }
 

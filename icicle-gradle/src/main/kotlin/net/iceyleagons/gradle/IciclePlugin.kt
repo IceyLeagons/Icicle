@@ -38,6 +38,14 @@ class IciclePlugin : Plugin<Project> {
                     val connection = URL(url).openConnection()
                     connection.getInputStream() ?: throw Exception()
                     connection.url
+                    URL(
+                        connection.url.toString().replace(
+                            "%s/%s/%s/%s-%s".format(
+                                it.group?.replace('.', '/') ?: "", it.name, it.version,
+                                it.name, it.version
+                            ), ""
+                        ).removeSuffix(".jar").removeSuffix(".aar")
+                    )
                 }.getOrNull()
             }
         }
@@ -79,11 +87,11 @@ class IciclePlugin : Plugin<Project> {
                         t.group = "Icicle addon development"
 
                         if (config.registerRuntimeDownload) {
-                            for ((_, url) in getDependencyUrls(Strings.CONFIGURATION_RUNTIME_DOWNLOAD))
-                                config.dependencies += url.toString()
+                            for ((dependency, repo) in getDependencyUrls(Strings.CONFIGURATION_RUNTIME_DOWNLOAD))
+                                config.dependencies[dependency] = repo.toString().trimEnd('/')
 
-                            for ((_, url) in getDependencyUrls(Strings.CONFIGURATION_ICICLE_ADDON))
-                                config.icicle_dependencies += url.toString()
+                            for ((dependency, repo) in getDependencyUrls(Strings.CONFIGURATION_ICICLE_ADDON))
+                                config.icicle_dependencies[dependency] = repo.toString().trimEnd('/')
                         }
 
                         t.data = config

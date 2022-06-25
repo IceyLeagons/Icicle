@@ -26,14 +26,17 @@ package net.iceyleagons.icicle.core.modules;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.*;
-import net.iceyleagons.icicle.core.utils.Version;
+import net.iceyleagons.icicle.core.maven.MavenDependency;
 import net.iceyleagons.icicle.utilities.Asserts;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -43,67 +46,65 @@ import java.util.jar.JarFile;
 public class ModuleMetadata {
 
     @NonNull
-    private final File baseFile;
+    private final File moduleFile;
     @NonNull
     private final String name;
+    private final int updateType;
+    @Nullable
+    private final String updaterClass;
     @NonNull
-    private final String description;
+    private final List<MavenDependency> dependencies;
     @NonNull
-    private final DependencyNotation dependencyNotation;
-    @NonNull
-    private final String mainClass;
-    @NonNull
-    private final Version version;
-    @NonNull
-    private final List<String> developers;
-    @NonNull
-    private final List<DependencyNotation> dependencies;
+    private final List<MavenDependency> icicleDependencies;
 
-    // private static final List<ModuleMetadata> loadedModules = new ArrayList<>();
-
-    public ModuleMetadata(InputStream inputStream, File file) throws IOException {
+    public ModuleMetadata(InputStream inputStream, @NotNull File file) throws IOException {
         val yamlFile = YamlFile.loadConfiguration(inputStream);
 
         // Required stuff...
         val name = yamlFile.getString("name");
-        val dependencyNotation = yamlFile.getString("dependency-notation");
-        val mainClass = yamlFile.getString("main-class");
-        val description = yamlFile.getString("description");
-        val version = new Version(yamlFile.getString("version"));
 
-        var dependencies = yamlFile.getStringList("dependencies");
-        if (dependencies == null)
-            dependencies = new ObjectArrayList<>();
-        // Commented out since load order isn't defined here.
-        /*if (dependencies != null) {
-            // Check if dependency is installed/has correct version.
-            if (!dependencies.stream().allMatch(dependency -> {
-                val splitDependency = dependency.split(":");
-                val dependencyName = splitDependency[1];
-                val dependencyVersion = new Version(splitDependency[2]);
+        val updaterClass = yamlFile.getString("update-class");
+        var updateType = 1;
+        try {
+            updateType = Integer.parseInt(yamlFile.getString("update-type"));
+        } catch (Exception ignored) {
 
-                for (ModuleMetadata loadedDependency : loadedModules)
-                    if (loadedDependency.name.equalsIgnoreCase(dependencyName))
-                        if (loadedDependency.version.compareTo(dependencyVersion) >= 0)
-                            return true;
+        }
 
-                return false;
-            }))
-                throw new IllegalArgumentException("Required dependencies not found!");
-        }*/
+        var dependencies_ = yamlFile.getMapList("dependencies");
+        if (dependencies_ == null)
+            dependencies_ = new ObjectArrayList<>(1);
 
-        var developers = yamlFile.getStringList("developers");
-        if (developers == null)
-            developers = new ObjectArrayList<>();
+        var icicleDependencies_ = yamlFile.getMapList("icicle-dependencies");
+        if (icicleDependencies_ == null)
+            icicleDependencies_ = new ObjectArrayList<>(1);
 
-        this.baseFile = file;
+        val dependencies = new ObjectArrayList<MavenDependency>(dependencies_.size());
+        for (Map<?, ?> m : dependencies_) {
+            Map<String, List<String>> map = (Map<String, List<String>>) m;
+            for (Map.Entry<String, List<String>> stringListEntry : map.entrySet())
+                for (String dependency : stringListEntry.getValue()) {
+                    String[] split = dependency.split(":");
+                    dependencies.add(new MavenDependency(split[0], split[1], split[2], stringListEntry.getKey()));
+                }
+        }
+
+        val icicleDependencies = new ObjectArrayList<MavenDependency>(icicleDependencies_.size());
+        for (Map<?, ?> m : icicleDependencies_) {
+            Map<String, List<String>> map = (Map<String, List<String>>) m;
+            for (Map.Entry<String, List<String>> stringListEntry : map.entrySet())
+                for (String dependency : stringListEntry.getValue()) {
+                    String[] split = dependency.split(":");
+                    dependencies.add(new MavenDependency(split[0], split[1], split[2], stringListEntry.getKey()));
+                }
+        }
+
         this.name = name;
-        this.version = version;
-        this.developers = developers;
-        this.description = description;
-        this.dependencies = dependencies.stream().map(DependencyNotation::fromString).toList();
-        this.dependencyNotation = DependencyNotation.fromString(dependencyNotation);
-        this.mainClass = mainClass;
+        this.dependencies = dependencies;
+        this.updateType = updateType;
+        this.updaterClass = updaterClass;
+        this.icicleDependencies = icicleDependencies;
+        this.moduleFile = file;
     }
 
     @SneakyThrows
