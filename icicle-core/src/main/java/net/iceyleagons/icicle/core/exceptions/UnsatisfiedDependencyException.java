@@ -40,13 +40,13 @@ public class UnsatisfiedDependencyException extends Exception {
      * @param parameter the parameter of the constructor that caused the issue
      */
     public UnsatisfiedDependencyException(Parameter parameter) {
-        super("Unsatisfied dependency expressed at parameter named " + parameter.getName() + ". Type: " + parameter.getType().getName() + " (Is it an @AutoCreate child?):");
+        super("Unsatisfied dependency expressed in " + parameter.getDeclaringExecutable().getDeclaringClass().getName() + " at parameter named " + parameter.getName() + ". Type: " + parameter.getType().getName() + " (Is it an @AutoCreate child?):");
     }
 
     /**
      * @param field the field of the class that caused the issue
      */
     public UnsatisfiedDependencyException(Field field) {
-        super("Unsatisfied dependency expressed at field named " + field.getName() + ". Type: " + field.getType().getName() + " (Is it an @AutoCreate child?):");
+        super("Unsatisfied dependency expressed in " + field.getDeclaringClass().getName() + " at field named " + field.getName() + ". Type: " + field.getType().getName() + " (Is it an @AutoCreate child?):");
     }
 }
