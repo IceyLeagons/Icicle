@@ -36,8 +36,6 @@ plugins {
 group = "net.iceyleagons"
 version = "0.1-SNAPSHOT"
 
-val spigotVersion = findProperty("spigotVersion") as String
-
 repositories {
     mavenCentral()
     repos.spigot

@@ -22,6 +22,7 @@ class IciclePlugin : Plugin<Project> {
 
     companion object {
         internal var CONF: IcicleConfiguration? = null
+        internal lateinit var PROJ: Project
     }
 
     private lateinit var target: Project
@@ -56,6 +57,7 @@ class IciclePlugin : Plugin<Project> {
 
     override fun apply(target_: Project) {
         target = target_
+        PROJ = target
         setup()
         dependencies()
         config()
@@ -118,6 +120,7 @@ class IciclePlugin : Plugin<Project> {
 
     private fun dependencies() {
         val compileOnly = target.configurations[Strings.CONFIGURATION_EXTENDED_CONFIGURATION]
+        val testImplementation = target.configurations[Strings.CONFIGURATION_TEST_IMPLEMENTATION]
 
         if (config.registerShadow) {
             val shadow = target.configurations.create(Strings.CONFIGURATION_SHADOW)
@@ -134,16 +137,20 @@ class IciclePlugin : Plugin<Project> {
                     t.duplicatesStrategy = DuplicatesStrategy.INCLUDE
                     t.from(files.toTypedArray())
                 }
-
             })
+
+            compileOnly.extendsFrom(shadow)
+            testImplementation.extendsFrom(shadow)
         }
 
         if (config.registerRuntimeDownload) {
             val runtimeDownload = target.configurations.create(Strings.CONFIGURATION_RUNTIME_DOWNLOAD)
             compileOnly.extendsFrom(runtimeDownload)
+            testImplementation.extendsFrom(runtimeDownload)
 
             val icicleAddon = target.configurations.create(Strings.CONFIGURATION_ICICLE_ADDON)
             compileOnly.extendsFrom(icicleAddon)
+            testImplementation.extendsFrom(icicleAddon)
         }
     }
 
