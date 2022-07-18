@@ -3,7 +3,7 @@ package net.iceyleagons.gradle.catalogs
 import net.iceyleagons.gradle.utils.Version
 
 
-class MinecraftCatalog {
+open class MinecraftCatalog {
     /**
      * **Returns the dependency notation of the spigot api.**
      *

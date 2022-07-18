@@ -38,16 +38,18 @@ version = "0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    spigot()
-    jitpack()
+    repos.spigot
+    repos.jitpack
     maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
-    lombok()
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+
     compileOnly(libs.netty)
     compileOnly(libs.fastutil)
-    spigotApi(libs.versions.spigot.get())
+    compileOnly(minecraft.spigotApi(libs.versions.spigot.get()))
 
     shadow(project(":icicle-gui"))
     shadow(project(":icicle-core"))
@@ -70,7 +72,7 @@ dependencies {
 }
 
 icicle {
-    isModifyPluginYml = false
+    modifyPluginYml = false
 
 }
 

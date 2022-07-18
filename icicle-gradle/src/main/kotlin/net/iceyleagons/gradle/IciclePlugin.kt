@@ -20,6 +20,10 @@ import java.net.URL
 
 class IciclePlugin : Plugin<Project> {
 
+    companion object {
+        internal var CONF: IcicleConfiguration? = null
+    }
+
     private lateinit var target: Project
     private lateinit var config: IcicleConfiguration
 
@@ -94,7 +98,7 @@ class IciclePlugin : Plugin<Project> {
                                 config.icicle_dependencies[dependency] = repo.toString().trimEnd('/')
                         }
 
-                        t.data = config
+                        CONF = config
                         t.outputDirectory.set(target.layout.buildDirectory.dir(t.name))
                     }
                 })

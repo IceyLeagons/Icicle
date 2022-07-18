@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.7.0"
-icicle = "1.5-SNAPSHOT"
+icicle = "1.8.0"
 reflections = "0.9.12"
 spigot = "1.18.2"
 simple-yaml = "1.8"
@@ -20,6 +20,7 @@ mockbukkit = "1.15.0"
 jupiter = "5.7.2"
 # jupiter-engine = "5.7.2"
 fastutil = "8.5.8"
+lombok = "1.18.24"
 
 [libraries]
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
@@ -41,6 +42,7 @@ json = { module = "org.json:json", version.ref = "json" }
 bson = { module = "org.mongodb:bson", version.ref = "bson" }
 # Fastutil-core because standard fastutil is thrice this...
 fastutil = { module = "it.unimi.dsi:fastutil-core", version.ref = "fastutil" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 
 [bundles]
 logging = ["slf4j", "logback"]

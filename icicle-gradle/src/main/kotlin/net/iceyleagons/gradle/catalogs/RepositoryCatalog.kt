@@ -4,7 +4,7 @@ import org.gradle.api.Action
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import java.net.URI
 
-class RepositoryCatalog {
+open class RepositoryCatalog {
     val igloo: Action<in MavenArtifactRepository>
         get() = object : Action<MavenArtifactRepository> {
             override fun execute(t: MavenArtifactRepository) {

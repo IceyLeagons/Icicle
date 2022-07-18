@@ -37,8 +37,8 @@ version = "0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    iglooSnapshots()
-    jitpack()
+    repos.iglooSnapshots
+    repos.jitpack
 }
 
 dependencies {
@@ -52,7 +52,8 @@ dependencies {
     shadow(libs.json)
     compileOnly(libs.yaml)
     compileOnly(libs.bson)
-    lombok()
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
 
     testImplementation(libs.slf4j)
     testImplementation(libs.bundles.kotlin)
@@ -71,12 +72,6 @@ dependencies {
 
 icicle {
     name = "Serialization"
-    version = project.version.toString()
-    description = "Plenty of serialization options for all your saving/reading needs."
-    developers = listOf("TOTHTOMI")
-
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
 }
 
 tasks.test {

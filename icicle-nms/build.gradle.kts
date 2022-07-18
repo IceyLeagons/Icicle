@@ -37,13 +37,14 @@ version = "0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    spigot()
-    jitpack()
+    repos.spigot
+    repos.jitpack
 }
 
 dependencies {
-    lombok()
-    // https://mvnrepository.com/artifact/io.netty/netty-all
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+
     compileOnly(libs.netty)
     compileOnly(libs.bytebuddy)
     compileOnly(libs.fastutil)
@@ -51,18 +52,9 @@ dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
 
-    spigotApi(libs.versions.spigot.get())
+    compileOnly(minecraft.spigotApi(libs.versions.spigot.get()))
 }
 
 icicle {
     name = "Minecraft NMS"
-
-    dependencyNotation = "net.iceyleagons:icicle-addon-nms:$version"
-    description =
-        "Contains wrapped representations of NMS classes."
-    version = project.version.toString()
-    developers = listOf("TOTHTOMI")
-
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
 }

@@ -38,13 +38,15 @@ version = "0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    spigot()
-    jitpack()
+    repos.spigot
+    repos.jitpack
     maven("https://hub.spigotmc.org/nexus/content/repositories/public/")
 }
 
 dependencies {
-    lombok()
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
     implementation(project(":icicle-nms"))
@@ -52,19 +54,9 @@ dependencies {
     compileOnly(libs.netty)
     compileOnly(libs.fastutil)
     compileOnly(kotlin("stdlib"))
-    spigotApi(libs.versions.spigot.get())
+    compileOnly(minecraft.spigotApi(libs.versions.spigot.get()))
 }
 
 icicle {
     name = "Minecraft Protocol"
-
-    dependencyNotation = "net.iceyleagons:icicle-addon-protocol:$version"
-    description =
-        "Contains standard protocol libraries for use with Bukkit/Spigot servers, where base functions are just not enough."
-    version = project.version.toString()
-    developers = listOf("Gábe")
-
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-nms:0.1-SNAPSHOT"
 }

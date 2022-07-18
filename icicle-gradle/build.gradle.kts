@@ -32,6 +32,7 @@ plugins {
     java
     kotlin("jvm") version libs.versions.kotlin.asProvider()
     id("java-gradle-plugin")
+    id("maven-publish")
 }
 
 group = "net.iceyleagons"
@@ -60,6 +61,29 @@ tasks.compileJava {
 
 tasks.jar {
     from(extraLibs.map { if (it.isDirectory) it else zipTree(it) })
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "net.iceyleagons.icicle-gradle"
+            artifactId = "net.iceyleagons.icicle-gradle.gradle.plugin"
+            version = "1.8.0"
+
+            from(components["java"])
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                username = property("ilSnapshotUser") as String
+                password = property("ilSnapshotPwd") as String
+            }
+
+            url = uri("https://mvn.iceyleagons.net/snapshots")
+        }
+    }
 }
 
 gradlePlugin {

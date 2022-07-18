@@ -9,10 +9,10 @@ import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 
-internal class PluginYmlTask : DefaultTask() {
+internal open class PluginYmlTask : DefaultTask() {
 
     @OutputFile
-    internal lateinit var pluginYml: File
+    lateinit var pluginYml: File
 
     @TaskAction
     internal fun doTask() {

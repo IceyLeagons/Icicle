@@ -14,8 +14,8 @@ version = "0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    spigot()
-    jitpack()
+    repos.spigot
+    repos.jitpack
 }
 
 dependencies {
@@ -23,20 +23,13 @@ dependencies {
     implementation(project(":icicle-utilities"))
     compileOnly(libs.fastutil)
     compileOnly(libs.jetbrainsannotations)
-    spigotApi(libs.versions.spigot.get())
-    lombok()
+    compileOnly(minecraft.spigotApi(libs.versions.spigot.get()))
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
 }
 
 icicle {
     name = "Minecraft GUI"
-
-    dependencyNotation = "net.iceyleagons:icicle-addon-gui:$version"
-    version = project.version.toString()
-    description = "A complete GUI library just for you!"
-    developers = listOf("TOTHTOMI", "Gabe")
-
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
 }
 
 tasks.test {

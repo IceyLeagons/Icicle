@@ -38,11 +38,13 @@ version = "1.0.0"
 
 repositories {
     mavenCentral()
-    jitpack()
+    repos.jitpack
 }
 
 dependencies {
-    lombok()
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+
     shadow(project(":icicle-utilities"))
     annotationProcessor(project(":icicle-utilities"))
 
@@ -71,9 +73,6 @@ dependencies {
 
 icicle {
     name = "Core"
-    version = project.version.toString()
-    description = "The main driving force/power house of the icicle ecosystem."
-    developers = listOf("TOTHTOMI", "Gabe")
 }
 
 tasks.withType<Test> {

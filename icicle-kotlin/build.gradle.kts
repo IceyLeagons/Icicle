@@ -39,8 +39,8 @@ version = "0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    jitpack()
-    spigot()
+    repos.jitpack
+    repos.spigot
 }
 
 dependencies {
@@ -48,17 +48,9 @@ dependencies {
     implementation(project(":icicle-utilities"))
     implementation(project(":icicle-protocol"))
     shadow(kotlin("stdlib"))
-    spigotApi(libs.versions.spigot.get())
+    compileOnly(minecraft.spigotApi(libs.versions.spigot.get()))
 }
 
 icicle {
     name = "Standard Kotlin"
-
-    dependencyNotation = "net.iceyleagons:icicle-addon-kotlin:$version"
-    description = "Contains standard methods/libraries for speeding up Kotlin development."
-    version = project.version.toString()
-    developers = listOf("Gabe")
-
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
 }

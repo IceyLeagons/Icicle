@@ -40,8 +40,8 @@ val spigotVersion = findProperty("spigotVersion") as String
 
 repositories {
     mavenCentral()
-    spigot()
-    jitpack()
+    repos.spigot
+    repos.jitpack
 }
 
 dependencies {
@@ -50,20 +50,13 @@ dependencies {
     compileOnly(libs.fastutil)
     compileOnly(libs.jetbrainsannotations)
     compileOnly(libs.slf4j)
-    spigotApi(libs.versions.spigot.get())
-    lombok()
+    compileOnly(minecraft.spigotApi(libs.versions.spigot.get()))
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
 }
 
 icicle {
     name = "Minecraft Commands"
-
-    dependencyNotation = "net.iceyleagons:icicle-addon-commands:$version"
-    version = project.version.toString()
-    description = "A complete command framework ready-to-use in your project!"
-    developers = listOf("TOTHTOMI", "Gabe")
-
-    dependencies += "net.iceyleagons:icicle-addon-core:0.1-SNAPSHOT"
-    dependencies += "net.iceyleagons:icicle-addon-utilities:0.1-SNAPSHOT"
 }
 
 tasks.test {

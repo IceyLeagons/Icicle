@@ -45,7 +45,8 @@ dependencies {
     compileOnly(libs.slf4j)
     compileOnly(libs.guava)
 
-    lombok()
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
 
     testImplementation(libs.guava)
     testImplementation(libs.bundles.junit)
@@ -53,9 +54,6 @@ dependencies {
 
 icicle {
     name = "Utilities"
-    version = project.version.toString()
-    description = "Contains utility classes that may or may not prove to be useful."
-    developers = listOf("TOTHTOMI", "Gabe")
 }
 
 tasks.jar {

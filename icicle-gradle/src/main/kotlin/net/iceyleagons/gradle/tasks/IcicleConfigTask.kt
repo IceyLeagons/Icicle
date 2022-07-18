@@ -1,9 +1,8 @@
 package net.iceyleagons.gradle.tasks
 
-import net.iceyleagons.gradle.catalogs.IcicleConfiguration
+import net.iceyleagons.gradle.IciclePlugin
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.internal.file.Deleter
@@ -12,13 +11,13 @@ import java.io.IOException
 import java.io.UncheckedIOException
 import javax.inject.Inject
 
-internal class IcicleConfigTask : DefaultTask() {
+internal open class IcicleConfigTask : DefaultTask() {
 
     @OutputDirectory
-    internal val outputDirectory: DirectoryProperty
+    val outputDirectory: DirectoryProperty
 
-    @Input
-    internal lateinit var data: IcicleConfiguration
+    /*@Input
+    lateinit var data: IcicleConfiguration*/
 
     init {
         val objectFactory = project.objects
@@ -26,7 +25,7 @@ internal class IcicleConfigTask : DefaultTask() {
     }
 
     @Inject
-    internal fun getDeleter(): Deleter {
+    internal open fun getDeleter(): Deleter {
         throw UnsupportedOperationException("Decorator takes care of injection")
     }
 
@@ -37,7 +36,9 @@ internal class IcicleConfigTask : DefaultTask() {
         clearOutputDirectory(outputDir)
 
         // Write contents of the icicle.yml file.
-        data.writeToFile(File(outputDir, "icicle.yml"))
+        //data.writeToFile(File(outputDir, "icicle.yml"))
+        // YES I KNOW THIS ISN'T NICE, BUT I NEED THIS COMPLEX OBJECT... :(
+        IciclePlugin.CONF!!.writeToFile(File(outputDir, "icicle.yml"))
     }
 
     private fun clearOutputDirectory(directoryToClear: File) {
