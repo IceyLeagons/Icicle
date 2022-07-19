@@ -28,14 +28,8 @@ jobs:
         env:
           ilSnapshotUser: ${{ secrets.IGLOO_SNAPSHOT_USER }}
           ilSnapshotPwd: ${{ secrets.IGLOO_SNAPSHOT_PWD }}
-      - name: Create artifacts folder
-        run: mkdir artifacts
-      - name: Move artifacts
-        run: mv ./icicle-*/build/libs/*.jar ./artifacts/
-      - name: Upload
+      - name: Upload artifacts
         uses: actions/upload-artifact@v3.1.0
         with:
           name: Artifacts
-          path: artifacts/*.jar
-      - name: Cleanup artifacts
-        run: rm -rf artifacts
+          path: icicle-*/build/libs/*.jar
