@@ -31,6 +31,7 @@ import net.iceyleagons.icicle.core.beans.GlobalServiceProvider;
 import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment;
 import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironmentImpl;
 import net.iceyleagons.icicle.core.performance.PerformanceLog;
+import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.reflections.Reflections;
@@ -83,7 +84,7 @@ public abstract class AbstractIcicleApplication implements Application {
         this.executionHandler = executionHandler;
         this.globalServiceProvider = globalServiceProvider;
 
-        this.configurationEnvironment = new ConfigurationEnvironmentImpl(new AdvancedFile(configRoot, true).asFile()); //TODO once Bukkit API is present
+        this.configurationEnvironment = new ConfigurationEnvironmentImpl(new AdvancedFile(configRoot, true).asFile(), ByteBuddyProxyHandler.getNewByteBuddyInstance()); //TODO once Bukkit API is present
 
         this.beanManager.getBeanRegistry().registerBean(Application.class, this); //registering self instance
         this.beanManager.getBeanRegistry().registerBean(ConfigurationEnvironment.class, configurationEnvironment);

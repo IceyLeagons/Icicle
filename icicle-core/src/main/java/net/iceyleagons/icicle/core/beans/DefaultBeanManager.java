@@ -31,6 +31,7 @@ import net.iceyleagons.icicle.core.annotations.Autowired;
 import net.iceyleagons.icicle.core.annotations.Bean;
 import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
 import net.iceyleagons.icicle.core.annotations.config.Config;
+import net.iceyleagons.icicle.core.annotations.config.ConfigurationDriver;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
@@ -45,6 +46,7 @@ import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingInjectionParam
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingCustomAutoCreateAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingDependencyTreeResolver;
 import net.iceyleagons.icicle.core.configuration.Configuration;
+import net.iceyleagons.icicle.core.configuration.driver.ConfigDelegator;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.MultipleInstanceException;
@@ -55,17 +57,14 @@ import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
-import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.*;
 
 /**
@@ -140,6 +139,32 @@ public class DefaultBeanManager implements BeanManager {
 
         return result;
     }
+    
+    private void createConfigDrivers(Set<Class<?>> autoCreationTypes) throws Exception {
+        PerformanceLog.begin(application, "Creating config drivers", DefaultBeanManager.class);
+
+        final ConfigDelegator delegator = this.application.getConfigurationEnvironment().getConfigDelegator();
+        Set<Class<?>> drivers = getAndRemoveTypesAnnotatedWith(ConfigurationDriver.class, autoCreationTypes);
+
+        for (Class<?> driver : drivers) {
+            if (!driver.isAnnotationPresent(ConfigurationDriver.class)) {
+                throw new IllegalStateException("Driver is not annotated with @ConfigurationDriver!");
+            }
+
+            createAndRegisterBean(driver);
+
+            Object driverObject = this.beanRegistry.getBeanNullable(driver);
+            if (!(driverObject instanceof net.iceyleagons.icicle.core.configuration.driver.ConfigDriver)) {
+                LOGGER.warn("ConfigDriver described by {} does not extend any ConfigDriver.", driver.getName());
+                this.beanRegistry.unregisterBean(driver);
+                continue;
+            }
+
+            delegator.addDriver((net.iceyleagons.icicle.core.configuration.driver.ConfigDriver) driverObject, driver.getAnnotation(ConfigurationDriver.class));
+        }
+
+        PerformanceLog.end(application);
+    }
 
     /**
      * Creates and registers all the {@link Config}s.
@@ -158,6 +183,7 @@ public class DefaultBeanManager implements BeanManager {
      * @see #getAndRemoveTypesAnnotatedWith(Class, Set)
      */
     private void createConfigs(Set<Class<?>> autoCreationTypes) throws Exception {
+
         PerformanceLog.begin(application, "Creating configs", DefaultBeanManager.class);
         Set<Class<?>> configs = getAndRemoveTypesAnnotatedWith(Config.class, autoCreationTypes);
 
@@ -165,21 +191,9 @@ public class DefaultBeanManager implements BeanManager {
             Config annotation = config.getAnnotation(Config.class);
             PerformanceLog.begin(application, "Creating config: " + annotation.value(), DefaultBeanManager.class);
 
-            createAndRegisterBean(config);
-            Object object = this.beanRegistry.getBeanNullable(config);
+            Configuration configuration = this.application.getConfigurationEnvironment().getConfigDelegator().implementConfig(config, BeanUtils.getResolvableConstructor(config), annotation);
 
-            if (!(object instanceof Configuration configuration)) {
-                LOGGER.warn("Config described by {} does not extend any Configuration instance. (Did you forget to extend AbstractConfiguration?)", config.getName());
-                this.beanRegistry.unregisterBean(config);
-                continue;
-            }
-
-            configuration.setConfigFile(new AdvancedFile(new File(this.application.getConfigurationEnvironment().getConfigRootFolder(), annotation.value())));
-
-            configuration.setOrigin(object);
-            configuration.setOriginType(config);
-
-            configuration.afterConstruct(annotation);
+            this.beanRegistry.registerBean(config, configuration);
             this.application.getConfigurationEnvironment().addConfiguration(configuration);
             PerformanceLog.end(application);
         }
@@ -275,6 +289,7 @@ public class DefaultBeanManager implements BeanManager {
 
         // The order down below is important! DO NOT CHANGE ORDER OF CALL!
         // First we want to create all the configurations because other beans may need them during construction
+        createConfigDrivers(autoCreationTypes);
         createConfigs(autoCreationTypes);
 
         // Second we want to register all autowiring annotation handlers before creating beans

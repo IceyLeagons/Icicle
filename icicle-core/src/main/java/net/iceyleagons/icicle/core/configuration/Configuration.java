@@ -25,35 +25,59 @@
 package net.iceyleagons.icicle.core.configuration;
 
 import net.iceyleagons.icicle.core.annotations.config.Config;
+import net.iceyleagons.icicle.utilities.exceptions.UnImplementedException;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;
 
 public interface Configuration {
 
-    void addDefault(String path, Object object);
+    default void addDefault(String path, Object object) {
+        throw new UnImplementedException("Interface cannot be used standalone, requires a driver via Icicle core.");
+    }
 
-    void save();
+    default void save() {
+        throw new UnImplementedException("Interface cannot be used standalone, requires a driver via Icicle core.");
+    }
 
-    void reload();
+    default void reload() {
+        throw new UnImplementedException("Interface cannot be used standalone, requires a driver via Icicle core.");
+    }
 
-    Object get(String path);
+    default Object get(String path) {
+        throw new UnImplementedException("Interface cannot be used standalone, requires a driver via Icicle core.");
+    }
 
-    Set<Map.Entry<String, Object>> getValues();
+    default Set<Map.Entry<String, Object>> getValues() {
+        throw new UnImplementedException("Interface cannot be used standalone, requires a driver via Icicle core.");
+    }
 
-    Class<?> declaringType();
+    default Class<?> declaringType() {
+        throw new UnImplementedException("Interface cannot be used standalone, requires a driver via Icicle core.");
+    }
 
-    void setConfigFile(AdvancedFile configFile);
+    default void setConfigFile(AdvancedFile configFile) {
+        throw new UnImplementedException("Interface cannot be used standalone, requires a driver via Icicle core.");
+    }
 
-    void setOrigin(Object origin);
+    default void setOrigin(Object origin) {
+        throw new UnImplementedException("Interface cannot be used standalone, requires a driver via Icicle core.");
+    }
 
-    void setOriginType(Class<?> originType);
+    default void setOriginType(Class<?> originType) {
+        throw new UnImplementedException("Interface cannot be used standalone, requires a driver via Icicle core.");
+    }
 
-    void setHeader(String header);
+    default void setHeader(String header) {
+        throw new UnImplementedException("Interface cannot be used standalone, requires a driver via Icicle core.");
+    }
 
     @Internal
-    void afterConstruct(Config annotation);
-
+    default void afterConstruct(Config annotation, Path configRootFolder) {
+        throw new UnImplementedException("Interface cannot be used standalone, requires a driver via Icicle core.");
+    }
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +22,27 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.configuration.environment;
+package net.iceyleagons.icicle.core.configuration.driver;
 
+import lombok.Setter;
 import net.iceyleagons.icicle.core.configuration.Configuration;
-import net.iceyleagons.icicle.core.configuration.driver.ConfigDelegator;
-import net.iceyleagons.icicle.utilities.lang.Internal;
+import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.Optional;
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Jul. 19, 2022
+ */
+public abstract class ConfigDriver implements Configuration {
 
-public interface ConfigurationEnvironment {
+    protected AdvancedFile configFile;
+    protected Object origin;
+    protected Class<?> originType;
 
-    void addConfiguration(Configuration configuration);
+    @Override
+    public Class<?> declaringType() {
+        return this.originType;
+    }
 
-    void updateValues();
-
-    Optional<Object> getProperty(String path);
-
-    <T> Optional<T> getProperty(String path, Class<T> type);
-
-    Collection<Configuration> getConfigurations();
-
-    Configuration getConfiguration(Class<?> declaringType);
-
-    File getConfigRootFolder();
-
-    ConfigDelegator getConfigDelegator();
-
-    @Internal
-    void cleanUp();
+    protected abstract ConfigDriver newInstance();
 }

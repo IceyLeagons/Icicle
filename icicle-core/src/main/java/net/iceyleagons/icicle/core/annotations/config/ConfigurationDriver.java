@@ -22,34 +22,24 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.configuration.environment;
+package net.iceyleagons.icicle.core.annotations.config;
 
-import net.iceyleagons.icicle.core.configuration.Configuration;
-import net.iceyleagons.icicle.core.configuration.driver.ConfigDelegator;
-import net.iceyleagons.icicle.utilities.lang.Internal;
+import net.iceyleagons.icicle.core.annotations.AutoCreate;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.Optional;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-public interface ConfigurationEnvironment {
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-    void addConfiguration(Configuration configuration);
+@AutoCreate
+@Target(TYPE)
+@Retention(RUNTIME)
+public @interface ConfigurationDriver {
 
-    void updateValues();
+    /**
+     * @return the extensions supported
+     */
+    String[] value();
 
-    Optional<Object> getProperty(String path);
-
-    <T> Optional<T> getProperty(String path, Class<T> type);
-
-    Collection<Configuration> getConfigurations();
-
-    Configuration getConfiguration(Class<?> declaringType);
-
-    File getConfigRootFolder();
-
-    ConfigDelegator getConfigDelegator();
-
-    @Internal
-    void cleanUp();
 }

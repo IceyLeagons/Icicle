@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +22,16 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.configuration.environment;
+package net.iceyleagons.icicle.core.exceptions;
 
-import net.iceyleagons.icicle.core.configuration.Configuration;
-import net.iceyleagons.icicle.core.configuration.driver.ConfigDelegator;
-import net.iceyleagons.icicle.utilities.lang.Internal;
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Jul. 19, 2022
+ */
+public class ConfigDelegationException extends RuntimeException {
 
-import java.io.File;
-import java.util.Collection;
-import java.util.Optional;
-
-public interface ConfigurationEnvironment {
-
-    void addConfiguration(Configuration configuration);
-
-    void updateValues();
-
-    Optional<Object> getProperty(String path);
-
-    <T> Optional<T> getProperty(String path, Class<T> type);
-
-    Collection<Configuration> getConfigurations();
-
-    Configuration getConfiguration(Class<?> declaringType);
-
-    File getConfigRootFolder();
-
-    ConfigDelegator getConfigDelegator();
-
-    @Internal
-    void cleanUp();
+    public ConfigDelegationException(String msg) {
+        super(msg);
+    }
 }

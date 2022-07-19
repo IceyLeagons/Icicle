@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.configuration;
+package net.iceyleagons.icicle.core.configuration.driver.impl;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -30,6 +30,8 @@ import lombok.Setter;
 import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.config.ConfigComment;
 import net.iceyleagons.icicle.core.annotations.config.ConfigField;
+import net.iceyleagons.icicle.core.annotations.config.ConfigurationDriver;
+import net.iceyleagons.icicle.core.configuration.driver.ConfigDriver;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
@@ -41,22 +43,20 @@ import org.simpleyaml.exceptions.InvalidConfigurationException;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public abstract class AbstractConfiguration implements Configuration {
-
-    @Setter
-    private AdvancedFile configFile;
-
-    @Setter
-    private Object origin;
-
-    @Setter
-    private Class<?> originType;
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Jul. 10, 2022
+ */
+@ConfigurationDriver({"yml", "yaml"})
+public class YamlConfigurationDriver extends ConfigDriver {
 
     @Setter
     private String header = null;
@@ -64,8 +64,8 @@ public abstract class AbstractConfiguration implements Configuration {
     private YamlFile file;
 
     @Override
-    public void afterConstruct(Config annotation) {
-        Asserts.notNull(configFile, "Config file must not be null!");
+    public void afterConstruct(Config annotation, Path configRootFolder) {
+        setConfigFile(new AdvancedFile(configRootFolder.resolve(annotation.value())));
         Asserts.isTrue(!configFile.isDirectory(), "Config file must not be a folder!");
 
         if (annotation.headerLines().length != 0) {
@@ -136,11 +136,6 @@ public abstract class AbstractConfiguration implements Configuration {
         return getValues(getFields());
     }
 
-    @Override
-    public Class<?> declaringType() {
-        return this.originType;
-    }
-
     private void loadDefaultValues() {
         Set<Field> fields = getFields();
         Set<Map.Entry<String, Object>> values = getValues(fields);
@@ -200,5 +195,26 @@ public abstract class AbstractConfiguration implements Configuration {
             values.put(configPath.value(), ReflectionUtils.get(field, origin, Object.class));
         }
         return values.entrySet();
+    }
+
+    @Override
+    protected ConfigDriver newInstance() {
+        return new YamlConfigurationDriver();
+    }
+
+    // We need to include these here (rather than in super class), because of byte buddy.
+    @Override
+    public void setConfigFile(AdvancedFile configFile) {
+        this.configFile = configFile;
+    }
+
+    @Override
+    public void setOrigin(Object origin) {
+        this.origin = origin;
+    }
+
+    @Override
+    public void setOriginType(Class<?> originType) {
+        this.originType = originType;
     }
 }

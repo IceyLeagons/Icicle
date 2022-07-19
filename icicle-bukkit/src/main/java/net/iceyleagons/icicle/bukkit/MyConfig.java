@@ -27,7 +27,6 @@ package net.iceyleagons.icicle.bukkit;
 import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.config.ConfigComment;
 import net.iceyleagons.icicle.core.annotations.config.ConfigField;
-import net.iceyleagons.icicle.core.configuration.AbstractConfiguration;
 
 /**
  * @author TOTHTOMI

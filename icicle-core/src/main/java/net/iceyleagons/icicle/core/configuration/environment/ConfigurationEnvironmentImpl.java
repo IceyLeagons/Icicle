@@ -26,7 +26,9 @@ package net.iceyleagons.icicle.core.configuration.environment;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.bytebuddy.ByteBuddy;
 import net.iceyleagons.icicle.core.configuration.Configuration;
+import net.iceyleagons.icicle.core.configuration.driver.ConfigDelegator;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 
 import java.io.File;
@@ -40,10 +42,13 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
 
     private final Map<Class<?>, Configuration> configurations = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
     private final Map<String, Object> values = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
+
+    private final ConfigDelegator delegator;
     private final File configRootFolder;
 
-    public ConfigurationEnvironmentImpl(File configRootFolder) {
+    public ConfigurationEnvironmentImpl(File configRootFolder, ByteBuddy bytebuddy) {
         this.configRootFolder = configRootFolder;
+        this.delegator = new ConfigDelegator(bytebuddy, configRootFolder.toPath());
     }
 
     @Override
@@ -84,6 +89,11 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
     @Override
     public File getConfigRootFolder() {
         return this.configRootFolder;
+    }
+
+    @Override
+    public ConfigDelegator getConfigDelegator() {
+        return this.delegator;
     }
 
     @Override
