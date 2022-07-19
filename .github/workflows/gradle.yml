@@ -25,6 +25,9 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew build
+        env:
+          ilSnapshotUser: ${{ secrets.IGLOO_SNAPSHOT_USER }}
+          ilSnapshotPwd: ${{ secrets.IGLOO_SNAPSHOT_PWD }}
       - name: Create artifacts folder
         run: mkdir artifacts
       - name: Move artifacts
