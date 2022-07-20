@@ -38,7 +38,8 @@ import net.iceyleagons.icicle.serialization.serializers.SerializationProvider;
 
 import java.lang.reflect.Constructor;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**

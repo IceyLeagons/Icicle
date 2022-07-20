@@ -38,13 +38,13 @@ import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotati
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodAdviceHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
-import net.iceyleagons.icicle.core.beans.resolvers.InjectionParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.CustomAutoCreateAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
+import net.iceyleagons.icicle.core.beans.resolvers.InjectionParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingAutowiringAnnotationResolver;
-import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingInjectionParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingCustomAutoCreateAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingDependencyTreeResolver;
+import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingInjectionParameterResolver;
 import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.core.configuration.driver.ConfigDelegator;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
@@ -65,7 +65,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * Default implementation of {@link BeanManager}.

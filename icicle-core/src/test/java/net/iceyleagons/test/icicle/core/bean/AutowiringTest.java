@@ -36,7 +36,6 @@ import net.iceyleagons.test.icicle.core.bean.resolvable.SetterTesterService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.custom.CustomAutowiringHandlerService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.modifiers.DefaultValueService;
 import net.iceyleagons.test.icicle.core.bean.resolvable.qualifier.QualificationTestService;
-import net.iceyleagons.test.icicle.core.bean.resolvable.qualifier.QualifiedService;
 import org.junit.jupiter.api.*;
 
 /**

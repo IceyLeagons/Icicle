@@ -33,7 +33,6 @@ import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
-import java.util.Collections;
 import java.util.Set;
 
 /**

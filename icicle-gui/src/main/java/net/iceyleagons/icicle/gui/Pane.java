@@ -36,7 +36,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static net.iceyleagons.icicle.utilities.ErrorUtils.ILLEGAL;

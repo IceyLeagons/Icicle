@@ -31,7 +31,6 @@ import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.Icicle;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @since Oct. 31, 2021

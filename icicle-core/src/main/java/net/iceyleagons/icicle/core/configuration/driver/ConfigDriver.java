@@ -24,7 +24,6 @@
 
 package net.iceyleagons.icicle.core.configuration.driver;
 
-import lombok.Setter;
 import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 

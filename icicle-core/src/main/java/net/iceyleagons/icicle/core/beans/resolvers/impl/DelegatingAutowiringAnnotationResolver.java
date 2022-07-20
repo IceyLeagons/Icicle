@@ -31,7 +31,6 @@ import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class DelegatingAutowiringAnnotationResolver implements AutowiringAnnotationResolver {
 

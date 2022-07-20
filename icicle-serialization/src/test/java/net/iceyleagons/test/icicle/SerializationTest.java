@@ -31,10 +31,13 @@ import net.iceyleagons.icicle.serialization.converters.ConverterAnnotationHandle
 import net.iceyleagons.icicle.serialization.converters.ValueConverter;
 import net.iceyleagons.icicle.serialization.mapping.PropertyMapperAnnotationHandler;
 import net.iceyleagons.icicle.serialization.mapping.impl.*;
+import net.iceyleagons.icicle.serialization.serializers.NbtSerializer;
 import net.iceyleagons.icicle.utilities.Benchmark;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +59,24 @@ public class SerializationTest {
         PropertyMapperAnnotationHandler.REGISTERED_PROPERTY_MAPPERS.add(new MapMapper());
         PropertyMapperAnnotationHandler.REGISTERED_PROPERTY_MAPPERS.add(new UUIDMapper());
         ConverterAnnotationHandler.REGISTERED_CONVERTERS.add(new Test3Converter());
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testNbt() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper(new NbtSerializer());
+        Test original = new Test("asd", 4, UUID.randomUUID(),
+                new String[]{"value1", "value2", "value3"}, new int[]{35, 65, 45},
+                List.of("asd", "asd3"), Map.of("testkey", "testvalue", "key2", "value2"),
+                new Test2(), new Test3());
+
+        File f = new File("test.nbt");
+        if (!f.exists()) {
+            f.createNewFile();
+        }
+        objectMapper.writeValueToFile(original, f.toPath());
+
+        Test clone = objectMapper.readValueFromFile(f.toPath(), Test.class);
+        compare(original, clone);
     }
 
     @org.junit.jupiter.api.Test
@@ -82,6 +103,9 @@ public class SerializationTest {
     }
 
     public boolean compareMaps(Map<?,?> a, Map<?,?> b) {
+        System.out.println(Arrays.toString(a.entrySet().toArray(Map.Entry<?, ?>[]::new)));
+        System.out.println(Arrays.toString(b.entrySet().toArray(Map.Entry<?, ?>[]::new)));
+
         for (Map.Entry<?, ?> entry : a.entrySet()) {
             if (!b.containsKey(entry.getKey()) || !entry.getValue().equals(b.get(entry.getKey()))) {
                 Assertions.fail();

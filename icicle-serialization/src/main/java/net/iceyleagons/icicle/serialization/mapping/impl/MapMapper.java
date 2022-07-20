@@ -29,17 +29,14 @@ import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
 import net.iceyleagons.icicle.serialization.dto.MappedObject;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
-import net.iceyleagons.icicle.serialization.dto.ValueGetter;
 import net.iceyleagons.icicle.serialization.mapping.PropertyMapper;
 import net.iceyleagons.icicle.serialization.mapping.SerializationPropertyMapper;
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.AbstractMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiConsumer;
 
 /**
  * @author TOTHTOMI

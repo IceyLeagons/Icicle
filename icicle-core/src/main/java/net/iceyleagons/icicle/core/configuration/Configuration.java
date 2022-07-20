@@ -29,7 +29,6 @@ import net.iceyleagons.icicle.utilities.exceptions.UnImplementedException;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;

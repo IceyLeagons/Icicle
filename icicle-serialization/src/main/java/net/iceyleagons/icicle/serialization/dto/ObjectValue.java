@@ -34,7 +34,6 @@ import net.iceyleagons.icicle.serialization.converters.Convert;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * @author TOTHTOMI

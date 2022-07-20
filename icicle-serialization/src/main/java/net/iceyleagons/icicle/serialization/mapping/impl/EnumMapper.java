@@ -28,13 +28,11 @@ import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
 import net.iceyleagons.icicle.serialization.annotations.EnumSerialization;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
-import net.iceyleagons.icicle.serialization.dto.ValueGetter;
 import net.iceyleagons.icicle.serialization.mapping.PropertyMapper;
 import net.iceyleagons.icicle.serialization.mapping.SerializationPropertyMapper;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 /**
  * @author TOTHTOMI

@@ -27,7 +27,6 @@ package net.iceyleagons.icicle.core.translations.impl.file;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.iceyleagons.icicle.core.translations.TranslationStringProvider;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**

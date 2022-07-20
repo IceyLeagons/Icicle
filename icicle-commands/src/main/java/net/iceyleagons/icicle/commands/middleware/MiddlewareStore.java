@@ -25,9 +25,7 @@
 package net.iceyleagons.icicle.commands.middleware;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**

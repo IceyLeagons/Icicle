@@ -35,7 +35,6 @@ import net.iceyleagons.icicle.protocol.action.Action;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author TOTHTOMI

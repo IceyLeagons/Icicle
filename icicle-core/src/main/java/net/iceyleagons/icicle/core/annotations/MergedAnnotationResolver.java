@@ -30,7 +30,6 @@ import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.reflections.Reflections;
 
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;

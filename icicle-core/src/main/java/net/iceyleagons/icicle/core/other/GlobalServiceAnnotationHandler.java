@@ -25,11 +25,11 @@
 package net.iceyleagons.icicle.core.other;
 
 import net.iceyleagons.icicle.core.Application;
+import net.iceyleagons.icicle.core.annotations.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.service.GlobalService;
 import net.iceyleagons.icicle.core.beans.GlobalServiceProvider;
-import net.iceyleagons.icicle.core.annotations.Autowired;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

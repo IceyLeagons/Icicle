@@ -26,14 +26,12 @@ package net.iceyleagons.icicle.serialization.mapping.impl;
 
 import net.iceyleagons.icicle.serialization.ObjectMapper;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
-import net.iceyleagons.icicle.serialization.dto.ValueGetter;
 import net.iceyleagons.icicle.serialization.mapping.PropertyMapper;
 import net.iceyleagons.icicle.serialization.mapping.SerializationPropertyMapper;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 /**
  * @author TOTHTOMI

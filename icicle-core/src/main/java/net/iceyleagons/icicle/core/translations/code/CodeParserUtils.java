@@ -26,7 +26,6 @@ package net.iceyleagons.icicle.core.translations.code;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

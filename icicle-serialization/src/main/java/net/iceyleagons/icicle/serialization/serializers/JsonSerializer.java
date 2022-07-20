@@ -52,7 +52,6 @@ public class JsonSerializer implements SerializationProvider {
         for (ObjectValue value : mappedObject.getValues()) {
             if (value.shouldConvert()) {
                 Class<?> vClass = value.getValue().getClass();
-                System.out.println("Called for JSON: " + vClass);
                 root.put(value.getKey(), SerializationUtils.isSubObject(vClass) ? serialize((MappedObject) value.getValue(), new JSONObject()) : value.getValue());
             } else if (value.isValuePrimitiveOrString() || value.isEnum()) {
                 root.put(value.getKey(), value.getValue());

@@ -32,9 +32,7 @@ import net.iceyleagons.icicle.utilities.lang.Internal;
 import net.iceyleagons.icicle.utilities.lang.Utility;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 
 /**
  * @author TOTHTOMI
