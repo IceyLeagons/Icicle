@@ -35,6 +35,12 @@ import java.util.Set;
 
 public interface Configuration {
 
+    /**
+     * Save must be called after this!
+     *
+     * @param path
+     * @param object
+     */
     default void addDefault(String path, Object object) {
         throw new UnImplementedException("Interface cannot be used standalone, requires a driver via Icicle core.");
     }

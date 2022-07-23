@@ -25,139 +25,118 @@
 package net.iceyleagons.icicle.core.configuration.driver.impl;
 
 import lombok.Setter;
+import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.annotations.config.Config;
-import net.iceyleagons.icicle.core.annotations.config.ConfigComment;
-import net.iceyleagons.icicle.core.annotations.config.ConfigField;
 import net.iceyleagons.icicle.core.annotations.config.ConfigurationDriver;
 import net.iceyleagons.icicle.core.configuration.driver.ConfigDriver;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.iceyleagons.icicle.utilities.file.FileUtils;
-import org.simpleyaml.configuration.comments.format.YamlCommentFormat;
-import org.simpleyaml.configuration.comments.format.YamlHeaderFormatter;
-import org.simpleyaml.configuration.file.YamlFile;
+import net.iceyleagons.icicle.utilities.lang.Experimental;
 
-import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jul. 10, 2022
+ * @since Jul. 23, 2022
  */
-@ConfigurationDriver({"yml", "yaml"})
-public class YamlConfigurationDriver extends ConfigDriver {
+@Experimental
+@ConfigurationDriver({"properties"})
+public class PropertiesConfigurationDriver extends ConfigDriver {
 
+    private Properties properties;
     @Setter
     private String header = null;
 
-    private YamlFile file;
-
     @Override
+    @SneakyThrows
     public void afterConstruct(Config annotation, Path configRootFolder) {
         setConfigFile(new AdvancedFile(configRootFolder.resolve(annotation.value())));
         Asserts.isTrue(!configFile.isDirectory(), "Config file must not be a folder!");
 
+        this.properties = new Properties();
         if (annotation.headerLines().length != 0) {
             setHeader(String.join("\n", annotation.headerLines()));
         }
 
-        try {
-            this.file = new YamlFile(configFile.asFile());
-            if (!file.exists()) {
-                this.file.createNewFile(true);
-                if (this.header != null) {
-                    FileUtils.appendFile(configFile.getPath(), this.header.split("\n"));
-                }
-
-                this.file.loadWithComments();
+        final Path file = super.configFile.getPath();
+        if (!Files.exists(file)) {
+            Files.createFile(file);
+            if (this.header != null) {
+                FileUtils.appendFile(configFile.getPath(), this.header.split("\n"));
             }
-
-            applyHeaderOptions(annotation);
-            loadDefaultValues();
-        } catch (IOException e) {
-            throw new IllegalStateException("Could not load Configuration described by " + originType.getName(), e);
         }
-    }
 
-    private void applyHeaderOptions(Config ann) {
-        final YamlHeaderFormatter formatter = file.options().headerFormatter();
-
-        if (!ann.headerPrefixFirst().isEmpty()) formatter.prefixFirst(ann.headerPrefixFirst());
-        if (!ann.headerCommentPrefix().isEmpty()) formatter.commentPrefix(ann.headerCommentPrefix());
-        if (!ann.headerCommentSuffix().isEmpty()) formatter.commentSuffix(ann.headerCommentSuffix());
-        if (!ann.headerSuffixLast().isEmpty()) formatter.suffixLast(ann.headerSuffixLast());
+        this.load();
+        this.loadDefaultValues();
     }
 
     @Override
     public void addDefault(String path, Object object) {
-        if (this.file != null) {
-            this.file.addDefault(path, object);
+        if (!properties.containsKey(path)) {
+            properties.put(path, object);
         }
-
-        // Removed save to save performance
-    }
-
-    @Override
-    public void save() {
-        try {
-            this.file.save();
-        } catch (IOException e) {
-            throw new IllegalStateException("Could not save config described by: " + originType.getName(), e);
-        }
-    }
-
-    @Override
-    public void reload() {
-        try {
-            this.file.loadWithComments();
-            super.reloadValues();
-        } catch (IOException e) {
-            throw new IllegalStateException("Could not reload config described by: " + originType.getName(), e);
-        }
-    }
-
-    @Override
-    public Object get(String path) {
-        return this.file != null ? this.file.get(path) : null;
     }
 
     private void loadDefaultValues() {
         Set<Field> fields = getFields();
         Set<Map.Entry<String, Object>> values = getValues(fields);
 
-        if (header != null) {
-            file.setHeader(header);
-        }
-
         values.forEach((entry) -> {
             String path = entry.getKey();
             Object value = entry.getValue();
 
-            if (!file.contains(path)) {
-                //System.out.println("Setting \"" + path + "\" to " + value);
-                file.set(path, value);
+            if (!properties.contains(path)) {
+                properties.put(path, value);
             }
         });
 
-        file.setCommentFormat(YamlCommentFormat.PRETTY);
-        fields.stream().filter(f -> f.isAnnotationPresent(ConfigComment.class)).forEach(f -> {
-            String path = f.getAnnotation(ConfigField.class).value();
-            ConfigComment comment = f.getAnnotation(ConfigComment.class);
-
-            file.setComment(path, comment.value(), comment.type());
-        });
+        // TODO comments (needs custom implementation)
 
         save();
         reload();
     }
 
+    @SneakyThrows
+    private void load() {
+        try (InputStream is = Files.newInputStream(super.configFile.getPath())) {
+            try (InputStreamReader isr = new InputStreamReader(is)) {
+                this.properties.load(isr);
+            }
+        }
+    }
+
+    @Override
+    @SneakyThrows
+    public void save() {
+        try (OutputStream os = Files.newOutputStream(super.configFile.getPath())) {
+            this.properties.store(os, null);
+        }
+    }
+
+    @Override
+    public void reload() {
+        load();
+        super.reloadValues();
+    }
+
+    @Override
+    public Object get(String path) {
+        return this.properties != null ? this.properties.get(path) : null;
+    }
+
     @Override
     protected ConfigDriver newInstance() {
-        return new YamlConfigurationDriver();
+        return new PropertiesConfigurationDriver();
     }
 
     // We need to include these here (rather than in super class), because of byte buddy.

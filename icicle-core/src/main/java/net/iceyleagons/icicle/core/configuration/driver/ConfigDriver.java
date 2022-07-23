@@ -24,8 +24,19 @@
 
 package net.iceyleagons.icicle.core.configuration.driver;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.iceyleagons.icicle.core.annotations.config.ConfigField;
 import net.iceyleagons.icicle.core.configuration.Configuration;
+import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author TOTHTOMI
@@ -43,5 +54,40 @@ public abstract class ConfigDriver implements Configuration {
         return this.originType;
     }
 
+    @Override
+    public Set<Map.Entry<String, Object>> getValues() {
+        return getValues(getFields());
+    }
+
     protected abstract ConfigDriver newInstance();
+
+    protected void reloadValues() {
+        Map<String, Field> values = new ConcurrentHashMap<>();
+
+        for (Field field : getFields()) {
+            ConfigField configPath = field.getAnnotation(ConfigField.class);
+            values.put(configPath.value(), field);
+        }
+
+        values.forEach((path, field) -> {
+            if (get(path) != null) {
+                ReflectionUtils.set(field, origin, get(path));
+            }
+        });
+    }
+
+    protected Set<Field> getFields() {
+        return Arrays.stream(originType.getDeclaredFields())
+                .filter(f -> f.isAnnotationPresent(ConfigField.class)).collect(Collectors.toSet());
+    }
+
+    protected Set<Map.Entry<String, Object>> getValues(Set<Field> fields) {
+        Map<String, Object> values = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
+
+        for (Field field : fields) {
+            ConfigField configPath = field.getAnnotation(ConfigField.class);
+            values.put(configPath.value(), ReflectionUtils.get(field, origin, Object.class));
+        }
+        return values.entrySet();
+    }
 }
