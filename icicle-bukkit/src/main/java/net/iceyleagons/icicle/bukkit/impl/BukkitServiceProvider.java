@@ -48,6 +48,12 @@ public class BukkitServiceProvider implements GlobalServiceProvider {
 
     private final ServicesManager servicesManager = Bukkit.getServicesManager();
 
+    // Due to Bukkit's generic things I cannot call ServicesManager#register directly. Instead I call it via Reflection as generics are not present at runtime.
+    private static void register(ServicesManager manager, Class<?> interfaceType, Object object, JavaPlugin registrar, ServicePriority priority) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method method = ServicesManager.class.getMethod("register", Class.class, Object.class, Plugin.class, ServicePriority.class);
+        method.invoke(manager, interfaceType, object, registrar, priority);
+    }
+
     @Override
     public <T> Optional<T> getService(Class<T> type) {
         RegisteredServiceProvider<T> registered = servicesManager.getRegistration(type);
@@ -71,11 +77,5 @@ public class BukkitServiceProvider implements GlobalServiceProvider {
 
         System.out.println("Registering: " + interfaceType.getName());
         register(servicesManager, interfaceType, object, ((BukkitApplication) registrar).getJavaPlugin(), providerType.isAnnotationPresent(GlobalServicePriority.class) ? providerType.getAnnotation(GlobalServicePriority.class).value() : ServicePriority.Normal);
-    }
-
-    // Due to Bukkit's generic things I cannot call ServicesManager#register directly. Instead I call it via Reflection as generics are not present at runtime.
-    private static void register(ServicesManager manager, Class<?> interfaceType, Object object, JavaPlugin registrar, ServicePriority priority) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Method method = ServicesManager.class.getMethod("register", Class.class, Object.class, Plugin.class, ServicePriority.class);
-        method.invoke(manager, interfaceType, object, registrar, priority);
     }
 }

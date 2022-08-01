@@ -53,23 +53,18 @@ public class Pane implements StateAware {
 
     @Getter
     private final Set<GuiComponent> components = new ObjectOpenHashSet<>();
-
-    @Setter
-    @Getter
-    private GUI gui;
-
     @Getter
     private final int width;
     @Getter
     private final int height;
     @Getter
     private final int rowSize;
-
     private final ItemStack[][] items;
-
     @Getter
     private final int xOff = 0, yOff = 0; // easy access
-
+    @Setter
+    @Getter
+    private GUI gui;
     private boolean dirty = true;
 
     public Pane(int width, int height, int rowSize) {

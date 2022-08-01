@@ -98,11 +98,11 @@ public class SerializationTest {
 
     public void compare(String key, Object a, Object b) {
         boolean value = a.equals(b);
-        System.out.printf("[%s] %s: %s <--> %s\n",value ? "CHECK" : "ERROR", key, a, b);
+        System.out.printf("[%s] %s: %s <--> %s\n", value ? "CHECK" : "ERROR", key, a, b);
         Assertions.assertTrue(value);
     }
 
-    public boolean compareMaps(Map<?,?> a, Map<?,?> b) {
+    public boolean compareMaps(Map<?, ?> a, Map<?, ?> b) {
         System.out.println(Arrays.toString(a.entrySet().toArray(Map.Entry<?, ?>[]::new)));
         System.out.println(Arrays.toString(b.entrySet().toArray(Map.Entry<?, ?>[]::new)));
 
@@ -127,6 +127,10 @@ public class SerializationTest {
         compare("test3 - name", a.test3.name, b.test3.name);
 
         System.out.printf("[%s] Comparing mapTest", compareMaps(a.mapTest, b.mapTest) ? "CHECK" : "ERROR");
+    }
+
+    static enum TestEnum {
+        HELLO, HELLO2, HELLO3;
     }
 
     static class Test {
@@ -182,10 +186,6 @@ public class SerializationTest {
         public Test3() {
             this("Hi");
         }
-    }
-
-    static enum TestEnum {
-        HELLO, HELLO2, HELLO3;
     }
 
     static class Test3Converter extends ValueConverter<Test3, String> {

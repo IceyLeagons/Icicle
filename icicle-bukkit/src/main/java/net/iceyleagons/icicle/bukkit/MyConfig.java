@@ -27,6 +27,7 @@ package net.iceyleagons.icicle.bukkit;
 import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.config.ConfigComment;
 import net.iceyleagons.icicle.core.annotations.config.ConfigField;
+import net.iceyleagons.icicle.core.configuration.Configuration;
 
 /**
  * @author TOTHTOMI
@@ -34,7 +35,7 @@ import net.iceyleagons.icicle.core.annotations.config.ConfigField;
  * @since Apr. 09, 2022
  */
 @Config(value = "config.yml", headerLines = {"You can even add headers!"})
-public class MyConfig extends AbstractConfiguration {
+public class MyConfig implements Configuration {
 
     @ConfigField("settings.prefix")
     @ConfigComment("Change the prefix of the demo.")

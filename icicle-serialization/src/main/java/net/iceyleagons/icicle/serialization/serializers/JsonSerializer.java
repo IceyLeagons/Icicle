@@ -97,14 +97,14 @@ public class JsonSerializer implements SerializationProvider {
         if (objectValue.isArray()) {
             JSONArray jsonArray = jsonObject.getJSONArray(objectValue.getKey());
             return objectValue.copyWithNewValueAndType(
-                    fromJsonArray(jsonArray,  objectValue.getJavaType().getComponentType()), objectValue.getJavaType()
+                    fromJsonArray(jsonArray, objectValue.getJavaType().getComponentType()), objectValue.getJavaType()
             );
         }
 
         if (objectValue.isCollection()) {
             JSONArray jsonArray = jsonObject.getJSONArray(objectValue.getKey());
             return objectValue.copyWithNewValueAndType(
-                    fromJsonArray(jsonArray,  objectValue.getGenericGetter().getGenericClass(0)), objectValue.getJavaType()
+                    fromJsonArray(jsonArray, objectValue.getGenericGetter().getGenericClass(0)), objectValue.getJavaType()
             );
         }
 
@@ -186,7 +186,6 @@ public class JsonSerializer implements SerializationProvider {
         }
         return jsonArray;
     }
-
 
 
     @Override

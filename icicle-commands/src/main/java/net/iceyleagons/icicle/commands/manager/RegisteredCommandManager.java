@@ -100,6 +100,18 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
         }
     }
 
+    private static String join(String[] args, int startFrom) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = startFrom; i < args.length; i++) {
+            sb.append(args[i]).append(" ");
+        }
+        return sb.toString();
+    }
+
+    private static String color(String msg) {
+        return ChatColor.translateAlternateColorCodes('&', msg);
+    }
+
     private void scanForCommands() throws CommandInjectionException {
         for (Method declaredMethod : this.clazz.getDeclaredMethods()) {
             if (!declaredMethod.isAnnotationPresent(Command.class)) continue;
@@ -118,14 +130,6 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
             commandRegistry.registerSubCommand((RegisteredCommandManager) sc);
         }
 
-    }
-
-    private static String join(String[] args, int startFrom) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = startFrom; i < args.length; i++) {
-            sb.append(args[i]).append(" ");
-        }
-        return sb.toString();
     }
 
     private Object[] getParams(RegisteredCommand cmd, String[] args, CommandSender commandSender) throws Exception {
@@ -342,9 +346,5 @@ public class RegisteredCommandManager implements CommandExecutor, TabCompleter {
         }
 
         return completions;
-    }
-
-    private static String color(String msg) {
-        return ChatColor.translateAlternateColorCodes('&', msg);
     }
 }

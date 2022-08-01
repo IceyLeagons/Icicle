@@ -159,7 +159,7 @@ public class NbtSerializer implements SerializationProvider {
         int i = 0;
         for (Map.Entry<String, Tag> entry : map.getValue().entrySet()) {
             Tag entryValue = entry.getValue();
-            Object value = SerializationUtils.isSubObject(valueType) ?  deserialize((CompoundTag) entryValue, valueType) : entryValue.getValue();
+            Object value = SerializationUtils.isSubObject(valueType) ? deserialize((CompoundTag) entryValue, valueType) : entryValue.getValue();
 
             Array.set(array, i++, Map.entry(entry.getKey(), value));
         }

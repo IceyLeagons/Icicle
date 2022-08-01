@@ -44,6 +44,16 @@ import java.util.Map;
 @SerializationPropertyMapper
 public class CollectionMapper extends PropertyMapper<Collection<?>> {
 
+    private static Collection<?> toCollection(Class<?> type, Object array) {
+        final Collection<Object> collection = (Collection<Object>) SerializationUtils.createCollectionFromType(type);
+
+        for (int i = 0; i < Array.getLength(array); i++) {
+            collection.add(Array.get(array, i));
+        }
+
+        return collection;
+    }
+
     @Override
     public Collection<?> deMap(Object genericArray, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations, ObjectValue objectValue) {
         final Object[] array = GenericUtils.genericArrayToNormalArray(genericArray, Object.class);
@@ -62,19 +72,8 @@ public class CollectionMapper extends PropertyMapper<Collection<?>> {
         return old.copyWithNewValueAndType(ArrayMapper.mapArray(array, context), javaType); // ArrayMapper.arrayToMappedObject(ArrayMapper.mapArray(array, context), key, javaType, annotations, setter, getter);
     }
 
-
     @Override
     public boolean supports(Class<?> type) {
         return SerializationUtils.isCollection(type);
-    }
-
-    private static Collection<?> toCollection(Class<?> type, Object array) {
-        final Collection<Object> collection = (Collection<Object>) SerializationUtils.createCollectionFromType(type);
-
-        for (int i = 0; i < Array.getLength(array); i++) {
-            collection.add(Array.get(array, i));
-        }
-
-        return collection;
     }
 }

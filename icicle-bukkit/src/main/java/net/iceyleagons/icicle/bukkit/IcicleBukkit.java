@@ -29,17 +29,32 @@ import lombok.SneakyThrows;
 import net.iceyleagons.icicle.bukkit.listeners.PluginStatusListener;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.annotations.IcicleApplication;
+import net.iceyleagons.icicle.core.plugin.IciclePluginLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 @IcicleApplication("net.iceyleagons.icicle.bukkit")
 public class IcicleBukkit extends JavaPlugin {
+
     public static final Map<JavaPlugin, BukkitApplication> RUNNING_APPLICATIONS = new Object2ObjectOpenHashMap<>(4);
+    public static IciclePluginLoader iciclePluginLoader;
+    private static Method getPluginMethod;
+
+    static {
+        try {
+            getPluginMethod = JavaPlugin.class.getDeclaredMethod("getFile");
+            getPluginMethod.setAccessible(true);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean isTestingEnvironment = false;
 
     public IcicleBukkit() {
@@ -58,6 +73,11 @@ public class IcicleBukkit extends JavaPlugin {
 
             if (clazz.isAnnotationPresent(IcicleApplication.class)) {
                 String mainPackage = clazz.getAnnotation(IcicleApplication.class).value();
+
+                // TODO Uncomment this, if there are no multiple icicle.yml files!
+                // Before the application is started, we read the dependencies and load it into the classpath, so
+                // the application can use them.
+                // iciclePluginLoader.loadPluginDependencies(getPluginFile(javaPlugin));
 
                 BukkitApplication bukkitApplication = new BukkitApplication(mainPackage, javaPlugin);
                 RUNNING_APPLICATIONS.put(javaPlugin, bukkitApplication);
@@ -81,12 +101,20 @@ public class IcicleBukkit extends JavaPlugin {
         });
     }
 
+    @SneakyThrows
+    private static File getPluginFile(JavaPlugin javaPlugin) {
+        if (getPluginMethod == null) return null;
+        return (File) getPluginMethod.invoke(javaPlugin);
+    }
+
     @Override
     public void onLoad() {
         if (isTestingEnvironment) {
             Icicle.loadIcicle(null);
+            iciclePluginLoader = new IciclePluginLoader(null);
         } else {
             Icicle.loadIcicle(this.getClassLoader());
+            iciclePluginLoader = new IciclePluginLoader(this.getClassLoader());
         }
     }
 

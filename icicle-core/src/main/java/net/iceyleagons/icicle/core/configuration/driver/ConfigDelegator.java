@@ -53,6 +53,11 @@ public class ConfigDelegator {
     private final Path configRootFolder;
     private final Map<String, ConfigDriver> drivers = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 
+    private static String getExtension(Config annotation) {
+        String[] array = annotation.value().split("\\.");
+        return array[array.length - 1];
+    }
+
     public void addDriver(ConfigDriver driver, ConfigurationDriver annotation) {
         String[] extensions = annotation.value();
         for (String extension : extensions) {
@@ -87,10 +92,5 @@ public class ConfigDelegator {
         }
 
         return drivers.get(extension).newInstance();
-    }
-
-    private static String getExtension(Config annotation) {
-        String[] array = annotation.value().split("\\.");
-        return array[array.length - 1];
     }
 }

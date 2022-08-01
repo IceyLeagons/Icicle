@@ -45,8 +45,8 @@ import java.util.concurrent.Callable;
 @RequiredArgsConstructor
 public class BeanDelegation {
 
-    private final BeanRegistry beanRegistry;
     private static final Logger logger = LoggerFactory.getLogger(BeanDelegation.class);
+    private final BeanRegistry beanRegistry;
 
     @RuntimeType
     public Object run(@SuperCall Callable<?> callable, @Origin Method method) throws Exception {

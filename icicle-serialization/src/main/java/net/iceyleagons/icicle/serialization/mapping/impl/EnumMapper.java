@@ -42,6 +42,18 @@ import java.util.Map;
 @SerializationPropertyMapper
 public class EnumMapper extends PropertyMapper<Enum<?>> {
 
+    private static Enum<?> getFromName(String name, Class<?> type) {
+
+        for (Object enumConstant : type.getEnumConstants()) {
+            Enum<?> e = (Enum<?>) enumConstant;
+            if (e.name().equals(name)) {
+                return e;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public Enum<?> deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
         if (annotations.containsKey(EnumSerialization.class)) {
@@ -83,18 +95,6 @@ public class EnumMapper extends PropertyMapper<Enum<?>> {
     @Override
     public boolean supports(Class<?> type) {
         return SerializationUtils.isEnum(type);
-    }
-
-    private static Enum<?> getFromName(String name, Class<?> type) {
-
-        for (Object enumConstant : type.getEnumConstants()) {
-            Enum<?> e = (Enum<?>) enumConstant;
-            if (e.name().equals(name)) {
-                return e;
-            }
-        }
-
-        return null;
     }
 
     public enum EnumMappingType {

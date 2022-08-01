@@ -49,14 +49,14 @@ public class BetterLocation extends Location {
         super(world, x, y, z, yaw, pitch);
     }
 
-    public String serializeToString(String delimiter) {
-        return String.join(delimiter, Objects.requireNonNull(super.getWorld()).getName(),
-                String.valueOf(super.getX()), String.valueOf(super.getY()), String.valueOf(super.getZ()), String.valueOf(super.getYaw()), String.valueOf(super.getPitch()));
-    }
-
     public static BetterLocation fromString(String input, String delimiter) {
         String[] data = input.split(delimiter);
         return new BetterLocation(Bukkit.getWorld(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Float.parseFloat(data[4]), Float.parseFloat(data[5]));
+    }
+
+    public String serializeToString(String delimiter) {
+        return String.join(delimiter, Objects.requireNonNull(super.getWorld()).getName(),
+                String.valueOf(super.getX()), String.valueOf(super.getY()), String.valueOf(super.getZ()), String.valueOf(super.getYaw()), String.valueOf(super.getPitch()));
     }
 
     public Location asLocation() {

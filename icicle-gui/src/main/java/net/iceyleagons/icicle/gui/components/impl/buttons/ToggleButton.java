@@ -37,10 +37,10 @@ import java.util.function.Consumer;
  */
 public class ToggleButton extends LabelButton {
 
-    private boolean value = false;
     private final ItemStack onItem;
     private final ItemStack offItem;
     private final Consumer<GuiInteractEvent> handler;
+    private boolean value = false;
 
     public ToggleButton(int x, int y, ItemStack onItem, ItemStack offItem, BiConsumer<Boolean, GuiInteractEvent> onClicked) {
         super(x, y, offItem, null);

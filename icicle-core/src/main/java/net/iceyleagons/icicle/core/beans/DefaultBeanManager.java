@@ -142,7 +142,7 @@ public class DefaultBeanManager implements BeanManager {
 
         return result;
     }
-    
+
     private void createConfigDrivers(Set<Class<?>> autoCreationTypes) throws Exception {
         PerformanceLog.begin(application, "Creating config drivers", DefaultBeanManager.class);
 

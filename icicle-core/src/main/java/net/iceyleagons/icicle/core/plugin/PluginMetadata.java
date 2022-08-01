@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.modules;
+package net.iceyleagons.icicle.core.plugin;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.*;
@@ -43,7 +43,7 @@ import java.util.jar.JarFile;
 @EqualsAndHashCode
 @RequiredArgsConstructor
 @Getter
-public class ModuleMetadata {
+public class PluginMetadata {
 
     @NonNull
     private final File moduleFile;
@@ -57,7 +57,7 @@ public class ModuleMetadata {
     @NonNull
     private final List<MavenDependency> icicleDependencies;
 
-    public ModuleMetadata(InputStream inputStream, @NotNull File file) throws IOException {
+    public PluginMetadata(InputStream inputStream, @NotNull File file) throws IOException {
         val yamlFile = YamlFile.loadConfiguration(inputStream);
 
         // Required stuff...
@@ -108,7 +108,7 @@ public class ModuleMetadata {
     }
 
     @SneakyThrows
-    public static ModuleMetadata fromFile(File file) {
+    public static PluginMetadata fromFile(File file) {
         Asserts.notNull(file, "File must not be null!");
 
         try (JarFile jarFile = new JarFile(file)) {
@@ -118,7 +118,7 @@ public class ModuleMetadata {
                 throw new IllegalStateException("icicle.yml file is not found or is a directory!");
 
             try (InputStream inputStream = jarFile.getInputStream(metaEntry)) {
-                return new ModuleMetadata(inputStream, file);
+                return new PluginMetadata(inputStream, file);
             }
         }
     }

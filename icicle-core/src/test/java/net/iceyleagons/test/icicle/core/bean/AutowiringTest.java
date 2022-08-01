@@ -61,7 +61,7 @@ public class AutowiringTest {
         registry = application.getBeanManager().getBeanRegistry();
         Assertions.assertDoesNotThrow(application::start);
     }
-    
+
     @AfterAll
     public static void printPerformance() {
         String log = PerformanceLog.dumpExecutionLog(application);

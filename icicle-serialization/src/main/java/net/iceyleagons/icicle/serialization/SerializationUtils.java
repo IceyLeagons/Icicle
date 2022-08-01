@@ -51,7 +51,6 @@ public class SerializationUtils {
 
         for (Field declaredField : javaType.getDeclaredFields()) {
             final String name = SerializationUtils.getCustomNameOrDefault(declaredField, declaredField.getName());
-            final Map<Class<? extends Annotation>, Annotation> annotations = SerializationUtils.getAnnotations(declaredField);
 
             ObjectValue obj = new ObjectValue(declaredField.getType(), name, getAnnotations(declaredField),
                     (parent, value) -> ReflectionUtils.set(declaredField, parent, value),

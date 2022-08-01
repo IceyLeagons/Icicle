@@ -55,12 +55,12 @@ public class Settings {
 
     private final Map<Integer, Object> settings = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>(4));
 
+    public static Settings create() {
+        return new Settings();
+    }
+
     public Settings with(int id, Object value) {
         settings.put(id, value);
         return this;
-    }
-
-    public static Settings create() {
-        return new Settings();
     }
 }

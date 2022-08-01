@@ -41,8 +41,8 @@ import java.util.function.Consumer;
 @EqualsAndHashCode(callSuper = false)
 public class LabelButton extends Button {
 
-    private ItemStack itemStack;
     private final Consumer<GuiInteractEvent> onClicked;
+    private ItemStack itemStack;
 
     public LabelButton(int x, int y, ItemStack itemStack, Consumer<GuiInteractEvent> onClicked) {
         super(x, y);

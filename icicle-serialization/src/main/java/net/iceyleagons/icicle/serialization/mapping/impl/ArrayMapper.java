@@ -43,21 +43,6 @@ import java.util.Map;
  */
 @SerializationPropertyMapper
 public class ArrayMapper extends PropertyMapper<Object> {
-    @Override
-    public Object deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
-        return deMapArray(GenericUtils.genericArrayToNormalArray(object, Object.class), originalType.getComponentType(), context);
-    }
-
-    @Override
-    public ObjectValue mapCasted(Object object, Class<?> javaType, ObjectMapper context, ObjectValue old) {
-        return old.copyWithNewValueAndType(mapArray(object, context), javaType);
-    }
-
-    @Override
-    public boolean supports(Class<?> type) {
-        return SerializationUtils.isArray(type) && !SerializationUtils.isCollection(type);
-    }
-
     static Object[] mapArray(Object genericArray, ObjectMapper context) {
         final Object[] array = GenericUtils.genericArrayToNormalArray(genericArray, Object.class);
 
@@ -97,5 +82,20 @@ public class ArrayMapper extends PropertyMapper<Object> {
         }
 
         return clone;
+    }
+
+    @Override
+    public Object deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
+        return deMapArray(GenericUtils.genericArrayToNormalArray(object, Object.class), originalType.getComponentType(), context);
+    }
+
+    @Override
+    public ObjectValue mapCasted(Object object, Class<?> javaType, ObjectMapper context, ObjectValue old) {
+        return old.copyWithNewValueAndType(mapArray(object, context), javaType);
+    }
+
+    @Override
+    public boolean supports(Class<?> type) {
+        return SerializationUtils.isArray(type) && !SerializationUtils.isCollection(type);
     }
 }

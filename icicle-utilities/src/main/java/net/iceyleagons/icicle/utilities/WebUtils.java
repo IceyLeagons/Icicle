@@ -46,10 +46,6 @@ import static net.iceyleagons.icicle.utilities.ErrorUtils.TODO;
  */
 public final class WebUtils {
 
-    public void something() {
-        TODO("This is not implemented bruh");
-    }
-
     /**
      * This will open a connection to the given {@link URL} and generate a string with line separators.
      *
@@ -133,5 +129,9 @@ public final class WebUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void something() {
+        TODO("This is not implemented bruh");
     }
 }

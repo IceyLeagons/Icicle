@@ -41,6 +41,10 @@ public class Pos2i {
     private int x;
     private int y;
 
+    public static Pos2i from(int slot, int rowSize) {
+        return InventoryUtils.calculateXYFromSlot(slot, rowSize);
+    }
+
     public int toInventorySlot(int rowSize) {
         return InventoryUtils.calculateSlotFromXY(x, y, rowSize);
     }
@@ -51,10 +55,6 @@ public class Pos2i {
 
     public Pos2i rotateCounterClockwise(int rot, int w, int h) {
         return InventoryUtils.rotateCounterClockwise(x, y, w, h, rot);
-    }
-
-    public static Pos2i from(int slot, int rowSize) {
-        return InventoryUtils.calculateXYFromSlot(slot, rowSize);
     }
 
     @Override

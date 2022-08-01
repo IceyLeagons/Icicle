@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.modules;
+package net.iceyleagons.icicle.core.plugin;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -34,7 +34,6 @@ import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
 import net.iceyleagons.icicle.core.maven.loaders.AdvancedClassLoader;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.datastores.tuple.UnmodifiableTuple;
-import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.iceyleagons.icicle.utilities.lang.Experimental;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -44,64 +43,52 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URLClassLoader;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Experimental
-public class IcicleModuleLoader {
+public class IciclePluginLoader {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IcicleModuleLoader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IciclePluginLoader.class);
 
-    private final AdvancedFile modulesFolder;
     private final AdvancedClassLoader acl;
 
-    private final List<ModuleMetadata> loadedModules = new ObjectArrayList<>(4);
+    private final List<PluginMetadata> loadedModules = new ObjectArrayList<>(4);
     private final Set<UnmodifiableTuple<String, String>> loadedDependencies = new ObjectOpenHashSet<>(8);
 
-    public IcicleModuleLoader(AdvancedFile folder, ClassLoader classLoader) {
-        Asserts.state(folder.isDirectory(), "Folder must be a folder!");
-
-        this.modulesFolder = folder;
+    public IciclePluginLoader(ClassLoader classLoader) {
         acl = AdvancedClassLoaders.get((URLClassLoader) classLoader);
-        loadModulesInFolder();
     }
 
     @SneakyThrows
-    public void loadModulesInFolder() {
-        for (File file : Objects.requireNonNull(modulesFolder.asFile().listFiles()))
-            try {
-                loadedModules.add(loadModule(file));
-            } catch (MalformedURLException e) {
-                LOGGER.warn("Could not load module from file {} due to {}", file.getPath(), e);
-            }
+    public void loadPluginDependencies(File jarFile) {
+        PluginMetadata meta = loadModule(jarFile);
 
-        for (ModuleMetadata moduleMetadata : loadedModules) {
-            for (MavenDependency library : moduleMetadata.getDependencies()) {
-                UnmodifiableTuple<String, String> depTuple = new UnmodifiableTuple<>(library.getGroupId(), library.getArtifactId());
-                if (!loadedDependencies.contains(depTuple)) {
-                    MavenLibraryLoader.load(library);
-                    loadedDependencies.add(depTuple);
-                }
+        for (MavenDependency library : meta.getDependencies()) {
+            UnmodifiableTuple<String, String> depTuple = new UnmodifiableTuple<>(library.getGroupId(), library.getArtifactId());
+            if (!loadedDependencies.contains(depTuple)) {
+                MavenLibraryLoader.load(library);
+                loadedDependencies.add(depTuple);
             }
-
-            for (MavenDependency library : moduleMetadata.getIcicleDependencies()) {
-                UnmodifiableTuple<String, String> depTuple = new UnmodifiableTuple<>(library.getGroupId(), library.getArtifactId());
-                if (!loadedDependencies.contains(depTuple)) {
-                    MavenLibraryLoader.load(library);
-                    loadedDependencies.add(depTuple);
-                }
-            }
-
-            acl.loadLibrary(moduleMetadata.getModuleFile());
-            Icicle.ICICLE_REFLECTIONS.merge(new Reflections(acl.getOrigin()));
-            Icicle.ICICLE_REFLECTIONS.expandSuperTypes();
         }
+
+        for (MavenDependency library : meta.getIcicleDependencies()) {
+            UnmodifiableTuple<String, String> depTuple = new UnmodifiableTuple<>(library.getGroupId(), library.getArtifactId());
+            if (!loadedDependencies.contains(depTuple)) {
+                MavenLibraryLoader.load(library);
+                loadedDependencies.add(depTuple);
+            }
+        }
+
+        acl.loadLibrary(meta.getModuleFile());
+        Icicle.ICICLE_REFLECTIONS.merge(new Reflections(acl.getOrigin()));
+        Icicle.ICICLE_REFLECTIONS.expandSuperTypes();
     }
 
-    public ModuleMetadata loadModule(File file) throws MalformedURLException {
+
+    private PluginMetadata loadModule(File file) throws MalformedURLException {
         Asserts.notNull(file, "Module file must not be null!");
         Asserts.state(file.exists(), "Module file does not exist!");
         Asserts.isTrue(file.getName().endsWith(".jar"), "Module file is not a jar!");
-        return ModuleMetadata.fromFile(file);
+        return PluginMetadata.fromFile(file);
     }
 }

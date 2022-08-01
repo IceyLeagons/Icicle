@@ -47,14 +47,12 @@ public class ObjectValue {
 
     private final Class<?> javaType;
     private final String key; //name
-
-    @Setter
-    private Object value;
     private final Map<Class<? extends Annotation>, Annotation> annotations;
-
     private final BiConsumer<Object, Object> setter;
     private final ValueGetter getter;
     private final GenericGetter genericGetter;
+    @Setter
+    private Object value;
 
     public <T> T getValueAs(Class<T> clazz) {
         return SerializationUtils.getValueAs(clazz, value);
