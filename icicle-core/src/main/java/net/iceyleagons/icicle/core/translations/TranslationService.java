@@ -31,6 +31,8 @@ import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.core.translations.code.CodeParser;
 import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
 import net.iceyleagons.icicle.core.translations.impl.ConstantLanguageProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.Map;
@@ -39,6 +41,8 @@ import java.util.Set;
 @Getter
 @Service
 public class TranslationService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TranslationService.class);
 
     private final Application application;
     private final Set<AbstractCodeFunction> codeFunctions;
@@ -59,8 +63,8 @@ public class TranslationService {
     }
 
     public String getTranslation(String key, String language, String defaultValue, Map<String, String> values) {
-        System.out.println("Providing translation for: " + String.format("KEY: %s | LANG: %s | DV: %s", key, language, defaultValue));
-        System.out.println("String Provider: " + this.translationStringProvider);
+        LOGGER.debug("Providing translation for: [key: {} | lang: {} | DV: {}]", key, language, defaultValue);
+        LOGGER.debug("String Provider: {}", this.translationStringProvider);
 
         String translation = translationStringProvider == null ? defaultValue : translationStringProvider.get(language, key, defaultValue);
         String toParse = translation == null ? defaultValue : translation;
