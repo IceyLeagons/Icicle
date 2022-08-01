@@ -10,24 +10,37 @@ To gain more information about the individual features, please check our develop
 
 - Beans (almost like in Spring)
     - Constructor auto-wiring (field auto-wiring is not supported)
+    - Setter auto-wiring
+    - Qualifiers
+    - Primary beans
     - Circular dependency handling
     - Support for creating custom annotations
         - Support for custom auto-wiring logic
         - Support for custom auto-creation logic
     - Support for creating custom method interceptors
+    - @PostConstruct
+    - @GlobalService
 - Kotlin support (for beans, additional Kotlin features can be obtained via the icicle-kotlin module)
 - Configuration
     - Easy default values
     - Comments and headers supported
+    - Multiple config types (ConfigDrivers)
+        - properties
+        - yaml
     - Ability to auto-wire configuration properties (ready-only!)
     - Ability to search for a property in every config file (ConfigurationEnvironment)
+    - ConfigurationEnvironment
+    - @Property
+- Value Modifiers
+    - @DefaultValue
 - Method Interceptors
     - @Async - run method asynchronously
     - @Sync - run method synchronously
     - @Meauser - measure method's execution time in ms
-- Module loading
-    - Automatic module downloading (to save space)
-    - Automatic module updating
+- Maven loading
+    - Maven dependency downloading/loading
+- Plugin Loading
+    - Reading in icicle.yml & loading necessary dependencies
 - Performance Log
     - Logged on a per-project basis
 - Translations
@@ -38,15 +51,13 @@ To gain more information about the individual features, please check our develop
 ## Serialization
 
 - ObjectMapper
-    - Handles the objects themselves, converts them into an intermediate form: ObjectDescriptors
-    - The actual serializers use ObjectDescriptors
+    - Handles the objects themselves, converts them into an intermediate form: MappedObject
+    - The actual serializers use MappedObjects
 - Converters
+- PropertyMappers
 - Built-in formats:
     - JSON
-    - YAML
     - NBT
-    - ProtoBuf (planned)
-    - HOCON (planned)
 
 ## Utilities
 
