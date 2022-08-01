@@ -25,6 +25,7 @@
 package net.iceyleagons.icicle.core.beans;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.AutoCreate;
 import net.iceyleagons.icicle.core.annotations.Autowired;
@@ -143,6 +144,19 @@ public class DefaultBeanManager implements BeanManager {
         return result;
     }
 
+    /**
+     * Creates the config drivers.
+     *
+     * @param autoCreationTypes the set of all the {@link AutoCreate} annotated types from {@link MergedAnnotationResolver}
+     *                          (this method calls {@link #getAndRemoveTypesAnnotatedWith(Class, Set)} with this parameter)
+     * @throws Exception        if anything goes wrong.
+     * @see ConfigurationDriver
+     * @see AutoCreate
+     * @see MergedAnnotationResolver
+     * @see Configuration
+     * @see net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment
+     * @see #getAndRemoveTypesAnnotatedWith(Class, Set)
+     */
     private void createConfigDrivers(Set<Class<?>> autoCreationTypes) throws Exception {
         PerformanceLog.begin(application, "Creating config drivers", DefaultBeanManager.class);
 
@@ -373,13 +387,19 @@ public class DefaultBeanManager implements BeanManager {
             Object[] parameters = this.constructorParameterResolver.resolveConstructorParameters(constructor, getBeanRegistry());
             Object bean = BeanUtils.instantiateClass(constructor, this.beanProxyHandler, parameters);
 
+            callBeanMethodsInsideBean(beanClass, bean);
             autowireSetters(beanClass, bean);
             BeanUtils.invokePostConstructor(beanClass, bean);
             registerBean(beanClass, bean);
-            callBeanMethodsInsideBean(beanClass, bean);
         }
     }
 
+    /**
+     * Resolves the dependency tree for the given bean (for its constructor)
+     *
+     * @param beanClass the bean
+     * @throws Exception if anything goes wrong
+     */
     private void resolveDependencyTree(Class<?> beanClass) throws Exception {
         LinkedList<Class<?>> dependencies = this.dependencyTreeResolver.resolveDependencyTree(beanClass);
 
@@ -389,6 +409,12 @@ public class DefaultBeanManager implements BeanManager {
         }
     }
 
+    /**
+     * Resolves the dependency tree for the given method
+     *
+     * @param method the method
+     * @throws Exception if anything goes wrong
+     */
     private void resolveDependencyTree(Method method) throws Exception {
         LinkedList<Class<?>> dependencies = this.dependencyTreeResolver.resolveDependencyTree(method);
 
@@ -398,7 +424,17 @@ public class DefaultBeanManager implements BeanManager {
         }
     }
 
-    private void autowireSetters(Class<?> beanClass, Object bean) throws Exception {
+    /**
+     * Can be called to auto-wire non-icicle beans.
+     *
+     * @param bean the bean to autowire
+     */
+    @SneakyThrows
+    public void autowireSetters(Object bean) {
+        autowireSetters(bean.getClass(), bean);
+    }
+
+    public void autowireSetters(Class<?> beanClass, Object bean) throws Exception {
         for (Method declaredMethod : beanClass.getDeclaredMethods()) {
             if (!declaredMethod.isAnnotationPresent(Autowired.class)) continue;
 
@@ -410,7 +446,14 @@ public class DefaultBeanManager implements BeanManager {
         }
     }
 
-    private void callBeanMethodsInsideBean(Class<?> beanClass, Object bean) throws MultipleInstanceException {
+    /**
+     * Calls the @Bean marked methods inside the bean.
+     * This is used first time to register and proxy all these methods.
+     *
+     * @param beanClass the beanClass
+     * @param bean the beanObject
+     */
+    private void callBeanMethodsInsideBean(Class<?> beanClass, Object bean) {
         for (Method method : Arrays.stream(beanClass.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(Bean.class)).toList()) {
             try {
                 method.setAccessible(true);
