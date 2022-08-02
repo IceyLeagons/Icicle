@@ -31,6 +31,8 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ *
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 28, 2021

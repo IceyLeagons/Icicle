@@ -30,10 +30,21 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * This annotation marks a field as a config field.
+ * Fields inside {@link Config} that don't annotate this will be ignored!
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
+ * @since Aug. 26, 2021
+ */
 @Target(FIELD)
 @Retention(RUNTIME)
 public @interface ConfigField {
 
+    /**
+     * @return the config path
+     */
     String value();
 
 }

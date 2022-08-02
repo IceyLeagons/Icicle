@@ -31,10 +31,26 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * This annotation can be used to autowire config properties into parameters.
+ * This is handled via {@link net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment} and {@link net.iceyleagons.icicle.core.configuration.ConfigPropertyAutowiringHandler}.
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
+ * @since Aug. 27, 2021
+ *
+ * @see net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment
+ * @see net.iceyleagons.icicle.core.configuration.ConfigPropertyAutowiringHandler
+ * @see net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler
+ * @see net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler
+ */
 @Retention(RUNTIME)
 @Target({FIELD, PARAMETER})
 public @interface Property {
 
+    /**
+     * @return the config path
+     */
     String value();
 
 }

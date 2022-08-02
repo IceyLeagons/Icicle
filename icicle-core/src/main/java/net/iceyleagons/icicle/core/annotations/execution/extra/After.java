@@ -32,6 +32,9 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * This annotation must be used in conjunction with {@link net.iceyleagons.icicle.core.annotations.execution.Async} or {@link net.iceyleagons.icicle.core.annotations.execution.Sync}.
+ * Methods with this annotation will only get called after the set delay.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 14, 2021
@@ -40,8 +43,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface After {
 
+    /**
+     * @return the delay
+     */
     long delay();
 
+    /**
+     * @return the unit of the delay
+     */
     TimeUnit unit();
 
 }

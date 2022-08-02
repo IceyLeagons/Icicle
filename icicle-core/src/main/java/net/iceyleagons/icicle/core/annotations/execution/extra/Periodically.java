@@ -32,6 +32,9 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * This annotation must be used in conjunction with {@link net.iceyleagons.icicle.core.annotations.execution.Async} or {@link net.iceyleagons.icicle.core.annotations.execution.Sync}.
+ * This marks the method as a periodically executed one. These methods get called via {@link net.iceyleagons.icicle.core.utils.ExecutionHandler}.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 14, 2021
@@ -40,8 +43,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Periodically {
 
+    /**
+     * @return the period
+     */
     long period();
 
+    /**
+     * @return the unit of the period
+     */
     TimeUnit unit();
 
 }

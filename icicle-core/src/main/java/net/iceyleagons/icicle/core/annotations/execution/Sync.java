@@ -30,6 +30,20 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Methods annotated with this annotation will be called synchronously via {@link net.iceyleagons.icicle.core.utils.ExecutionHandler}.
+ * This annotation can only be used inside Icicle managed beans.
+ *
+ * Functionality is implemented at {@link net.iceyleagons.icicle.core.proxy.interceptor.sync.SyncHandler}
+ Can be used in conjunction with annotations defined inside the package: <b>net.iceyleagons.icicle.core.annotation.execution.extra</b>.
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
+ * @since Aug. 24, 2021
+ *
+ * @see net.iceyleagons.icicle.core.utils.ExecutionHandler
+ * @see net.iceyleagons.icicle.core.proxy.interceptor.sync.SyncHandler
+ */
 @Target(METHOD)
 @Retention(RUNTIME)
 public @interface Sync {

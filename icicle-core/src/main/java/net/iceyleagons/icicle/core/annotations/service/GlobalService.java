@@ -33,7 +33,18 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Broken
+/**
+ * GlobalServices are just like {@link Service}s, but additionally they get registered into the {@link net.iceyleagons.icicle.core.beans.GlobalServiceProvider}.
+ * GlobalServices must have at least one implemented interface!
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
+ * @since Mar. 27, 2022
+ *
+ * @see AutoCreate
+ * @see Service
+ * @see net.iceyleagons.icicle.core.beans.GlobalServiceProvider
+ */
 @AutoCreate
 @Target(TYPE)
 @Retention(RUNTIME)

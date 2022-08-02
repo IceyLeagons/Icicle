@@ -29,16 +29,40 @@ import net.iceyleagons.icicle.core.Application;
 import java.util.Optional;
 
 /**
+ * Similar to {@link BeanRegistry}, but reserved for {@link net.iceyleagons.icicle.core.annotations.service.GlobalService}s.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Mar. 25, 2022
  */
 public interface GlobalServiceProvider {
 
+    /**
+     * Returns the service described by the type supplied (or an empty {@link Optional})
+     *
+     * @param type the service type class
+     * @param <T>  the service type
+     * @return the {@link Optional}nal containing the service or empty
+     */
     <T> Optional<T> getService(Class<T> type);
 
+    /**
+     * Used for checking whether a service is registered into this provider.
+     *
+     * @param type the service type class
+     * @return true if it is registered, false otherwise
+     */
     boolean isRegistered(Class<?> type);
 
+    /**
+     * Used for registering a service into the provider.
+     *
+     * @param interfaceType the interfaceType
+     * @param providerType the provider (implementation) type
+     * @param object the provider bean
+     * @param registrar the application who registered it
+     * @throws Exception if something goes wrong
+     */
     void registerService(Class<?> interfaceType, Class<?> providerType, Object object, Application registrar) throws Exception;
 
 }

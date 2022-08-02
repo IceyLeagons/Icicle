@@ -34,6 +34,14 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
+/**
+ * The MergedAnnotationResolver is responsible for searching all the annotations (using DFS), that annotate an annotation specified in the constructor.
+ * This way we can get classes, that have for ex. @{@link AutoCreate} in their annotation tree somewhere.
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
+ * @since Aug. 25, 2021
+ */
 @Getter
 public class MergedAnnotationResolver {
 
@@ -41,6 +49,12 @@ public class MergedAnnotationResolver {
     private final Set<Class<? extends Annotation>> childrenAnnotations;
     private final Reflections reflections;
 
+    /**
+     * Creates a new instance of {@link MergedAnnotationResolver}
+     *
+     * @param annotation the annotation to search for in the tree
+     * @param reflections the reflections instance to use
+     */
     public MergedAnnotationResolver(Class<? extends Annotation> annotation, Reflections reflections) {
         this.annotation = annotation;
         this.reflections = reflections;
@@ -49,6 +63,11 @@ public class MergedAnnotationResolver {
         this.childrenAnnotations.add(annotation); //we want to add the "root" annotation as well, because non-annotation types may annotate it
     }
 
+    /**
+     * Returns all the non-annotation types, that have the specified annotation somewhere in their annotation tree.
+     *
+     * @return the resulting {@link Set}
+     */
     public Set<Class<?>> getAllTypesAnnotated() {
         Set<Class<?>> result = new ObjectOpenHashSet<>();
 
@@ -62,6 +81,12 @@ public class MergedAnnotationResolver {
         return result;
     }
 
+    /**
+     * Checks whether the supplied type has the specified annotation somewhere in their annotation tree.
+     *
+     * @param clazz the type to check
+     * @return true if it does annotate the specified annotation, false otherwise.
+     */
     public boolean isAnnotated(Class<?> clazz) {
         for (Annotation clazzAnnotation : clazz.getAnnotations()) {
             if (childrenAnnotations.contains(clazzAnnotation.annotationType())) return true;
@@ -70,11 +95,23 @@ public class MergedAnnotationResolver {
         return false;
     }
 
+    /**
+     * Clears the children annotations set.
+     * Shouldn't be called outside Icicle!
+     *
+     * @see Internal
+     */
     @Internal
     public void cleanUp() {
         this.childrenAnnotations.clear();
     }
 
+    /**
+     * The actual DFS implementation.
+     *
+     * @param reflections the reflections to use
+     * @return the children annotations.
+     */
     @SuppressWarnings("unchecked")
     private Set<Class<? extends Annotation>> getChildren(Reflections reflections) {
         Set<Class<? extends Annotation>> children = new ObjectOpenHashSet<>();

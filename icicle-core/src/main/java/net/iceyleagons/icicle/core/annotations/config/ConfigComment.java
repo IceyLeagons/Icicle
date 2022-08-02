@@ -32,12 +32,26 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Adds comment to the field.
+ * Please note, that comments will only be applied if the responsible {@link ConfigurationDriver} supports it.
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
+ * @since Aug. 26, 2021
+ */
 @Target(FIELD)
 @Retention(RUNTIME)
 public @interface ConfigComment {
 
+    /**
+     * @return the actual comment text
+     */
     String value();
 
-    CommentType type() default CommentType.SIDE;
+    /**
+     * @return the type of the comment
+     */
+    CommentType type() default CommentType.SIDE; // TODO this is only simpleyaml, extend it to multiple file types (aka. have our own type system)
 
 }

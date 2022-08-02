@@ -30,11 +30,42 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
+/**
+ * An AutowiringAnnotationHandler extends the default logic of AutoWiring by introducing annotation specific logic.
+ * Classes that implement this interface, must annotate themselves with @{@link AnnotationHandler}
+ *
+ * If a to-be-auto-wired parameter has an annotation, that is supported by this handler ({@link #getSupportedAnnotations()}),
+ * the {@link net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver} will call this handler, to resolve that parameter.
+ * Note that, parameters managed via this handler won't receive values from the regular life cycle, the handler must provide one (or null)
+ *
+ * See an example at: {@link net.iceyleagons.icicle.core.configuration.ConfigPropertyAutowiringHandler}
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
+ * @since Aug. 27, 2021
+ *
+ * @see AnnotationHandler
+ * @see net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver
+ */
 public interface AutowiringAnnotationHandler {
 
+    /**
+     * @return the supported annotations, managed by this handler. Must not be null!
+     * @see NotNull
+     */
     @NotNull
     Set<Class<? extends Annotation>> getSupportedAnnotations();
 
-    @Nullable <T> T getValueForAnnotation(Annotation annotation, Class<T> wantedType);
+    /**
+     * Returns a value for the given annotation.
+     *
+     * @param annotation the annotation
+     * @param wantedType the required type class (parameter's type)
+     * @param <T> the required type
+     * @return the value or null
+     * @see Nullable
+     */
+    @Nullable
+    <T> T getValueForAnnotation(Annotation annotation, Class<T> wantedType);
 
 }

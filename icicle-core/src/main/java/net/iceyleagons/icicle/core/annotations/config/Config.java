@@ -32,6 +32,16 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Marks a class as a {@link Config}.
+ * All config classes must implement the {@link net.iceyleagons.icicle.core.configuration.Configuration} interface.
+ *
+ * Configs are the second things to be initialized in the life cycle of the application (after {@link ConfigurationDriver}s)
+ *
+ * @version 1.5.0
+ * @author TOTHTOMI
+ * @since Aug. 26, 2021
+ */
 @AutoCreate
 @Target(TYPE)
 @Retention(RUNTIME)
@@ -47,7 +57,7 @@ public @interface Config {
      */
     String[] headerLines() default {};
 
-    String headerPrefixFirst() default "";
+    String headerPrefixFirst() default ""; // TODO document these, 'cause I have no idea atm, what do they do :sweat_smile:
 
     String headerCommentPrefix() default "";
 

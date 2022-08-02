@@ -31,6 +31,19 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * AutoCreate is used across Icicle to mark the beans as Icicle-managed ones.
+ * These beans will be initialized, and proxied by the {@link net.iceyleagons.icicle.core.beans.BeanManager}.
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
+ * @since Aug. 25, 2021
+ *
+ * @see net.iceyleagons.icicle.core.beans.BeanManager
+ * @see net.iceyleagons.icicle.core.beans.DefaultBeanManager
+ * @see net.iceyleagons.icicle.core.proxy.BeanProxyHandler
+ * @see net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler
+ */
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface AutoCreate {

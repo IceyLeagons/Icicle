@@ -32,6 +32,20 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * In an application ConfigurationDrivers are responsible for implementing different configuration types.
+ *
+ * These drivers should all implement {@link net.iceyleagons.icicle.core.configuration.Configuration}.
+ * The {@link Config}s method will be routed to these methods using the {@link net.iceyleagons.icicle.core.proxy.BeanProxyHandler}.
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Jul. 19, 2022
+ * @see Config
+ * @see net.iceyleagons.icicle.core.configuration.Configuration
+ * @see net.iceyleagons.icicle.core.proxy.BeanProxyHandler
+ * @see AutoCreate
+ */
 @AutoCreate
 @Target(TYPE)
 @Retention(RUNTIME)

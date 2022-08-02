@@ -32,6 +32,20 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * In an application services are responsible for handling the actual logic of the application.
+ *
+ * The services can only be applied to classes, to mark them as a provider. From then, all the interfaces that are implemented by that class can be autowired
+ * standalone, and the auto-wiring logic will inject that implementation.
+ *
+ * Please note, that an interface can only have one implementation (provider). To have multiple ones, use this annotation in conjunction with @{@link net.iceyleagons.icicle.core.annotations.Qualifier}
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Aug. 25, 2021
+ * @see net.iceyleagons.icicle.core.annotations.Qualifier
+ * @see AutoCreate
+ */
 @AutoCreate
 @Target(TYPE)
 @Retention(RUNTIME)
