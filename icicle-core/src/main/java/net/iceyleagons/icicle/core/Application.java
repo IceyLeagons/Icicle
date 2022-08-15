@@ -49,15 +49,38 @@ public interface Application {
      */
     void shutdown();
 
+    /**
+     * @return the service provider which was provided to this application.
+     * @see GlobalServiceProvider
+     */
     GlobalServiceProvider getGlobalServiceProvider();
 
+    /**
+     * @return the bean manager used by this application.
+     * @see BeanManager
+     */
     BeanManager getBeanManager();
 
+    /**
+     * @return the environment in which this application was set up.
+     * @see ConfigurationEnvironment
+     */
     ConfigurationEnvironment getConfigurationEnvironment();
 
+    /**
+     * @return the instance of {@link org.reflections.Reflections} used by this application.
+     * @see Reflections
+     */
     Reflections getReflections();
 
+    /**
+     * @return the execution handler used by this application.
+     * @see ExecutionHandler
+     */
     ExecutionHandler getExecutionHandler();
 
+    /**
+     * @return the name of the application
+     */
     String getName();
 }

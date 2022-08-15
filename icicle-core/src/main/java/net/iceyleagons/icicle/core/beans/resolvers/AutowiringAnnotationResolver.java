@@ -29,11 +29,45 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 
+/**
+ * An AutowiringAnnotationResolver is basically a registry for all {@link AutowiringAnnotationHandler}s.
+ * This is what the core calls, and this is what routes the request to the appropriate handler.
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
+ * @since Aug. 27, 2021
+ * @see AutowiringAnnotationHandler
+ */
 public interface AutowiringAnnotationResolver {
 
-    @Nullable <T> T getValueForAnnotation(Class<? extends Annotation> annotationType, Annotation annotation, Class<T> wantedType);
+    /**
+     * Finds the appropriate {@link AutowiringAnnotationHandler} and calls it's {@link AutowiringAnnotationHandler#getValueForAnnotation(Annotation, Class)}
+     *
+     * @param annotationType the type of the annotation 
+     * @param annotation the annotation
+     * @param wantedType the required type class (parameter's type)
+     * @param <T> the required type
+     * @return the value or null
+     * @see Nullable
+     * @see AutowiringAnnotationHandler
+     * @see AutowiringAnnotationHandler#getValueForAnnotation(Annotation, Class) 
+     */
+    @Nullable
+    <T> T getValueForAnnotation(Class<? extends Annotation> annotationType, Annotation annotation, Class<T> wantedType);
 
+    /**
+     * Registers a new {@link AutowiringAnnotationHandler}.
+     *
+     * @param handler the handler to register
+     */
     void registerAutowiringAnnotationHandler(AutowiringAnnotationHandler handler);
 
-    boolean has(Class<?> type);
+    /**
+     * Checks whether the supplied annotationType has an {@link AutowiringAnnotationHandler} linked to it,
+     * aka. if it's registered.
+     *
+     * @param annotationType the annotation type
+     * @return true if the annotation is registered
+     */
+    boolean has(Class<?> annotationType);
 }

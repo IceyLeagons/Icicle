@@ -22,20 +22,11 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.exceptions;
-
 /**
+ * This package contains all the logic for configurations.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jul. 19, 2022
+ * @since Aug. 26, 2021
  */
-public class ConfigDelegationException extends Exception {
-
-    public ConfigDelegationException(String msg) {
-        super(msg);
-    }
-
-    public ConfigDelegationException(String msg, Throwable t) {
-        super(msg, t);
-    }
-}
+package net.iceyleagons.icicle.core.configuration;

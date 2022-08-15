@@ -30,8 +30,11 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Classes that implement this interface are responsible for the scheduling and parallelization of tasks.
+ * Abstraction layer present for easier implementation in other environments.
  *
  * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Sep. 25, 2021
  */
 public interface ExecutionHandler {
 

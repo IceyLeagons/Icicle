@@ -22,20 +22,15 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.exceptions;
+package com.otherpackage.test;
+
+import net.iceyleagons.icicle.core.annotations.service.Service;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jul. 19, 2022
+ * @since Aug. 14, 2022
  */
-public class ConfigDelegationException extends Exception {
-
-    public ConfigDelegationException(String msg) {
-        super(msg);
-    }
-
-    public ConfigDelegationException(String msg, Throwable t) {
-        super(msg, t);
-    }
+@Service
+public class ForeignServiceImpl implements ForeignService {
 }

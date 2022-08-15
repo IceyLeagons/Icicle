@@ -49,6 +49,7 @@ public interface DependencyTreeResolver {
      * @param currentBean the bean to start from
      * @return the dependency tree
      * @throws CircularDependencyException if the dependencies in the tree form a circle somewhere
+     * @throws UnsatisfiedDependencyException if a bean type is required, but no instance of it found inside the registry (and cannot be created)
      */
     LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException, UnsatisfiedDependencyException;
 
@@ -61,6 +62,7 @@ public interface DependencyTreeResolver {
      * @param method the bean to start from (setter)
      * @return the dependency tree
      * @throws CircularDependencyException if the dependencies in the tree form a circle somewhere
+     * @throws UnsatisfiedDependencyException if a bean type is required, but no instance of it found inside the registry (and cannot be created)
      */
     LinkedList<Class<?>> resolveDependencyTree(Method method) throws CircularDependencyException, UnsatisfiedDependencyException;
 }

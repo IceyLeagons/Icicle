@@ -26,6 +26,7 @@ package net.iceyleagons.icicle.core.configuration.driver;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.Setter;
 import net.iceyleagons.icicle.core.annotations.config.ConfigField;
 import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
@@ -39,26 +40,40 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
+ * Skeleton for all {@link net.iceyleagons.icicle.core.annotations.config.ConfigurationDriver}s, with some utility methods.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jul. 19, 2022
  */
+@Setter
 public abstract class ConfigDriver implements Configuration {
 
     protected AdvancedFile configFile;
     protected Object origin;
     protected Class<?> originType;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Class<?> declaringType() {
         return this.originType;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<Map.Entry<String, Object>> getValues() {
         return getValues(getFields());
     }
 
+
+    // TODO: This could be improved, see ConfigDelegator for information about it.
+    /**
+     * @return a fresh new instance of the driver.
+     */
     protected abstract ConfigDriver newInstance();
 
     protected void reloadValues() {

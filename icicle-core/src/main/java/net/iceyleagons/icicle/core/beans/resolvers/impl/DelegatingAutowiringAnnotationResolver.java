@@ -32,10 +32,20 @@ import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
+/**
+ * Default implementation of {@link AutowiringAnnotationResolver}
+ *
+ * @version 1.5.0
+ * @author TOTHTOMI
+ * @since Aug. 28, 2021
+ */
 public class DelegatingAutowiringAnnotationResolver implements AutowiringAnnotationResolver {
 
     private final Map<Class<? extends Annotation>, AutowiringAnnotationHandler> handlers = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void registerAutowiringAnnotationHandler(AutowiringAnnotationHandler handler) {
         for (Class<? extends Annotation> supportedAnnotation : handler.getSupportedAnnotations()) {
@@ -43,11 +53,17 @@ public class DelegatingAutowiringAnnotationResolver implements AutowiringAnnotat
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean has(Class<?> type) {
         return handlers.containsKey(type);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T> T getValueForAnnotation(Class<? extends Annotation> annotationType, Annotation annotation, Class<T> wantedType) {
         return handlers.containsKey(annotationType) ? handlers.get(annotationType).getValueForAnnotation(annotation, wantedType) : null;

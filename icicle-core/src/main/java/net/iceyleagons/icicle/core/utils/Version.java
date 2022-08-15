@@ -29,18 +29,19 @@ import lombok.NonNull;
 
 /**
  * Taken from <a href="https://gist.github.com/brianguertin/ada4b65c6d1c4f6d3eee3c12b6ce021b">this github gist</a>.
+ *
+ * @author brianguertin
  */
 public class Version implements Comparable<Version> {
 
-    @NonNull
-    public final int[] numbers;
     @Getter
     private final String version;
+    public final int[] numbers;
 
     public Version(@NonNull String version) {
         this.version = version;
 
-        final String split[] = version.split("-")[0].split("\\.");
+        final String[] split = version.split("-")[0].split("\\.");
         numbers = new int[split.length];
         for (int i = 0; i < split.length; i++)
             numbers[i] = Integer.parseInt(split[i]);

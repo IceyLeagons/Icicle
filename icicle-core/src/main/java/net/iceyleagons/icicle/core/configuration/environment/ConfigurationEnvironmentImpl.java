@@ -36,7 +36,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
-
+/**
+ * Default implementation of {@link ConfigurationEnvironment}
+ */
 public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
 
     private final Map<Class<?>, Configuration> configurations = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());

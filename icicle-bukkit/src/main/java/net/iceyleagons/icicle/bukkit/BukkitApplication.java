@@ -43,7 +43,8 @@ public class BukkitApplication extends AbstractIcicleApplication {
 
     @SneakyThrows
     public BukkitApplication(String rootPackage, JavaPlugin javaPlugin) {
-        super(rootPackage, new BukkitExecutionHandler(javaPlugin), new BukkitServiceProvider(), javaPlugin.getDataFolder());
+        super(rootPackage, new BukkitExecutionHandler(javaPlugin), new BukkitServiceProvider(), javaPlugin.getDataFolder(),
+                javaPlugin.getServer().getPluginManager().getClass().getClassLoader(), javaPlugin.getClass().getClassLoader());
         this.javaPlugin = javaPlugin;
 
         super.getBeanManager().getBeanRegistry().registerBean(Server.class, javaPlugin.getServer()); //removed due to the introduction of GlobalBeanRegistry

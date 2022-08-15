@@ -68,7 +68,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "net.iceyleagons.icicle-gradle"
             artifactId = "net.iceyleagons.icicle-gradle.gradle.plugin"
-            version = "1.10.0"
+            version = "1.10.1"
 
             from(components["java"])
         }

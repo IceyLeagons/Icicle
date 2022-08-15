@@ -30,11 +30,13 @@
 
 plugins {
     java
-    alias(libs.plugins.icicle)
+    id("maven-publish")
+    id("net.iceyleagons.icicle-gradle") version "1.10.1"
+    // alias(libs.plugins.icicle)
 }
 
 group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
+version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -51,12 +53,13 @@ dependencies {
     compileOnly(libs.fastutil)
     compileOnly(minecraft.spigotApi(libs.versions.spigot.get()))
 
-    shadow(project(":icicle-gui"))
-    shadow(project(":icicle-core"))
-    shadow(project(":icicle-commands"))
-    shadow(project(":icicle-protocol"))
-    shadow(project(":icicle-nms"))
-    compileOnly(project(":icicle-utilities"))
+    implementation(project(":icicle-gui"))
+    implementation(project(":icicle-core"))
+    implementation(project(":icicle-commands"))
+    implementation(project(":icicle-protocol"))
+    implementation(project(":icicle-nms"))
+    implementation(libs.reflections)
+    implementation(project(":icicle-utilities"))
 
     testImplementation(libs.mockbukkit)
     testImplementation(libs.yaml)
@@ -71,10 +74,35 @@ dependencies {
     testImplementation(libs.bundles.junit)
 }
 
+publishing {
+    repositories {
+        maven {
+            credentials {
+                username = project.properties["ilSnapshotUser"].toString()
+                password = project.properties["ilSnapshotPwd"].toString()
+            }
+            url = uri("https://mvn.iceyleagons.net/snapshots")
+        }
+    }
+    publications {
+        create<MavenPublication>("Maven") {
+            groupId = "net.iceyleagons"
+            artifactId = "icicle-bukkit"
+            version = "1.0.0-SNAPSHOT"
+            from(components["java"])
+        }
+    }
+}
+
 icicle {
     modifyPluginYml = false
 
 }
+
+tasks.withType<Jar> {
+    from(configurations.runtimeClasspath.map { config -> config.map { if (it.isDirectory) it else zipTree(it) } })
+}
+
 
 tasks.test {
     useJUnitPlatform()

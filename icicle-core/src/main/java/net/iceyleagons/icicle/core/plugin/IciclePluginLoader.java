@@ -81,7 +81,7 @@ public class IciclePluginLoader {
 
         acl.loadLibrary(meta.getModuleFile());
         Icicle.ICICLE_REFLECTIONS.merge(new Reflections(acl.getOrigin()));
-        Icicle.ICICLE_REFLECTIONS.expandSuperTypes();
+        //Icicle.ICICLE_REFLECTIONS.expandSuperTypes();
     }
 
 

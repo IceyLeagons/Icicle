@@ -21,5 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
+/**
+ * This package is responsible for the bean management (IoC) of Icicle (includes registries, resolvers and managers).
+ *
+ * @author TOTHTOMI
+ * @version 2.0.0
+ * @since Aug. 28, 2021
+ */
 package net.iceyleagons.icicle.core.beans;

@@ -25,6 +25,8 @@
 package net.iceyleagons.icicle.core;
 
 import lombok.SneakyThrows;
+import net.iceyleagons.icicle.core.annotations.AutoCreate;
+import net.iceyleagons.icicle.core.annotations.service.GlobalService;
 import net.iceyleagons.icicle.core.beans.BeanManager;
 import net.iceyleagons.icicle.core.beans.DefaultBeanManager;
 import net.iceyleagons.icicle.core.beans.GlobalServiceProvider;
@@ -35,6 +37,10 @@ import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,9 +83,17 @@ public abstract class AbstractIcicleApplication implements Application {
      * @param configRoot            the root folder, where the configs will be placed
      */
     @SneakyThrows
-    public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler, GlobalServiceProvider globalServiceProvider, File configRoot) {
+    public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler, GlobalServiceProvider globalServiceProvider, File configRoot, ClassLoader... classLoaders) {
         PerformanceLog.begin(this, "Application Creation", AbstractIcicleApplication.class);
-        this.reflections = new Reflections(rootPackage).merge(Icicle.ICICLE_REFLECTIONS);
+        System.out.println("Root package: " + rootPackage);
+        this.reflections = new Reflections(
+                new ConfigurationBuilder()
+                        .setScanners(Scanners.values())
+                        .setExpandSuperTypes(false)
+                        .filterInputsBy(new FilterBuilder().includePackage(rootPackage).includePackage("net.iceyleagons.icicle"))
+                        .setUrls(ClasspathHelper.forPackage(rootPackage, classLoaders))
+        ).merge(Icicle.ICICLE_REFLECTIONS);
+
         this.beanManager = new DefaultBeanManager(this);
         this.executionHandler = executionHandler;
         this.globalServiceProvider = globalServiceProvider;
@@ -93,6 +107,11 @@ public abstract class AbstractIcicleApplication implements Application {
         PerformanceLog.end(this);
     }
 
+    protected void onConstructed() {}
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void start() throws Exception {
         LOGGER.info("Booting Icicle application named: " + getName());
@@ -103,6 +122,9 @@ public abstract class AbstractIcicleApplication implements Application {
         PerformanceLog.end(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void shutdown() {
         LOGGER.info("Shutting down Icicle application named: " + getName());
@@ -110,11 +132,8 @@ public abstract class AbstractIcicleApplication implements Application {
         this.configurationEnvironment.cleanUp();
     }
 
-    protected void onConstructed() {
-    }
-
     /**
-     * @return the bean manager used by this application.
+     * {@inheritDoc}
      */
     @Override
     public BeanManager getBeanManager() {
@@ -122,7 +141,7 @@ public abstract class AbstractIcicleApplication implements Application {
     }
 
     /**
-     * @return the environment in which this application was set up.
+     * {@inheritDoc}
      */
     @Override
     public ConfigurationEnvironment getConfigurationEnvironment() {
@@ -130,7 +149,7 @@ public abstract class AbstractIcicleApplication implements Application {
     }
 
     /**
-     * @return the instance of {@link org.reflections.Reflections} used by this application.
+     * {@inheritDoc}
      */
     @Override
     public Reflections getReflections() {
@@ -138,7 +157,7 @@ public abstract class AbstractIcicleApplication implements Application {
     }
 
     /**
-     * @return the execution handler used by this application.
+     * {@inheritDoc}
      */
     @Override
     public ExecutionHandler getExecutionHandler() {
@@ -146,7 +165,7 @@ public abstract class AbstractIcicleApplication implements Application {
     }
 
     /**
-     * @return the service provider which was provided to this application.
+     * {@inheritDoc}
      */
     @Override
     public GlobalServiceProvider getGlobalServiceProvider() {

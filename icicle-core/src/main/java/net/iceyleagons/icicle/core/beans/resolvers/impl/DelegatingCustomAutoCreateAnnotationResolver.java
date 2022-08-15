@@ -32,10 +32,20 @@ import net.iceyleagons.icicle.core.beans.resolvers.CustomAutoCreateAnnotationRes
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
+/**
+ * Default implementation of {@link CustomAutoCreateAnnotationResolver}
+ *
+ * @version 1.5.0
+ * @author TOTHTOMI
+ * @since Aug. 28, 2021
+ */
 public class DelegatingCustomAutoCreateAnnotationResolver implements CustomAutoCreateAnnotationResolver {
 
     private final Map<Class<? extends Annotation>, CustomAutoCreateAnnotationHandler> handlers = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void registerCustomAutoCreateAnnotationHandler(CustomAutoCreateAnnotationHandler handler) {
         for (Class<? extends Annotation> supportedAnnotation : handler.getSupportedAnnotations()) {
@@ -43,6 +53,9 @@ public class DelegatingCustomAutoCreateAnnotationResolver implements CustomAutoC
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreated(Object bean, Class<?> type) throws Exception {
         for (Annotation annotation : type.getAnnotations()) {
@@ -54,6 +67,9 @@ public class DelegatingCustomAutoCreateAnnotationResolver implements CustomAutoC
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean has(Class<?> type) {
         return handlers.containsKey(type);

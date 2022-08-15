@@ -60,6 +60,10 @@ public final class Defaults {
         );
     }
 
+    /**
+     * @param name of the primitive (basically the keyword)
+     * @return the class of the primitive
+     */
     public static Class<?> getPrimitiveClassFromName(String name) {
         return CLASSES.getOrDefault(name.toLowerCase(), null);
     }

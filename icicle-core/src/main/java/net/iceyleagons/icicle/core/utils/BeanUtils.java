@@ -80,12 +80,19 @@ public final class BeanUtils {
         return set;
     }
 
-    public static void invokePostConstructor(Class<?> clazz, Object parent) {
+    /**
+     * This method will call all @{@link PostConstruct} marked annotations inside a bean.
+     * It uses streams, due to this: exceptions thrown during this will only be printed out, not thrown.
+     *
+     * @param clazz the class of the bean (required due to proxying)
+     * @param bean the bean to call
+     */
+    public static void invokePostConstructor(Class<?> clazz, Object bean) {
         Arrays.stream(clazz.getDeclaredMethods())
                 .filter(m -> m.isAnnotationPresent(PostConstruct.class))
                 .forEach(m -> {
                     try {
-                        m.invoke(parent);
+                        m.invoke(bean);
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     }

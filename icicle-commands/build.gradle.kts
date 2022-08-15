@@ -30,11 +30,12 @@
 
 plugins {
     java
+    id("maven-publish")
     alias(libs.plugins.icicle)
 }
 
 group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
+version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -51,6 +52,26 @@ dependencies {
     compileOnly(minecraft.spigotApi(libs.versions.spigot.get()))
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
+}
+
+publishing {
+    repositories {
+        maven {
+            credentials {
+                username = project.properties["ilSnapshotUser"].toString()
+                password = project.properties["ilSnapshotPwd"].toString()
+            }
+            url = uri("https://mvn.iceyleagons.net/snapshots")
+        }
+    }
+    publications {
+        create<MavenPublication>("Maven") {
+            groupId = "net.iceyleagons"
+            artifactId = "icicle-commands"
+            version = "1.0.0-SNAPSHOT"
+            from(components["java"])
+        }
+    }
 }
 
 icicle {

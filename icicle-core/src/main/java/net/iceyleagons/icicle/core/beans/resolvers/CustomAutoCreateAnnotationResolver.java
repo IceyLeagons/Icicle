@@ -24,13 +24,46 @@
 
 package net.iceyleagons.icicle.core.beans.resolvers;
 
+import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 
+/**
+ * A CustomAutoCreateAnnotationResolver is basically a registry for all {@link CustomAutoCreateAnnotationHandler}s.
+ * This is what the core calls, and this is what routes the request to the appropriate handler.
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
+ * @since Aug. 28, 2021
+ * @see AutowiringAnnotationHandler
+ */
 public interface CustomAutoCreateAnnotationResolver {
 
+    /**
+     * Registers a new {@link CustomAutoCreateAnnotationHandler}.
+     *
+     * @param handler the handler to register
+     */
     void registerCustomAutoCreateAnnotationHandler(CustomAutoCreateAnnotationHandler handler);
 
+    /**
+     * This method is called after the bean has been initialized and auto-wired.
+     * This resolver will route this call to the appropriate {@link CustomAutoCreateAnnotationHandler#onCreated(Object, Class)}
+     *
+     * The supplied type must be used instead of calling {@link #getClass()} on the bean, due to proxying.
+     * The type is the actual type of the bean, while the bean's class can be proxied.
+     *
+     * @param bean the bean
+     * @param type the actual type of the bean. (supplied due to proxying)
+     * @throws Exception if something is not right for the handler (ex. bean does not implement an interface)
+     */
     void onCreated(Object bean, Class<?> type) throws Exception;
 
-    boolean has(Class<?> type);
+    /**
+     * Checks whether the supplied annotationType has an {@link CustomAutoCreateAnnotationHandler} linked to it,
+     * aka. if it's registered.
+     *
+     * @param annotationType the annotation type
+     * @return true if the annotation is registered
+     */
+    boolean has(Class<?> annotationType);
 }

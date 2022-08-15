@@ -32,6 +32,7 @@ import net.iceyleagons.icicle.utilities.file.FileUtils;
 import net.iceyleagons.icicle.utilities.lang.Experimental;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.reflections.Reflections;
+import org.reflections.util.ConfigurationBuilder;
 
 import java.io.File;
 import java.net.URLClassLoader;
@@ -86,7 +87,7 @@ public class MavenLibraryLoader {
 
         System.out.println("Loading in " + dependency.getName() + " from " + f);
         acl.loadLibrary(f);
-        Icicle.ICICLE_REFLECTIONS.merge(new Reflections(acl.getOrigin()));
-        Icicle.ICICLE_REFLECTIONS.expandSuperTypes();
+        Icicle.ICICLE_REFLECTIONS.merge(new Reflections(new ConfigurationBuilder().addClassLoaders(acl.getOrigin())));
+        //Icicle.ICICLE_REFLECTIONS.expandSuperTypes();
     }
 }

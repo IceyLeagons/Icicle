@@ -59,6 +59,13 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
     private final AutowiringAnnotationResolver autowiringAnnotationResolver;
     private final MergedAnnotationResolver autoCreateResolver;
 
+    /**
+     * Creates a new instance of the resolver.
+     *
+     * @param beanRegistry the {@link BeanRegistry} the {@link net.iceyleagons.icicle.core.beans.BeanManager} uses
+     * @param autowiringAnnotationResolver the {@link AutowiringAnnotationResolver} the {@link net.iceyleagons.icicle.core.beans.BeanManager} uses
+     * @param autoCreateResolver the {@link MergedAnnotationResolver} the {@link net.iceyleagons.icicle.core.beans.BeanManager} uses
+     */
     public DelegatingDependencyTreeResolver(BeanRegistry beanRegistry, AutowiringAnnotationResolver autowiringAnnotationResolver, MergedAnnotationResolver autoCreateResolver) {
         this.beanRegistry = beanRegistry;
         this.autoCreateResolver = autoCreateResolver;
@@ -66,34 +73,17 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
     }
 
     /**
-     * Formats a human-friendly "graph" of the dependency circle.
+     * Handles parameters for the DFS algorithm.
+     * This abstraction is present to support multiple auto-wiring types (and to clean up code).
      *
-     * @param rawTree the dependencies that form a circle
-     * @param start   the starting point of the circle
-     * @param end     the ending point of the circle (the one that references the starting point --> making a circle)
-     * @return the formatted "graph" to use in {@link CircularDependencyException}
+     * @param dependencies the parameters to handle
+     * @param stack the stack to use
+     * @param tree the tree to use
+     * @param bean the type of the current bean (the bean that needs to be autowired)
+     *
+     * @throws UnsatisfiedDependencyException if a bean type is required, but no instance of it found inside the registry (and cannot be created)
+     * @throws CircularDependencyException if the dependency tree forms a circle
      */
-    private static String getCycleString(LinkedList<QualifierKey> rawTree, Class<?> start, Class<?> end) {
-        LinkedList<Class<?>> tree = rawTree.stream().map(QualifierKey::getClazz).collect(Collectors.toCollection(LinkedList::new));
-
-        int startIndex = tree.indexOf(start);
-        int endIndex = tree.indexOf(end);
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-
-        stringBuilder.append("\n\t\t┌─────┐").append("\n\r");
-        stringBuilder.append("\t\t│     ↓").append("\n\r");
-        for (int i = startIndex; i <= endIndex; i++) {
-            stringBuilder.append("\t\t│   ").append(tree.get(i).getName()).append("\n\r");
-            stringBuilder.append("\t\t│     ↓").append("\n\r");
-        }
-
-        stringBuilder.append("\t\t└─────┘").append("\n\r");
-
-        return stringBuilder.toString();
-    }
-
     private void handleDependencies(Parameter[] dependencies, Stack<Class<?>> stack, LinkedList<QualifierKey> tree, Class<?> bean) throws UnsatisfiedDependencyException, CircularDependencyException {
         x:
         for (Parameter param : dependencies) {
@@ -140,21 +130,14 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         }
     }
 
-    @Override
-    public LinkedList<Class<?>> resolveDependencyTree(Method method) throws CircularDependencyException, UnsatisfiedDependencyException {
-        logger.debug("Resolving dependency tree for bean-type: {}", method.getDeclaringClass().getName());
-
-        final LinkedList<QualifierKey> tree = new LinkedList<>();
-        final Stack<Class<?>> stack = new Stack<>();
-        final Parameter[] params = method.getParameters();
-
-        handleDependencies(params, stack, tree, method.getDeclaringClass());
-        resolveDependencyTreeForBean(tree, stack);
-
-        return ListUtils.reverseLinkedList(tree)
-                .stream().map(QualifierKey::getClazz).collect(Collectors.toCollection(LinkedList::new));
-    }
-
+    /**
+     * The actual DFS algorithm (the resolver).
+     *
+     * @param tree the tree to use
+     * @param stack the stack to use
+     * @throws UnsatisfiedDependencyException if a bean type is required, but no instance of it found inside the registry (and cannot be created)
+     * @throws CircularDependencyException if the dependency tree forms a circle
+     */
     private void resolveDependencyTreeForBean(LinkedList<QualifierKey> tree, Stack<Class<?>> stack) throws UnsatisfiedDependencyException, CircularDependencyException {
         while (!stack.isEmpty()) {
             Class<?> bean = stack.pop();
@@ -170,6 +153,24 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
      * {@inheritDoc}
      */
     @Override
+    public LinkedList<Class<?>> resolveDependencyTree(Method method) throws CircularDependencyException, UnsatisfiedDependencyException {
+        logger.debug("Resolving dependency tree for method {} inside class: {}", method.getName(), method.getDeclaringClass().getName());
+
+        final LinkedList<QualifierKey> tree = new LinkedList<>();
+        final Stack<Class<?>> stack = new Stack<>();
+        final Parameter[] params = method.getParameters();
+
+        handleDependencies(params, stack, tree, method.getDeclaringClass()); // We fill in the stack with the methods parameters first
+        resolveDependencyTreeForBean(tree, stack); // Then we call the DFS algorithm
+
+        return ListUtils.reverseLinkedList(tree) // TODO maybe we can optimise this??
+                .stream().map(QualifierKey::getClazz).collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException, UnsatisfiedDependencyException {
         logger.debug("Resolving dependency tree for bean-type: {}", currentBean.getName());
 
@@ -178,12 +179,41 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
 
         QualifierKey cq = new QualifierKey(currentBean, QualifierKey.getQualifier(currentBean));
         tree.add(cq);
-        stack.add(currentBean);
+        stack.add(currentBean); // we add our bean (starting point) to the stack first
 
-        resolveDependencyTreeForBean(tree, stack);
-        tree.remove(cq);
+        resolveDependencyTreeForBean(tree, stack); // then we call the DFS algorithm
+        tree.remove(cq); // we remove the currentBean from the tree, as it would cause problems
 
         return ListUtils.reverseLinkedList(tree)
                 .stream().map(QualifierKey::getClazz).collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Formats a human-friendly "graph" of the dependency circle.
+     *
+     * @param rawTree the dependencies that form a circle
+     * @param start   the starting point of the circle
+     * @param end     the ending point of the circle (the one that references the starting point --> making a circle)
+     * @return the formatted "graph" to use in {@link CircularDependencyException}
+     */
+    private static String getCycleString(LinkedList<QualifierKey> rawTree, Class<?> start, Class<?> end) {
+        LinkedList<Class<?>> tree = rawTree.stream().map(QualifierKey::getClazz).collect(Collectors.toCollection(LinkedList::new));
+
+        int startIndex = tree.indexOf(start);
+        int endIndex = tree.indexOf(end);
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+
+        stringBuilder.append("\n\t\t┌─────┐").append("\n\r");
+        stringBuilder.append("\t\t│     ↓").append("\n\r");
+        for (int i = startIndex; i <= endIndex; i++) {
+            stringBuilder.append("\t\t│   ").append(tree.get(i).getName()).append("\n\r");
+            stringBuilder.append("\t\t│     ↓").append("\n\r");
+        }
+
+        stringBuilder.append("\t\t└─────┘").append("\n\r");
+
+        return stringBuilder.toString();
     }
 }

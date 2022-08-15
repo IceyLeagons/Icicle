@@ -32,6 +32,9 @@ import net.iceyleagons.icicle.core.utils.Kotlin;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -66,15 +69,20 @@ public class Icicle {
     /**
      * The instance of our Reflections.
      */
-    public static final Reflections ICICLE_REFLECTIONS = new Reflections("net.iceyleagons.icicle", ICICLE_CLASS_LOADERS);
+    public static final Reflections ICICLE_REFLECTIONS = new Reflections(
+            new ConfigurationBuilder()
+                    .setUrls(ClasspathHelper.forPackage("net.iceyleagons.icicle"))
+                    .setScanners(Scanners.values()).setExpandSuperTypes(true)
+                    .addClassLoaders(Icicle.class.getClassLoader(), ClassLoader.getPlatformClassLoader())
+    );
     // TODO: Gradle plugin --> icicle.yml and the core searches for its dependencies rather than this \/
     public static final MavenDependency[] CORE_DEPENDENCIES = new MavenDependency[]{
             new MavenDependency("net.bytebuddy", "byte-buddy", "1.11.15", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("net.bytebuddy", "byte-buddy-agent", "1.11.15", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("me.carleslc.Simple-YAML", "Simple-Yaml", "1.8", MavenLibraryLoader.MAVEN_JITPACK),
             new MavenDependency("ch.qos.logback", "logback-core", "1.2.9", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
-            new MavenDependency("org.jetbrains.kotlin", "kotlin-reflect", "1.5.31", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
-            new MavenDependency("org.jetbrains.kotlin", "kotlin-stdlib", "1.6.20", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
+            new MavenDependency("org.jetbrains.kotlin", "kotlin-reflect", "1.7.10", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
+            new MavenDependency("org.jetbrains.kotlin", "kotlin-stdlib", "1.7.10", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("it.unimi.dsi", "fastutil-core", "8.5.8", MavenLibraryLoader.MAVEN_CENTRAL_REPO)
     };
     /**

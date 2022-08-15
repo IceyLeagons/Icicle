@@ -33,7 +33,7 @@ import java.lang.annotation.Annotation;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
-
+import static org.reflections.scanners.Scanners.*;
 /**
  * The MergedAnnotationResolver is responsible for searching all the annotations (using DFS), that annotate an annotation specified in the constructor.
  * This way we can get classes, that have for ex. @{@link AutoCreate} in their annotation tree somewhere.
@@ -60,6 +60,8 @@ public class MergedAnnotationResolver {
         this.reflections = reflections;
 
         this.childrenAnnotations = getChildren(reflections);
+        //System.out.println("Reflections working with annotations: [" + this.childrenAnnotations.stream().map(Class::getName).collect(Collectors.joining(", ")) + "]");
+
         this.childrenAnnotations.add(annotation); //we want to add the "root" annotation as well, because non-annotation types may annotate it
     }
 
@@ -73,11 +75,22 @@ public class MergedAnnotationResolver {
 
         for (Class<? extends Annotation> childrenAnnotation : childrenAnnotations) {
             result.addAll(
-                    reflections.getTypesAnnotatedWith(childrenAnnotation)
+                    reflections.get(TypesAnnotated.with(childrenAnnotation).asClass())
                             .stream().filter(c -> !c.isAnnotation()).collect(Collectors.toSet())
             );
         }
 
+        /*
+        System.out.println("[!!!] Found AutoCreate instances: ");
+        result.forEach(s -> {
+            System.out.println(s.getName());
+        });
+        System.out.println("=======================================");
+        System.out.println();
+        System.out.println();
+
+
+         */
         return result;
     }
 
@@ -125,7 +138,7 @@ public class MergedAnnotationResolver {
             if (!children.contains(current)) {
                 children.add(current);
 
-                for (Class<?> aClass : reflections.getTypesAnnotatedWith(current)) {
+                for (Class<?> aClass : reflections.get(TypesAnnotated.with(current).asClass())) {
                     if (!children.contains(aClass) && aClass.isAnnotation()) {
                         stack.add((Class<? extends Annotation>) aClass);
                     }

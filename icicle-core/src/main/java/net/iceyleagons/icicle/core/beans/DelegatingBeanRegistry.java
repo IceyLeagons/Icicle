@@ -119,7 +119,7 @@ public class DelegatingBeanRegistry implements BeanRegistry {
 
         if (!isRegistered(type, qualifier)) {
             beans.put(new QualifierKey(type, qualifier), object);
-            // System.out.printf("Registered bean of type: %s. Qualifier: %s\n", type.getName(), qualifier);
+            //System.out.printf("Registered bean of type: %s. Qualifier: %s\n", type.getName(), qualifier);
             logger.debug("Registered bean of type: {}. Qualifier: {}", type.getName(), qualifier);
             return;
         }

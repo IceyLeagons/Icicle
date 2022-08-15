@@ -46,6 +46,11 @@ public class DelegatingInjectionParameterResolver implements InjectionParameterR
 
     private final AutowiringAnnotationResolver autowiringAnnotationResolver;
 
+    /**
+     * Creates a new instance of this resolver.
+     *
+     * @param autowiringAnnotationResolver is the {@link AutowiringAnnotationResolver} the {@link net.iceyleagons.icicle.core.beans.BeanManager} uses.
+     */
     public DelegatingInjectionParameterResolver(AutowiringAnnotationResolver autowiringAnnotationResolver) {
         this.autowiringAnnotationResolver = autowiringAnnotationResolver;
     }

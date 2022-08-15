@@ -104,17 +104,18 @@ public class DefaultBeanManager implements BeanManager {
         this.beanRegistry.registerBean(BeanRegistry.class, beanRegistry);
         this.beanRegistry.registerBean(DelegatingBeanRegistry.class, beanRegistry);
 
+        this.autowiringAnnotationResolver = new DelegatingAutowiringAnnotationResolver();
+        this.customAutoCreateAnnotationResolver = new DelegatingCustomAutoCreateAnnotationResolver();
+
         PerformanceLog.begin(application, "AutoCreate Ann. Res. Creation & Scanning", DefaultBeanManager.class);
         this.autoCreationAnnotationResolver = new MergedAnnotationResolver(AutoCreate.class, reflections);
         PerformanceLog.end(application);
-
-        this.autowiringAnnotationResolver = new DelegatingAutowiringAnnotationResolver();
-        this.customAutoCreateAnnotationResolver = new DelegatingCustomAutoCreateAnnotationResolver();
 
         this.dependencyTreeResolver = new DelegatingDependencyTreeResolver(this.beanRegistry, this.autowiringAnnotationResolver, this.autoCreationAnnotationResolver);
 
         this.beanProxyHandler = new ByteBuddyProxyHandler();
         this.constructorParameterResolver = new DelegatingInjectionParameterResolver(autowiringAnnotationResolver);
+
     }
 
     /**

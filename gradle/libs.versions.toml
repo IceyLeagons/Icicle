@@ -1,7 +1,7 @@
 [versions]
 kotlin = "1.7.0"
 icicle = "1.10.0"
-reflections = "0.9.12"
+reflections = "0.10.2"
 spigot = "1.18.2"
 simple-yaml = "1.8"
 jetbrains-annotations = "23.0.0"

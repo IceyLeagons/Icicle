@@ -30,11 +30,12 @@
 
 plugins {
     java
+    id("maven-publish")
     alias(libs.plugins.icicle)
 }
 
 group = "net.iceyleagons"
-version = "1.0.0"
+version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -48,7 +49,7 @@ dependencies {
     shadow(project(":icicle-utilities"))
     annotationProcessor(project(":icicle-utilities"))
 
-    implementation(libs.reflections)
+    shadow(libs.reflections)
 
     // FIXME: Try to get rid of this one!
     compileOnly(libs.guava)
@@ -73,6 +74,26 @@ dependencies {
 
 icicle {
     name = "Core"
+}
+
+publishing {
+    repositories {
+        maven {
+            credentials {
+                username = project.properties["ilSnapshotUser"].toString()
+                password = project.properties["ilSnapshotPwd"].toString()
+            }
+            url = uri("https://mvn.iceyleagons.net/snapshots")
+        }
+    }
+    publications {
+        create<MavenPublication>("Maven") {
+            groupId = "net.iceyleagons"
+            artifactId = "icicle-core"
+            version = "1.0.0-SNAPSHOT"
+            from(components["java"])
+        }
+    }
 }
 
 tasks.withType<Test> {
