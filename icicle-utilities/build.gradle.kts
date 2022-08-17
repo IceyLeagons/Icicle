@@ -30,11 +30,12 @@
 
 plugins {
     java
+    id("maven-publish")
     alias(libs.plugins.icicle)
 }
 
 group = "net.iceyleagons"
-version = "0.1-SNAPSHOT"
+version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -54,6 +55,26 @@ dependencies {
 
 icicle {
     name = "Utilities"
+}
+
+publishing {
+    repositories {
+        maven {
+            credentials {
+                username = project.properties["ilSnapshotUser"].toString()
+                password = project.properties["ilSnapshotPwd"].toString()
+            }
+            url = uri("https://mvn.iceyleagons.net/snapshots")
+        }
+    }
+    publications {
+        create<MavenPublication>("Maven") {
+            groupId = "net.iceyleagons"
+            artifactId = "icicle-utilities"
+            version = "1.0.0-SNAPSHOT"
+            from(components["java"])
+        }
+    }
 }
 
 tasks.jar {

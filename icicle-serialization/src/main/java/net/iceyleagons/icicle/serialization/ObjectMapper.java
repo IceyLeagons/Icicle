@@ -26,6 +26,8 @@ package net.iceyleagons.icicle.serialization;
 
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
+import net.iceyleagons.icicle.serialization.annotations.EnumSerialization;
+import net.iceyleagons.icicle.serialization.annotations.SerializeIgnore;
 import net.iceyleagons.icicle.serialization.converters.Convert;
 import net.iceyleagons.icicle.serialization.converters.ConverterAnnotationHandler;
 import net.iceyleagons.icicle.serialization.converters.ValueConverter;
@@ -44,7 +46,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author TOTHTOMI
- * @version 1.0.0
+ * @version 1.1.0
  * @since Jun. 13, 2022
  */
 public class ObjectMapper {
@@ -75,6 +77,15 @@ public class ObjectMapper {
 
     private ObjectValue mapObjectProperty(ObjectValue objectValue, Object parent) {
         Object value = objectValue.getGetter().get(parent);
+        if (objectValue.getAnnotations().containsKey(SerializeIgnore.class)) {
+            IgnoreCondition condition = ((SerializeIgnore) objectValue.getAnnotations().get(SerializeIgnore.class)).value();
+            if (condition == IgnoreCondition.NO_CONDITION) {
+                return null;
+            }
+            if (condition == IgnoreCondition.IF_NULL && value == null) {
+                return null;
+            }
+        }
         Class<?> javaType = objectValue.getJavaType();
         boolean converted = false;
 
@@ -116,50 +127,6 @@ public class ObjectMapper {
         return null;
     }
 
-    private void deMapObjectProperty(ObjectValue objectValue, Object parent) {
-        Object value = objectValue.getGetter().get(parent);
-        Class<?> javaType = objectValue.getJavaType();
-        boolean converted = false;
-
-        if (objectValue.shouldConvert()) {
-            Class<?> conv = ((Convert) objectValue.getAnnotations().get(Convert.class)).converter();
-            for (ValueConverter<?, ?> converter : ConverterAnnotationHandler.REGISTERED_CONVERTERS) {
-                if (converter.supports(javaType) && conv.equals(converter.getClass())) {
-                    final Object result = converter.convert(value, false);
-                    final Class<?> resultClass = result.getClass();
-
-                    if (SerializationUtils.isValuePrimitiveOrString(resultClass)) {
-                        objectValue.getSetter().accept(parent, result);
-                        return;
-                    }
-
-                    value = result;
-                    javaType = resultClass;
-                    converted = true;
-                }
-            }
-            if (!converted) {
-                throw new IllegalStateException("Converter not found. Converter required: " + conv);
-            }
-        }
-
-        if (SerializationUtils.isValuePrimitiveOrString(javaType) && !converted) {
-            objectValue.getSetter().accept(parent, value);
-            return;
-        }
-
-        for (PropertyMapper<?> registeredPropertyMapper : PropertyMapperAnnotationHandler.REGISTERED_PROPERTY_MAPPERS) {
-            if (registeredPropertyMapper.supports(javaType)) {
-                Object result = registeredPropertyMapper.deMap(value, javaType, this, objectValue.getAnnotations(), objectValue);
-                objectValue.getSetter().accept(parent, result);
-            }
-        }
-
-        if (SerializationUtils.isSubObject(javaType)) {
-            objectValue.getSetter().accept(parent, demapObject((MappedObject) value, javaType));
-        }
-    }
-
     @SneakyThrows
     public <T> T demapObject(MappedObject mappedObject, Class<T> wantedType) {
         final Class<?> type = mappedObject.getJavaType();
@@ -184,6 +151,16 @@ public class ObjectMapper {
     private void demapObjectProperty(ObjectValue objectValue, Object parent) {
         Class<?> javaType = objectValue.getJavaType();
         Object value = objectValue.getValue();
+        if (objectValue.getAnnotations().containsKey(SerializeIgnore.class)) {
+            IgnoreCondition condition = ((SerializeIgnore) objectValue.getAnnotations().get(SerializeIgnore.class)).value();
+            if (condition == IgnoreCondition.NO_CONDITION) {
+                return;
+            }
+            if (condition == IgnoreCondition.IF_NULL && value == null) {
+                return;
+            }
+        }
+
         boolean converted = false;
 
         if (objectValue.shouldConvert()) {

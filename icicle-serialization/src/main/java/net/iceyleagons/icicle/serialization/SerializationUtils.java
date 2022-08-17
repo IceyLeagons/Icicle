@@ -33,6 +33,7 @@ import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ import static net.iceyleagons.icicle.utilities.StringUtils.containsIgnoresCase;
 
 /**
  * @author TOTHTOMI
- * @version 1.0.0
+ * @version 1.1.0
  * @since Jun. 13, 2022
  */
 public class SerializationUtils {
@@ -50,6 +51,8 @@ public class SerializationUtils {
         Set<ObjectValue> set = new ObjectArraySet<>(8);
 
         for (Field declaredField : javaType.getDeclaredFields()) {
+            if (Modifier.isTransient(declaredField.getModifiers())) continue;
+
             final String name = SerializationUtils.getCustomNameOrDefault(declaredField, declaredField.getName());
 
             ObjectValue obj = new ObjectValue(declaredField.getType(), name, getAnnotations(declaredField),
