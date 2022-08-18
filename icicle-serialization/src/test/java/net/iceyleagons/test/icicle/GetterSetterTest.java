@@ -60,6 +60,7 @@ public class GetterSetterTest {
         orig.hello = "asd";
 
         String s = Benchmark.run(() -> objectMapper.writeValueAsString(orig), "Serialization");
+        System.out.println(s);
         Test1 read = Benchmark.run(() -> objectMapper.readValueFromString(s, Test1.class), "DeSerialization");
 
         Assertions.assertEquals(orig, read);
@@ -75,9 +76,18 @@ public class GetterSetterTest {
         public Test1(String hello) {
             this.hello = hello;
         }
+
+        public String getData() {
+            // Testing for non-field getters and setters.
+            return "test-data";
+        }
+
+        public void setData(String value) {
+            // Testing for non-field getters and setters.
+            Assertions.assertEquals(getData(), value);
+        }
         
         public String getHello() {
-            System.out.println("Invoked getter");
             return this.hello;
         }
 

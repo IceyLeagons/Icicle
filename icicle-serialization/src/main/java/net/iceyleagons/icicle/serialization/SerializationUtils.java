@@ -28,6 +28,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.iceyleagons.icicle.serialization.annotations.SerializedName;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
+import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 
 import java.lang.annotation.Annotation;
@@ -51,8 +52,9 @@ public class SerializationUtils {
     public static Set<ObjectValue> getObjectValues(Class<?> javaType) {
         Set<ObjectValue> set = new ObjectArraySet<>(8);
         final Method[] methods = javaType.getDeclaredMethods();
+        final Field[] fields = javaType.getDeclaredFields();
 
-        for (Field declaredField : javaType.getDeclaredFields()) {
+        for (Field declaredField : fields) {
             if (Modifier.isTransient(declaredField.getModifiers())) continue;
 
 
@@ -89,6 +91,22 @@ public class SerializationUtils {
 
                 set.add(obj);
             });
+        }
+
+        for (Tuple<Method, Method> standaloneGettersAndSetters : FuzzyResolver.getStandaloneGettersAndSetters(methods, fields)) {
+            // Inside these every method must be not null, otherwise FuzzyResolver skips them.
+            Method getter = standaloneGettersAndSetters.getA();
+            Method setter = standaloneGettersAndSetters.getB();
+
+            ObjectValue obj = new ObjectValue(
+                    getter.getReturnType(),
+                    SerializationUtils.getCustomNameOrDefault(getter, FuzzyResolver.getPropertyNameFromMethod(getter).orElseThrow(() -> new IllegalStateException("Could not get name for getter."))),
+                    getAnnotations(getter),
+                    (parent, value) -> ReflectionUtils.invoke(setter, parent, Void.class, value),
+                    parent -> ReflectionUtils.invoke(getter, parent, Object.class),
+                    index -> GenericUtils.getGenericTypeClass(getter, index));
+
+            set.add(obj);
         }
 
         return set;

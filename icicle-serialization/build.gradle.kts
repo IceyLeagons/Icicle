@@ -34,7 +34,7 @@ plugins {
     alias(libs.plugins.icicle)
 }
 
-version = "1.2.0-SNAPSHOT"
+version = "1.2.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -85,7 +85,7 @@ publishing {
         create<MavenPublication>("Maven") {
             groupId = "net.iceyleagons"
             artifactId = "icicle-serialization"
-            version = "1.2.0-SNAPSHOT"
+            version = "1.2.1-SNAPSHOT"
             from(components["java"])
         }
     }

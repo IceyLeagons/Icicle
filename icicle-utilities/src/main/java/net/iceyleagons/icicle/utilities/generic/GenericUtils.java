@@ -27,10 +27,8 @@ package net.iceyleagons.icicle.utilities.generic;
 import com.google.common.reflect.TypeToken;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
+import java.util.Objects;
 
 /**
  * Utility methods to make dealing with generic types easier!
@@ -56,18 +54,25 @@ public final class GenericUtils {
     }
 
     @Nullable
+    public static Type getGenericType(Method from, int typeIndex) {
+        return ((ParameterizedType) from.getGenericReturnType()).getActualTypeArguments()[typeIndex];
+    }
+
+    @Nullable
     public static Type getGenericType(Field from, int typeIndex) {
         return ((ParameterizedType) from.getGenericType()).getActualTypeArguments()[typeIndex];
     }
 
-    @Nullable
-    public static Class<?> getGenericTypeClass(Field field, int typeIndex) {
-        return TypeToken.of(getGenericType(field, typeIndex)).getRawType();
+    public static Class<?> getGenericTypeClass(Method from, int typeIndex) {
+        return TypeToken.of(Objects.requireNonNull(getGenericType(from, typeIndex))).getRawType();
     }
 
-    @Nullable
+    public static Class<?> getGenericTypeClass(Field field, int typeIndex) {
+        return TypeToken.of(Objects.requireNonNull(getGenericType(field, typeIndex))).getRawType();
+    }
+
     public static Class<?> getGenericTypeClass(Class<?> from, int typeIndex) {
-        return TypeToken.of(getGenericType(from, typeIndex)).getRawType();
+        return TypeToken.of(Objects.requireNonNull(getGenericType(from, typeIndex))).getRawType();
     }
 
     public static <T> T[] genericArrayToNormalArray(Object genericArray, Class<T> wantedType) {

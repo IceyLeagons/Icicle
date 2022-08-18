@@ -29,7 +29,9 @@ import net.iceyleagons.icicle.utilities.datastores.tuple.UnmodifiableTuple;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -74,6 +76,42 @@ public final class FuzzyResolver {
         return Arrays.stream(methods)
                 .filter(m -> searchPattern.matcher(m.getName()).matches())
                 .findFirst();
+    }
+
+    public static List<Tuple<Method, Method>> getStandaloneGettersAndSetters(Method[] methods, Field[] toIgnore) {
+        final List<Tuple<Method, Method>> result = new ArrayList<>();
+        final List<String> blackList = new ArrayList<>(Arrays.stream(toIgnore).map(Field::getName).toList());
+
+        for (Method method : methods) {
+            Optional<String> opt = getPropertyNameFromMethod(method);
+            if (opt.isEmpty()) continue;
+
+            String propName = opt.get();
+            if (blackList.contains(propName)) continue;
+
+
+            if (method.getReturnType().equals(void.class) || method.getReturnType().equals(Void.class)) {
+                // It's a setter
+                Optional<Method> getter = findGetter(propName, methods);
+                if (getter.isEmpty()) {
+                    blackList.add(propName);
+                    continue;
+                }
+
+                result.add(new UnmodifiableTuple<>(getter.get(), method));
+                continue;
+            }
+
+            Optional<Method> setter = findSetter(propName, methods);
+            if (setter.isEmpty()) {
+                blackList.add(propName);
+                continue;
+            }
+
+            result.add(new UnmodifiableTuple<>(method, setter.get()));
+        }
+
+        return result;
     }
 
     public static Optional<String> getPropertyNameFromMethod(Method methodName) {
