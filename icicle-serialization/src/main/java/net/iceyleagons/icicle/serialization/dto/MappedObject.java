@@ -42,5 +42,6 @@ public class MappedObject {
 
     private final Class<?> javaType;
     private final Set<ObjectValue> values;
+    private final int version;
 
 }

@@ -35,8 +35,8 @@ import java.util.Map;
 /**
  * Default implementation of {@link AutowiringAnnotationResolver}
  *
- * @version 1.5.0
  * @author TOTHTOMI
+ * @version 1.5.0
  * @since Aug. 28, 2021
  */
 public class DelegatingAutowiringAnnotationResolver implements AutowiringAnnotationResolver {

@@ -26,7 +26,6 @@ package net.iceyleagons.icicle.core.annotations.handlers.proxy;
 
 import net.iceyleagons.icicle.core.annotations.AutoCreate;
 import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
-import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 
 import java.lang.annotation.Retention;
@@ -38,17 +37,16 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * This annotation marks a bean as an MethodInterceptorHandler.
  * These beans extend the functionality of the {@link BeanProxyHandler} with new interceptor implementations.
- *
+ * <p>
  * These classes must implement the {@link MethodInterceptorHandlerTemplate} interface.
  * In the life cycle of the applications, these beans get initialized after annotation handlers, but before all the other beans.
  *
- * @version 1.0.0
  * @author TOTHTOMI
- * @since Nov. 14, 2021
- *
+ * @version 1.0.0
  * @see AutoCreate
  * @see BeanProxyHandler
  * @see MethodInterceptorHandlerTemplate
+ * @since Nov. 14, 2021
  */
 @AutoCreate
 @Target(TYPE)

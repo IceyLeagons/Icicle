@@ -35,14 +35,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * This annotation can be used to autowire config properties into parameters.
  * This is handled via {@link net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment} and {@link net.iceyleagons.icicle.core.configuration.ConfigPropertyAutowiringHandler}.
  *
- * @version 1.0.0
  * @author TOTHTOMI
- * @since Aug. 27, 2021
- *
+ * @version 1.0.0
  * @see net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment
  * @see net.iceyleagons.icicle.core.configuration.ConfigPropertyAutowiringHandler
  * @see net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler
  * @see net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler
+ * @since Aug. 27, 2021
  */
 @Retention(RUNTIME)
 @Target({FIELD, PARAMETER})

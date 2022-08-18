@@ -34,8 +34,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * This annotation marks a field as a config field.
  * Fields inside {@link Config} that don't annotate this will be ignored!
  *
- * @version 1.0.0
  * @author TOTHTOMI
+ * @version 1.0.0
  * @since Aug. 26, 2021
  */
 @Target(FIELD)

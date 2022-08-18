@@ -30,12 +30,12 @@ import net.iceyleagons.icicle.serialization.dto.MappedObject;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import net.iceyleagons.nbtlib.NBTConverter;
-import net.iceyleagons.nbtlib.Tag;
-import net.iceyleagons.nbtlib.TagTypes;
 import net.iceyleagons.nbtlib.streams.NBTInputStream;
 import net.iceyleagons.nbtlib.streams.NBTOutputStream;
-import net.iceyleagons.nbtlib.tags.CompoundTag;
-import net.iceyleagons.nbtlib.tags.ListTag;
+import net.iceyleagons.nbtlib.tags.Tag;
+import net.iceyleagons.nbtlib.tags.TagTypes;
+import net.iceyleagons.nbtlib.tags.impl.CompoundTag;
+import net.iceyleagons.nbtlib.tags.impl.ListTag;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -54,6 +54,7 @@ import java.util.stream.Collectors;
 public class NbtSerializer implements SerializationProvider {
 
     private CompoundTag serialize(MappedObject mappedObject, CompoundTag root) {
+        root.put("dataVersion", mappedObject.getVersion());
         for (ObjectValue value : mappedObject.getValues()) {
             if (value.shouldConvert()) {
                 Class<?> vClass = value.getValue().getClass();
@@ -99,13 +100,13 @@ public class NbtSerializer implements SerializationProvider {
     }
 
     private MappedObject deserialize(CompoundTag tag, Class<?> javaType) {
-        final Set<ObjectValue> values = SerializationUtils.getObjectValues(javaType)
+        final Set<ObjectValue> values = SerializationUtils.getObjectValues(javaType, tag.getInt("dataVersion"))
                 .stream()
                 .map(o -> deserializeValue(o, tag))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
-        return new MappedObject(javaType, values);
+        return new MappedObject(javaType, values, tag.getInt("dataVersion"));
     }
 
     private ObjectValue deserializeValue(ObjectValue value, CompoundTag tag) {
@@ -139,7 +140,7 @@ public class NbtSerializer implements SerializationProvider {
 
         if (value.isMap()) {
             return value.copyWithNewValueAndType(
-                    demapMap(tag.getTag(value.getKey(), CompoundTag.class), value.getGenericGetter().getGenericClass(1)), value.getJavaType()
+                    demapMap(tag.getCompound(value.getKey()), value.getGenericGetter().getGenericClass(1)), value.getJavaType()
             );
         }
 

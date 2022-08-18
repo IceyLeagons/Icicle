@@ -48,13 +48,23 @@ import java.util.stream.Collectors;
  */
 public class JsonSerializer implements SerializationProvider {
 
+    private static Object convertNullToJson(Object obj) {
+        return obj == null ? JSONObject.NULL : obj;
+    }
+
+    private static Object convertNullFromJson(Object obj) {
+        return obj.equals(JSONObject.NULL) ? null : obj;
+    }
+
     private JSONObject serialize(MappedObject mappedObject, JSONObject root) {
+        root.put("dataVersion", mappedObject.getVersion());
+
         for (ObjectValue value : mappedObject.getValues()) {
             if (value.shouldConvert()) {
                 Class<?> vClass = value.getValue().getClass();
-                root.put(value.getKey(), SerializationUtils.isSubObject(vClass) ? serialize((MappedObject) value.getValue(), new JSONObject()) : value.getValue());
+                root.put(value.getKey(), SerializationUtils.isSubObject(vClass) ? serialize((MappedObject) value.getValue(), new JSONObject()) : convertNullToJson(value.getValue()));
             } else if (value.isValuePrimitiveOrString() || value.isEnum()) {
-                root.put(value.getKey(), value.getValue());
+                root.put(value.getKey(), convertNullToJson(value.getValue()));
             } else if (value.isArray() || value.isCollection()) {
                 JSONArray jsonArray = toJsonArray(value.getValue());
                 root.put(value.getKey(), jsonArray);
@@ -70,58 +80,63 @@ public class JsonSerializer implements SerializationProvider {
     }
 
     private MappedObject deserialize(JSONObject jsonObject, Class<?> javaType) {
-        final Set<ObjectValue> values = SerializationUtils.getObjectValues(javaType)
+        final Set<ObjectValue> values = SerializationUtils.getObjectValues(javaType, jsonObject.getInt("dataVersion"))
                 .stream()
-                .map(o -> deserializeValue(o, jsonObject))
+                .map(o -> deserializeValue(o, jsonObject, SerializationUtils.getVersion(javaType)))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
-        return new MappedObject(javaType, values);
+        return new MappedObject(javaType, values, jsonObject.getInt("dataVersion"));
     }
 
-    private ObjectValue deserializeValue(ObjectValue objectValue, JSONObject jsonObject) {
-        if (objectValue.shouldConvert()) {
-            Object obj = jsonObject.get(objectValue.getKey());
-            if (obj instanceof JSONObject) {
-                Object result = deserialize((JSONObject) obj, objectValue.getJavaType());
-                return objectValue.copyWithNewValueAndType(result, objectValue.getJavaType());
+    private ObjectValue deserializeValue(ObjectValue objectValue, JSONObject jsonObject, int currentVersion) {
+        try {
+            if (objectValue.shouldConvert()) {
+                Object obj = convertNullFromJson(jsonObject.get(objectValue.getKey()));
+                if (obj instanceof JSONObject) {
+                    Object result = deserialize((JSONObject) obj, objectValue.getJavaType());
+                    return objectValue.copyWithNewValueAndType(result, objectValue.getJavaType());
+                }
+
+                return objectValue.copyWithNewValueAndType(obj, objectValue.getJavaType());
             }
 
-            return objectValue.copyWithNewValueAndType(obj, objectValue.getJavaType());
-        }
+            if (objectValue.isValuePrimitiveOrString() || objectValue.isEnum()) {
+                return objectValue.copyWithNewValueAndType(convertNullFromJson(jsonObject.get(objectValue.getKey())), objectValue.getJavaType());
+            }
 
-        if (objectValue.isValuePrimitiveOrString() || objectValue.isEnum()) {
+            if (objectValue.isArray()) {
+                JSONArray jsonArray = jsonObject.getJSONArray(objectValue.getKey());
+                return objectValue.copyWithNewValueAndType(
+                        fromJsonArray(jsonArray, objectValue.getJavaType().getComponentType()), objectValue.getJavaType()
+                );
+            }
+
+            if (objectValue.isCollection()) {
+                JSONArray jsonArray = jsonObject.getJSONArray(objectValue.getKey());
+                return objectValue.copyWithNewValueAndType(
+                        fromJsonArray(jsonArray, objectValue.getGenericGetter().getGenericClass(0)), objectValue.getJavaType()
+                );
+            }
+
+            if (objectValue.isMap()) {
+                return objectValue.copyWithNewValueAndType(
+                        deMapMap(jsonObject.getJSONObject(objectValue.getKey()), objectValue.getGenericGetter().getGenericClass(1)), objectValue.getJavaType()
+                );
+            }
+
+            if (objectValue.isSubObject()) {
+                Object obj = jsonObject.get(objectValue.getKey());
+                if (obj instanceof JSONObject) {
+                    return objectValue.copyWithNewValueAndType(deserialize((JSONObject) obj, objectValue.getJavaType()), objectValue.getJavaType());
+                }
+            }
+
             return objectValue.copyWithNewValueAndType(jsonObject.get(objectValue.getKey()), objectValue.getJavaType());
+        } catch (Exception e) {
+            throw new IllegalStateException("Could not parse JSON to ObjectValue. Is the file corrupted?.\n" +
+                    "(CV: " + currentVersion + " | PV: " + jsonObject.getInt("dataVersion") + " | FV: " + objectValue.getVersion() + " | K: " + objectValue.getKey() + ")");
         }
-
-        if (objectValue.isArray()) {
-            JSONArray jsonArray = jsonObject.getJSONArray(objectValue.getKey());
-            return objectValue.copyWithNewValueAndType(
-                    fromJsonArray(jsonArray, objectValue.getJavaType().getComponentType()), objectValue.getJavaType()
-            );
-        }
-
-        if (objectValue.isCollection()) {
-            JSONArray jsonArray = jsonObject.getJSONArray(objectValue.getKey());
-            return objectValue.copyWithNewValueAndType(
-                    fromJsonArray(jsonArray, objectValue.getGenericGetter().getGenericClass(0)), objectValue.getJavaType()
-            );
-        }
-
-        if (objectValue.isMap()) {
-            return objectValue.copyWithNewValueAndType(
-                    deMapMap(jsonObject.getJSONObject(objectValue.getKey()), objectValue.getGenericGetter().getGenericClass(1)), objectValue.getJavaType()
-            );
-        }
-
-        if (objectValue.isSubObject()) {
-            Object obj = jsonObject.get(objectValue.getKey());
-            if (obj instanceof JSONObject) {
-                return objectValue.copyWithNewValueAndType(deserialize((JSONObject) obj, objectValue.getJavaType()), objectValue.getJavaType());
-            }
-        }
-
-        return objectValue.copyWithNewValueAndType(jsonObject.get(objectValue.getKey()), objectValue.getJavaType());
     }
 
     private JSONObject mapMap(Object array) {

@@ -71,6 +71,7 @@ public abstract class ConfigDriver implements Configuration {
 
 
     // TODO: This could be improved, see ConfigDelegator for information about it.
+
     /**
      * @return a fresh new instance of the driver.
      */

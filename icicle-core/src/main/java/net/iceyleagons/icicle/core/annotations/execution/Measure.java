@@ -33,14 +33,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Methods annotated with this annotation will get their execution measured and printed out into the console.
  * This annotation can only be used inside Icicle managed beans.
- *
+ * <p>
  * Functionality is implemented at {@link net.iceyleagons.icicle.core.proxy.advices.MeasureAdviceHandler}
  *
- * @version 1.0.0
  * @author TOTHTOMI
- * @since Sep. 25, 2021
- *
+ * @version 1.0.0
  * @see net.iceyleagons.icicle.core.proxy.advices.MeasureAdviceHandler
+ * @since Sep. 25, 2021
  */
 @Target(METHOD)
 @Retention(RUNTIME)

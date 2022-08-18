@@ -58,9 +58,9 @@ public interface GlobalServiceProvider {
      * Used for registering a service into the provider.
      *
      * @param interfaceType the interfaceType
-     * @param providerType the provider (implementation) type
-     * @param object the provider bean
-     * @param registrar the application who registered it
+     * @param providerType  the provider (implementation) type
+     * @param object        the provider bean
+     * @param registrar     the application who registered it
      * @throws Exception if something goes wrong
      */
     void registerService(Class<?> interfaceType, Class<?> providerType, Object object, Application registrar) throws Exception;

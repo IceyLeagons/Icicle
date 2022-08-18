@@ -24,10 +24,10 @@
 
 package net.iceyleagons.icicle.nms.utils;
 
-import net.iceyleagons.icicle.core.utils.Defaults;
 import net.iceyleagons.icicle.nms.annotations.CraftWrap;
 import net.iceyleagons.icicle.nms.annotations.NMSWrap;
 import net.iceyleagons.icicle.utilities.AdvancedClass;
+import net.iceyleagons.icicle.utilities.Defaults;
 import org.bukkit.Bukkit;
 
 import java.util.logging.Logger;

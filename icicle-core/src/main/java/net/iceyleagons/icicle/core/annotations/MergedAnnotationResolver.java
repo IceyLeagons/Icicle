@@ -33,13 +33,15 @@ import java.lang.annotation.Annotation;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
-import static org.reflections.scanners.Scanners.*;
+
+import static org.reflections.scanners.Scanners.TypesAnnotated;
+
 /**
  * The MergedAnnotationResolver is responsible for searching all the annotations (using DFS), that annotate an annotation specified in the constructor.
  * This way we can get classes, that have for ex. @{@link AutoCreate} in their annotation tree somewhere.
  *
- * @version 1.0.0
  * @author TOTHTOMI
+ * @version 1.0.0
  * @since Aug. 25, 2021
  */
 @Getter
@@ -52,7 +54,7 @@ public class MergedAnnotationResolver {
     /**
      * Creates a new instance of {@link MergedAnnotationResolver}
      *
-     * @param annotation the annotation to search for in the tree
+     * @param annotation  the annotation to search for in the tree
      * @param reflections the reflections instance to use
      */
     public MergedAnnotationResolver(Class<? extends Annotation> annotation, Reflections reflections) {

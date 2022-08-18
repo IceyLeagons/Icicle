@@ -33,7 +33,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * PostConstruct can be used on methods inside Icicle managed bean classes.
  * These methods will only be called after all the @{@link Bean} methods have been resolved and the bean has been autowired via setters (if present).
- *
+ * <p>
  * Post construct method must not have parameters!
  *
  * @author TOTHTOMI

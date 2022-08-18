@@ -26,6 +26,8 @@ package net.iceyleagons.icicle.serialization;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.iceyleagons.icicle.serialization.annotations.SerializedName;
+import net.iceyleagons.icicle.serialization.annotations.versioning.Since;
+import net.iceyleagons.icicle.serialization.annotations.versioning.Version;
 import net.iceyleagons.icicle.serialization.dto.ObjectValue;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
@@ -49,14 +51,27 @@ import static net.iceyleagons.icicle.utilities.StringUtils.containsIgnoresCase;
  */
 public class SerializationUtils {
 
-    public static Set<ObjectValue> getObjectValues(Class<?> javaType) {
+    public static Set<ObjectValue> getObjectValues(Class<?> javaType, final int dataVersion) {
         Set<ObjectValue> set = new ObjectArraySet<>(8);
-        final Method[] methods = javaType.getDeclaredMethods();
+
+        final Method[] methods = Arrays.stream(javaType.getDeclaredMethods()).filter(m -> {
+            if (m.isAnnotationPresent(Since.class)) {
+                int since = m.getAnnotation(Since.class).value();
+                return dataVersion != -1 && dataVersion >= since;
+            }
+            return true;
+        }).toArray(Method[]::new);
+
         final Field[] fields = javaType.getDeclaredFields();
 
         for (Field declaredField : fields) {
             if (Modifier.isTransient(declaredField.getModifiers())) continue;
-
+            if (declaredField.isAnnotationPresent(Since.class)) {
+                int since = declaredField.getAnnotation(Since.class).value();
+                if (dataVersion != -1 && dataVersion < since) {
+                    continue;
+                }
+            }
 
             FuzzyResolver.getGettersAndSetters(declaredField, methods).ifPresentOrElse(setterAndGetter -> {
                 final Method getter = setterAndGetter.getA();
@@ -110,6 +125,10 @@ public class SerializationUtils {
         }
 
         return set;
+    }
+
+    public static int getVersion(Class<?> clazz) {
+        return clazz.isAnnotationPresent(Version.class) ? clazz.getAnnotation(Version.class).value() : -1;
     }
 
     public static Map<Class<? extends Annotation>, Annotation> getAnnotations(AccessibleObject object) {

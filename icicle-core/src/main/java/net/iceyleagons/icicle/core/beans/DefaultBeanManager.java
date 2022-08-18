@@ -150,7 +150,7 @@ public class DefaultBeanManager implements BeanManager {
      *
      * @param autoCreationTypes the set of all the {@link AutoCreate} annotated types from {@link MergedAnnotationResolver}
      *                          (this method calls {@link #getAndRemoveTypesAnnotatedWith(Class, Set)} with this parameter)
-     * @throws Exception        if anything goes wrong.
+     * @throws Exception if anything goes wrong.
      * @see ConfigurationDriver
      * @see AutoCreate
      * @see MergedAnnotationResolver
@@ -452,7 +452,7 @@ public class DefaultBeanManager implements BeanManager {
      * This is used first time to register and proxy all these methods.
      *
      * @param beanClass the beanClass
-     * @param bean the beanObject
+     * @param bean      the beanObject
      */
     private void callBeanMethodsInsideBean(Class<?> beanClass, Object bean) {
         for (Method method : Arrays.stream(beanClass.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(Bean.class)).toList()) {

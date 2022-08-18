@@ -22,29 +22,22 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations.service;
+package net.iceyleagons.icicle.serialization.annotations.versioning;
 
-import net.iceyleagons.icicle.core.annotations.AutoCreate;
-
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 /**
- * GlobalServices are just like {@link Service}s, but additionally they get registered into the {@link net.iceyleagons.icicle.core.beans.GlobalServiceProvider}.
- * GlobalServices must have at least one implemented interface!
- *
  * @author TOTHTOMI
  * @version 1.0.0
- * @see AutoCreate
- * @see Service
- * @see net.iceyleagons.icicle.core.beans.GlobalServiceProvider
- * @since Mar. 27, 2022
+ * @since Aug. 18, 2022
  */
-@AutoCreate
-@Target(TYPE)
-@Retention(RUNTIME)
-public @interface GlobalService {
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Version {
+
+    int value();
+
 }

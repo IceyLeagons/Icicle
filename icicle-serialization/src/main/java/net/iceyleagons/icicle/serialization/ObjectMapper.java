@@ -26,7 +26,6 @@ package net.iceyleagons.icicle.serialization;
 
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
-import net.iceyleagons.icicle.serialization.annotations.EnumSerialization;
 import net.iceyleagons.icicle.serialization.annotations.SerializeIgnore;
 import net.iceyleagons.icicle.serialization.converters.Convert;
 import net.iceyleagons.icicle.serialization.converters.ConverterAnnotationHandler;
@@ -37,6 +36,7 @@ import net.iceyleagons.icicle.serialization.mapping.PropertyMapper;
 import net.iceyleagons.icicle.serialization.mapping.PropertyMapperAnnotationHandler;
 import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
 import net.iceyleagons.icicle.serialization.serializers.SerializationProvider;
+import net.iceyleagons.icicle.utilities.Defaults;
 
 import java.lang.reflect.Constructor;
 import java.nio.file.Path;
@@ -66,13 +66,15 @@ public class ObjectMapper {
         if (object == null) return null;
 
         final Class<?> clazz = object.getClass();
-        final Set<ObjectValue> values = SerializationUtils.getObjectValues(clazz)
+        final int version = SerializationUtils.getVersion(clazz);
+
+        final Set<ObjectValue> values = SerializationUtils.getObjectValues(clazz, version)
                 .stream()
                 .map(o -> mapObjectProperty(o, object))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
-        return new MappedObject(clazz, values);
+        return new MappedObject(clazz, values, version); // negative 1 means no information found
     }
 
     private ObjectValue mapObjectProperty(ObjectValue objectValue, Object parent) {
@@ -80,10 +82,10 @@ public class ObjectMapper {
         if (objectValue.getAnnotations().containsKey(SerializeIgnore.class)) {
             IgnoreCondition condition = ((SerializeIgnore) objectValue.getAnnotations().get(SerializeIgnore.class)).value();
             if (condition == IgnoreCondition.NO_CONDITION) {
-                return null;
+                return null; //objectValue.copyWithNewValueAndType(null, objectValue.getJavaType());
             }
             if (condition == IgnoreCondition.IF_NULL && value == null) {
-                return null;
+                return null; //objectValue.copyWithNewValueAndType(null, objectValue.getJavaType());
             }
         }
         Class<?> javaType = objectValue.getJavaType();
@@ -142,13 +144,15 @@ public class ObjectMapper {
         final Object object = BeanUtils.instantiateClass(constructor, null);
 
         for (ObjectValue value : mappedObject.getValues()) {
-            demapObjectProperty(value, object);
+            demapObjectProperty(value, object, mappedObject.getVersion());
         }
 
         return wantedType.cast(object);
     }
 
-    private void demapObjectProperty(ObjectValue objectValue, Object parent) {
+    private void demapObjectProperty(final ObjectValue objectValue, final Object parent, final int dataVersion) {
+        // dataVersion is the read in information
+
         Class<?> javaType = objectValue.getJavaType();
         Object value = objectValue.getValue();
         if (objectValue.getAnnotations().containsKey(SerializeIgnore.class)) {
@@ -157,6 +161,20 @@ public class ObjectMapper {
                 return;
             }
             if (condition == IgnoreCondition.IF_NULL && value == null) {
+                return;
+            }
+        }
+        if (objectValue.isVersioned()) {
+            if (dataVersion == -1) {
+                throw new IllegalStateException("Object value is versioned, but no version information was found!");
+            }
+
+            final int currentVersion = objectValue.getVersion(); // this is coming from local fields --> currentVersion
+
+            if (dataVersion < currentVersion) {
+                // data was coming from an older version, we need to set to default
+                Object defVal = Defaults.DEFAULT_TYPE_VALUES.getOrDefault(objectValue.getJavaType(), null);
+                objectValue.getSetter().accept(parent, defVal);
                 return;
             }
         }

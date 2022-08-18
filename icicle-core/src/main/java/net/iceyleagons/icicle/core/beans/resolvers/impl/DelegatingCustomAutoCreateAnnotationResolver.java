@@ -35,8 +35,8 @@ import java.util.Map;
 /**
  * Default implementation of {@link CustomAutoCreateAnnotationResolver}
  *
- * @version 1.5.0
  * @author TOTHTOMI
+ * @version 1.5.0
  * @since Aug. 28, 2021
  */
 public class DelegatingCustomAutoCreateAnnotationResolver implements CustomAutoCreateAnnotationResolver {

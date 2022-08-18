@@ -33,11 +33,11 @@ import java.util.Set;
  * CustomAutoCreateAnnotationHandlers are used to write custom logic to new {@link net.iceyleagons.icicle.core.annotations.AutoCreate} subtypes.
  * After the AutoCreate subtype has been initialized by the {@link net.iceyleagons.icicle.core.beans.BeanManager} it will call this handler, to handle the
  * additional logic required for that type(s).
- *
+ * <p>
  * Note, that all custom annotations must annotate the @{@link net.iceyleagons.icicle.core.annotations.AutoCreate} annotation for this to work!
  *
- * @version 1.0.0
  * @author TOTHTOMI
+ * @version 1.0.0
  * @since Aug. 28, 2021
  */
 public interface CustomAutoCreateAnnotationHandler {
@@ -51,7 +51,7 @@ public interface CustomAutoCreateAnnotationHandler {
 
     /**
      * This method is called after the bean has been initialized and auto-wired.
-     *
+     * <p>
      * The supplied type must be used instead of calling {@link #getClass()} on the bean, due to proxying.
      * The type is the actual type of the bean, while the bean's class can be proxied.
      *

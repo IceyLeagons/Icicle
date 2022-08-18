@@ -35,16 +35,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * This annotation marks a bean as an AnnotationHandler.
  * These classes must implement an interface: {@link AutowiringAnnotationHandler} or {@link CustomAutoCreateAnnotationHandler}.
- *
+ * <p>
  * In the life cycle of the applications, these beans get initialized after configurations, but before all the other beans.
  *
- * @version 1.0.0
  * @author TOTHTOMI
- * @since Aug. 27, 2021
- *
+ * @version 1.0.0
  * @see AutoCreate
  * @see AutowiringAnnotationHandler
  * @see CustomAutoCreateAnnotationHandler
+ * @since Aug. 27, 2021
  */
 @AutoCreate
 @Target(TYPE)

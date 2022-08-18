@@ -34,8 +34,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Annotation used to bootstrap Icicle applications more easily.
  * The core does not have an implementation for this type of bootstrapping, that's the job of the environments implementing Icicle.
  *
- * @version 1.0.0
  * @author TOTHTOMI
+ * @version 1.0.0
  * @since Oct. 24, 2021
  */
 @Target(TYPE)

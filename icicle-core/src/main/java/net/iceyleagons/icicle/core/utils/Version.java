@@ -34,9 +34,9 @@ import lombok.NonNull;
  */
 public class Version implements Comparable<Version> {
 
+    public final int[] numbers;
     @Getter
     private final String version;
-    public final int[] numbers;
 
     public Version(@NonNull String version) {
         this.version = version;

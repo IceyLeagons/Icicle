@@ -35,11 +35,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Marks a class as a {@link Config}.
  * All config classes must implement the {@link net.iceyleagons.icicle.core.configuration.Configuration} interface.
- *
+ * <p>
  * Configs are the second things to be initialized in the life cycle of the application (after {@link ConfigurationDriver}s)
  *
- * @version 1.5.0
  * @author TOTHTOMI
+ * @version 1.5.0
  * @since Aug. 26, 2021
  */
 @AutoCreate

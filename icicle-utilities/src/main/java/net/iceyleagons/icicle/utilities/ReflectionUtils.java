@@ -35,8 +35,8 @@ import java.lang.reflect.Method;
  * This class contains utility methods regarding java Reflections.
  * Some methods are only here to catch errors, so the code can be cleaner.
  *
- * @version 1.2.0
  * @author TOTHTOMI
+ * @version 1.2.0
  */
 public final class ReflectionUtils {
 
@@ -50,6 +50,7 @@ public final class ReflectionUtils {
             throw new IllegalStateException(String.format("Could not invoke method (%s) inside %s", method.getName(), parent.getClass().getName()), e);
         }
     }
+
     public static void set(Field field, Object parent, Object value) {
         try {
             field.setAccessible(true);

@@ -25,8 +25,6 @@
 package net.iceyleagons.icicle.core;
 
 import lombok.SneakyThrows;
-import net.iceyleagons.icicle.core.annotations.AutoCreate;
-import net.iceyleagons.icicle.core.annotations.service.GlobalService;
 import net.iceyleagons.icicle.core.beans.BeanManager;
 import net.iceyleagons.icicle.core.beans.DefaultBeanManager;
 import net.iceyleagons.icicle.core.beans.GlobalServiceProvider;
@@ -107,7 +105,8 @@ public abstract class AbstractIcicleApplication implements Application {
         PerformanceLog.end(this);
     }
 
-    protected void onConstructed() {}
+    protected void onConstructed() {
+    }
 
     /**
      * {@inheritDoc}

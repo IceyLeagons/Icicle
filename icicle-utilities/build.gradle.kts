@@ -35,7 +35,7 @@ plugins {
 }
 
 group = "net.iceyleagons"
-version = "1.1.1-SNAPSHOT"
+version = "1.1.2-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -71,7 +71,7 @@ publishing {
         create<MavenPublication>("Maven") {
             groupId = "net.iceyleagons"
             artifactId = "icicle-utilities"
-            version = "1.1.1-SNAPSHOT"
+            version = "1.1.2-SNAPSHOT"
             from(components["java"])
         }
     }

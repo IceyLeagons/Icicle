@@ -37,18 +37,17 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * This annotation marks a bean as an MethodAdviceHandler.
  * These beans extend the functionality of the {@link BeanProxyHandler} with new {@link net.bytebuddy.asm.Advice} implementations.
- *
+ * <p>
  * These classes must implement the {@link MethodAdviceHandlerTemplate} interface.
  * In the life cycle of the applications, these beans get initialized after annotation handlers, but before all the other beans.
  *
- * @version 1.0.0
  * @author TOTHTOMI
- * @since Nov. 14, 2021
- *
+ * @version 1.0.0
  * @see AutoCreate
  * @see net.bytebuddy.asm.Advice
  * @see BeanProxyHandler
  * @see MethodAdviceHandlerTemplate
+ * @since Nov. 14, 2021
  */
 @AutoCreate
 @Target(TYPE)

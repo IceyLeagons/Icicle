@@ -25,20 +25,23 @@
 package net.iceyleagons.test.icicle;
 
 import net.iceyleagons.icicle.serialization.ObjectMapper;
+import net.iceyleagons.icicle.serialization.annotations.versioning.Since;
+import net.iceyleagons.icicle.serialization.annotations.versioning.Version;
 import net.iceyleagons.icicle.serialization.converters.ConverterAnnotationHandler;
 import net.iceyleagons.icicle.serialization.mapping.PropertyMapperAnnotationHandler;
 import net.iceyleagons.icicle.serialization.mapping.impl.*;
-import net.iceyleagons.icicle.utilities.Benchmark;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.Objects;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Aug. 18, 2022
  */
-public class GetterSetterTest {
+public class VersioningTest {
 
     @BeforeAll
     public static void registerMappers() {
@@ -56,48 +59,39 @@ public class GetterSetterTest {
     @Test
     public void test() {
         ObjectMapper objectMapper = new ObjectMapper();
-        Test1 orig = new Test1("asd");
+        String oldVersion = "{\"dataVersion\": 0, \"hello\": \"asd\"}}";
+        String newVersion = "{\"thisWillBeNull\": \"FilledIn\", \"dataVersion\": 1, \"hello\": \"asd\"}}";
 
-        String s = Benchmark.run(() -> objectMapper.writeValueAsString(orig), "Serialization");
-        System.out.println(s);
-        Test1 read = Benchmark.run(() -> objectMapper.readValueFromString(s, Test1.class), "DeSerialization");
+        Test1 old = objectMapper.readValueFromString(oldVersion, Test1.class);
+        Test1 newV = objectMapper.readValueFromString(newVersion, Test1.class);
 
-        Assertions.assertEquals(orig, read);
+        Assertions.assertEquals("asd", old.hello);
+        Assertions.assertEquals("asd", newV.hello);
+
+        Assertions.assertNull(old.thisWillBeNull);
+        Assertions.assertEquals("FilledIn", newV.thisWillBeNull);
     }
 
+    @Version(1)
     static class Test1 {
+        @Since(0)
         public String hello;
+        @Since(1)
+        public String thisWillBeNull;
 
         public Test1() {
 
         }
 
-        public Test1(String hello) {
+        public Test1(String hello, String hello2) {
             this.hello = hello;
-        }
-
-        public String getData() {
-            // Testing for non-field getters and setters.
-            return "test-data";
-        }
-
-        public void setData(String value) {
-            // Testing for non-field getters and setters.
-            Assertions.assertEquals(getData(), value);
-        }
-
-        public String getHello() {
-            return this.hello;
-        }
-
-        public void setHello(String value) {
-            System.out.println("Invoked setter");
-            this.hello = value;
+            this.thisWillBeNull = hello2;
         }
 
         @Override
         public boolean equals(Object obj) {
-            return hello.equals(((Test1) obj).hello);
+            Test1 test1 = (Test1) obj;
+            return test1.hello.equals(this.hello) && Objects.equals(this.thisWillBeNull, test1.thisWillBeNull);
         }
     }
 }

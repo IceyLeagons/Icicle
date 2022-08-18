@@ -29,6 +29,7 @@ import net.iceyleagons.icicle.core.annotations.PostConstruct;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.utilities.Asserts;
+import net.iceyleagons.icicle.utilities.Defaults;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 
@@ -85,7 +86,7 @@ public final class BeanUtils {
      * It uses streams, due to this: exceptions thrown during this will only be printed out, not thrown.
      *
      * @param clazz the class of the bean (required due to proxying)
-     * @param bean the bean to call
+     * @param bean  the bean to call
      */
     public static void invokePostConstructor(Class<?> clazz, Object bean) {
         Arrays.stream(clazz.getDeclaredMethods())

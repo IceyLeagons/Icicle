@@ -36,8 +36,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Adds comment to the field.
  * Please note, that comments will only be applied if the responsible {@link ConfigurationDriver} supports it.
  *
- * @version 1.0.0
  * @author TOTHTOMI
+ * @version 1.0.0
  * @since Aug. 26, 2021
  */
 @Target(FIELD)

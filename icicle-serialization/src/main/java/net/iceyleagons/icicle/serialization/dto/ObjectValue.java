@@ -29,6 +29,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.iceyleagons.icicle.serialization.SerializationUtils;
+import net.iceyleagons.icicle.serialization.annotations.versioning.Since;
 import net.iceyleagons.icicle.serialization.converters.Convert;
 
 import java.lang.annotation.Annotation;
@@ -84,6 +85,14 @@ public class ObjectValue {
 
     public boolean isSubObject() {
         return SerializationUtils.isSubObject(this.javaType);
+    }
+
+    public boolean isVersioned() {
+        return this.getAnnotations().containsKey(Since.class);
+    }
+
+    public int getVersion() {
+        return ((Since) this.getAnnotations().get(Since.class)).value();
     }
 
     public ObjectValue copyWithNewValueAndType(Object newValue, Class<?> newType) {

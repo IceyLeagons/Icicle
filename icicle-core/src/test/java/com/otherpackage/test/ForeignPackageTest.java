@@ -30,7 +30,6 @@ import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.performance.PerformanceLog;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
-import net.iceyleagons.test.icicle.core.bean.resolvable.EmptyConstructorService;
 import org.junit.jupiter.api.*;
 
 /**

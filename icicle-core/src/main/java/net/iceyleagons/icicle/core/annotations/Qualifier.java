@@ -34,11 +34,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * AutoCreate instances (atm should only be used with @{@link net.iceyleagons.icicle.core.annotations.service.Service}s) marked with this annotation will be stored
  * with the unique key given via {@link #value()}.
- *
+ * <p>
  * These instances can only be autowired with the same key, and using this annotation on a parameter
  *
- * @version 1.0.0
  * @author TOTHTOMI
+ * @version 1.0.0
  * @since Jun. 6, 2022
  */
 @Target({TYPE, PARAMETER})

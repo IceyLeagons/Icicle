@@ -37,7 +37,6 @@ import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.core.exceptions.ConfigDelegationException;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -72,7 +71,7 @@ public class ConfigDelegator {
     /**
      * Registers a new {@link ConfigDriver}.
      *
-     * @param driver the actual driver
+     * @param driver     the actual driver
      * @param annotation the {@link ConfigurationDriver} marking it
      */
     public void addDriver(ConfigDriver driver, ConfigurationDriver annotation) {
@@ -91,7 +90,7 @@ public class ConfigDelegator {
      *
      * @param configClass the configClass
      * @param constructor the constructor to use (should be free of parameters)
-     * @param annotation the {@link Config} annotation of the class
+     * @param annotation  the {@link Config} annotation of the class
      * @return the {@link Configuration} instance with implemented methods.
      * @throws ConfigDelegationException if the config cannot be delegated (/implemented)
      * @see ByteBuddy
@@ -125,9 +124,8 @@ public class ConfigDelegator {
      * (P.S: Can be improved see comment in code)
      *
      * @param annotation the annotation to get the extension from
-     * @param clazz the configClass (only used inside the exception as an information)
+     * @param clazz      the configClass (only used inside the exception as an information)
      * @return the resulting {@link ConfigDriver}
-     *
      * @throws ConfigDelegationException if no driver found for extension
      */
     private ConfigDriver getDriver(Config annotation, Class<?> clazz) throws ConfigDelegationException {

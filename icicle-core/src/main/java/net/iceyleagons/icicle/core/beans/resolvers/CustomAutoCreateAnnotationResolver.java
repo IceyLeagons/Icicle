@@ -31,10 +31,10 @@ import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotati
  * A CustomAutoCreateAnnotationResolver is basically a registry for all {@link CustomAutoCreateAnnotationHandler}s.
  * This is what the core calls, and this is what routes the request to the appropriate handler.
  *
- * @version 1.0.0
  * @author TOTHTOMI
- * @since Aug. 28, 2021
+ * @version 1.0.0
  * @see AutowiringAnnotationHandler
+ * @since Aug. 28, 2021
  */
 public interface CustomAutoCreateAnnotationResolver {
 
@@ -48,7 +48,7 @@ public interface CustomAutoCreateAnnotationResolver {
     /**
      * This method is called after the bean has been initialized and auto-wired.
      * This resolver will route this call to the appropriate {@link CustomAutoCreateAnnotationHandler#onCreated(Object, Class)}
-     *
+     * <p>
      * The supplied type must be used instead of calling {@link #getClass()} on the bean, due to proxying.
      * The type is the actual type of the bean, while the bean's class can be proxied.
      *
