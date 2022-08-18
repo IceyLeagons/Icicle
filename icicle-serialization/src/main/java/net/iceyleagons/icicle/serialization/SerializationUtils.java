@@ -33,6 +33,7 @@ import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,36 +43,60 @@ import static net.iceyleagons.icicle.utilities.StringUtils.containsIgnoresCase;
 
 /**
  * @author TOTHTOMI
- * @version 1.1.0
+ * @version 1.2.0
  * @since Jun. 13, 2022
  */
 public class SerializationUtils {
 
     public static Set<ObjectValue> getObjectValues(Class<?> javaType) {
         Set<ObjectValue> set = new ObjectArraySet<>(8);
+        final Method[] methods = javaType.getDeclaredMethods();
 
         for (Field declaredField : javaType.getDeclaredFields()) {
             if (Modifier.isTransient(declaredField.getModifiers())) continue;
 
-            final String name = SerializationUtils.getCustomNameOrDefault(declaredField, declaredField.getName());
 
-            ObjectValue obj = new ObjectValue(declaredField.getType(), name, getAnnotations(declaredField),
-                    (parent, value) -> ReflectionUtils.set(declaredField, parent, value),
-                    parent -> ReflectionUtils.get(declaredField, parent, Object.class),
-                    index -> GenericUtils.getGenericTypeClass(declaredField, index));
+            FuzzyResolver.getGettersAndSetters(declaredField, methods).ifPresentOrElse(setterAndGetter -> {
+                final Method getter = setterAndGetter.getA();
+                final Method setter = setterAndGetter.getB();
+                final String name = getter != null ? SerializationUtils.getCustomNameOrDefault(getter, declaredField.getName()) : SerializationUtils.getCustomNameOrDefault(declaredField, declaredField.getName());
 
-            set.add(obj);
+                ObjectValue obj = new ObjectValue(declaredField.getType(), name, getter != null ? getAnnotations(getter) : getAnnotations(setter), // Either getter or setter must be present. Otherwise the optional is empty
+                        (parent, value) -> {
+                            if (setter != null) {
+                                ReflectionUtils.invoke(setter, parent, Void.class, value);
+                            } else {
+                                ReflectionUtils.set(declaredField, parent, value);
+                            }
+                        },
+                        parent -> {
+                            if (getter != null) {
+                                return ReflectionUtils.invoke(getter, parent, Object.class);
+                            } else {
+                                return ReflectionUtils.get(declaredField, parent, Object.class);
+                            }
+                        },
+                        index -> GenericUtils.getGenericTypeClass(declaredField, index));
+
+                set.add(obj);
+            }, () -> {
+                final String name = SerializationUtils.getCustomNameOrDefault(declaredField, declaredField.getName());
+
+                ObjectValue obj = new ObjectValue(declaredField.getType(), name, getAnnotations(declaredField),
+                        (parent, value) -> ReflectionUtils.set(declaredField, parent, value),
+                        parent -> ReflectionUtils.get(declaredField, parent, Object.class),
+                        index -> GenericUtils.getGenericTypeClass(declaredField, index));
+
+                set.add(obj);
+            });
         }
 
         return set;
     }
 
     public static Map<Class<? extends Annotation>, Annotation> getAnnotations(AccessibleObject object) {
+        object.setAccessible(true);
         return Arrays.stream(object.getAnnotations()).collect(Collectors.toMap(Annotation::annotationType, a -> a));
-    }
-
-    public static boolean shouldIgnore(Field field) {
-        return false; //Modifier.isTransient(field.getModifiers()) || field.isAnnotationPresent(SerializeIgnore.class);
     }
 
     public static String getCustomNameOrDefault(AccessibleObject obj, String defaultValue) {

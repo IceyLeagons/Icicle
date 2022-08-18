@@ -53,6 +53,7 @@ public class SerializationTest {
     @BeforeAll
     public static void registerMappers() {
         // Normally this would be registered via Icicle-Core, but I didn't want to bootstrap Icicle for serialization test so yeah
+        if (!PropertyMapperAnnotationHandler.REGISTERED_PROPERTY_MAPPERS.isEmpty()) return;
         PropertyMapperAnnotationHandler.REGISTERED_PROPERTY_MAPPERS.add(new ArrayMapper());
         PropertyMapperAnnotationHandler.REGISTERED_PROPERTY_MAPPERS.add(new CollectionMapper());
         PropertyMapperAnnotationHandler.REGISTERED_PROPERTY_MAPPERS.add(new EnumMapper());

@@ -34,11 +34,22 @@ import java.lang.reflect.Method;
 /**
  * This class contains utility methods regarding java Reflections.
  * Some methods are only here to catch errors, so the code can be cleaner.
+ *
+ * @version 1.2.0
+ * @author TOTHTOMI
  */
 public final class ReflectionUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionUtils.class);
 
+    public static <T> T invoke(Method method, Object parent, Class<T> wantedType, Object... params) {
+        try {
+            method.setAccessible(true);
+            return castIfNecessary(wantedType, method.invoke(parent, params));
+        } catch (Exception e) {
+            throw new IllegalStateException(String.format("Could not invoke method (%s) inside %s", method.getName(), parent.getClass().getName()), e);
+        }
+    }
     public static void set(Field field, Object parent, Object value) {
         try {
             field.setAccessible(true);

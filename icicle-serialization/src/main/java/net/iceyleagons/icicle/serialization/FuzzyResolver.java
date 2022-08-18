@@ -24,6 +24,9 @@
 
 package net.iceyleagons.icicle.serialization;
 
+import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
+import net.iceyleagons.icicle.utilities.datastores.tuple.UnmodifiableTuple;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -32,7 +35,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author TOTHTOMI
- * @version 1.0.0
+ * @version 1.1.0
  * @since Jul. 23, 2022
  */
 public final class FuzzyResolver {
@@ -43,8 +46,16 @@ public final class FuzzyResolver {
     private static final Pattern GETTER_IS_PATTERN = Pattern.compile("(is)[A-Z].*");
     private static final Pattern SETTER_PATTERN = Pattern.compile("(set)[A-Z].*");
 
+    public static Optional<Tuple<Method, Method>> getGettersAndSetters(Field target, Method[] methods) {
+        Method getter = findGetter(target, methods).orElse(null);
+        Method setter = findSetter(target, methods).orElse(null);
+        if (getter == null && setter == null) return Optional.empty();
+
+        return Optional.of(new UnmodifiableTuple<>(getter, setter));
+    }
+
     public static Optional<Method> findSetter(Field target, Method[] methods) {
-        return findGetter(target.getName(), methods);
+        return findSetter(target.getName(), methods);
     }
 
     public static Optional<Method> findGetter(Field target, Method[] methods) {
@@ -55,14 +66,14 @@ public final class FuzzyResolver {
         final Pattern searchPattern = Pattern.compile("(set)(?i)" + target + ".*");
         return Arrays.stream(methods)
                 .filter(m -> searchPattern.matcher(m.getName()).matches())
-                .findAny();
+                .findFirst();
     }
 
     public static Optional<Method> findGetter(String target, Method[] methods) {
         final Pattern searchPattern = Pattern.compile("(get|is)(?i)" + target + ".*");
         return Arrays.stream(methods)
                 .filter(m -> searchPattern.matcher(m.getName()).matches())
-                .findAny();
+                .findFirst();
     }
 
     public static Optional<String> getPropertyNameFromMethod(Method methodName) {
