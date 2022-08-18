@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.util.Set;
 
 /**
@@ -64,6 +65,6 @@ public interface AutowiringAnnotationHandler {
      * @return the value or null
      * @see Nullable
      */
-    @Nullable <T> T getValueForAnnotation(Annotation annotation, Class<T> wantedType);
+    @Nullable <T> T getValueForAnnotation(Annotation annotation, Class<T> wantedType, Parameter parameter);
 
 }

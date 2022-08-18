@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.core.annotations;
 
+import net.iceyleagons.icicle.core.annotations.bean.Bean;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 

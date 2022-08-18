@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.beans;
 
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.InjectionParameterResolver;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
@@ -60,7 +61,7 @@ public interface BeanManager {
 
     /**
      * This method can be used if we want to create, auto-wire and register, etc. a bean after startup.
-     * ({@link net.iceyleagons.icicle.core.annotations.AutoCreate} annotated types should never call this)
+     * ({@link AutoCreate} annotated types should never call this)
      *
      * @param beanClass the bean to create
      * @throws BeanCreationException          if any other exception prevents the creation of a bean

@@ -28,9 +28,9 @@ import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.SuperCall;
-import net.iceyleagons.icicle.core.annotations.Primary;
+import net.iceyleagons.icicle.core.annotations.bean.Primary;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
-import net.iceyleagons.icicle.core.other.QualifierKey;
+import net.iceyleagons.icicle.core.beans.QualifierKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -80,6 +80,16 @@ public interface BeanRegistry {
     @Nullable <T> T getBeanNullable(Class<T> type, String qualifier);
 
     /**
+     * Returns the bean for the supplied qualifier key or null.
+     *
+     * @param qualifierKey  the qualifierKey
+     * @return the bean (if exists) or null
+     */
+    @Nullable default Object getBeanNullable(QualifierKey qualifierKey) {
+        return getBeanNullable(qualifierKey.getClazz(), qualifierKey.getName());
+    }
+
+    /**
      * Checks whether a bean instance has been registered for the supplied class.
      *
      * @param type the class to check
@@ -95,6 +105,17 @@ public interface BeanRegistry {
      * @return true if a bean instance is registered for this class
      */
     boolean isRegistered(Class<?> type, String qualifier);
+
+    /**
+     * Checks whether a bean instance has been registered for the supplied class.
+     * This will call {@link #isRegistered(Class, String)} after unwrapping the {@link QualifierKey} supplied.
+     *
+     * @param qualifier      the QualifierKey to check
+     * @return true if a bean instance is registered for this class
+     */
+    default boolean isRegistered(QualifierKey qualifierKey) {
+        return isRegistered(qualifierKey.getClazz(), qualifierKey.getName());
+    }
 
     /**
      * Registers a bean with the specified class (type).

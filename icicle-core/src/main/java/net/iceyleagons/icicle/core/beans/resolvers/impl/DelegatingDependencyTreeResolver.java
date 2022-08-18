@@ -25,12 +25,14 @@
 package net.iceyleagons.icicle.core.beans.resolvers.impl;
 
 import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
+import net.iceyleagons.icicle.core.annotations.bean.Bean;
+import net.iceyleagons.icicle.core.annotations.bean.Qualifier;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
-import net.iceyleagons.icicle.core.other.QualifierKey;
+import net.iceyleagons.icicle.core.beans.QualifierKey;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
 import net.iceyleagons.icicle.utilities.ListUtils;
 import org.slf4j.Logger;
@@ -48,7 +50,7 @@ import java.util.stream.Collectors;
  * Default implementation of {@link DependencyTreeResolver}.
  *
  * @author TOTHTOMI
- * @version 1.1.0
+ * @version 2.0.0
  * @see DependencyTreeResolver
  * @since Aug. 23, 2021
  */
@@ -70,6 +72,21 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         this.beanRegistry = beanRegistry;
         this.autoCreateResolver = autoCreateResolver;
         this.autowiringAnnotationResolver = autowiringAnnotationResolver;
+    }
+    
+    private Class<?> findClassThatCouldContainBeanMethodForType(QualifierKey key) {
+        for (Method method : this.autoCreateResolver.getReflections().getMethodsAnnotatedWith(Bean.class)) {
+            if (method.getReturnType().equals(key.getClazz())) {
+                if (method.isAnnotationPresent(Qualifier.class)) {
+                    if (method.getAnnotation(Qualifier.class).value().equals(key.getName())) {
+                        return method.getDeclaringClass();
+                    }
+                    return null;
+                }
+                return method.getDeclaringClass();
+            }
+        }
+        return null;
     }
 
     /**
@@ -123,17 +140,18 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
             }
 
             String qualifier = QualifierKey.getQualifier(param);
+            QualifierKey qualifierKey = new QualifierKey(dependency, qualifier);
 
             if (!beanRegistry.isRegistered(dependency, qualifier)) {
-                if (tree.contains(new QualifierKey(dependency, qualifier))) {
+                if (tree.contains(qualifierKey)) {
                     logger.warn("Circular dependency found!");
                     throw new CircularDependencyException(getCycleString(tree, dependency, bean));
                 } else if (!this.autoCreateResolver.isAnnotated(dependency)) {
                     if (dependency.isInterface()) {
-                        // Maybe it's a Service or GlobalService interface
+                        // It's an interface, maybe we have implementations
                         List<Class<?>> impls =
                                 BeanUtils.getImplementationsOfInterface(dependency, this.autoCreateResolver.getReflections())
-                                        .stream().filter(c -> QualifierKey.getQualifier(c).equals(qualifier)).collect(Collectors.toList());
+                                        .stream().filter(c -> QualifierKey.getQualifier(c).equals(qualifier)).toList();
 
                         if (impls.isEmpty()) {
                             throw new UnsatisfiedDependencyException(param);
@@ -148,12 +166,19 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
                         stack.add(impl);
                         continue;
                     } else {
-                        throw new UnsatisfiedDependencyException(param);
+                        // System.out.println("Getting potential classes for: " + qualifierKey.getClazz() + " | " + qualifierKey.getName());
+                        Class<?> potentialClass = findClassThatCouldContainBeanMethodForType(qualifierKey);
+                        if (potentialClass == null) {
+                            throw new UnsatisfiedDependencyException(param);
+                        }
+
+                        tree.add(qualifierKey);
+                        stack.add(potentialClass);
                     }
                 }
             }
 
-            tree.add(new QualifierKey(dependency, qualifier));
+            tree.add(qualifierKey);
             stack.add(dependency);
         }
     }

@@ -24,7 +24,7 @@
 
 package net.iceyleagons.icicle.serialization.mapping;
 
-import net.iceyleagons.icicle.core.annotations.AutoCreate;
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

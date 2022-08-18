@@ -22,25 +22,28 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations;
+package net.iceyleagons.icicle.core.annotations.bean;
 
-import java.lang.annotation.ElementType;
+
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 /**
- * Annotation used to mark constructors as being auto wired, this is not a functional annotation, it's only used in documentation.
- * <p>
- * Since Icicle does not support field auto-wiring, and because the constructor auto
- * wiring is automatic (meaning no annotation needed) this annotation is only used for documentation ->
- * more understandable code (especially) for those, who are not familiar with the framework.
+ * AutoCreate is used across Icicle to mark the beans as Icicle-managed ones.
+ * These beans will be initialized, and proxied by the {@link net.iceyleagons.icicle.core.beans.BeanManager}.
  *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Oct. 31, 2021
+ * @see net.iceyleagons.icicle.core.beans.BeanManager
+ * @see net.iceyleagons.icicle.core.beans.DefaultBeanManager
+ * @see net.iceyleagons.icicle.core.proxy.BeanProxyHandler
+ * @see net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler
+ * @since Aug. 25, 2021
  */
-@Target({ElementType.CONSTRUCTOR, ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Autowired {
+@Target(TYPE)
+@Retention(RUNTIME)
+public @interface AutoCreate {
 }

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.other;
+package net.iceyleagons.icicle.core.beans.handlers;
 
 import it.unimi.dsi.fastutil.objects.ObjectSets;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +30,7 @@ import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
+import net.iceyleagons.icicle.core.beans.QualifierKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;

@@ -24,7 +24,7 @@
 
 package net.iceyleagons.icicle.core.modifiers;
 
-import net.iceyleagons.icicle.core.annotations.AutoCreate;
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 
 import java.lang.annotation.*;
 

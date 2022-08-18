@@ -26,6 +26,7 @@ package net.iceyleagons.icicle.core.annotations;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.reflections.Reflections;
 

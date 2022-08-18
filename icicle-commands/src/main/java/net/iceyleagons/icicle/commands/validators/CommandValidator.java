@@ -25,7 +25,7 @@
 package net.iceyleagons.icicle.commands.validators;
 
 import net.iceyleagons.icicle.commands.middleware.CommandMiddleware;
-import net.iceyleagons.icicle.core.annotations.AutoCreate;
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;

@@ -22,11 +22,12 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.test.icicle.core.bean.circular;
+package net.iceyleagons.test.icicle.core.bean.lazy;
 
 import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.Icicle;
+import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import org.junit.jupiter.api.Assertions;
@@ -38,20 +39,30 @@ import org.junit.jupiter.api.Test;
  * @version 1.0.0
  * @since Feb. 01, 2022
  */
-@DisplayName("Service Circular Dependencies")
-public class CircularDependencyTest {
+@DisplayName("Lazy Initialization Test")
+public class LazyTest {
 
     @Test
-    @DisplayName("Circular dependency (for services)")
-    public void testCircularDependency() {
+    public void testLazy() throws Exception {
         if (!Icicle.LOADED)
             Icicle.loadIcicle(null);
-        Application app = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.circular2", ExecutionUtils.debugHandler(), null) {
+        Application app = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.lazy", ExecutionUtils.debugHandler(), null) {
             @Override
             public String getName() {
                 return "test";
             }
         };
-        Assertions.assertThrows(CircularDependencyException.class, app::start);
+        app.start();
+
+        BeanRegistry registry = app.getBeanManager().getBeanRegistry();
+        Lazy1 lazy1 = registry.getBeanNullable(Lazy1.class);
+        Lazy2 lazy2 = registry.getBeanNullable(Lazy2.class);
+
+        // I test for the strings, as because of the proxying these won't be the same!
+        Assertions.assertEquals("Lazy1String", lazy2.lazy1.getTestString());
+        Assertions.assertEquals("Lazy1String", lazy1.getTestString());
+        Assertions.assertEquals("Lazy2String", lazy1.lazy2.getTestString());
+        Assertions.assertEquals("Lazy2String", lazy2.getTestString());
+
     }
 }

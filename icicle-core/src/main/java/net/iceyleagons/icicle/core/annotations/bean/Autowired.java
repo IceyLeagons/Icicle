@@ -22,27 +22,25 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.test.icicle.core.bean.resolvable;
+package net.iceyleagons.icicle.core.annotations.bean;
 
-import net.iceyleagons.icicle.core.annotations.bean.Autowired;
-import net.iceyleagons.icicle.core.annotations.bean.Qualifier;
-import net.iceyleagons.icicle.core.annotations.service.Service;
-import net.iceyleagons.test.icicle.core.bean.resolvable.qualifier.TestService;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
+ * Annotation used to mark constructors as being auto wired, this is not a functional annotation, it's only used in documentation.
+ * <p>
+ * Since Icicle does not support field auto-wiring, and because the constructor auto
+ * wiring is automatic (meaning no annotation needed) this annotation is only used for documentation ->
+ * more understandable code (especially) for those, who are not familiar with the framework.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jun. 21, 2022
+ * @since Oct. 31, 2021
  */
-@Service
-public class SetterTesterService {
-
-    public EmptyConstructorService.TestBean testBean;
-    public TestService testService;
-
-    @Autowired
-    public void setTestBean(EmptyConstructorService.TestBean testBean, @Qualifier("qualified") TestService ts) {
-        this.testBean = testBean;
-        this.testService = ts;
-    }
+@Target({ElementType.CONSTRUCTOR, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Autowired {
 }

@@ -22,27 +22,22 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.test.icicle.core.bean.resolvable;
+package net.iceyleagons.test.icicle.core.bean.circular2;
 
-import net.iceyleagons.icicle.core.annotations.bean.Autowired;
-import net.iceyleagons.icicle.core.annotations.bean.Qualifier;
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 import net.iceyleagons.icicle.core.annotations.service.Service;
-import net.iceyleagons.test.icicle.core.bean.resolvable.qualifier.TestService;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jun. 21, 2022
+ * @since Feb. 01, 2022
  */
-@Service
-public class SetterTesterService {
+@AutoCreate
+public class Circular1 {
 
-    public EmptyConstructorService.TestBean testBean;
-    public TestService testService;
+    private final Circular2 circular2;
 
-    @Autowired
-    public void setTestBean(EmptyConstructorService.TestBean testBean, @Qualifier("qualified") TestService ts) {
-        this.testBean = testBean;
-        this.testService = ts;
+    public Circular1(Circular2 circular2) {
+        this.circular2 = circular2;
     }
 }

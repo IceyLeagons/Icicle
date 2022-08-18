@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.other;
+package net.iceyleagons.icicle.core.beans;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.iceyleagons.icicle.core.annotations.Qualifier;
+import net.iceyleagons.icicle.core.annotations.bean.Qualifier;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;

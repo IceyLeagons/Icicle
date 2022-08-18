@@ -25,7 +25,7 @@
 package net.iceyleagons.icicle.bukkit.annotations;
 
 import it.unimi.dsi.fastutil.objects.ObjectSets;
-import net.iceyleagons.icicle.core.annotations.Autowired;
+import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import org.bukkit.event.Listener;

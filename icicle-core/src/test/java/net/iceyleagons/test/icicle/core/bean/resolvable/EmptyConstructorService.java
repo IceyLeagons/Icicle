@@ -24,7 +24,7 @@
 
 package net.iceyleagons.test.icicle.core.bean.resolvable;
 
-import net.iceyleagons.icicle.core.annotations.Bean;
+import net.iceyleagons.icicle.core.annotations.bean.Bean;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 
 import java.util.UUID;

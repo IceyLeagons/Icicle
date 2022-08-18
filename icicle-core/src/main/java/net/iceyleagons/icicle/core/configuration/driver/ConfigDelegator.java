@@ -30,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.implementation.attribute.AnnotationRetention;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.config.ConfigurationDriver;
@@ -103,7 +104,7 @@ public class ConfigDelegator {
 
         try {
             ConfigDriver driver = getDriver(annotation, configClass);
-            Configuration config = (Configuration) bytebuddy.subclass(configClass)
+            Configuration config = (Configuration) bytebuddy.with(AnnotationRetention.ENABLED).subclass(configClass)
                     .method(ElementMatchers.isPublic()).intercept(MethodDelegation.to(driver))
                     .make()
                     .load(constructor.getDeclaringClass().getClassLoader(), ClassReloadingStrategy.fromInstalledAgent())

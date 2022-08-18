@@ -27,7 +27,7 @@ package net.iceyleagons.icicle.commands.handlers;
 import net.iceyleagons.icicle.commands.CommandService;
 import net.iceyleagons.icicle.commands.validators.CommandParameterValidator;
 import net.iceyleagons.icicle.commands.validators.CommandValidator;
-import net.iceyleagons.icicle.core.annotations.Autowired;
+import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import org.jetbrains.annotations.NotNull;

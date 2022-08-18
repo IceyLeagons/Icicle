@@ -22,27 +22,20 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.test.icicle.core.bean.resolvable;
+package net.iceyleagons.icicle.core.annotations.bean;
 
-import net.iceyleagons.icicle.core.annotations.bean.Autowired;
-import net.iceyleagons.icicle.core.annotations.bean.Qualifier;
-import net.iceyleagons.icicle.core.annotations.service.Service;
-import net.iceyleagons.test.icicle.core.bean.resolvable.qualifier.TestService;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jun. 21, 2022
+ * @since Nov. 28, 2021
  */
-@Service
-public class SetterTesterService {
-
-    public EmptyConstructorService.TestBean testBean;
-    public TestService testService;
-
-    @Autowired
-    public void setTestBean(EmptyConstructorService.TestBean testBean, @Qualifier("qualified") TestService ts) {
-        this.testBean = testBean;
-        this.testService = ts;
-    }
+@Target(METHOD)
+@Retention(RUNTIME)
+public @interface Primary {
 }

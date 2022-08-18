@@ -22,32 +22,36 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations;
+package net.iceyleagons.test.icicle.core.bean.circular2;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import net.iceyleagons.icicle.core.AbstractIcicleApplication;
+import net.iceyleagons.icicle.core.Application;
+import net.iceyleagons.icicle.core.Icicle;
+import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
+import net.iceyleagons.icicle.core.utils.ExecutionUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 /**
- * AutoCreate instances (atm should only be used with @{@link net.iceyleagons.icicle.core.annotations.service.Service}s) marked with this annotation will be stored
- * with the unique key given via {@link #value()}.
- * <p>
- * These instances can only be autowired with the same key, and using this annotation on a parameter
- *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jun. 6, 2022
+ * @since Feb. 01, 2022
  */
-@Target({TYPE, PARAMETER})
-@Retention(RUNTIME)
-public @interface Qualifier {
+@DisplayName("General Circular Dependencies")
+public class CircularDependencyTest {
 
-    /**
-     * @return the qualifier. (name of the implementation)
-     */
-    String value() default "";
-
+    @Test
+    @DisplayName("Circular dependency (for general auto-create)")
+    public void testCircularDependency() {
+        if (!Icicle.LOADED)
+            Icicle.loadIcicle(null);
+        Application app = new AbstractIcicleApplication("net.iceyleagons.test.icicle.core.bean.circular", ExecutionUtils.debugHandler(), null) {
+            @Override
+            public String getName() {
+                return "test";
+            }
+        };
+        Assertions.assertThrows(CircularDependencyException.class, app::start);
+    }
 }

@@ -30,6 +30,7 @@ import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHand
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.util.Map;
 
 /**
@@ -65,7 +66,7 @@ public class DelegatingAutowiringAnnotationResolver implements AutowiringAnnotat
      * {@inheritDoc}
      */
     @Override
-    public <T> T getValueForAnnotation(Class<? extends Annotation> annotationType, Annotation annotation, Class<T> wantedType) {
-        return handlers.containsKey(annotationType) ? handlers.get(annotationType).getValueForAnnotation(annotation, wantedType) : null;
+    public <T> T getValueForAnnotation(Class<? extends Annotation> annotationType, Annotation annotation, Class<T> wantedType, Parameter parameter) {
+        return handlers.containsKey(annotationType) ? handlers.get(annotationType).getValueForAnnotation(annotation, wantedType, parameter) : null;
     }
 }

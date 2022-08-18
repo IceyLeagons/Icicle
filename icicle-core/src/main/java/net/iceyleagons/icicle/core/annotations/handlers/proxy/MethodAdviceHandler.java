@@ -24,7 +24,7 @@
 
 package net.iceyleagons.icicle.core.annotations.handlers.proxy;
 
-import net.iceyleagons.icicle.core.annotations.AutoCreate;
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
 

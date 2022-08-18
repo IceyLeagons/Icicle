@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,32 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations;
+package net.iceyleagons.icicle.core.annotations.bean;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * AutoCreate instances (atm should only be used with @{@link net.iceyleagons.icicle.core.annotations.service.Service}s) marked with this annotation will be stored
+ * with the unique key given via {@link #value()}.
+ * <p>
+ * These instances can only be autowired with the same key, and using this annotation on a parameter
+ *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 28, 2021
+ * @since Jun. 6, 2022
  */
-@Target(METHOD)
+@Target({TYPE, PARAMETER})
 @Retention(RUNTIME)
-public @interface Primary {
+public @interface Qualifier {
+
+    /**
+     * @return the qualifier. (name of the implementation)
+     */
+    String value() default "";
+
 }

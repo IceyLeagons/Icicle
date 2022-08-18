@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.util.Collections;
 import java.util.Set;
 
@@ -51,7 +52,7 @@ public class ConfigPropertyAutowiringHandler implements AutowiringAnnotationHand
 
     @Nullable
     @Override
-    public <T> T getValueForAnnotation(Annotation annotation, Class<T> wantedType) {
+    public <T> T getValueForAnnotation(Annotation annotation, Class<T> wantedType, Parameter parameter) {
         if (annotation instanceof Property) {
             return configurationEnvironment.getProperty(((Property) annotation).value(), wantedType).orElse(null);
         }

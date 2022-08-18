@@ -28,6 +28,7 @@ import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHand
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 
 /**
  * An AutowiringAnnotationResolver is basically a registry for all {@link AutowiringAnnotationHandler}s.
@@ -50,9 +51,9 @@ public interface AutowiringAnnotationResolver {
      * @return the value or null
      * @see Nullable
      * @see AutowiringAnnotationHandler
-     * @see AutowiringAnnotationHandler#getValueForAnnotation(Annotation, Class)
+     * @see AutowiringAnnotationHandler#getValueForAnnotation(Annotation, Class, Parameter)
      */
-    @Nullable <T> T getValueForAnnotation(Class<? extends Annotation> annotationType, Annotation annotation, Class<T> wantedType);
+    @Nullable <T> T getValueForAnnotation(Class<? extends Annotation> annotationType, Annotation annotation, Class<T> wantedType, Parameter parameter);
 
     /**
      * Registers a new {@link AutowiringAnnotationHandler}.

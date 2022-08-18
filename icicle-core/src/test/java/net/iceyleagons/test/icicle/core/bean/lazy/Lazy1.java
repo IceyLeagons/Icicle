@@ -22,27 +22,27 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.test.icicle.core.bean.resolvable;
+package net.iceyleagons.test.icicle.core.bean.lazy;
 
-import net.iceyleagons.icicle.core.annotations.bean.Autowired;
-import net.iceyleagons.icicle.core.annotations.bean.Qualifier;
 import net.iceyleagons.icicle.core.annotations.service.Service;
-import net.iceyleagons.test.icicle.core.bean.resolvable.qualifier.TestService;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jun. 21, 2022
+ * @since Aug. 18, 2022
  */
 @Service
-public class SetterTesterService {
+public class Lazy1 {
 
-    public EmptyConstructorService.TestBean testBean;
-    public TestService testService;
+    public Lazy2 lazy2;
+    private String testString;
 
-    @Autowired
-    public void setTestBean(EmptyConstructorService.TestBean testBean, @Qualifier("qualified") TestService ts) {
-        this.testBean = testBean;
-        this.testService = ts;
+    public Lazy1(Lazy2 lazy2) {
+        this.lazy2 = lazy2;
+        this.testString = "Lazy1String";
+    }
+
+    public String getTestString() {
+        return this.testString;
     }
 }

@@ -24,7 +24,7 @@
 
 package net.iceyleagons.test.icicle.core.bean.resolvable.qualifier;
 
-import net.iceyleagons.icicle.core.annotations.Qualifier;
+import net.iceyleagons.icicle.core.annotations.bean.Qualifier;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 
 /**

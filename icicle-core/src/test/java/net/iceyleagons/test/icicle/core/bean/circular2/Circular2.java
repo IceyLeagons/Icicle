@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,28 +22,22 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations;
+package net.iceyleagons.test.icicle.core.bean.circular2;
 
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
+import net.iceyleagons.icicle.core.annotations.service.Service;
 
 /**
- * AutoCreate is used across Icicle to mark the beans as Icicle-managed ones.
- * These beans will be initialized, and proxied by the {@link net.iceyleagons.icicle.core.beans.BeanManager}.
- *
  * @author TOTHTOMI
  * @version 1.0.0
- * @see net.iceyleagons.icicle.core.beans.BeanManager
- * @see net.iceyleagons.icicle.core.beans.DefaultBeanManager
- * @see net.iceyleagons.icicle.core.proxy.BeanProxyHandler
- * @see net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler
- * @since Aug. 25, 2021
+ * @since Feb. 01, 2022
  */
-@Target(TYPE)
-@Retention(RUNTIME)
-public @interface AutoCreate {
+@AutoCreate
+public class Circular2 {
+
+    private final Circular3 circular3;
+
+    public Circular2(Circular3 circular3) {
+        this.circular3 = circular3;
+    }
 }

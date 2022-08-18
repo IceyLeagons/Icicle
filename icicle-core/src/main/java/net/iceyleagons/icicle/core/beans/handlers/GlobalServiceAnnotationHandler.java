@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.other;
+package net.iceyleagons.icicle.core.beans.handlers;
 
 import net.iceyleagons.icicle.core.Application;
-import net.iceyleagons.icicle.core.annotations.Autowired;
+import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.service.GlobalService;

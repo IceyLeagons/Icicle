@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.util.Collections;
 import java.util.Set;
 
@@ -47,7 +48,7 @@ public class TestAutowiringHandler implements AutowiringAnnotationHandler {
     }
 
     @Override
-    public <T> @Nullable T getValueForAnnotation(Annotation annotation, Class<T> wantedType) {
+    public <T> @Nullable T getValueForAnnotation(Annotation annotation, Class<T> wantedType, Parameter parameter) {
         if (annotation instanceof TestAutowiring && wantedType.equals(String.class)) {
             TestAutowiring testAutowiring = (TestAutowiring) annotation;
             return wantedType.cast(testAutowiring.value());

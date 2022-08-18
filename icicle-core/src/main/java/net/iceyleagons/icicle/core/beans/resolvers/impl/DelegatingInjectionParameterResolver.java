@@ -28,7 +28,7 @@ import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.InjectionParameterResolver;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
-import net.iceyleagons.icicle.core.other.QualifierKey;
+import net.iceyleagons.icicle.core.beans.QualifierKey;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Executable;
@@ -74,7 +74,7 @@ public class DelegatingInjectionParameterResolver implements InjectionParameterR
 
             if (parameter.getAnnotations().length != 0 && result == null) {
                 for (Annotation annotation : parameter.getAnnotations()) {
-                    result = autowiringAnnotationResolver.getValueForAnnotation(annotation.annotationType(), annotation, type);
+                    result = autowiringAnnotationResolver.getValueForAnnotation(annotation.annotationType(), annotation, type, parameter);
                     if (result != null) break;
                 }
             }

@@ -27,9 +27,9 @@ package net.iceyleagons.icicle.core.beans;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.Application;
-import net.iceyleagons.icicle.core.annotations.AutoCreate;
-import net.iceyleagons.icicle.core.annotations.Autowired;
-import net.iceyleagons.icicle.core.annotations.Bean;
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
+import net.iceyleagons.icicle.core.annotations.bean.Autowired;
+import net.iceyleagons.icicle.core.annotations.bean.Bean;
 import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
 import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.config.ConfigurationDriver;
@@ -58,6 +58,7 @@ import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,10 +67,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Default implementation of {@link BeanManager}.
@@ -101,6 +99,7 @@ public class DefaultBeanManager implements BeanManager {
         this.reflections = application.getReflections();
 
         this.beanRegistry = new DelegatingBeanRegistry(application);
+        this.beanRegistry.registerBean(BeanManager.class, this);
         this.beanRegistry.registerBean(BeanRegistry.class, beanRegistry);
         this.beanRegistry.registerBean(DelegatingBeanRegistry.class, beanRegistry);
 
@@ -115,7 +114,6 @@ public class DefaultBeanManager implements BeanManager {
 
         this.beanProxyHandler = new ByteBuddyProxyHandler();
         this.constructorParameterResolver = new DelegatingInjectionParameterResolver(autowiringAnnotationResolver);
-
     }
 
     /**
@@ -316,6 +314,7 @@ public class DefaultBeanManager implements BeanManager {
         createAndRegisterMethodInterceptorsAndAdvices(autoCreationTypes);
 
         PerformanceLog.begin(application, "Creating non-exclusive beans", DefaultBeanManager.class);
+
         for (Class<?> autoCreationType : autoCreationTypes) {
             createAndRegisterBean(autoCreationType);
         }
@@ -455,7 +454,8 @@ public class DefaultBeanManager implements BeanManager {
      * @param bean      the beanObject
      */
     private void callBeanMethodsInsideBean(Class<?> beanClass, Object bean) {
-        for (Method method : Arrays.stream(beanClass.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(Bean.class)).toList()) {
+        for (Method method : beanClass.getDeclaredMethods()) {
+            if (!method.isAnnotationPresent(Bean.class)) continue; // Moved from stream due to occasional issues
             try {
                 method.setAccessible(true);
                 method.invoke(bean); // BeanDelegation (in proxy) will take care of registration, we just need to invoke it once, to register it

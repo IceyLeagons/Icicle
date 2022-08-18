@@ -24,17 +24,18 @@
 
 package net.iceyleagons.icicle.core.annotations.handlers;
 
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
 /**
- * CustomAutoCreateAnnotationHandlers are used to write custom logic to new {@link net.iceyleagons.icicle.core.annotations.AutoCreate} subtypes.
+ * CustomAutoCreateAnnotationHandlers are used to write custom logic to new {@link AutoCreate} subtypes.
  * After the AutoCreate subtype has been initialized by the {@link net.iceyleagons.icicle.core.beans.BeanManager} it will call this handler, to handle the
  * additional logic required for that type(s).
  * <p>
- * Note, that all custom annotations must annotate the @{@link net.iceyleagons.icicle.core.annotations.AutoCreate} annotation for this to work!
+ * Note, that all custom annotations must annotate the @{@link AutoCreate} annotation for this to work!
  *
  * @author TOTHTOMI
  * @version 1.0.0

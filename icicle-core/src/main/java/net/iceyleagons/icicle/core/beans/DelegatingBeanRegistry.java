@@ -29,7 +29,6 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.exceptions.MultipleInstanceException;
-import net.iceyleagons.icicle.core.other.QualifierKey;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import org.jetbrains.annotations.Nullable;
