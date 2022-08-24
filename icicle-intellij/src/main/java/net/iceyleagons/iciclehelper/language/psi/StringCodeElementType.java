@@ -22,16 +22,21 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.intellij;
+package net.iceyleagons.iciclehelper.language.psi;
+
+
+import com.intellij.psi.tree.IElementType;
+import net.iceyleagons.iciclehelper.language.StringCodeLanguage;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Mar. 15, 2022
+ * @since Aug. 20, 2022
  */
-public class Plugin {
-
-    // TODO Wanted to do syntax highlighting, but no clue how it works.
-    //  Ex.: https://github.com/carymrobbins/intellij-plugin-example
-
+public class StringCodeElementType extends IElementType {
+    public StringCodeElementType(@NonNls @NotNull String debugName) {
+        super(debugName, StringCodeLanguage.INSTANCE);
+    }
 }

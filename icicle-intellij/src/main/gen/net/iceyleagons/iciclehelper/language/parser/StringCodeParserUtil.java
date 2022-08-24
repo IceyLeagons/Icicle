@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,32 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-enableFeaturePreview("VERSION_CATALOGS")
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        maven {
-            url = uri("https://plugins.gradle.org/m2/")
-        }
-        maven {
-            url = uri("https://mvn.iceyleagons.net/snapshots/")
-            name = "Igloo Snapshots"
-        }
-    }
+package net.iceyleagons.iciclehelper.language.parser;
+
+import com.intellij.lang.parser.GeneratedParserUtilBase;
+
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Aug. 21, 2022
+ */public class StringCodeParserUtil extends GeneratedParserUtilBase {
 }
-
-rootProject.name = "icicle"
-
-include("icicle-core")
-include("icicle-utilities")
-include("icicle-serialization")
-include("icicle-gradle")
-include("icicle-bukkit")
-include("icicle-kotlin")
-include("icicle-commands")
-include("icicle-protocol")
-include("icicle-nms")
-include("icicle-demo")
-include("icicle-gui")
-include("icicle-intellij")

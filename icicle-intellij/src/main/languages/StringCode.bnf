@@ -1,0 +1,72 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2022 IceyLeagons and Contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+{
+    parserClass = "net.iceyleagons.iciclehelper.language.parser.StringCodeParser"
+    parserUtilClass="net.iceyleagons.iciclehelper.language.parser.StringCodeParserUtil"
+
+    extends = "com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    psiClassPrefix = "StringCode"
+    psiImplClassSuffix = "Impl"
+    psiPackage = "net.iceyleagons.icicle.intellij.language.psi"
+    psiImplPackage = "net.iceyleagons.icicle.intellij.language.psi.impl"
+
+    elementTypeHolderClass = "net.iceyleagons.iciclehelper.language.psi.StringCodeTypes"
+    elementTypeClass = "net.iceyleagons.iciclehelper.language.psi.StringCodeElementType"
+    tokenTypeClass = "net.iceyleagons.iciclehelper.language.psi.StringCodeTokenType"
+
+    tokens = [
+        keyword = "regexp:TRUE|FALSE|AND|NOT|OR|GT|GTEQ|LT|LTEQ|ADD|DIV|MOD|MUL|SUB|CONCAT|EW|EQ|IF|ISEMPTY|JOIN|NE|SW"
+
+        COMMA = ','
+
+        SPACE_LITERAL = "regexp:\s+"
+        IDENTIFIER_LITERAL = "regexp:[a-zA-Z_][a-zA-Z0-9_]*"
+        INTEGER_LITERAL = "regexp:(0|[1-9][0-9]*)|(0[xX][0-9a-fA-F]+)|(0[0-7]+)"
+        STRING_LITERAL = "regexp:('([^'\\])*')"
+
+        CODE_PART_START = '{'
+        CODE_PART_END = '}'
+        FUNC_PART_START = '('
+        FUNC_PART_END = ')'
+    ]
+}
+root ::= ((CODE_PART_START value CODE_PART_END) | value | stringCode)*
+stringCode ::= CODE_PART_START function* CODE_PART_END
+
+function ::= keyword FUNC_PART_START function_body* FUNC_PART_END {
+    pin = 1
+}
+
+function_body ::= value (','|&')') {
+    recoverWhile = not_bracket_or_next_value
+    pin = 1
+}
+
+// Constants
+value ::= IDENTIFIER_LITERAL | STRING_LITERAL | INTEGER_LITERAL | function
+
+// Recoveries
+not_bracket_or_next_value ::= !(','|FUNC_PART_END|value)

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,32 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-enableFeaturePreview("VERSION_CATALOGS")
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        maven {
-            url = uri("https://plugins.gradle.org/m2/")
-        }
-        maven {
-            url = uri("https://mvn.iceyleagons.net/snapshots/")
-            name = "Igloo Snapshots"
-        }
-    }
+// This is a generated file. Not intended for manual editing.
+package net.iceyleagons.iciclehelper.language.psi.impl;
+
+import net.iceyleagons.iciclehelper.language.psi.StringCodeNotBracketOrNextValue;
+import net.iceyleagons.iciclehelper.language.psi.StringCodeVisitor;
+import org.jetbrains.annotations.*;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
+
+public class StringCodeNotBracketOrNextValueImpl extends ASTWrapperPsiElement implements StringCodeNotBracketOrNextValue {
+
+  public StringCodeNotBracketOrNextValueImpl(@NotNull ASTNode node) {
+    super(node);
+  }
+
+  public void accept(@NotNull StringCodeVisitor visitor) {
+    visitor.visitNotBracketOrNextValue(this);
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof StringCodeVisitor) accept((StringCodeVisitor)visitor);
+    else super.accept(visitor);
+  }
+
 }
-
-rootProject.name = "icicle"
-
-include("icicle-core")
-include("icicle-utilities")
-include("icicle-serialization")
-include("icicle-gradle")
-include("icicle-bukkit")
-include("icicle-kotlin")
-include("icicle-commands")
-include("icicle-protocol")
-include("icicle-nms")
-include("icicle-demo")
-include("icicle-gui")
-include("icicle-intellij")
