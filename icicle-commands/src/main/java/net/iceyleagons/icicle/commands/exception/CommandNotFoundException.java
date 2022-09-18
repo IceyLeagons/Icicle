@@ -24,18 +24,18 @@
 
 package net.iceyleagons.icicle.commands.exception;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.commands.utils.StandardCommandErrors;
+import net.iceyleagons.icicle.core.exceptions.TranslatableException;
+
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 12, 2021
+ * @since Sept. 11, 2022
  */
-@Getter
-@RequiredArgsConstructor
-public class CommandNotFoundException extends Exception {
-
-    private final String command;
-
+public class CommandNotFoundException extends TranslatableException {
+    public CommandNotFoundException(String cmd) {
+        super(StandardCommandErrors.REGISTRY_CMD_NOT_FOUND_KEY, StandardCommandErrors.REGISTRY_CMD_NOT_FOUND_DEFAULT, Map.of("cmd", cmd));
+    }
 }

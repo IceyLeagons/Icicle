@@ -22,23 +22,27 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
+package net.iceyleagons.icicle.commands.validators;
 
-import net.iceyleagons.icicle.commands.utils.Store;
+import net.iceyleagons.icicle.commands.exception.ParameterValidationException;
+
+import java.lang.reflect.Parameter;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+public interface CommandValidatorTemplate {
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
-        }
+    /**
+     * Validates the parameter against the given input.
+     * If the validation fails, this method will throw a {@link ParameterValidationException}
+     *
+     * @param parameter the parameter
+     * @param input the input to validate
+     * @throws ParameterValidationException if the validation fails
+     */
+    void validate(Parameter parameter, String input) throws ParameterValidationException;
 
-        super.elements.put(middlewareClass, middlewareTemplate);
-    }
 }

@@ -22,23 +22,23 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
+package net.iceyleagons.icicle.commands.annotations;
 
-import net.iceyleagons.icicle.commands.utils.Store;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
+public @interface Usage {
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
-        }
+    String key();
+    String defaultValue();
 
-        super.elements.put(middlewareClass, middlewareTemplate);
-    }
 }

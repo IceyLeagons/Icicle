@@ -24,17 +24,15 @@
 
 package net.iceyleagons.iciclehelper;
 
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoFilter;
-import com.intellij.java.JavaBundle;
-import com.intellij.lang.annotation.AnnotationSession;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.iceyleagons.iciclehelper.utils.AnnotationSearchUtil;
 import net.iceyleagons.iciclehelper.utils.IcicleUtil;
@@ -45,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * @author TOTHTOMI

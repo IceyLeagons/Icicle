@@ -24,31 +24,23 @@
 
 package net.iceyleagons.icicle.commands.validators;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import lombok.Getter;
+import net.iceyleagons.icicle.commands.utils.Store;
 
 import java.lang.annotation.Annotation;
-import java.util.Map;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Mar. 19, 2022
+ * @since Sept. 11, 2022
  */
-public class ValidatorStore {
+public class ValidatorStore extends Store<Class<? extends Annotation>, CommandValidatorTemplate> {
 
-    @Getter
-    private final Map<Class<? extends Annotation>, CommandParameterValidator> validators = new Object2ObjectOpenHashMap<>(16);
-
-    public void registerValidator(CommandParameterValidator validator, CommandValidator commandValidator) {
-        final Class<? extends Annotation> validatorClass = commandValidator.value();
-        Class<?> toReplace = commandValidator.replaces();
-
+    public void registerValidator(CommandValidatorTemplate template, CommandValidator annotation) {
+        Class<?> toReplace = annotation.replaces();
         if (toReplace != CommandValidator.Nothing.class) {
-            validators.remove(toReplace);
+            super.elements.remove(toReplace);
         }
 
-        validators.put(validatorClass, validator);
-        System.out.println("Registered: " + validatorClass.getName());
+        super.elements.put(annotation.value(), template);
     }
 }

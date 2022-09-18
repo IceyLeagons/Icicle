@@ -22,23 +22,30 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
+package net.iceyleagons.icicle.commands;
 
-import net.iceyleagons.icicle.commands.utils.Store;
+import net.iceyleagons.icicle.commands.exception.CommandNotFoundException;
+import net.iceyleagons.icicle.commands.exception.CommandRegistrationException;
+import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
+
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+public interface CommandRegistry {
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
-        }
+    void registerSubCommand(CommandManager subManager, String... aliases) throws CommandRegistrationException;
+    void registerCommand(Method method, Object origin) throws CommandRegistrationException;
 
-        super.elements.put(middlewareClass, middlewareTemplate);
-    }
+    Set<Tuple<String, Command>> getAllChildCommands(String rootCommand);
+    Map<String, Command> getCommands();
+    Map<String, CommandManager> getSubCommands();
+
+    CommandManager getSubCommand(String cmd) throws CommandNotFoundException;
+    Command getCommand(String cmd) throws CommandNotFoundException;
 }

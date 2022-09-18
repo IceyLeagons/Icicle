@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
+package net.iceyleagons.icicle.commands.params;
 
 import net.iceyleagons.icicle.commands.utils.Store;
 
@@ -31,14 +31,11 @@ import net.iceyleagons.icicle.commands.utils.Store;
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+public class ParameterResolverStore extends Store<Class<?>, CommandParameterResolverTemplate> {
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
+    public void registerParameterResolver(CommandParameterResolverTemplate resolverTemplate, CommandParameterResolver annotation) {
+        for (Class<?> aClass : annotation.value()) {
+            super.elements.put(aClass, resolverTemplate);
         }
-
-        super.elements.put(middlewareClass, middlewareTemplate);
     }
 }

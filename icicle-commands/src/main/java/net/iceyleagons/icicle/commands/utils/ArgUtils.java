@@ -22,23 +22,30 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
+package net.iceyleagons.icicle.commands.utils;
 
-import net.iceyleagons.icicle.commands.utils.Store;
+import net.iceyleagons.icicle.utilities.ArrayUtils;
+import net.iceyleagons.icicle.utilities.lang.Utility;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+@Utility
+public class ArgUtils {
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
+    private ArgUtils() {}
+
+    public static String join(String[] args, int startFrom) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = startFrom; i < args.length; i++) {
+            sb.append(args[i]).append(" ");
         }
+        return sb.toString();
+    }
 
-        super.elements.put(middlewareClass, middlewareTemplate);
+    public static String[] stripFirst(String[] args) {
+        return ArrayUtils.ignoreFirst(1, args);
     }
 }

@@ -22,23 +22,30 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
+package net.iceyleagons.icicle.commands.params.builtin;
 
-import net.iceyleagons.icicle.commands.utils.Store;
+import net.iceyleagons.icicle.commands.CommandManager;
+import net.iceyleagons.icicle.commands.params.CommandParameterResolver;
+import net.iceyleagons.icicle.commands.params.CommandParameterResolverTemplate;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+@CommandParameterResolver({String.class})
+public class StringParamResolver implements CommandParameterResolverTemplate {
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
-        }
+    @Override
+    public List<String> getOptions(String[] args) {
+        return Collections.emptyList();
+    }
 
-        super.elements.put(middlewareClass, middlewareTemplate);
+    @Override
+    public Object resolveParameter(Class<?> type, CommandManager commandManager, String arg, Object sender) {
+        return arg;
     }
 }

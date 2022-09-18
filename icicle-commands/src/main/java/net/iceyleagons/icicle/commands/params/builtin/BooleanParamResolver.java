@@ -22,23 +22,37 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
+package net.iceyleagons.icicle.commands.params.builtin;
 
-import net.iceyleagons.icicle.commands.utils.Store;
+import net.iceyleagons.icicle.commands.CommandManager;
+import net.iceyleagons.icicle.commands.utils.StandardCommandErrors;
+import net.iceyleagons.icicle.commands.exception.ParamParsingException;
+import net.iceyleagons.icicle.commands.params.CommandParameterResolver;
+import net.iceyleagons.icicle.commands.params.CommandParameterResolverTemplate;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+@CommandParameterResolver({ boolean.class, Boolean.class })
+public class BooleanParamResolver implements CommandParameterResolverTemplate {
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
+    @Override
+    public Object resolveParameter(Class<?> type, CommandManager commandManager, String arg, Object sender) throws ParamParsingException {
+        if (!arg.equalsIgnoreCase("true") && !arg.equalsIgnoreCase("false")) {
+            throw new ParamParsingException(StandardCommandErrors.BOOLEAN_PARSER_KEY, StandardCommandErrors.BOOLEAN_PARSER_DEFAULT, Map.of("expected", "true/false"));
         }
 
-        super.elements.put(middlewareClass, middlewareTemplate);
+        return Boolean.parseBoolean(arg);
+    }
+
+    @Override
+    public List<String> getOptions(String[] args) {
+        return Arrays.asList("true", "false");
     }
 }

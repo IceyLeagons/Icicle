@@ -24,34 +24,27 @@
 
 package net.iceyleagons.icicle.commands.validators;
 
-import net.iceyleagons.icicle.commands.middleware.CommandMiddleware;
 import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 
-import java.lang.annotation.Annotation;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.*;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Mar. 19, 2022
+ * @since Sept. 11, 2022
  */
 @AutoCreate
-@Target(TYPE)
-@Retention(RUNTIME)
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface CommandValidator {
 
     Class<? extends Annotation> value();
-
     /**
      * This value is here, so users can override our default middlewares.
      *
      * @return the middleware this implementation is meant to replace
      */
-    Class<?> replaces() default CommandMiddleware.Nothing.class;
+    Class<?> replaces() default Nothing.class;
 
     class Nothing {
     }

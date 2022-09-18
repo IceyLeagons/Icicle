@@ -17,11 +17,7 @@
         </processorPath>
         <module name="icicle.icicle-commands.main" />
         <module name="icicle.icicle-utilities.main" />
-        <module name="icicle.icicle-bukkit.main" />
         <module name="icicle.icicle-serialization.main" />
-        <module name="icicle.icicle-protocol.main" />
-        <module name="icicle.icicle-gui.main" />
-        <module name="icicle.icicle-nms.main" />
       </profile>
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
@@ -36,14 +32,22 @@
       <module name="icicle.icicle-addon-server" target="16" />
       <module name="icicle.icicle-addon-server.main" target="16" />
       <module name="icicle.icicle-addon-server.test" target="16" />
+      <module name="icicle.icicle-bukkit.main" target="17" />
+      <module name="icicle.icicle-bukkit.test" target="17" />
       <module name="icicle.icicle-database" target="16" />
       <module name="icicle.icicle-database.main" target="16" />
       <module name="icicle.icicle-database.test" target="16" />
       <module name="icicle.icicle-demo.main" target="16" />
       <module name="icicle.icicle-demo.test" target="16" />
+      <module name="icicle.icicle-gui.main" target="17" />
+      <module name="icicle.icicle-gui.test" target="17" />
+      <module name="icicle.icicle-nms.main" target="17" />
+      <module name="icicle.icicle-nms.test" target="17" />
       <module name="icicle.icicle-pathing" target="16" />
       <module name="icicle.icicle-pathing.main" target="16" />
       <module name="icicle.icicle-pathing.test" target="16" />
+      <module name="icicle.icicle-protocol.main" target="17" />
+      <module name="icicle.icicle-protocol.test" target="17" />
       <module name="icicle.main" target="16" />
       <module name="icicle.test" target="16" />
     </bytecodeTargetLevel>

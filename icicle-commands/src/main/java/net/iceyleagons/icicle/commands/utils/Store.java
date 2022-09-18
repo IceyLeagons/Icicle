@@ -22,23 +22,29 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
+package net.iceyleagons.icicle.commands.utils;
 
-import net.iceyleagons.icicle.commands.utils.Store;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import lombok.Getter;
+
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+@Getter
+public abstract class Store<K, V> {
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
-        }
+    protected Map<K, V> elements = new Object2ObjectArrayMap<>(8);
 
-        super.elements.put(middlewareClass, middlewareTemplate);
+    public V get(K key) {
+        return elements.get(key);
+    }
+
+    @SuppressWarnings("unchecked")
+    public V[] getElementsArray() {
+        return (V[]) elements.values().toArray();
     }
 }

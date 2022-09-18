@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,28 +24,18 @@
 
 package net.iceyleagons.icicle.commands.annotations.manager;
 
-import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.*;
 
 /**
- * @since Nov. 1, 2021
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Sept. 11, 2022
  */
-@AutoCreate
-@Target(TYPE)
-@Retention(RUNTIME)
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface CommandManager {
 
     String value();
-
     boolean isSubCommand() default false;
 
-    String description() default "";
-
-
-    boolean printExceptionStackTrace() default false;
 }

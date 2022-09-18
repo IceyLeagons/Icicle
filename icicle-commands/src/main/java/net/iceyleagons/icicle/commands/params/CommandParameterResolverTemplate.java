@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,28 @@
 
 package net.iceyleagons.icicle.commands.params;
 
-import net.iceyleagons.icicle.commands.manager.RegisteredCommandManager;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import net.iceyleagons.icicle.commands.CommandManager;
+import net.iceyleagons.icicle.commands.CompletionHandler;
+import net.iceyleagons.icicle.commands.exception.ParamParsingException;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 16, 2021
+ * @since Sept. 11, 2022
  */
-public interface CommandParameterResolverTemplate extends TabCompleter {
+public interface CommandParameterResolverTemplate extends CompletionHandler {
 
-    // TODO tabcomplete
-    Object resolveParameter(Class<?> type, RegisteredCommandManager manager, String arg, CommandSender commandSender);
+    /**
+     * Resolves a parameter, meaning it parses the given arg string and returns
+     * an appropriate Java Object.
+     *
+     * @param type the required type
+     * @param commandManager the {@link CommandManager}
+     * @param arg the string to parse
+     * @param sender the command sender
+     * @return the parsed object
+     * @throws ParamParsingException if the arg cannot be parsed
+     */
+    Object resolveParameter(Class<?> type, CommandManager commandManager, String arg, Object sender) throws ParamParsingException;
 
 }

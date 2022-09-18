@@ -22,23 +22,24 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
+package net.iceyleagons.icicle.commands.exception;
 
-import net.iceyleagons.icicle.commands.utils.Store;
+import net.iceyleagons.icicle.core.exceptions.TranslatableException;
+
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+public class ParamParsingException extends TranslatableException {
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
-        }
+    public ParamParsingException(String key, String defaultValue) {
+        super(key, defaultValue);
+    }
 
-        super.elements.put(middlewareClass, middlewareTemplate);
+    public ParamParsingException(String key, String defaultValue, Map<String, String> params) {
+        super(key, defaultValue, params);
     }
 }

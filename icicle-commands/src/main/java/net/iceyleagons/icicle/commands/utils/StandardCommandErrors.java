@@ -22,23 +22,19 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
-
-import net.iceyleagons.icicle.commands.utils.Store;
+package net.iceyleagons.icicle.commands.utils;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+public class StandardCommandErrors {
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
-        }
+    public static final String BOOLEAN_PARSER_KEY = "icicle.commands.params.boolean.error";
+    public static final String BOOLEAN_PARSER_DEFAULT = "Invalid input given. Expected input: {expected}";
 
-        super.elements.put(middlewareClass, middlewareTemplate);
-    }
+    public static final String REGISTRY_CMD_NOT_FOUND_KEY = "icicle.commands.cmdNotFound";
+    public static final String REGISTRY_CMD_NOT_FOUND_DEFAULT = "Command not found: {cmd}";
+
 }

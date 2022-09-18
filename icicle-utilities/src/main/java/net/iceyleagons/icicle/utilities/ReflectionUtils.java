@@ -28,6 +28,8 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -41,6 +43,10 @@ import java.lang.reflect.Method;
 public final class ReflectionUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionUtils.class);
+
+    public static <T extends Annotation> T getAnnotationOrNull(AccessibleObject obj, Class<T> annClass) {
+        return obj.isAnnotationPresent(annClass) ? obj.getAnnotation(annClass) : null;
+    }
 
     public static <T> T invoke(Method method, Object parent, Class<T> wantedType, Object... params) {
         try {

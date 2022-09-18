@@ -22,23 +22,19 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
-
-import net.iceyleagons.icicle.commands.utils.Store;
+package net.iceyleagons.icicle.commands;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+public interface CommandManager {
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
-        }
+    void onCommand(Object sender, String cmd, String[] args) throws Exception;
 
-        super.elements.put(middlewareClass, middlewareTemplate);
-    }
+    String getRoot();
+    boolean isSubCommand();
+    CommandService getCommandService();
+    CommandRegistry getCommandRegistry();
 }

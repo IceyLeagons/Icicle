@@ -22,23 +22,24 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
+package net.iceyleagons.icicle.commands;
 
-import net.iceyleagons.icicle.commands.utils.Store;
+import net.iceyleagons.icicle.commands.exception.CommandRegistrationException;
 
 /**
+ * This is an interface that should be implemented by the implementing context.
+ * There are no implementations of this in the core/base icicle modules.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+public interface CommandExecutionHandler {
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
-        }
+    void registerCommandManagerIntoContext(String rootCommand, CommandManager manager, String[] rootAliases) throws CommandRegistrationException;
+    void sendToSender(Object commandSender, String text);
+    void sendErrorToSender(Object commandSender, String error);
 
-        super.elements.put(middlewareClass, middlewareTemplate);
-    }
+    void printHelp(Object commandSender, int page);
+
 }

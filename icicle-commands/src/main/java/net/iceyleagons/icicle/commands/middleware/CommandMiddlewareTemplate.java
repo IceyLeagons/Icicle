@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,36 +24,37 @@
 
 package net.iceyleagons.icicle.commands.middleware;
 
-import net.iceyleagons.icicle.commands.annotations.manager.CommandManager;
+import net.iceyleagons.icicle.commands.CommandManager;
 import net.iceyleagons.icicle.core.translations.TranslationService;
-import org.bukkit.command.CommandSender;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * @since Nov. 1, 2021
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Sept. 11, 2022
  */
 public interface CommandMiddlewareTemplate {
 
     /**
-     * @param commandManager
-     * @param commandManagerClass
-     * @param method
+     * @param commandManager the {@link CommandManager}
+     * @param commandManagerClass the commandManager's class
+     * @param method the method to-be-executed
      * @return true if the command can proceed, false if issues arise.
-     * @throws Exception
+     * @throws Exception if anything bad happens
      */
     boolean onCommand(CommandManager commandManager, Class<?> commandManagerClass, String commandName,
-                      Method method, CommandSender sender, TranslationService translationService) throws Exception;
+                      Method method, Object sender, TranslationService translationService) throws Exception;
 
     /**
-     * @param commandManager
-     * @param commandManagerClass
-     * @param field
+     * @param commandManager the {@link CommandManager}
+     * @param commandManagerClass the commandManager's class
+     * @param field the field to-be-handled
      * @return true if the command can proceed, false if issues arise.
-     * @throws Exception
+     * @throws Exception if anything bad happens
      */
     boolean onCommand(CommandManager commandManager, Class<?> commandManagerClass, String commandName,
-                      Field field, CommandSender sender, TranslationService translationService) throws Exception;
+                      Field field, Object sender, TranslationService translationService) throws Exception;
 
 }

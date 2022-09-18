@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,20 @@
 
 package net.iceyleagons.icicle.commands.annotations;
 
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.RetentionPolicy;
 
-@Retention(RUNTIME)
-@Target(METHOD)
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Sept. 11, 2022
+ */
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Command {
 
     String value();

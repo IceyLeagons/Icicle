@@ -22,23 +22,17 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.middleware;
+package net.iceyleagons.icicle.commands;
 
-import net.iceyleagons.icicle.commands.utils.Store;
+import java.lang.annotation.Annotation;
+import java.util.List;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class MiddlewareStore extends Store<Class<?>, CommandMiddlewareTemplate> {
+public interface CompletionHandler {
+    List<String> getOptions(String[] args);
 
-    public void registerMiddleware(CommandMiddlewareTemplate middlewareTemplate, Class<?> middlewareClass, CommandMiddleware annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandMiddleware.Nothing.class) {
-            super.elements.remove(toReplace);
-        }
-
-        super.elements.put(middlewareClass, middlewareTemplate);
-    }
 }

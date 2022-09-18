@@ -49,7 +49,7 @@ dependencies {
     compileOnly(libs.fastutil)
     compileOnly(libs.jetbrainsannotations)
     compileOnly(libs.slf4j)
-    compileOnly(minecraft.spigotApi(libs.versions.spigot.get()))
+    // compileOnly(minecraft.spigotApi(libs.versions.spigot.get()))
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 }
