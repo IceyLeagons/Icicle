@@ -52,10 +52,10 @@ public class CommandImpl implements Command {
 
     private final String[] aliases;
 
-    public CommandImpl(CommandManager manager, net.iceyleagons.icicle.commands.annotations.Command annotation, Method method, Object origin) {
+    public CommandImpl(CommandManager manager, String name, boolean returnsTranslationKey, Method method, Object origin) {
         this.manager = manager;
-        this.name = annotation.value();
-        this.supplyingTranslationKeys = annotation.returnsTranslationKey();
+        this.name = name;
+        this.supplyingTranslationKeys = returnsTranslationKey;
 
         this.method = method;
         this.origin = origin;

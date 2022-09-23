@@ -24,7 +24,16 @@
 
 package net.iceyleagons.icicle.commands.utils;
 
+import it.unimi.dsi.fastutil.doubles.Double2ObjectRBTreeMap;
+import net.iceyleagons.icicle.commands.Command;
+import net.iceyleagons.icicle.commands.CommandManager;
+import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
 import net.iceyleagons.icicle.utilities.lang.Utility;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
@@ -35,5 +44,30 @@ import net.iceyleagons.icicle.utilities.lang.Utility;
 public class CommandPredictor {
 
     private CommandPredictor() {}
+
+    public static Optional<Command> predictFromInput(CommandManager commandManager, String[] input) {
+        final Double2ObjectRBTreeMap<Command> possibilities = new Double2ObjectRBTreeMap<>();
+        final Set<Tuple<String, Command>> children = commandManager.getCommandRegistry().getAllChildCommands(commandManager.getRoot());
+
+        for (final Tuple<String, Command> child : children) {
+            final String name = child.getA();
+            final Command cmd = child.getB();
+
+            final String[] args = new String[name.split(" ").length];
+            System.arraycopy(input, 0, args, 0, Math.min(input.length, args.length));
+
+            possibilities.put(calculateDistance(args, name), cmd);
+        }
+
+        return possibilities.size() > 0 ? Optional.ofNullable(possibilities.get(possibilities.lastDoubleKey())) : Optional.empty();
+    }
+
+    private static double calculateDistance(String[] args, String expected) {
+        final String joined = StringUtils.join(args, " ");
+        final double levD = StringUtils.getLevenshteinDistance(joined, expected);
+        final double max = Math.max(joined.length(), expected.length()) * 1D;
+
+        return (1D - (levD / max)) * 100D;
+    }
 
 }

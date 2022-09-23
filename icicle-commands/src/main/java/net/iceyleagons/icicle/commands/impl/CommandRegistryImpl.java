@@ -27,10 +27,14 @@ package net.iceyleagons.icicle.commands.impl;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.val;
 import net.iceyleagons.icicle.commands.Command;
 import net.iceyleagons.icicle.commands.CommandManager;
 import net.iceyleagons.icicle.commands.CommandRegistry;
+import net.iceyleagons.icicle.commands.annotations.RootCommand;
 import net.iceyleagons.icicle.commands.exception.CommandNotFoundException;
 import net.iceyleagons.icicle.commands.exception.CommandRegistrationException;
 import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
@@ -53,6 +57,8 @@ public class CommandRegistryImpl implements CommandRegistry {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandRegistryImpl.class);
 
     private final CommandManager commandManager;
+
+    private Command rootCommand = null;
     private final Map<String, Command> commands = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
     private final Map<String, CommandManager> subCommands = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 
@@ -79,7 +85,22 @@ public class CommandRegistryImpl implements CommandRegistry {
     @Override
     public void registerCommand(Method method, Object origin) throws CommandRegistrationException {
         if (!method.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.Command.class)) return;
-        registerCommand(new CommandImpl(this.commandManager, method.getAnnotation(net.iceyleagons.icicle.commands.annotations.Command.class), method, origin));
+
+        final net.iceyleagons.icicle.commands.annotations.Command command = method.getAnnotation(net.iceyleagons.icicle.commands.annotations.Command.class);
+        registerCommand(new CommandImpl(this.commandManager, command.value(), command.returnsTranslationKey(), method, origin));
+    }
+
+    @Override
+    public Command getRootCommand() {
+        return this.rootCommand;
+    }
+
+    @Override
+    public void setRootCommand(Method method, Object origin) {
+        if (!method.isAnnotationPresent(net.iceyleagons.icicle.commands.annotations.RootCommand.class)) return;
+
+        this.rootCommand = new CommandImpl(this.commandManager, this.commandManager.getRoot(),
+                method.getAnnotation(net.iceyleagons.icicle.commands.annotations.RootCommand.class).returnsTranslationKey(), method, origin);
     }
 
     private void registerCommand(Command command) throws CommandRegistrationException {

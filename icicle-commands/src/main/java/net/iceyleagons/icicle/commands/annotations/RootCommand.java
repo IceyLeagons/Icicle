@@ -22,25 +22,22 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.utils;
+package net.iceyleagons.icicle.commands.annotations;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Sept. 11, 2022
+ * @since Sept. 23, 2022
  */
-public class StandardCommandErrors {
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface RootCommand {
 
-    public static final String BOOLEAN_PARSER_KEY = "icicle.commands.params.boolean.error";
-    public static final String BOOLEAN_PARSER_DEFAULT = "Invalid input given. Expected input: {expected}";
-
-    public static final String REGISTRY_CMD_NOT_FOUND_KEY = "icicle.commands.cmdNotFound";
-    public static final String REGISTRY_CMD_NOT_FOUND_DEFAULT = "Command not found: {cmd}";
-
-    public static final String TOO_FEW_ARGS_KEY = "icicle.commands.params.tooFewError";
-    public static final String TOO_FEW_ARGS_DEFAULT = "Too few arguments!";
-
-    public static final String NOT_FOUND_KEY = "icicle.commands.notFoundError";
-    public static final String NOT_FOUND_DEFAULT = "Command {cmd} not found! Did you mean: {prediction}?";
+    boolean returnsTranslationKey() default false;
 
 }

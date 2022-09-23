@@ -36,6 +36,8 @@ import net.iceyleagons.icicle.commands.params.annotations.Concat;
 import net.iceyleagons.icicle.commands.params.annotations.FlagOptional;
 import net.iceyleagons.icicle.commands.params.annotations.Optional;
 import net.iceyleagons.icicle.commands.utils.ArgUtils;
+import net.iceyleagons.icicle.commands.utils.StandardCommandErrors;
+import net.iceyleagons.icicle.core.exceptions.TranslatableException;
 import net.iceyleagons.icicle.utilities.Defaults;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.generic.GenericUtils;
@@ -57,7 +59,7 @@ public class ParameterHandlerImpl implements ParameterHandler {
     private final CommandService commandService;
 
     @Override
-    public Object[] getParameters(Command command, String[] args, Object sender) throws ParameterValidationException, ParamParsingException {
+    public Object[] getParameters(Command command, String[] args, Object sender) throws TranslatableException {
         final Parameter[] params = command.getMethod().getParameters();
         final Object[] result = new Object[params.length];
 
@@ -114,7 +116,7 @@ public class ParameterHandlerImpl implements ParameterHandler {
             }
 
             // In any other cases, if we have run out of string arguments
-            // TODO too few arguments exception
+            throw new TranslatableException(StandardCommandErrors.TOO_FEW_ARGS_KEY, StandardCommandErrors.TOO_FEW_ARGS_DEFAULT);
         }
 
         return result;

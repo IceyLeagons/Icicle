@@ -96,7 +96,7 @@ public abstract class AbstractIcicleApplication implements Application {
         this.executionHandler = executionHandler;
         this.globalServiceProvider = globalServiceProvider;
 
-        this.configurationEnvironment = new ConfigurationEnvironmentImpl(new AdvancedFile(configRoot, true).asFile(), ByteBuddyProxyHandler.getNewByteBuddyInstance()); //TODO once Bukkit API is present
+        this.configurationEnvironment = new ConfigurationEnvironmentImpl(new AdvancedFile(configRoot, true).asFile(), ByteBuddyProxyHandler.getNewByteBuddyInstance());
 
         this.beanManager.getBeanRegistry().registerBean(Application.class, this); //registering self instance
         this.beanManager.getBeanRegistry().registerBean(ConfigurationEnvironment.class, configurationEnvironment);

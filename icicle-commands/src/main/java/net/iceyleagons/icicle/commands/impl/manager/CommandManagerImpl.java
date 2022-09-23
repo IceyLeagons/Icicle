@@ -27,6 +27,8 @@ package net.iceyleagons.icicle.commands.impl.manager;
 import net.iceyleagons.icicle.commands.*;
 import net.iceyleagons.icicle.commands.annotations.Alias;
 import net.iceyleagons.icicle.commands.annotations.Command;
+import net.iceyleagons.icicle.commands.annotations.RootCommand;
+import net.iceyleagons.icicle.commands.annotations.Usage;
 import net.iceyleagons.icicle.commands.annotations.manager.SubCommand;
 import net.iceyleagons.icicle.commands.exception.CommandNotFoundException;
 import net.iceyleagons.icicle.commands.exception.CommandRegistrationException;
@@ -34,11 +36,15 @@ import net.iceyleagons.icicle.commands.impl.CommandRegistryImpl;
 import net.iceyleagons.icicle.commands.impl.ParameterHandlerImpl;
 import net.iceyleagons.icicle.commands.middleware.CommandMiddlewareTemplate;
 import net.iceyleagons.icicle.commands.utils.ArgUtils;
+import net.iceyleagons.icicle.commands.utils.CommandPredictor;
+import net.iceyleagons.icicle.commands.utils.StandardCommandErrors;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.exceptions.TranslatableException;
 import net.iceyleagons.icicle.core.translations.TranslationService;
 
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author TOTHTOMI
@@ -85,13 +91,13 @@ public class CommandManagerImpl implements CommandManager {
         if (!cmd.equalsIgnoreCase(this.getRoot())) return;
 
         try {
-            if (args.length < 1) {
-                // TODO error
-                return;
-            }
+            if (args.length < 1 ) {
+                final net.iceyleagons.icicle.commands.Command root = commandRegistry.getRootCommand();
+                if (root == null) {
+                    throw new TranslatableException(StandardCommandErrors.TOO_FEW_ARGS_KEY, StandardCommandErrors.TOO_FEW_ARGS_DEFAULT);
+                }
 
-            if (args[0].equalsIgnoreCase("help")) {
-                // TODO
+                handleCommand(root, sender, args);
                 return;
             }
 
@@ -102,7 +108,18 @@ public class CommandManagerImpl implements CommandManager {
                 handleSubCommand(this.getCommandRegistry().getSubCommand(args[0].toLowerCase()), sender, args);
             } catch (CommandNotFoundException e2) {
                 // Giving up
-                // TODO
+                final String prediction = getPrediction(args, sender);
+                final String msg = translationService.getTranslation(
+                        StandardCommandErrors.NOT_FOUND_KEY,
+                        translationService.getLanguageProvider().getLanguage(sender),
+                        StandardCommandErrors.NOT_FOUND_DEFAULT,
+                        Map.of("cmd", e2.getCommand(), "prediction", prediction)
+                );
+
+                this.commandExecutionHandler.sendErrorToSender(
+                        sender,
+                        msg
+                );
             }
         } catch (TranslatableException e) {
             this.commandExecutionHandler.sendToSender(
@@ -112,6 +129,19 @@ public class CommandManagerImpl implements CommandManager {
         } catch (Exception e) {
             this.commandExecutionHandler.sendErrorToSender(sender, e.getMessage());
         }
+    }
+
+    private String getPrediction(String[] args, Object sender) {
+        final AtomicReference<String> prediction = new AtomicReference<>("N/A");
+        CommandPredictor.predictFromInput(this, args).ifPresent((predicted) -> {
+            final Usage usage = predicted.getUsage();
+            if (usage != null) {
+                final String usageParsed = translationService.getTranslation(usage.key(), translationService.getLanguageProvider().getLanguage(sender), usage.defaultValue(), Map.of());
+                prediction.set(usageParsed);
+            }
+        });
+
+        return prediction.get();
     }
 
     private void handleCommand(net.iceyleagons.icicle.commands.Command cmd, Object sender, String[] args) throws Exception {
@@ -141,6 +171,15 @@ public class CommandManagerImpl implements CommandManager {
 
     private void scanForCommands() throws CommandRegistrationException {
         for (Method declaredMethod : this.clazz.getDeclaredMethods()) {
+            if (declaredMethod.isAnnotationPresent(RootCommand.class)) {
+                if (commandRegistry.getRootCommand() != null) {
+                    throw new IllegalStateException("Multilple @RootCommands found in " + clazz.getName() + ". Only one allowed!");
+                }
+
+                commandRegistry.setRootCommand(declaredMethod, origin);
+                continue;
+            }
+
             if (!declaredMethod.isAnnotationPresent(Command.class)) continue;
             commandRegistry.registerCommand(declaredMethod, origin);
         }

@@ -26,6 +26,7 @@ package net.iceyleagons.icicle.commands;
 
 import net.iceyleagons.icicle.commands.exception.ParamParsingException;
 import net.iceyleagons.icicle.commands.exception.ParameterValidationException;
+import net.iceyleagons.icicle.core.exceptions.TranslatableException;
 
 /**
  * @author TOTHTOMI
@@ -34,6 +35,6 @@ import net.iceyleagons.icicle.commands.exception.ParameterValidationException;
  */
 public interface ParameterHandler {
 
-    Object[] getParameters(Command command, String[] args, Object sender) throws ParameterValidationException, ParamParsingException;
+    Object[] getParameters(Command command, String[] args, Object sender) throws TranslatableException;
 
 }

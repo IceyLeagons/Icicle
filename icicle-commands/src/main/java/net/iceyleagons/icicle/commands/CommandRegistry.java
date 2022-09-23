@@ -42,6 +42,9 @@ public interface CommandRegistry {
     void registerSubCommand(CommandManager subManager, String... aliases) throws CommandRegistrationException;
     void registerCommand(Method method, Object origin) throws CommandRegistrationException;
 
+    Command getRootCommand();
+    void setRootCommand(Method method, Object origin);
+
     Set<Tuple<String, Command>> getAllChildCommands(String rootCommand);
     Map<String, Command> getCommands();
     Map<String, CommandManager> getSubCommands();
