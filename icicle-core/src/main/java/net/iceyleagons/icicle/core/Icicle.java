@@ -25,9 +25,12 @@
 package net.iceyleagons.icicle.core;
 
 
+import lombok.SneakyThrows;
+import net.iceyleagons.icicle.core.annotations.IcicleApplication;
 import net.iceyleagons.icicle.core.maven.MavenDependency;
 import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
 import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
+import net.iceyleagons.icicle.core.standalone.StandaloneIcicleApplication;
 import net.iceyleagons.icicle.core.utils.Kotlin;
 import net.iceyleagons.icicle.utilities.lang.Internal;
 import org.jetbrains.annotations.Nullable;
@@ -102,6 +105,19 @@ public class Icicle {
      */
     public static String getLoadText() {
         return String.format("Loading Icicle v%s. %s", ICICLE_VERSION, getCopyrightText());
+    }
+
+    @SneakyThrows
+    public static void bootStandalone(Class<?> clazz) {
+        StandaloneIcicleApplication app = null;
+        if (clazz.isAnnotationPresent(IcicleApplication.class)) {
+            String pack = clazz.getAnnotation(IcicleApplication.class).value();
+            app = new StandaloneIcicleApplication(pack, clazz);
+
+            Runtime.getRuntime().addShutdownHook(new Thread(app::shutdown));
+            app.start();
+        }
+        while (app != null && app.running) {}
     }
 
     /**
