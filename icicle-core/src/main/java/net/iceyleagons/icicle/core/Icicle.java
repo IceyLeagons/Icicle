@@ -26,6 +26,7 @@ package net.iceyleagons.icicle.core;
 
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import net.iceyleagons.icicle.core.annotations.IcicleApplication;
 import net.iceyleagons.icicle.core.maven.MavenDependency;
 import net.iceyleagons.icicle.core.maven.MavenLibraryLoader;
@@ -49,12 +50,14 @@ import java.net.URLClassLoader;
  * @version 1.1.0
  * @since Aug. 23, 2021
  */
+@Slf4j
 public class Icicle {
 
     /**
      * Current version of icicle.
      */
     public static final String ICICLE_VERSION = "1.0.0";
+    public static final String TYPE = "STANDALONE";
 
     /**
      * Enable performance logging
@@ -78,7 +81,6 @@ public class Icicle {
                     .setScanners(Scanners.values()).setExpandSuperTypes(true)
                     .addClassLoaders(Icicle.class.getClassLoader(), ClassLoader.getPlatformClassLoader())
     );
-    // TODO: Gradle plugin --> icicle.yml and the core searches for its dependencies rather than this \/
     public static final MavenDependency[] CORE_DEPENDENCIES = new MavenDependency[]{
             new MavenDependency("net.bytebuddy", "byte-buddy", "1.11.15", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("net.bytebuddy", "byte-buddy-agent", "1.11.15", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
@@ -109,6 +111,7 @@ public class Icicle {
 
     @SneakyThrows
     public static void bootStandalone(Class<?> clazz) {
+        loadIcicle(null);
         StandaloneIcicleApplication app = null;
         if (clazz.isAnnotationPresent(IcicleApplication.class)) {
             String pack = clazz.getAnnotation(IcicleApplication.class).value();
@@ -131,26 +134,33 @@ public class Icicle {
             throw new IllegalStateException("Icicle is already loaded!");
         }
 
+        printAsciiArt();
         MavenLibraryLoader.init(classLoader == null ? ICICLE_CLASS_LOADER : classLoader);
 
-        System.out.println();
-        System.out.println("[==================[Icicle Loader]==================]");
-        System.out.println();
-
-        System.out.printf("[Icicle] - %s\n", getLoadText());
-        System.out.println("[Icicle] - Downloading & loading core libraries... (This may take a while)\n");
+        log.info(getLoadText());
+        log.info("Downloading & loading core libraries... (This may take a while)");
         for (MavenDependency coreDependency : CORE_DEPENDENCIES) {
             MavenLibraryLoader.load(coreDependency);
         }
-        System.out.println("[Icicle] - Libraries loaded!");
+        log.info("Libraries loaded!");
 
         Kotlin.init(classLoader == null ? ICICLE_CLASS_LOADER : classLoader);
         ByteBuddyProxyHandler.installBuddyAgent();
 
-        System.out.println();
-        System.out.println("[========================[ ]========================]");
-        System.out.println();
-
         LOADED = true;
+    }
+
+    public static void printAsciiArt() {
+        System.out.println("\033[0;36m  _                   _          \n" +
+                " (_)        _        (_ )        \n" +
+                " | |   ___ (_)   ___  |(|    __  \n" +
+                " | | / ___)| | / ___) |()  / __ \\\n" +
+                " | |( (___ | |( (___  | | (  ___/\n" +
+                " (_))\\____)( ))\\____)( (_) )\\___) \033[0;34m Type: STANDALONE \033[0;36m\n" +
+                "   (__)    /((__)    (_)  (__)    \033[0;34m Running version: " + ICICLE_VERSION + "\033[0;36m\n" +
+                "          (__)                   \033[0m");
+        System.out.println();
+        System.out.println("[==============================================================]");
+        System.out.println();
     }
 }

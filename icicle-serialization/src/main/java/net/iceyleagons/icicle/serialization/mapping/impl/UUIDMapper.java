@@ -47,6 +47,11 @@ public class UUIDMapper extends PropertyMapper<UUID> {
     }
 
     @Override
+    protected Class<?> getPropertyClass() {
+        return UUID.class;
+    }
+
+    @Override
     protected ObjectValue mapCasted(UUID object, Class<?> javaType, ObjectMapper context, ObjectValue value) {
         return value.copyWithNewValueAndType(object.toString(), String.class);
     }

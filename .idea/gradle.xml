@@ -25,6 +25,7 @@
             <option value="$PROJECT_DIR$/icicle-protocol" />
             <option value="$PROJECT_DIR$/icicle-serialization" />
             <option value="$PROJECT_DIR$/icicle-utilities" />
+            <option value="$PROJECT_DIR$/icicle-web" />
           </set>
         </option>
       </GradleProjectSettings>

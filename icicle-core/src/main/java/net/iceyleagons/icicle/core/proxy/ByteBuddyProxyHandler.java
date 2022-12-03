@@ -25,6 +25,7 @@
 package net.iceyleagons.icicle.core.proxy;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.builder.AgentBuilder;
@@ -41,7 +42,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
-
+@Slf4j
 public class ByteBuddyProxyHandler implements BeanProxyHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ByteBuddyProxyHandler.class);
@@ -55,7 +56,7 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
     }
 
     public static void installBuddyAgent() {
-        System.out.println("[Icicle] - Installing ByteBuddy Agent...");
+        log.info("Installing ByteBuddy Agent...");
         ByteBuddyAgent.install();
 
         new AgentBuilder.Default()
@@ -63,7 +64,7 @@ public class ByteBuddyProxyHandler implements BeanProxyHandler {
                 .with(AgentBuilder.InitializationStrategy.NoOp.INSTANCE)
                 .with(AgentBuilder.TypeStrategy.Default.REBASE)
                 .installOnByteBuddyAgent();
-        System.out.println("[Icicle] - Success!");
+        log.info("Agent successfully installed!");
     }
 
     @Override

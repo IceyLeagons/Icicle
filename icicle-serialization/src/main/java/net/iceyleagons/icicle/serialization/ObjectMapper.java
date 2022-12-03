@@ -37,6 +37,7 @@ import net.iceyleagons.icicle.serialization.mapping.PropertyMapperAnnotationHand
 import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
 import net.iceyleagons.icicle.serialization.serializers.SerializationProvider;
 import net.iceyleagons.icicle.utilities.Defaults;
+import net.iceyleagons.icicle.utilities.ReflectionUtils;
 
 import java.lang.reflect.Constructor;
 import java.nio.file.Path;
@@ -52,6 +53,7 @@ import java.util.stream.Collectors;
 public class ObjectMapper {
 
     private final SerializationProvider serializationProvider;
+    public static boolean USE_DATA_VER = false;
 
     public ObjectMapper() {
         this.serializationProvider = new JsonSerializer();
@@ -164,7 +166,7 @@ public class ObjectMapper {
                 return;
             }
         }
-        if (objectValue.isVersioned()) {
+        if (objectValue.isVersioned() && USE_DATA_VER) {
             if (dataVersion == -1) {
                 throw new IllegalStateException("Object value is versioned, but no version information was found!");
             }
@@ -229,6 +231,10 @@ public class ObjectMapper {
     }
 
     public String writeValueAsString(Object object) {
+        if (SerializationUtils.isValuePrimitiveOrString(object.getClass())) {
+            return object.toString();
+        }
+
         return serializationProvider.writeAsString(mapObject(object));
     }
 
@@ -237,6 +243,11 @@ public class ObjectMapper {
     }
 
     public <T> T readValueFromString(String string, Class<T> type) {
+        if (SerializationUtils.isValuePrimitiveOrString(type)) {
+            // fixme possibly wrong, because Integer.parse etc.
+            return ReflectionUtils.castIfNecessary(type, string);
+        }
+
         return demapObject(serializationProvider.readFromString(string, type), type);
     }
 

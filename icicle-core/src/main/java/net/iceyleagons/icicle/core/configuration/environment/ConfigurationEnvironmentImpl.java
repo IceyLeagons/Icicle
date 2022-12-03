@@ -26,23 +26,34 @@ package net.iceyleagons.icicle.core.configuration.environment;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.SneakyThrows;
 import net.bytebuddy.ByteBuddy;
 import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.core.configuration.driver.ConfigDelegator;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
+import net.iceyleagons.icicle.utilities.file.FileUtils;
+import org.simpleyaml.configuration.file.YamlFile;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Default implementation of {@link ConfigurationEnvironment}
  */
 public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
 
+    private static final String[] possibleResources = new String[] { "application.properties", "application.yml", "config.properties", "config.yml" };
+
     private final Map<Class<?>, Configuration> configurations = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
     private final Map<String, Object> values = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
+    private final Map<String, Object> fixValues = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 
     private final ConfigDelegator delegator;
     private final File configRootFolder;
@@ -50,6 +61,62 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
     public ConfigurationEnvironmentImpl(File configRootFolder, ByteBuddy bytebuddy) {
         this.configRootFolder = configRootFolder;
         this.delegator = new ConfigDelegator(bytebuddy, configRootFolder.toPath());
+
+        this.scanForDefaultConfigurations();
+    }
+
+    @SneakyThrows
+    private void scanForDefaultConfigurations() {
+        for (String resourceName : possibleResources) {
+            URL url = this.getClass().getResource(resourceName);
+            if (url != null) {
+                Path p = Path.of(url.toURI());
+                String extension = FileUtils.getExtension(p);
+                if (extension.equals("properties")) {
+                    loadDefaultProperties(p);
+                } else if (extension.equals("yml")) {
+                    loadDefaultYaml(p);
+                }
+            }
+        }
+
+        Path configPath = Path.of("./configs");
+        if (Files.exists(configPath) && Files.isDirectory(configPath)) {
+            try (Stream<Path> files = Files.list(configPath)) {
+                files.forEach(file -> {
+                    try {
+                        if (Files.exists(file) && !Files.isDirectory(file)) {
+                            String extension = FileUtils.getExtension(file);
+                            if (extension.equals("yml")) {
+                                loadDefaultYaml(file);
+                            } else if (extension.equals("properties")) {
+                                loadDefaultProperties(file);
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        }
+    }
+
+    private void loadDefaultYaml(Path path) throws Exception {
+        try (InputStream is = Files.newInputStream(path)) {
+            YamlFile yamlFile = new YamlFile();
+            yamlFile.load(is);
+
+            this.fixValues.putAll(yamlFile.getMapValues(true));
+        }
+    }
+
+    private void loadDefaultProperties(Path path) throws IOException {
+        try (InputStream is = Files.newInputStream(path)) {
+            Properties properties = new Properties();
+            properties.load(is);
+
+            properties.forEach((key, value) -> this.fixValues.put(key.toString(), value));
+        }
     }
 
     @Override
@@ -68,13 +135,20 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
 
     @Override
     public Optional<Object> getProperty(String path) {
+        if (fixValues.containsKey(path)) {
+            return Optional.ofNullable(fixValues.get(path));
+        }
+
         return Optional.ofNullable(values.get(path));
     }
 
     @Override
     public <T> Optional<T> getProperty(String path, Class<T> type) {
-        Object value = values.get(path);
-        return value == null ? Optional.empty() : Optional.ofNullable(ReflectionUtils.castIfNecessary(type, value));
+        if (fixValues.containsKey(path)) {
+            return Optional.ofNullable(ReflectionUtils.castIfNecessary(type, fixValues.get(path)));
+        }
+
+        return Optional.ofNullable(ReflectionUtils.castIfNecessary(type, values.get(path)));
     }
 
     @Override

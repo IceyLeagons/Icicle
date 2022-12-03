@@ -46,6 +46,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static net.iceyleagons.icicle.serialization.ObjectMapper.USE_DATA_VER;
+
 /**
  * @author TOTHTOMI
  * @version 1.0.0
@@ -54,7 +56,7 @@ import java.util.stream.Collectors;
 public class NbtSerializer implements SerializationProvider {
 
     private CompoundTag serialize(MappedObject mappedObject, CompoundTag root) {
-        root.put("dataVersion", mappedObject.getVersion());
+        if (USE_DATA_VER) root.put("dataVersion", mappedObject.getVersion());
         for (ObjectValue value : mappedObject.getValues()) {
             if (value.shouldConvert()) {
                 Class<?> vClass = value.getValue().getClass();
@@ -100,13 +102,13 @@ public class NbtSerializer implements SerializationProvider {
     }
 
     private MappedObject deserialize(CompoundTag tag, Class<?> javaType) {
-        final Set<ObjectValue> values = SerializationUtils.getObjectValues(javaType, tag.getInt("dataVersion"))
+        final Set<ObjectValue> values = SerializationUtils.getObjectValues(javaType, USE_DATA_VER ? tag.getInt("dataVersion") : -1)
                 .stream()
                 .map(o -> deserializeValue(o, tag))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
-        return new MappedObject(javaType, values, tag.getInt("dataVersion"));
+        return new MappedObject(javaType, values, USE_DATA_VER ? tag.getInt("dataVersion") : -1);
     }
 
     private ObjectValue deserializeValue(ObjectValue value, CompoundTag tag) {

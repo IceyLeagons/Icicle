@@ -58,7 +58,6 @@ import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -308,10 +307,13 @@ public class DefaultBeanManager implements BeanManager {
         createConfigDrivers(autoCreationTypes);
         createConfigs(autoCreationTypes);
 
-        // Second we want to register all autowiring annotation handlers before creating beans
+        // Second we need proxy setup
+        createAndRegisterMethodInterceptorsAndAdvices(autoCreationTypes);
+
+        // Third we want to register all autowiring annotation handlers before creating beans
         createAnnotationHandlers(autoCreationTypes);
 
-        createAndRegisterMethodInterceptorsAndAdvices(autoCreationTypes);
+
 
         PerformanceLog.begin(application, "Creating non-exclusive beans", DefaultBeanManager.class);
 

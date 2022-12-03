@@ -90,6 +90,11 @@ public class ArrayMapper extends PropertyMapper<Object> {
     }
 
     @Override
+    protected Class<?> getPropertyClass() {
+        return Object.class;
+    }
+
+    @Override
     public ObjectValue mapCasted(Object object, Class<?> javaType, ObjectMapper context, ObjectValue old) {
         return old.copyWithNewValueAndType(mapArray(object, context), javaType);
     }

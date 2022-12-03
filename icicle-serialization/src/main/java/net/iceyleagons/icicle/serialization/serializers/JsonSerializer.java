@@ -41,6 +41,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static net.iceyleagons.icicle.serialization.ObjectMapper.USE_DATA_VER;
+
 /**
  * @author TOTHTOMI
  * @version 1.0.0
@@ -57,7 +59,7 @@ public class JsonSerializer implements SerializationProvider {
     }
 
     private JSONObject serialize(MappedObject mappedObject, JSONObject root) {
-        root.put("dataVersion", mappedObject.getVersion());
+        if (USE_DATA_VER) root.put("dataVersion", mappedObject.getVersion());
 
         for (ObjectValue value : mappedObject.getValues()) {
             if (value.shouldConvert()) {
@@ -80,13 +82,13 @@ public class JsonSerializer implements SerializationProvider {
     }
 
     private MappedObject deserialize(JSONObject jsonObject, Class<?> javaType) {
-        final Set<ObjectValue> values = SerializationUtils.getObjectValues(javaType, jsonObject.getInt("dataVersion"))
+        final Set<ObjectValue> values = SerializationUtils.getObjectValues(javaType, USE_DATA_VER ? jsonObject.getInt("dataVersion") : -1)
                 .stream()
                 .map(o -> deserializeValue(o, jsonObject, SerializationUtils.getVersion(javaType)))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
-        return new MappedObject(javaType, values, jsonObject.getInt("dataVersion"));
+        return new MappedObject(javaType, values, USE_DATA_VER ? jsonObject.getInt("dataVersion") : -1);
     }
 
     private ObjectValue deserializeValue(ObjectValue objectValue, JSONObject jsonObject, int currentVersion) {
@@ -135,7 +137,7 @@ public class JsonSerializer implements SerializationProvider {
             return objectValue.copyWithNewValueAndType(jsonObject.get(objectValue.getKey()), objectValue.getJavaType());
         } catch (Exception e) {
             throw new IllegalStateException("Could not parse JSON to ObjectValue. Is the file corrupted?.\n" +
-                    "(CV: " + currentVersion + " | PV: " + jsonObject.getInt("dataVersion") + " | FV: " + objectValue.getVersion() + " | K: " + objectValue.getKey() + ")");
+                    "(CV: " + currentVersion + " | PV: " + (USE_DATA_VER ? jsonObject.getInt("dataVersion") : -1) + " | FV: " + objectValue.getVersion() + " | K: " + objectValue.getKey() + ")");
         }
     }
 

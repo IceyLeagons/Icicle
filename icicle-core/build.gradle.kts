@@ -46,20 +46,25 @@ dependencies {
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
-    shadow(project(":icicle-utilities"))
+    implementation(project(":icicle-utilities"))
     annotationProcessor(project(":icicle-utilities"))
 
-    shadow(libs.reflections)
+    implementation(libs.reflections)
 
     // FIXME: Try to get rid of this one!
-    compileOnly(libs.guava)
+    implementation(libs.guava)
 
-    compileOnly(libs.fastutil)
-    compileOnly(libs.bundles.logging)
-    compileOnly(libs.bundles.bytebuddy)
-    compileOnly(libs.bundles.kotlin)
-    compileOnly(libs.jetbrainsannotations)
-    compileOnly(libs.yaml)
+    // FIXME: maven not loading in properly??? "Caused by: java.lang.ClassNotFoundException: net.bytebuddy.agent.builder.AgentBuilder$InitializationStrategy"
+    implementation(libs.fastutil)
+
+    implementation("ch.qos.logback:logback-core:1.4.4") // logging should not be moved to runtime load
+    implementation("ch.qos.logback:logback-classic:1.4.4")
+    implementation(libs.bundles.logging)
+
+    implementation(libs.bundles.bytebuddy)
+    implementation(libs.bundles.kotlin)
+    implementation(libs.jetbrainsannotations)
+    implementation(libs.yaml)
 
     testCompileOnly(libs.jetbrainsannotations)
     testImplementation(libs.fastutil)

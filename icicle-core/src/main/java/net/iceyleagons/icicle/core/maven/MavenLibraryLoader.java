@@ -25,6 +25,7 @@
 package net.iceyleagons.icicle.core.maven;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.maven.loaders.AdvancedClassLoader;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
@@ -44,6 +45,7 @@ import java.nio.file.Path;
  * @version 1.0.0
  * @since Dec. 26, 2021
  */
+@Slf4j
 @Internal
 @Experimental
 public class MavenLibraryLoader {
@@ -78,14 +80,14 @@ public class MavenLibraryLoader {
         Path f = ICICLE_LIB_FOLDER.getChild(dependency.getName() + ".jar");
 
         if (!Files.exists(f)) {
-            System.out.println("Downloading " + dependency.getName() + " from " + dependency.getRepository());
+            log.info("Downloading {} from {}", dependency.getName(), dependency.getRepository());
             FileUtils.downloadTo(f, dependency.getRequestUrl());
         }
         if (!Files.exists(f)) {
             throw new IllegalStateException("Unable to download maven dependency: " + dependency.getName());
         }
 
-        System.out.println("Loading in " + dependency.getName() + " from " + f);
+        log.info("Loading in {} from {}", dependency.getName(), f);
         acl.loadLibrary(f);
         Icicle.ICICLE_REFLECTIONS.merge(new Reflections(new ConfigurationBuilder().addClassLoaders(acl.getOrigin())));
         //Icicle.ICICLE_REFLECTIONS.expandSuperTypes();

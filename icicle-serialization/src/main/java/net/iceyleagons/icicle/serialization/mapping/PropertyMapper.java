@@ -37,11 +37,13 @@ import java.util.Map;
  * @version 1.0.0
  * @since Jun. 13, 2022
  */
-public abstract class PropertyMapper<A> extends OneTypeAccessor<A> {
+public abstract class PropertyMapper<A> {
 
     protected A deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations) {
         return null;
     }
+
+    abstract protected Class<?> getPropertyClass();
 
     public A deMap(Object object, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations, ObjectValue objectValue) {
         return deMap(object, originalType, context, annotations);
@@ -51,7 +53,7 @@ public abstract class PropertyMapper<A> extends OneTypeAccessor<A> {
         // System.out.println("Wanted type: " + super.getATypeClass().getName());
         // System.out.println("Currnet: " + javaType.getName());
 
-        return mapCasted(SerializationUtils.getValueAs(super.getATypeClass(), newValue), newJavaType, context, old);
+        return mapCasted((A) SerializationUtils.getValueAs(getPropertyClass(), newValue), newJavaType, context, old);
     }
 
     protected abstract ObjectValue mapCasted(A newValue, Class<?> newJavaType, ObjectMapper context, ObjectValue old);

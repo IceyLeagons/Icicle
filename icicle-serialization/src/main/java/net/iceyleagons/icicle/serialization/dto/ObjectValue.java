@@ -36,6 +36,8 @@ import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import static net.iceyleagons.icicle.serialization.ObjectMapper.USE_DATA_VER;
+
 /**
  * @author TOTHTOMI
  * @version 1.0.0
@@ -88,7 +90,7 @@ public class ObjectValue {
     }
 
     public boolean isVersioned() {
-        return this.getAnnotations().containsKey(Since.class);
+        return this.getAnnotations().containsKey(Since.class) && USE_DATA_VER;
     }
 
     public int getVersion() {

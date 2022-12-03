@@ -49,8 +49,8 @@ dependencies {
     compileOnly(libs.slf4j)
     compileOnly(libs.jetbrainsannotations)
     compileOnly(libs.fastutil)
-    shadow(libs.nbt)
-    shadow(libs.json)
+    shadow(libs.nbt) // fixme shadow doesn't work
+    implementation(libs.json) // fixme shadow doesn't work
     compileOnly(libs.yaml)
     compileOnly(libs.bson)
     compileOnly(libs.lombok)

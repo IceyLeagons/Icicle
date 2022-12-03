@@ -142,6 +142,31 @@ public final class ReflectionUtils {
      */
     @Nullable
     public static <T> T castIfNecessary(Class<T> required, Object object) {
+        if (object != null) {
+            Class<?> objType = object.getClass();
+            if (objType.equals(String.class)) {
+                if (required.equals(Integer.class) || required.equals(int.class)) {
+                    return required.cast(Integer.parseInt(object.toString()));
+                }
+
+                if (required.equals(Long.class) || required.equals(long.class)) {
+                    return required.cast(Long.parseLong(object.toString()));
+                }
+
+                if (required.equals(Float.class) || required.equals(float.class)) {
+                    return required.cast(Float.parseFloat(object.toString()));
+                }
+
+                if (required.equals(Double.class) || required.equals(double.class)) {
+                    return required.cast(Double.parseDouble(object.toString()));
+                }
+
+                if (required.equals(Short.class) || required.equals(short.class)) {
+                    return required.cast(Short.parseShort(object.toString()));
+                }
+            }
+        }
+
         return required.isInstance(object) ? required.cast(object) : null;
     }
 }

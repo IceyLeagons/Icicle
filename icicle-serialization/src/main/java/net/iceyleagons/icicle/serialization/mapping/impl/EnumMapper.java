@@ -74,6 +74,11 @@ public class EnumMapper extends PropertyMapper<Enum<?>> {
     }
 
     @Override
+    protected Class<?> getPropertyClass() {
+        return Enum.class;
+    }
+
+    @Override
     protected ObjectValue mapCasted(Enum<?> object, Class<?> javaType, ObjectMapper context, ObjectValue old) {
         if (old.getAnnotations().containsKey(EnumSerialization.class)) {
             EnumSerialization enumSerialization = (EnumSerialization) old.getAnnotations().get(EnumSerialization.class);

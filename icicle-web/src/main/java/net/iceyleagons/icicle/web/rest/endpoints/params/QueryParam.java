@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,23 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.extensions
+package net.iceyleagons.icicle.web.rest.endpoints.params;
 
-import net.iceyleagons.icicle.utilities.ListUtils
-import net.iceyleagons.icicle.utilities.datastores.tuple.UnmodifiableTuple
-
-/**
- * Merges multiple lists into one.
- *
- * @param lists the lists we want to merge into the one specified.
- * @return all the lists combined into one.
- */
-fun <T> List<T>.merge(vararg lists: List<T>): MutableList<T> =
-    ListUtils.mergeLists(this, *lists)
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Converts the pair into an unmodifiable tuple.
- *
- * @return an unmodifiable tuple.
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Nov. 12, 2022
  */
-fun <A, B> Pair<A, B>.asTuple(): UnmodifiableTuple<A, B> = UnmodifiableTuple(first, second)
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface QueryParam {
+
+    String value();
+    boolean required() default true;
+
+}

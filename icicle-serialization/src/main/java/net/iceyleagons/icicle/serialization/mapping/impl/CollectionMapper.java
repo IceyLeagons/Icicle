@@ -55,6 +55,11 @@ public class CollectionMapper extends PropertyMapper<Collection<?>> {
     }
 
     @Override
+    protected Class<?> getPropertyClass() {
+        return Collection.class;
+    }
+
+    @Override
     public Collection<?> deMap(Object genericArray, Class<?> originalType, ObjectMapper context, Map<Class<? extends Annotation>, Annotation> annotations, ObjectValue objectValue) {
         final Object[] array = GenericUtils.genericArrayToNormalArray(genericArray, Object.class);
 

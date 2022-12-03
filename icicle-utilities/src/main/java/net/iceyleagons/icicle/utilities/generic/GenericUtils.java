@@ -75,6 +75,10 @@ public final class GenericUtils {
         return TypeToken.of(Objects.requireNonNull(getGenericType(from, typeIndex))).getRawType();
     }
 
+    public static Class<?> getGenericTypeClass(Type type) {
+        return TypeToken.of(type).getRawType();
+    }
+
     public static <T> T[] genericArrayToNormalArray(Object genericArray, Class<T> wantedType) {
         int originalSize = Array.getLength(genericArray);
         T[] cloneArray = createGenericArray(wantedType, originalSize);

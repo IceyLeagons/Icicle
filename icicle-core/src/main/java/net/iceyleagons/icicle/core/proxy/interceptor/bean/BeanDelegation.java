@@ -56,12 +56,11 @@ public class BeanDelegation {
         }
 
         String qualifier = QualifierKey.getQualifier(method);
-
         if (this.beanRegistry.isRegistered(beanType, qualifier)) {
             if (method.isAnnotationPresent(Primary.class)) {
                 logger.info("Primary marked bean found, with already registered non-primary implementation. Replacing registered instance with primary one...");
                 // Removing previous bean type registered as this one is the primary.
-                this.beanRegistry.isRegistered(beanType, qualifier);
+                this.beanRegistry.unregisterBean(beanType, qualifier);
 
                 // Adding the primary
                 Object bean = callable.call();

@@ -42,6 +42,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static net.iceyleagons.icicle.serialization.ObjectMapper.USE_DATA_VER;
 import static net.iceyleagons.icicle.utilities.StringUtils.containsIgnoresCase;
 
 /**
@@ -55,7 +56,7 @@ public class SerializationUtils {
         Set<ObjectValue> set = new ObjectArraySet<>(8);
 
         final Method[] methods = Arrays.stream(javaType.getDeclaredMethods()).filter(m -> {
-            if (m.isAnnotationPresent(Since.class)) {
+            if (m.isAnnotationPresent(Since.class) && USE_DATA_VER) {
                 int since = m.getAnnotation(Since.class).value();
                 return dataVersion != -1 && dataVersion >= since;
             }
@@ -66,7 +67,7 @@ public class SerializationUtils {
 
         for (Field declaredField : fields) {
             if (Modifier.isTransient(declaredField.getModifiers())) continue;
-            if (declaredField.isAnnotationPresent(Since.class)) {
+            if (declaredField.isAnnotationPresent(Since.class) && USE_DATA_VER) {
                 int since = declaredField.getAnnotation(Since.class).value();
                 if (dataVersion != -1 && dataVersion < since) {
                     continue;
@@ -113,9 +114,11 @@ public class SerializationUtils {
             Method getter = standaloneGettersAndSetters.getA();
             Method setter = standaloneGettersAndSetters.getB();
 
+            String key = SerializationUtils.getCustomNameOrDefault(getter, FuzzyResolver.getPropertyNameFromMethod(getter).orElseThrow(() -> new IllegalStateException("Could not get name for getter.")));
+            System.out.println(key);
             ObjectValue obj = new ObjectValue(
                     getter.getReturnType(),
-                    SerializationUtils.getCustomNameOrDefault(getter, FuzzyResolver.getPropertyNameFromMethod(getter).orElseThrow(() -> new IllegalStateException("Could not get name for getter."))),
+                    key,
                     getAnnotations(getter),
                     (parent, value) -> ReflectionUtils.invoke(setter, parent, Void.class, value),
                     parent -> ReflectionUtils.invoke(getter, parent, Object.class),

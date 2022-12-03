@@ -75,6 +75,11 @@ public class MapMapper extends PropertyMapper<Map<?, ?>> {
     }
 
     @Override
+    protected Class<?> getPropertyClass() {
+        return Map.class;
+    }
+
+    @Override
     public ObjectValue mapCasted(Map<?, ?> map, Class<?> javaType, ObjectMapper context, ObjectValue old) {
         final Set<Map.Entry<?, ?>> entries = new ObjectArraySet<>(map.size());
 

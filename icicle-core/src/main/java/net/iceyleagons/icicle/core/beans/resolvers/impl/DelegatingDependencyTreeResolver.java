@@ -41,9 +41,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -133,6 +131,7 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         x:
         for (Parameter param : dependencies) {
             Class<?> dependency = param.getType();
+
             for (Annotation annotation : param.getAnnotations()) {
                 if (autowiringAnnotationResolver.has(annotation.annotationType())) {
                     continue x;
@@ -164,16 +163,16 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
                         final Class<?> impl = impls.get(0);
                         tree.add(new QualifierKey(impl, QualifierKey.getQualifier(impl)));
                         stack.add(impl);
-                        continue;
+                        continue; // (x)
                     } else {
-                        // System.out.println("Getting potential classes for: " + qualifierKey.getClazz() + " | " + qualifierKey.getName());
                         Class<?> potentialClass = findClassThatCouldContainBeanMethodForType(qualifierKey);
                         if (potentialClass == null) {
                             throw new UnsatisfiedDependencyException(param);
                         }
 
-                        tree.add(qualifierKey);
-                        stack.add(potentialClass);
+                        tree.push(new QualifierKey(potentialClass, QualifierKey.getQualifier(potentialClass)));
+                        stack.push(potentialClass);
+                        continue; // (x)
                     }
                 }
             }
@@ -194,6 +193,7 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
     private void resolveDependencyTreeForBean(LinkedList<QualifierKey> tree, Stack<Class<?>> stack) throws UnsatisfiedDependencyException, CircularDependencyException {
         while (!stack.isEmpty()) {
             Class<?> bean = stack.pop();
+
             if (beanRegistry.isRegistered(bean, QualifierKey.getQualifier(bean)) || bean.isInterface())
                 continue; //making sure it's already registered to not spend time
 
@@ -228,7 +228,9 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         logger.debug("Resolving dependency tree for bean-type: {}", currentBean.getName());
 
         final LinkedList<QualifierKey> tree = new LinkedList<>();
+        final Set<Class<?>> beans = new HashSet<>();
         final Stack<Class<?>> stack = new Stack<>();
+
 
         QualifierKey cq = new QualifierKey(currentBean, QualifierKey.getQualifier(currentBean));
         tree.add(cq);

@@ -83,7 +83,6 @@ public abstract class AbstractIcicleApplication implements Application {
     @SneakyThrows
     public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler, GlobalServiceProvider globalServiceProvider, File configRoot, ClassLoader... classLoaders) {
         PerformanceLog.begin(this, "Application Creation", AbstractIcicleApplication.class);
-        System.out.println("Root package: " + rootPackage);
         this.reflections = new Reflections(
                 new ConfigurationBuilder()
                         .setScanners(Scanners.values())
