@@ -25,8 +25,6 @@
 package net.iceyleagons.icicle.core.python;
 
 import lombok.SneakyThrows;
-import net.bytebuddy.ByteBuddy;
-import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.utilities.lang.Experimental;
 
 import java.io.BufferedReader;

@@ -29,9 +29,8 @@ import net.iceyleagons.icicle.commands.Command;
 import net.iceyleagons.icicle.commands.CommandManager;
 import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
 import net.iceyleagons.icicle.utilities.lang.Utility;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 

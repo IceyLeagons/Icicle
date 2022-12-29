@@ -24,8 +24,9 @@
 
 package net.iceyleagons.iciclehelper.utils;
 
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.util.containers.ContainerUtil;
 import net.iceyleagons.iciclehelper.IcicleClasses;
 

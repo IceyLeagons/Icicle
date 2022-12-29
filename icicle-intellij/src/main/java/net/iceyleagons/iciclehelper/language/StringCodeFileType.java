@@ -24,7 +24,6 @@
 
 package net.iceyleagons.iciclehelper.language;
 
-import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.NlsSafe;

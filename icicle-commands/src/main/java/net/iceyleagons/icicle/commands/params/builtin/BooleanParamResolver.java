@@ -25,10 +25,10 @@
 package net.iceyleagons.icicle.commands.params.builtin;
 
 import net.iceyleagons.icicle.commands.CommandManager;
-import net.iceyleagons.icicle.commands.utils.StandardCommandErrors;
 import net.iceyleagons.icicle.commands.exception.ParamParsingException;
 import net.iceyleagons.icicle.commands.params.CommandParameterResolver;
 import net.iceyleagons.icicle.commands.params.CommandParameterResolverTemplate;
+import net.iceyleagons.icicle.commands.utils.StandardCommandErrors;
 
 import java.util.Arrays;
 import java.util.List;

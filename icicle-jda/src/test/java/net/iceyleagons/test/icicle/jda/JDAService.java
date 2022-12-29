@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda;
+package net.iceyleagons.test.icicle.jda;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -30,9 +30,9 @@ import net.iceyleagons.icicle.core.annotations.bean.Bean;
 import net.iceyleagons.icicle.core.annotations.config.Property;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.jda.interactions.ModalUtils;
+import net.iceyleagons.icicle.jda.interactions.SelectMenuUtils;
 import net.iceyleagons.icicle.jda.interactions.commands.CommandListener;
 import net.iceyleagons.icicle.jda.interactions.commands.CommandServiceImpl;
-import net.iceyleagons.icicle.jda.interactions.SelectMenuUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;

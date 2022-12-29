@@ -27,10 +27,10 @@ package net.iceyleagons.icicle.core.beans;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.Application;
+import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
 import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.bean.Bean;
-import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
 import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.config.ConfigurationDriver;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
@@ -66,7 +66,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * Default implementation of {@link BeanManager}.

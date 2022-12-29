@@ -34,9 +34,7 @@ import net.iceyleagons.icicle.core.annotations.bean.Lazy;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
 import net.iceyleagons.icicle.core.beans.BeanManager;
-import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.QualifierKey;
-import net.iceyleagons.icicle.core.proxy.BeanProxyHandler;
 import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.core.proxy.interceptor.LazyMethodDelegation;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
@@ -48,7 +46,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 

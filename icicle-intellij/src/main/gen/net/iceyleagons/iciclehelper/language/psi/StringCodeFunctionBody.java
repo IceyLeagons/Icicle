@@ -25,8 +25,8 @@
 // This is a generated file. Not intended for manual editing.
 package net.iceyleagons.iciclehelper.language.psi;
 
-import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 
 public interface StringCodeFunctionBody extends PsiElement {
 

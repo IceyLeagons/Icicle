@@ -25,7 +25,6 @@
 package net.iceyleagons.test.icicle.core.bean.circular2;
 
 import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
-import net.iceyleagons.icicle.core.annotations.service.Service;
 
 /**
  * @author TOTHTOMI

@@ -33,7 +33,6 @@ import net.iceyleagons.icicle.core.configuration.driver.ConfigDelegator;
 import net.iceyleagons.icicle.utilities.ReflectionUtils;
 import net.iceyleagons.icicle.utilities.file.FileUtils;
 import org.simpleyaml.configuration.file.YamlFile;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +40,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.stream.Stream;
 
 /**

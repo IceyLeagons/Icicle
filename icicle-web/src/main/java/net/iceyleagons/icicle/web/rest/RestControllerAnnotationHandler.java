@@ -28,8 +28,6 @@ import io.javalin.Javalin;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
-import net.iceyleagons.icicle.core.beans.BeanRegistry;
-import net.iceyleagons.icicle.web.WebService;
 import net.iceyleagons.icicle.web.rest.endpoints.RestControllerEndpointManager;
 import org.jetbrains.annotations.NotNull;
 

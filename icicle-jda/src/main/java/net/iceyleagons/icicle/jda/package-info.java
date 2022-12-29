@@ -22,23 +22,9 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda;
-
-import net.iceyleagons.icicle.core.Icicle;
-import net.iceyleagons.icicle.core.annotations.IcicleApplication;
-
-import java.lang.reflect.ParameterizedType;
-import java.util.Optional;
-
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since ${MONTH_NAME_SHORT}. ${DAY}, ${YEAR}
+ * @since Dec. 29, 2022
  */
-@IcicleApplication("net.iceyleagons.icicle.jda")
-public class Main {
-
-    public static void main(String[] args) {
-        Icicle.bootStandalone(Main.class);
-    }
-}
+package net.iceyleagons.icicle.jda;

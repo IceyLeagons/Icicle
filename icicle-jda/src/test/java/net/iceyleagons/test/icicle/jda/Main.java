@@ -22,16 +22,20 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands;
+package net.iceyleagons.test.icicle.jda;
 
-import java.util.List;
+import net.iceyleagons.icicle.core.Icicle;
+import net.iceyleagons.icicle.core.annotations.IcicleApplication;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Sept. 11, 2022
+ * @since ${MONTH_NAME_SHORT}. ${DAY}, ${YEAR}
  */
-public interface CompletionHandler {
-    List<String> getOptions(String[] args);
+@IcicleApplication("net.iceyleagons.icicle.jda")
+public class Main {
 
+    public static void main(String[] args) {
+        Icicle.bootStandalone(Main.class);
+    }
 }

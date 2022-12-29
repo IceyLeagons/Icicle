@@ -26,7 +26,6 @@ package net.iceyleagons.icicle.web.rest.endpoints.types;
 
 import io.javalin.Javalin;
 import net.iceyleagons.icicle.web.rest.endpoints.Endpoint;
-import net.iceyleagons.icicle.web.rest.endpoints.types.annotations.Get;
 import net.iceyleagons.icicle.web.rest.endpoints.types.annotations.Post;
 
 import java.lang.reflect.Method;

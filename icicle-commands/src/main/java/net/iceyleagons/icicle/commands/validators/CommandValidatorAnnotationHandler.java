@@ -25,9 +25,6 @@
 package net.iceyleagons.icicle.commands.validators;
 
 import net.iceyleagons.icicle.commands.CommandService;
-import net.iceyleagons.icicle.commands.middleware.CommandMiddleware;
-import net.iceyleagons.icicle.commands.middleware.CommandMiddlewareTemplate;
-import net.iceyleagons.icicle.commands.params.CommandParamResolverAnnotationHandler;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;

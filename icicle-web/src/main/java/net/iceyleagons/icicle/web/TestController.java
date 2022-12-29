@@ -31,9 +31,7 @@ import net.iceyleagons.icicle.core.annotations.execution.python.PythonFile;
 import net.iceyleagons.icicle.web.rest.RestController;
 import net.iceyleagons.icicle.web.rest.endpoints.params.PathParam;
 import net.iceyleagons.icicle.web.rest.endpoints.params.QueryParam;
-import net.iceyleagons.icicle.web.rest.endpoints.params.RequestBody;
 import net.iceyleagons.icicle.web.rest.endpoints.types.annotations.Get;
-import net.iceyleagons.icicle.web.rest.endpoints.types.annotations.Post;
 
 import java.util.Collections;
 import java.util.List;

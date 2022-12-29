@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("maven-publish")
     alias(libs.plugins.icicle)
 }
 
@@ -32,6 +33,26 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+}
+
+publishing {
+    repositories {
+        maven {
+            credentials {
+                username = project.properties["ilSnapshotUser"].toString()
+                password = project.properties["ilSnapshotPwd"].toString()
+            }
+            url = uri("https://mvn.iceyleagons.net/snapshots")
+        }
+    }
+    publications {
+        create<MavenPublication>("Maven") {
+            groupId = "net.iceyleagons"
+            artifactId = "icicle-jda"
+            version = "1.0.0-SNAPSHOT"
+            from(components["java"])
+        }
+    }
 }
 
 tasks.getByName<Test>("test") {

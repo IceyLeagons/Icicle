@@ -25,16 +25,16 @@
 // This is a generated file. Not intended for manual editing.
 package net.iceyleagons.iciclehelper.language.psi.impl;
 
-import java.util.List;
-
-import net.iceyleagons.iciclehelper.language.psi.StringCodeFunction;
-import net.iceyleagons.iciclehelper.language.psi.StringCodeStringCode;
-import net.iceyleagons.iciclehelper.language.psi.StringCodeVisitor;
-import org.jetbrains.annotations.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import net.iceyleagons.iciclehelper.language.psi.StringCodeFunction;
+import net.iceyleagons.iciclehelper.language.psi.StringCodeStringCode;
+import net.iceyleagons.iciclehelper.language.psi.StringCodeVisitor;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class StringCodeStringCodeImpl extends ASTWrapperPsiElement implements StringCodeStringCode {
 

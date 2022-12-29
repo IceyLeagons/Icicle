@@ -46,6 +46,8 @@ repositories {
 dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+
     compileOnly(libs.fastutil)
     compileOnly(libs.jetbrainsannotations)
     compileOnly(libs.slf4j)

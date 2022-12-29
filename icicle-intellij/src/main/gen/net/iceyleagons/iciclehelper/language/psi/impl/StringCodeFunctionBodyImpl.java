@@ -25,13 +25,13 @@
 // This is a generated file. Not intended for manual editing.
 package net.iceyleagons.iciclehelper.language.psi.impl;
 
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
 import net.iceyleagons.iciclehelper.language.psi.StringCodeFunctionBody;
 import net.iceyleagons.iciclehelper.language.psi.StringCodeValue;
 import net.iceyleagons.iciclehelper.language.psi.StringCodeVisitor;
-import org.jetbrains.annotations.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import org.jetbrains.annotations.NotNull;
 
 public class StringCodeFunctionBodyImpl extends ASTWrapperPsiElement implements StringCodeFunctionBody {
 

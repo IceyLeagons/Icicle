@@ -24,8 +24,6 @@
 
 package net.iceyleagons.icicle.commands;
 
-import net.iceyleagons.icicle.commands.exception.ParamParsingException;
-import net.iceyleagons.icicle.commands.exception.ParameterValidationException;
 import net.iceyleagons.icicle.core.exceptions.TranslatableException;
 
 /**

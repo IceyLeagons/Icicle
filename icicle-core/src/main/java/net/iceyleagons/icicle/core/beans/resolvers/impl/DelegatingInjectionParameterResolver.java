@@ -25,10 +25,10 @@
 package net.iceyleagons.icicle.core.beans.resolvers.impl;
 
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
+import net.iceyleagons.icicle.core.beans.QualifierKey;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.InjectionParameterResolver;
 import net.iceyleagons.icicle.core.exceptions.UnsatisfiedDependencyException;
-import net.iceyleagons.icicle.core.beans.QualifierKey;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Executable;

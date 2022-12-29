@@ -25,7 +25,6 @@
 package net.iceyleagons.icicle.core.proxy.interceptor.python;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodDelegation;
@@ -33,8 +32,6 @@ import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.iceyleagons.icicle.core.annotations.execution.python.PythonFile;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;
-import net.iceyleagons.icicle.core.modifiers.ValueModifierAutoCreateHandler;
-import net.iceyleagons.icicle.core.proxy.interceptor.modifiers.ModifiersActive;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 
 /**

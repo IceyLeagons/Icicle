@@ -25,12 +25,12 @@
 // This is a generated file. Not intended for manual editing.
 package net.iceyleagons.iciclehelper.language.psi.impl;
 
-import net.iceyleagons.iciclehelper.language.psi.StringCodeNotBracketOrNextValue;
-import net.iceyleagons.iciclehelper.language.psi.StringCodeVisitor;
-import org.jetbrains.annotations.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import net.iceyleagons.iciclehelper.language.psi.StringCodeNotBracketOrNextValue;
+import net.iceyleagons.iciclehelper.language.psi.StringCodeVisitor;
+import org.jetbrains.annotations.NotNull;
 
 public class StringCodeNotBracketOrNextValueImpl extends ASTWrapperPsiElement implements StringCodeNotBracketOrNextValue {
 

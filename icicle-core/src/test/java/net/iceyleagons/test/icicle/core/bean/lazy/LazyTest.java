@@ -28,7 +28,6 @@ import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
-import net.iceyleagons.icicle.core.exceptions.CircularDependencyException;
 import net.iceyleagons.icicle.core.utils.ExecutionUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
