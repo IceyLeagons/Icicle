@@ -22,20 +22,31 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.params;
+package net.iceyleagons.icicle.jda.commands;
 
-import net.iceyleagons.icicle.core.utils.Store;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+
+import java.lang.reflect.Method;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Sept. 11, 2022
+ * @since Dec. 28, 2022
  */
-public class ParameterResolverStore extends Store<Class<?>, CommandParameterResolverTemplate> {
+@Getter
+@RequiredArgsConstructor
+public class RegisteredCommand {
 
-    public void registerParameterResolver(CommandParameterResolverTemplate resolverTemplate, CommandParameterResolver annotation) {
-        for (Class<?> aClass : annotation.value()) {
-            super.elements.put(aClass, resolverTemplate);
-        }
+    private final String name;
+    private final String description;
+
+    private final Object origin;
+    private final Method method;
+
+    @SneakyThrows
+    public void execute(Object[] params) {
+        method.invoke(origin, params);
     }
 }

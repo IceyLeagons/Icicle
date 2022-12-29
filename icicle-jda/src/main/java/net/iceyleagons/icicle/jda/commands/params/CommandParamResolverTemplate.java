@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,33 +22,35 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.translations.code.functions.impl;
+package net.iceyleagons.icicle.jda.commands.params;
 
-import net.iceyleagons.icicle.core.translations.code.CodeParserUtils;
-import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
-import net.iceyleagons.icicle.core.translations.code.functions.CodeFunction;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.iceyleagons.icicle.jda.commands.annotations.CommandParameter;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.lang.reflect.Parameter;
+import java.util.Optional;
 
-@CodeFunction
-public class EndsWithFunction extends AbstractCodeFunction {
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Dec. 28, 2022
+ */
+public interface CommandParamResolverTemplate<T> {
 
-    public EndsWithFunction() {
-        super("EW");
+    @Nullable
+    OptionData buildFromParameter(Parameter param, boolean autoComplete);
+
+    @Nullable
+    T parse(Parameter parameter, SlashCommandInteractionEvent event);
+
+    default boolean isRequired(Parameter parameter) {
+        return !parameter.getType().equals(Optional.class);
     }
 
-    @Override
-    public String parse(String input) {
-        List<String> list = CodeParserUtils.parseCommaSeparatedList(CodeParserUtils.getFunctionContent(input));
-
-        if (list.size() <= 1) return "error";
-        String value = super.getCodeParser().parseFunction(list.get(0));
-
-        for (int i = 1; i < list.size(); i++) {
-            if (value.endsWith(super.getCodeParser().parseFunction(list.get(i))))
-                return "true";
-        }
-
-        return "false";
+    default CommandParameter getParamAnnotation(Parameter parameter) {
+        return parameter.getAnnotation(CommandParameter.class);
     }
+
 }

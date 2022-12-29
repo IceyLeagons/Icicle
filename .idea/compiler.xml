@@ -19,6 +19,7 @@
         <module name="icicle.icicle-web.main" />
         <module name="icicle.icicle-serialization.main" />
         <module name="icicle.icicle-utilities.main" />
+        <module name="icicle.icicle-jda.main" />
       </profile>
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />

@@ -22,20 +22,20 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.params;
+package net.iceyleagons.icicle.core.translations.code.functions.impl.check;
 
-import net.iceyleagons.icicle.core.utils.Store;
+import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
+import net.iceyleagons.icicle.core.translations.code.functions.CodeFunction;
 
-/**
- * @author TOTHTOMI
- * @version 1.0.0
- * @since Sept. 11, 2022
- */
-public class ParameterResolverStore extends Store<Class<?>, CommandParameterResolverTemplate> {
+@CodeFunction
+public class EqualsFunction extends AbstractCodeFunction {
 
-    public void registerParameterResolver(CommandParameterResolverTemplate resolverTemplate, CommandParameterResolver annotation) {
-        for (Class<?> aClass : annotation.value()) {
-            super.elements.put(aClass, resolverTemplate);
-        }
+    public EqualsFunction() {
+        super("EQ");
+    }
+
+    @Override
+    public String parse(String input) {
+        return super.handleSimpleList(input, s -> s != 2, (v1, v2) -> String.valueOf(v1.equals(v2)));
     }
 }

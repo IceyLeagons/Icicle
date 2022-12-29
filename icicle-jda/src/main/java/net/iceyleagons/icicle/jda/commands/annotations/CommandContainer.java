@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +22,22 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.translations.code.functions.impl;
+package net.iceyleagons.icicle.jda.commands.annotations;
 
-import net.iceyleagons.icicle.core.translations.code.CodeParserUtils;
-import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
-import net.iceyleagons.icicle.core.translations.code.functions.CodeFunction;
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@CodeFunction
-public class JoinFunction extends AbstractCodeFunction {
-
-    public JoinFunction() {
-        super("JOIN");
-    }
-
-    @Override
-    public String parse(String input) {
-        List<String> list = CodeParserUtils.parseFunctionList(CodeParserUtils.getFunctionContent(input));
-        if (list.size() < 2) return "error";
-
-        String delimiter = super.getCodeParser().parseFunction(list.get(0));
-        List<String> parsed = new ArrayList<>();
-
-        for (int i = 1; i < list.size(); i++) {
-            parsed.add(super.getCodeParser().parseFunction(list.get(i)));
-        }
-
-        return String.join(delimiter, parsed);
-    }
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Dec. 28, 2022
+ */
+@AutoCreate
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface CommandContainer {
 }

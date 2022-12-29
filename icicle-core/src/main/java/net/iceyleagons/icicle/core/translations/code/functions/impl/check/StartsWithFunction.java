@@ -22,20 +22,33 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.params;
+package net.iceyleagons.icicle.core.translations.code.functions.impl.check;
 
-import net.iceyleagons.icicle.core.utils.Store;
+import net.iceyleagons.icicle.core.translations.code.CodeParserUtils;
+import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
+import net.iceyleagons.icicle.core.translations.code.functions.CodeFunction;
 
-/**
- * @author TOTHTOMI
- * @version 1.0.0
- * @since Sept. 11, 2022
- */
-public class ParameterResolverStore extends Store<Class<?>, CommandParameterResolverTemplate> {
+import java.util.List;
 
-    public void registerParameterResolver(CommandParameterResolverTemplate resolverTemplate, CommandParameterResolver annotation) {
-        for (Class<?> aClass : annotation.value()) {
-            super.elements.put(aClass, resolverTemplate);
+@CodeFunction
+public class StartsWithFunction extends AbstractCodeFunction {
+
+    public StartsWithFunction() {
+        super("SW");
+    }
+
+    @Override
+    public String parse(String input) {
+        List<String> list = CodeParserUtils.parseCommaSeparatedList(CodeParserUtils.getFunctionContent(input));
+
+        if (list.size() <= 1) return "error";
+        String value = super.getCodeParser().parseFunction(list.get(0));
+
+        for (int i = 1; i < list.size(); i++) {
+            if (value.startsWith(super.getCodeParser().parseFunction(list.get(i))))
+                return "true";
         }
+
+        return "false";
     }
 }

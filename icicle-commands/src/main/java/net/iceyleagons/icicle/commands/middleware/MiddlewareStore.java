@@ -24,7 +24,7 @@
 
 package net.iceyleagons.icicle.commands.middleware;
 
-import net.iceyleagons.icicle.commands.utils.Store;
+import net.iceyleagons.icicle.core.utils.Store;
 
 /**
  * @author TOTHTOMI

@@ -22,28 +22,23 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.translations.code.functions.impl;
+package net.iceyleagons.icicle.jda.commands.annotations;
 
-import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
-import net.iceyleagons.icicle.core.translations.code.functions.CodeFunction;
-
-import java.util.Objects;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jun. 08, 2022
+ * @since Dec. 28, 2022
  */
-@CodeFunction
-public class IsEmptyFunction extends AbstractCodeFunction {
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface CommandParameter {
 
-    public IsEmptyFunction() {
-        super("ISEMPTY");
-    }
+    String name();
+    String description();
 
-    @Override
-    public String parse(String input) {
-        if (Objects.equals(input, "error")) return "error";
-        return (input.isEmpty()) ? "true" : "false";
-    }
 }

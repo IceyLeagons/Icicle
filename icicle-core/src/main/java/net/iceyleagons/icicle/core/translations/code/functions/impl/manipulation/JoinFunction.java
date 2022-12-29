@@ -22,20 +22,34 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.params;
+package net.iceyleagons.icicle.core.translations.code.functions.impl.manipulation;
 
-import net.iceyleagons.icicle.core.utils.Store;
+import net.iceyleagons.icicle.core.translations.code.CodeParserUtils;
+import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
+import net.iceyleagons.icicle.core.translations.code.functions.CodeFunction;
 
-/**
- * @author TOTHTOMI
- * @version 1.0.0
- * @since Sept. 11, 2022
- */
-public class ParameterResolverStore extends Store<Class<?>, CommandParameterResolverTemplate> {
+import java.util.ArrayList;
+import java.util.List;
 
-    public void registerParameterResolver(CommandParameterResolverTemplate resolverTemplate, CommandParameterResolver annotation) {
-        for (Class<?> aClass : annotation.value()) {
-            super.elements.put(aClass, resolverTemplate);
+@CodeFunction
+public class JoinFunction extends AbstractCodeFunction {
+
+    public JoinFunction() {
+        super("JOIN");
+    }
+
+    @Override
+    public String parse(String input) {
+        List<String> list = CodeParserUtils.parseFunctionList(CodeParserUtils.getFunctionContent(input));
+        if (list.size() < 2) return "error";
+
+        String delimiter = super.getCodeParser().parseFunction(list.get(0));
+        List<String> parsed = new ArrayList<>();
+
+        for (int i = 1; i < list.size(); i++) {
+            parsed.add(super.getCodeParser().parseFunction(list.get(i)));
         }
+
+        return String.join(delimiter, parsed);
     }
 }

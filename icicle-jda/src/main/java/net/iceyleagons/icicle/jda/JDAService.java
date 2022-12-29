@@ -22,20 +22,47 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.params;
+package net.iceyleagons.icicle.jda;
 
-import net.iceyleagons.icicle.core.utils.Store;
+import lombok.RequiredArgsConstructor;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.iceyleagons.icicle.core.annotations.bean.Autowired;
+import net.iceyleagons.icicle.core.annotations.bean.Bean;
+import net.iceyleagons.icicle.core.annotations.service.Service;
+import net.iceyleagons.icicle.jda.commands.CommandListener;
+import net.iceyleagons.icicle.jda.commands.CommandService;
+import net.iceyleagons.icicle.jda.commands.CommandServiceImpl;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Sept. 11, 2022
+ * @since Dec. 28, 2022
  */
-public class ParameterResolverStore extends Store<Class<?>, CommandParameterResolverTemplate> {
+@Service
+@RequiredArgsConstructor
+public class JDAService {
 
-    public void registerParameterResolver(CommandParameterResolverTemplate resolverTemplate, CommandParameterResolver annotation) {
-        for (Class<?> aClass : annotation.value()) {
-            super.elements.put(aClass, resolverTemplate);
-        }
+    private final CommandServiceImpl commandService;
+
+    @Bean
+    public JDA jda() throws InterruptedException {
+        JDA jda = JDABuilder.createDefault("OTc1ODI2OTUwNTE2MDAyODU2.G9E-W6.b0aL4ssaeaWRAPW8fyk_jQND1oY45HcYxwHDfU")
+                .addEventListeners(new CommandListener(commandService))
+                .build().awaitReady();
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                commandService.registerToJda(jda);
+            }
+        }, 3000L);
+
+
+        return jda;
     }
+
 }

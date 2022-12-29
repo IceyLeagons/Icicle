@@ -22,20 +22,33 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.params;
+package net.iceyleagons.icicle.core.translations.code.functions.impl.manipulation;
 
-import net.iceyleagons.icicle.core.utils.Store;
+import net.iceyleagons.icicle.core.translations.code.CodeParserUtils;
+import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
+import net.iceyleagons.icicle.core.translations.code.functions.CodeFunction;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Sept. 11, 2022
+ * @since Dec. 29, 2022
  */
-public class ParameterResolverStore extends Store<Class<?>, CommandParameterResolverTemplate> {
+@CodeFunction
+public class RandomFunction extends AbstractCodeFunction {
 
-    public void registerParameterResolver(CommandParameterResolverTemplate resolverTemplate, CommandParameterResolver annotation) {
-        for (Class<?> aClass : annotation.value()) {
-            super.elements.put(aClass, resolverTemplate);
-        }
+    public RandomFunction() {
+        super("RANDOM");
+    }
+
+    @Override
+    public String parse(String input) {
+        List<String> list = CodeParserUtils.parseFunctionList(CodeParserUtils.getFunctionContent(input));
+        if (list.size() == 0) return "error";
+
+        return super.getCodeParser().parseFunction(list.get(new Random().nextInt(list.size())));
     }
 }
+

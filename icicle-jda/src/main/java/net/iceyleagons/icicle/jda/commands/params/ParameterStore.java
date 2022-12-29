@@ -22,20 +22,23 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.params;
+package net.iceyleagons.icicle.jda.commands.params;
+
 
 import net.iceyleagons.icicle.core.utils.Store;
+import net.iceyleagons.icicle.jda.commands.annotations.CommandParamHandler;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Sept. 11, 2022
+ * @since Dec. 28, 2022
  */
-public class ParameterResolverStore extends Store<Class<?>, CommandParameterResolverTemplate> {
+public class ParameterStore extends Store<Class<?>, CommandParamResolverTemplate<?>> {
 
-    public void registerParameterResolver(CommandParameterResolverTemplate resolverTemplate, CommandParameterResolver annotation) {
+    public void registerParameterResolver(CommandParamResolverTemplate<?> resolverTemplate, CommandParamHandler annotation) {
         for (Class<?> aClass : annotation.value()) {
             super.elements.put(aClass, resolverTemplate);
         }
     }
 }
+

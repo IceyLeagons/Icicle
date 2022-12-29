@@ -22,20 +22,29 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.params;
+package net.iceyleagons.icicle.core.utils;
 
-import net.iceyleagons.icicle.core.utils.Store;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import lombok.Getter;
+
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-public class ParameterResolverStore extends Store<Class<?>, CommandParameterResolverTemplate> {
+@Getter
+public abstract class Store<K, V> {
 
-    public void registerParameterResolver(CommandParameterResolverTemplate resolverTemplate, CommandParameterResolver annotation) {
-        for (Class<?> aClass : annotation.value()) {
-            super.elements.put(aClass, resolverTemplate);
-        }
+    protected Map<K, V> elements = new Object2ObjectArrayMap<>(8);
+
+    public V get(K key) {
+        return elements.get(key);
+    }
+
+    @SuppressWarnings("unchecked")
+    public V[] getElementsArray() {
+        return (V[]) elements.values().toArray();
     }
 }

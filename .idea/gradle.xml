@@ -20,6 +20,7 @@
             <option value="$PROJECT_DIR$/icicle-gradle" />
             <option value="$PROJECT_DIR$/icicle-gui" />
             <option value="$PROJECT_DIR$/icicle-intellij" />
+            <option value="$PROJECT_DIR$/icicle-jda" />
             <option value="$PROJECT_DIR$/icicle-kotlin" />
             <option value="$PROJECT_DIR$/icicle-nms" />
             <option value="$PROJECT_DIR$/icicle-protocol" />

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.translations.code.functions.impl;
+package net.iceyleagons.icicle.core.translations.code.functions.impl.check;
 
 import net.iceyleagons.icicle.core.translations.code.CodeParserUtils;
 import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
@@ -31,10 +31,10 @@ import net.iceyleagons.icicle.core.translations.code.functions.CodeFunction;
 import java.util.List;
 
 @CodeFunction
-public class StartsWithFunction extends AbstractCodeFunction {
+public class EndsWithFunction extends AbstractCodeFunction {
 
-    public StartsWithFunction() {
-        super("SW");
+    public EndsWithFunction() {
+        super("EW");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class StartsWithFunction extends AbstractCodeFunction {
         String value = super.getCodeParser().parseFunction(list.get(0));
 
         for (int i = 1; i < list.size(); i++) {
-            if (value.startsWith(super.getCodeParser().parseFunction(list.get(i))))
+            if (value.endsWith(super.getCodeParser().parseFunction(list.get(i))))
                 return "true";
         }
 

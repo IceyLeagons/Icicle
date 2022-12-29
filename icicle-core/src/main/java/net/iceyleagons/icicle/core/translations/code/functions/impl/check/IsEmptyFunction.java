@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2022 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,33 +22,28 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.translations.code.functions.impl;
+package net.iceyleagons.icicle.core.translations.code.functions.impl.check;
 
-import net.iceyleagons.icicle.core.translations.code.CodeParserUtils;
 import net.iceyleagons.icicle.core.translations.code.functions.AbstractCodeFunction;
 import net.iceyleagons.icicle.core.translations.code.functions.CodeFunction;
 
-import java.util.List;
+import java.util.Objects;
 
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Jun. 08, 2022
+ */
 @CodeFunction
-public class ConcatFunction extends AbstractCodeFunction {
+public class IsEmptyFunction extends AbstractCodeFunction {
 
-    public ConcatFunction() {
-        super("CONCAT");
+    public IsEmptyFunction() {
+        super("ISEMPTY");
     }
 
     @Override
     public String parse(String input) {
-        List<String> list = CodeParserUtils.parseFunctionList(CodeParserUtils.getFunctionContent(input));
-        StringBuilder sb = new StringBuilder();
-
-        for (String s : list) {
-            String parsed = super.getCodeParser().parseFunction(s);
-            if (parsed.equals("error")) return "error";
-
-            sb.append(parsed);
-        }
-
-        return sb.toString();
+        if (Objects.equals(input, "error")) return "error";
+        return (input.isEmpty()) ? "true" : "false";
     }
 }

@@ -22,20 +22,26 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.params;
+package net.iceyleagons.icicle.jda.commands;
 
-import net.iceyleagons.icicle.core.utils.Store;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.iceyleagons.icicle.jda.commands.params.ParameterStore;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Sept. 11, 2022
+ * @since Dec. 28, 2022
  */
-public class ParameterResolverStore extends Store<Class<?>, CommandParameterResolverTemplate> {
+public interface CommandService {
 
-    public void registerParameterResolver(CommandParameterResolverTemplate resolverTemplate, CommandParameterResolver annotation) {
-        for (Class<?> aClass : annotation.value()) {
-            super.elements.put(aClass, resolverTemplate);
-        }
-    }
+    void registerCommandContainer(Object bean, Class<?> type);
+
+    void registerToJda(JDA jda);
+
+    ParameterStore getParameterStore();
+
+    void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event);
+
 }

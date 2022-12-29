@@ -58,8 +58,8 @@ public class TestController {
 
     @Get("/")
     @SneakyThrows
-    public TestResponse lol() {
-        return new TestResponse(callTest());
+    public List<String> lol() {
+        return callTest();
     }
 
     @AllArgsConstructor

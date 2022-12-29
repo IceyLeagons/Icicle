@@ -22,25 +22,40 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.validators;
+package net.iceyleagons.icicle.jda.commands.handlers;
 
-import net.iceyleagons.icicle.core.utils.Store;
+import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.core.annotations.bean.Autowired;
+import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.jda.commands.CommandService;
+import net.iceyleagons.icicle.jda.commands.CommandServiceImpl;
+import net.iceyleagons.icicle.jda.commands.annotations.CommandContainer;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Sept. 11, 2022
+ * @since Dec. 28, 2022
  */
-public class ValidatorStore extends Store<Class<? extends Annotation>, CommandValidatorTemplate> {
+@AnnotationHandler
+@RequiredArgsConstructor(onConstructor__ = @Autowired)
+public class CommandContainerAutoCreateHandler implements CustomAutoCreateAnnotationHandler {
 
-    public void registerValidator(CommandValidatorTemplate template, CommandValidator annotation) {
-        Class<?> toReplace = annotation.replaces();
-        if (toReplace != CommandValidator.Nothing.class) {
-            super.elements.remove(toReplace);
-        }
+    private final CommandServiceImpl commandService;
 
-        super.elements.put(annotation.value(), template);
+    @Override
+    public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
+        return Collections.singleton(CommandContainer.class);
+    }
+
+    @Override
+    public void onCreated(Object bean, Class<?> type) throws Exception {
+        System.out.println("Adding");
+        this.commandService.registerCommandContainer(bean, type);
     }
 }
