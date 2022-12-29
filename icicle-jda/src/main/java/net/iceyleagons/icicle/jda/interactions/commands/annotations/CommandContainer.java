@@ -22,26 +22,22 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.commands;
+package net.iceyleagons.icicle.jda.interactions.commands.annotations;
 
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.iceyleagons.icicle.jda.commands.params.ParameterStore;
-import org.jetbrains.annotations.NotNull;
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
-public interface CommandService {
-
-    void registerCommandContainer(Object bean, Class<?> type);
-
-    void registerToJda(JDA jda);
-
-    ParameterStore getParameterStore();
-
-    void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event);
-
+@AutoCreate
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface CommandContainer {
 }

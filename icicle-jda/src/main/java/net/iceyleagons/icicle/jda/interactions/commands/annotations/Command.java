@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.commands.annotations;
+package net.iceyleagons.icicle.jda.interactions.commands.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

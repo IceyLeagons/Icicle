@@ -22,52 +22,39 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda;
+package net.iceyleagons.icicle.jda.interactions.commands.handlers;
 
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
-import net.iceyleagons.icicle.core.annotations.bean.Bean;
-import net.iceyleagons.icicle.core.annotations.config.Property;
-import net.iceyleagons.icicle.core.annotations.service.Service;
-import net.iceyleagons.icicle.jda.interactions.ModalUtils;
-import net.iceyleagons.icicle.jda.interactions.commands.CommandListener;
+import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.core.annotations.bean.Autowired;
+import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.jda.interactions.commands.CommandServiceImpl;
-import net.iceyleagons.icicle.jda.interactions.SelectMenuUtils;
+import net.iceyleagons.icicle.jda.interactions.commands.annotations.CommandParamHandler;
+import net.iceyleagons.icicle.jda.interactions.commands.params.CommandParamResolverTemplate;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
-@Service
-public class JDAService {
+@AnnotationHandler
+@RequiredArgsConstructor(onConstructor__ = @Autowired)
+public class ParamHandlerAutoCreateHandler implements CustomAutoCreateAnnotationHandler  {
 
     private final CommandServiceImpl commandService;
-    private final String token;
 
-    public JDAService(CommandServiceImpl commandService, @Property("bot.token") String token) {
-        this.commandService = commandService;
-        this.token = token;
+    @Override
+    public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
+        return Collections.singleton(CommandParamHandler.class);
     }
 
-    @Bean
-    public JDA jda() throws InterruptedException {
-        JDA jda = JDABuilder.createDefault(token)
-                .addEventListeners(new CommandListener(commandService), SelectMenuUtils.getListener(), ModalUtils.getListener())
-                .build().awaitReady();
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                commandService.registerToJda(jda);
-            }
-        }, 3000L);
-
-
-        return jda;
+    @Override
+    public void onCreated(Object bean, Class<?> type) throws Exception {
+        commandService.getParameterStore().registerParameterResolver((CommandParamResolverTemplate<?>) bean, type.getAnnotation(CommandParamHandler.class));
     }
-
 }

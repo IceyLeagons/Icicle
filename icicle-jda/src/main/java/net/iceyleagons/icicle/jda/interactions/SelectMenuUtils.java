@@ -22,40 +22,39 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.commands.handlers;
+package net.iceyleagons.icicle.jda.interactions;
 
-import lombok.RequiredArgsConstructor;
-import net.iceyleagons.icicle.core.annotations.bean.Autowired;
-import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
-import net.iceyleagons.icicle.jda.commands.CommandService;
-import net.iceyleagons.icicle.jda.commands.CommandServiceImpl;
-import net.iceyleagons.icicle.jda.commands.annotations.CommandContainer;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.annotation.Annotation;
-import java.util.Collections;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 28, 2022
+ * @since Dec. 29, 2022
  */
-@AnnotationHandler
-@RequiredArgsConstructor(onConstructor__ = @Autowired)
-public class CommandContainerAutoCreateHandler implements CustomAutoCreateAnnotationHandler {
+public class SelectMenuUtils {
 
-    private final CommandServiceImpl commandService;
+    private static final Map<String, Consumer<StringSelectInteractionEvent>> consumers = new HashMap<>();
 
-    @Override
-    public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
-        return Collections.singleton(CommandContainer.class);
+    public static StringSelectMenu.Builder withCallback(StringSelectMenu.Builder builder, Consumer<StringSelectInteractionEvent> consumer) {
+        consumers.put(builder.getId(), consumer);
+        return builder;
     }
 
-    @Override
-    public void onCreated(Object bean, Class<?> type) throws Exception {
-        System.out.println("Adding");
-        this.commandService.registerCommandContainer(bean, type);
+    public static ListenerAdapter getListener() {
+        return new ListenerAdapter() {
+            @Override
+            public void onStringSelectInteraction(@NotNull StringSelectInteractionEvent event) {
+                if (consumers.containsKey(event.getSelectMenu().getId())) {
+                    consumers.get(event.getSelectMenu().getId()).accept(event);
+                }
+            }
+        };
     }
 }

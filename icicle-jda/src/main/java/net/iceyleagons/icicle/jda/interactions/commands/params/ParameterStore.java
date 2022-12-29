@@ -22,19 +22,23 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.commands.annotations;
+package net.iceyleagons.icicle.jda.interactions.commands.params;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+
+import net.iceyleagons.icicle.core.utils.Store;
+import net.iceyleagons.icicle.jda.interactions.commands.annotations.CommandParamHandler;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
-@Target(ElementType.PARAMETER)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface CommandSender {
+public class ParameterStore extends Store<Class<?>, CommandParamResolverTemplate<?>> {
+
+    public void registerParameterResolver(CommandParamResolverTemplate<?> resolverTemplate, CommandParamHandler annotation) {
+        for (Class<?> aClass : annotation.value()) {
+            super.elements.put(aClass, resolverTemplate);
+        }
+    }
 }
+

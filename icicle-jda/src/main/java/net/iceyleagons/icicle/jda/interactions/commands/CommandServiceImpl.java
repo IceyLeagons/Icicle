@@ -22,13 +22,12 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.commands;
+package net.iceyleagons.icicle.jda.interactions.commands;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
@@ -36,22 +35,22 @@ import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.QualifierKey;
-import net.iceyleagons.icicle.jda.commands.annotations.Command;
-import net.iceyleagons.icicle.jda.commands.params.CommandParamResolverTemplate;
-import net.iceyleagons.icicle.jda.commands.params.ParameterStore;
+import net.iceyleagons.icicle.jda.interactions.commands.annotations.Command;
+import net.iceyleagons.icicle.jda.interactions.commands.params.CommandParamResolverTemplate;
+import net.iceyleagons.icicle.jda.interactions.commands.params.ParameterStore;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
+@Slf4j
 @Service
 public class CommandServiceImpl implements CommandService {
 
@@ -93,12 +92,9 @@ public class CommandServiceImpl implements CommandService {
 
         }).toList();
 
-        System.out.println(cmds.size());
-        jda.updateCommands().addCommands(cmds).queue(e -> {
-            System.out.println("success");
-        }, r -> {
-            System.out.println(r.getMessage());
-        });
+        if (!cmds.isEmpty()) {
+            jda.updateCommands().addCommands(cmds).queue(e -> log.info("Successfully registered " + commands.size() + " commands!"), r -> log.error("Could not register commands, due to: " + r.getMessage()));
+        }
     }
 
     @Override
