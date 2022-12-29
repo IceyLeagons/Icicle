@@ -6,3 +6,4 @@ debug-server/**
 
 # This should fix builds being present.
 **/build/**
+configs/config.properties

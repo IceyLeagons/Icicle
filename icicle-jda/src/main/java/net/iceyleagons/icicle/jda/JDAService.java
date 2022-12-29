@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.bean.Bean;
+import net.iceyleagons.icicle.core.annotations.config.Property;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.jda.commands.CommandListener;
 import net.iceyleagons.icicle.jda.commands.CommandService;
@@ -48,9 +49,12 @@ public class JDAService {
 
     private final CommandServiceImpl commandService;
 
+    @Property("bot.token")
+    private final String token;
+
     @Bean
     public JDA jda() throws InterruptedException {
-        JDA jda = JDABuilder.createDefault("OTc1ODI2OTUwNTE2MDAyODU2.G9E-W6.b0aL4ssaeaWRAPW8fyk_jQND1oY45HcYxwHDfU")
+        JDA jda = JDABuilder.createDefault(token)
                 .addEventListeners(new CommandListener(commandService))
                 .build().awaitReady();
 
