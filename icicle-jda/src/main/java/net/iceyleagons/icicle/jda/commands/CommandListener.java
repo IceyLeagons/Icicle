@@ -22,39 +22,25 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.interactions.commands.handlers;
+package net.iceyleagons.icicle.jda.commands;
 
 import lombok.RequiredArgsConstructor;
-import net.iceyleagons.icicle.core.annotations.bean.Autowired;
-import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
-import net.iceyleagons.icicle.jda.interactions.commands.CommandServiceImpl;
-import net.iceyleagons.icicle.jda.interactions.commands.annotations.CommandParamHandler;
-import net.iceyleagons.icicle.jda.interactions.commands.params.CommandParamResolverTemplate;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-
-import java.lang.annotation.Annotation;
-import java.util.Collections;
-import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
-@AnnotationHandler
-@RequiredArgsConstructor(onConstructor__ = @Autowired)
-public class ParamHandlerAutoCreateHandler implements CustomAutoCreateAnnotationHandler  {
+@RequiredArgsConstructor
+public class CommandListener extends ListenerAdapter {
 
-    private final CommandServiceImpl commandService;
-
-    @Override
-    public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
-        return Collections.singleton(CommandParamHandler.class);
-    }
+    private final CommandService commandService;
 
     @Override
-    public void onCreated(Object bean, Class<?> type) throws Exception {
-        commandService.getParameterStore().registerParameterResolver((CommandParamResolverTemplate<?>) bean, type.getAnnotation(CommandParamHandler.class));
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        commandService.onSlashCommandInteraction(event);
     }
 }

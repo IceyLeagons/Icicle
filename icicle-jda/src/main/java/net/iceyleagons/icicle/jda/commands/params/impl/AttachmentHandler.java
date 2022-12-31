@@ -22,25 +22,41 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.interactions.commands;
+package net.iceyleagons.icicle.jda.commands.params.impl;
 
-import lombok.RequiredArgsConstructor;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.iceyleagons.icicle.jda.commands.annotations.CommandParamHandler;
+import net.iceyleagons.icicle.jda.commands.annotations.CommandParameter;
+import net.iceyleagons.icicle.jda.commands.params.CommandParamResolverTemplate;
+import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Parameter;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
-@RequiredArgsConstructor
-public class CommandListener extends ListenerAdapter {
-
-    private final CommandService commandService;
+@CommandParamHandler({ Message.Attachment.class })
+public class AttachmentHandler implements CommandParamResolverTemplate<Message.Attachment> {
 
     @Override
-    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        commandService.onSlashCommandInteraction(event);
+    public OptionData buildFromParameter(Parameter param, boolean autoComplete) {
+        CommandParameter cp = getParamAnnotation(param);
+        return new OptionData(OptionType.ATTACHMENT, cp.name(), cp.description(), isRequired(param), autoComplete);
+    }
+
+    @Override
+    @Nullable
+    public Message.Attachment parse(Parameter parameter, SlashCommandInteractionEvent event) {
+        OptionMapping om = event.getOption(getParamAnnotation(parameter).name());
+        if (om == null) return null;
+
+        return om.getAsAttachment();
     }
 }
+

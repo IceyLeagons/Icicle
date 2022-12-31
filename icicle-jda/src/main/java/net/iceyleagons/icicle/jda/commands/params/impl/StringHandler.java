@@ -22,16 +22,15 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.interactions.commands.params.impl;
+package net.iceyleagons.icicle.jda.commands.params.impl;
 
-import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.iceyleagons.icicle.jda.interactions.commands.annotations.CommandParamHandler;
-import net.iceyleagons.icicle.jda.interactions.commands.annotations.CommandParameter;
-import net.iceyleagons.icicle.jda.interactions.commands.params.CommandParamResolverTemplate;
+import net.iceyleagons.icicle.jda.commands.annotations.CommandParamHandler;
+import net.iceyleagons.icicle.jda.commands.annotations.CommandParameter;
+import net.iceyleagons.icicle.jda.commands.params.CommandParamResolverTemplate;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Parameter;
@@ -41,23 +40,22 @@ import java.lang.reflect.Parameter;
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
-@CommandParamHandler(GuildChannel.class)
-public class ChannelHandler implements CommandParamResolverTemplate<GuildChannel> {
+@CommandParamHandler(String.class)
+public class StringHandler implements CommandParamResolverTemplate<String> {
 
     @Override
-    @Nullable
     public OptionData buildFromParameter(Parameter param, boolean autoComplete) {
         CommandParameter cp = getParamAnnotation(param);
-        return new OptionData(OptionType.CHANNEL, cp.name(), cp.description(), isRequired(param), autoComplete);
+        return new OptionData(OptionType.STRING, cp.name(), cp.description(), isRequired(param), autoComplete);
     }
 
     @Override
     @Nullable
-    public GuildChannel parse(Parameter parameter, SlashCommandInteractionEvent event) {
+    public String parse(Parameter parameter, SlashCommandInteractionEvent event) {
         OptionMapping om = event.getOption(getParamAnnotation(parameter).name());
         if (om == null) return null;
 
-        return om.getAsChannel();
+        return om.getAsString();
     }
 }
 

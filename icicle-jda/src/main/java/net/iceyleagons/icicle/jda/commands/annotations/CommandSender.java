@@ -22,9 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.interactions.commands.annotations;
-
-import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
+package net.iceyleagons.icicle.jda.commands.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -36,11 +34,7 @@ import java.lang.annotation.Target;
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
-@AutoCreate
-@Target(ElementType.TYPE)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CommandParamHandler {
-
-    Class<?>[] value();
-
+public @interface CommandSender {
 }

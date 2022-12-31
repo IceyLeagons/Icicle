@@ -22,22 +22,31 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.interactions.commands.annotations;
+package net.iceyleagons.icicle.jda.commands;
 
-import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.reflect.Method;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
-@AutoCreate
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface CommandContainer {
+@Getter
+@RequiredArgsConstructor
+public class RegisteredCommand {
+
+    private final String name;
+    private final String description;
+
+    private final Object origin;
+    private final Method method;
+
+    @SneakyThrows
+    public void execute(Object[] params) {
+        method.invoke(origin, params);
+    }
 }

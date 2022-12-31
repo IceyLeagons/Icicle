@@ -29,10 +29,9 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.iceyleagons.icicle.core.annotations.bean.Bean;
 import net.iceyleagons.icicle.core.annotations.config.Property;
 import net.iceyleagons.icicle.core.annotations.service.Service;
-import net.iceyleagons.icicle.jda.interactions.ModalUtils;
-import net.iceyleagons.icicle.jda.interactions.SelectMenuUtils;
-import net.iceyleagons.icicle.jda.interactions.commands.CommandListener;
-import net.iceyleagons.icicle.jda.interactions.commands.CommandServiceImpl;
+import net.iceyleagons.icicle.jda.InteractionUtils;
+import net.iceyleagons.icicle.jda.commands.CommandListener;
+import net.iceyleagons.icicle.jda.commands.CommandServiceImpl;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -56,7 +55,7 @@ public class JDAService {
     @Bean
     public JDA jda() throws InterruptedException {
         JDA jda = JDABuilder.createDefault(token)
-                .addEventListeners(new CommandListener(commandService), SelectMenuUtils.getListener(), ModalUtils.getListener())
+                .addEventListeners(new CommandListener(commandService), InteractionUtils.getListener())
                 .build().awaitReady();
 
         new Timer().schedule(new TimerTask() {

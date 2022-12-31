@@ -32,7 +32,7 @@ import net.iceyleagons.icicle.core.annotations.IcicleApplication;
  * @version 1.0.0
  * @since ${MONTH_NAME_SHORT}. ${DAY}, ${YEAR}
  */
-@IcicleApplication("net.iceyleagons.icicle.jda")
+@IcicleApplication("net.iceyleagons.test.icicle.jda")
 public class Main {
 
     public static void main(String[] args) {

@@ -26,18 +26,20 @@ package net.iceyleagons.test.icicle.jda;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
-import net.iceyleagons.icicle.jda.interactions.ModalUtils;
-import net.iceyleagons.icicle.jda.interactions.SelectMenuUtils;
-import net.iceyleagons.icicle.jda.interactions.commands.annotations.Command;
-import net.iceyleagons.icicle.jda.interactions.commands.annotations.CommandContainer;
-import net.iceyleagons.icicle.jda.interactions.commands.annotations.CommandParameter;
-import net.iceyleagons.icicle.jda.interactions.commands.annotations.CommandSender;
+import net.iceyleagons.icicle.jda.InteractionUtils;
+import net.iceyleagons.icicle.jda.commands.annotations.Command;
+import net.iceyleagons.icicle.jda.commands.annotations.CommandContainer;
+import net.iceyleagons.icicle.jda.commands.annotations.CommandParameter;
+import net.iceyleagons.icicle.jda.commands.annotations.CommandSender;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -49,6 +51,23 @@ import java.util.Optional;
  */
 @CommandContainer
 public class TestCommand {
+
+    enum Test {
+        OPTION1,
+        SECOND,
+        RANDOM
+    }
+
+    @Command(
+            name = "enumtest",
+            description = "Testing enums"
+    )
+    public void enumTest(
+            @CommandParameter(name = "enum", description = "test") Test test,
+            @CommandParameter(name = "optional", description = "optional enum") Optional<Test> optTest,
+            SlashCommandInteractionEvent event) {
+        event.deferReply(true).addContent("You choose: " + test.name() + (optTest.isEmpty() ? " and u did not choose the optional one." : " and u choose opt: " + optTest.get().name())).queue();
+    }
 
     @Command(
             name = "test2",
@@ -63,19 +82,20 @@ public class TestCommand {
             description = "Test"
     )
     public void modalTest(SlashCommandInteractionEvent event) {
-        TextInput subject = TextInput.create("subject", "Subject", TextInputStyle.SHORT)
+        TextInput subject = TextInput.create("subject", "Text1", TextInputStyle.SHORT)
                 .setPlaceholder("Subject of this ticket")
                 .setMinLength(10)
                 .setMaxLength(100) // or setRequiredRange(10, 100)
                 .build();
 
-        TextInput body = TextInput.create("body", "Body", TextInputStyle.PARAGRAPH)
+        TextInput body = TextInput.create("body", "Reason", TextInputStyle.PARAGRAPH)
                 .setPlaceholder("Your concerns go here")
                 .setMinLength(30)
                 .setMaxLength(1000)
                 .build();
 
-        Modal modal = ModalUtils.withCallback(Modal.create("modmail", "Modmail"), e -> {
+
+        Modal modal = InteractionUtils.withCallback(Modal.create("modmail", "Modmail"), e -> {
             e.deferReply(true).addContent("Got your answer! Subject: " + Objects.requireNonNull(e.getValue("subject")).getAsString() + " Body: " + Objects.requireNonNull(e.getValue("body")).getAsString()).queue();
                 })
                 .addActionRows(ActionRow.of(subject), ActionRow.of(body))
@@ -90,7 +110,7 @@ public class TestCommand {
     )
     public void testSelect(SlashCommandInteractionEvent event) {
         event.deferReply(true).setActionRow(
-                SelectMenuUtils.withCallback(StringSelectMenu.create("my-id"), stringSelectInteractionEvent -> {
+                InteractionUtils.withCallback(StringSelectMenu.create("my-id"), stringSelectInteractionEvent -> {
                     stringSelectInteractionEvent.deferReply(true).addContent("Got your reply: " + stringSelectInteractionEvent.getSelectedOptions().get(0).getValue()).queue();
                 })
                         .addOption("Option 1", "opt1")

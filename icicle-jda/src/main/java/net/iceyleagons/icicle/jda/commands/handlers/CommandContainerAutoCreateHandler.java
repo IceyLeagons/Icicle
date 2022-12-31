@@ -22,19 +22,38 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.interactions.commands.annotations;
+package net.iceyleagons.icicle.jda.commands.handlers;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.core.annotations.bean.Autowired;
+import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.jda.commands.CommandServiceImpl;
+import net.iceyleagons.icicle.jda.commands.annotations.CommandContainer;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
-@Target(ElementType.PARAMETER)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface CommandSender {
+@AnnotationHandler
+@RequiredArgsConstructor(onConstructor__ = @Autowired)
+public class CommandContainerAutoCreateHandler implements CustomAutoCreateAnnotationHandler {
+
+    private final CommandServiceImpl commandService;
+
+    @Override
+    public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
+        return Collections.singleton(CommandContainer.class);
+    }
+
+    @Override
+    public void onCreated(Object bean, Class<?> type) throws Exception {
+        this.commandService.registerCommandContainer(bean, type);
+    }
 }

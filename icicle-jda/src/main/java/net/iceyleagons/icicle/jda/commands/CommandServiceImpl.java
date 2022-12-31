@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.interactions.commands;
+package net.iceyleagons.icicle.jda.commands;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +35,9 @@ import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.QualifierKey;
-import net.iceyleagons.icicle.jda.interactions.commands.annotations.Command;
-import net.iceyleagons.icicle.jda.interactions.commands.params.CommandParamResolverTemplate;
-import net.iceyleagons.icicle.jda.interactions.commands.params.ParameterStore;
+import net.iceyleagons.icicle.jda.commands.annotations.Command;
+import net.iceyleagons.icicle.jda.commands.params.CommandParamResolverTemplate;
+import net.iceyleagons.icicle.jda.commands.params.ParameterStore;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
@@ -81,6 +81,11 @@ public class CommandServiceImpl implements CommandService {
             SlashCommandData data = Commands.slash(cmd.getName(), cmd.getDescription());
             OptionData[] od = Arrays.stream(cmd.getMethod().getParameters())
                     .map(parameter -> {
+                        if (parameter.getType().isEnum() || (parameter.getType().equals(Optional.class) && getOptionalInternalClass(parameter).isEnum())) {
+                            CommandParamResolverTemplate<?> temp = parameterStore.get(Enum.class);
+                            return temp != null ? temp.buildFromParameter(parameter, false) : null;
+                        }
+
                         CommandParamResolverTemplate<?> temp = parameter.getType().equals(Optional.class) ? parameterStore.get(getOptionalInternalClass(parameter)) : parameterStore.get(parameter.getType()); //
                         return temp != null ? temp.buildFromParameter(parameter, false) : null;
                     })
@@ -101,7 +106,12 @@ public class CommandServiceImpl implements CommandService {
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         if (commands.containsKey(event.getName())) {
             RegisteredCommand cmd = commands.get(event.getName());
-            cmd.execute(buildParams(cmd.getMethod(), event));
+            try {
+                cmd.execute(buildParams(cmd.getMethod(), event));
+            } catch (Exception e) {
+                event.reply("Dang it! We're sorry but an error happened on our side. Please contact a staff if you think this sould not happen!").queue();
+                log.error("Error happened during command execution for " + event.getName() + " .", e);
+            }
         }
     }
 
@@ -115,6 +125,16 @@ public class CommandServiceImpl implements CommandService {
 
             if (type.equals(SlashCommandInteractionEvent.class)) {
                 response[i] = event;
+                continue;
+            }
+
+            if (type.isEnum() || (type.equals(Optional.class) && getOptionalInternalClass(param).isEnum())) {
+                Object parsed = parameterStore.get(Enum.class).parse(param, event);
+                if (type.equals(Optional.class)) {
+                    response[i] = Optional.ofNullable(parsed);
+                    continue;
+                }
+                response[i] = parsed;
                 continue;
             }
 
@@ -147,7 +167,7 @@ public class CommandServiceImpl implements CommandService {
         return response;
     }
 
-    private Class<?> getOptionalInternalClass(Parameter parameter) {
+    public static Class<?> getOptionalInternalClass(Parameter parameter) {
         return (Class<?>) ((ParameterizedType) parameter.getParameterizedType()).getActualTypeArguments()[0];
     }
 }

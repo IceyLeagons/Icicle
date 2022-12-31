@@ -22,40 +22,25 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.interactions;
+package net.iceyleagons.icicle.jda.commands.annotations;
 
-import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.modals.Modal;
-import org.jetbrains.annotations.NotNull;
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 29, 2022
+ * @since Dec. 28, 2022
  */
-public class ModalUtils {
+@AutoCreate
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface CommandParamHandler {
 
-    private static final Map<String, Consumer<ModalInteractionEvent>> consumers = new HashMap<>();
-
-    public static Modal.Builder withCallback(Modal.Builder builder, Consumer<ModalInteractionEvent> consumer) {
-        consumers.put(builder.getId(), consumer);
-        return builder;
-    }
-
-    public static ListenerAdapter getListener() {
-        return new ListenerAdapter() {
-            @Override
-            public void onModalInteraction(@NotNull ModalInteractionEvent  event) {
-                if (consumers.containsKey(event.getModalId())) {
-                    consumers.get(event.getModalId()).accept(event);
-                }
-            }
-        };
-    }
+    Class<?>[] value();
 
 }

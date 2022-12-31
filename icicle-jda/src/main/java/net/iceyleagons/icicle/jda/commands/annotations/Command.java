@@ -22,39 +22,23 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.interactions;
+package net.iceyleagons.icicle.jda.commands.annotations;
 
-import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 29, 2022
+ * @since Dec. 28, 2022
  */
-public class SelectMenuUtils {
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Command {
 
-    private static final Map<String, Consumer<StringSelectInteractionEvent>> consumers = new HashMap<>();
+    String name();
+    String description();
 
-    public static StringSelectMenu.Builder withCallback(StringSelectMenu.Builder builder, Consumer<StringSelectInteractionEvent> consumer) {
-        consumers.put(builder.getId(), consumer);
-        return builder;
-    }
-
-    public static ListenerAdapter getListener() {
-        return new ListenerAdapter() {
-            @Override
-            public void onStringSelectInteraction(@NotNull StringSelectInteractionEvent event) {
-                if (consumers.containsKey(event.getSelectMenu().getId())) {
-                    consumers.get(event.getSelectMenu().getId()).accept(event);
-                }
-            }
-        };
-    }
 }
