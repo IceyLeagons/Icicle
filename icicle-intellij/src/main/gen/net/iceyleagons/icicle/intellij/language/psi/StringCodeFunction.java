@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface StringCodeFunction extends PsiElement {
 
-  @NotNull
-  List<StringCodeFunctionBody> getFunctionBodyList();
+    @NotNull
+    List<StringCodeFunctionBody> getFunctionBodyList();
 
-  @NotNull
-  PsiElement getKeyword();
+    @NotNull
+    PsiElement getKeyword();
 
 }

@@ -120,7 +120,8 @@ public class Icicle {
             Runtime.getRuntime().addShutdownHook(new Thread(app::shutdown));
             app.start();
         }
-        while (app != null && app.running) {}
+        while (app != null && app.running) {
+        }
     }
 
     /**

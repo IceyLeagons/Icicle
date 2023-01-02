@@ -34,6 +34,6 @@ import java.lang.reflect.Parameter;
 @FunctionalInterface
 public interface ValueModifier {
 
-    Object modify(Object input, Parameter parameter);
+    Object modify(Object input, Parameter parameter) throws Exception;
 
 }

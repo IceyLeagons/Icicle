@@ -40,7 +40,7 @@ import java.lang.reflect.Parameter;
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
-@CommandParamHandler({ Integer.class, int.class })
+@CommandParamHandler({Integer.class, int.class})
 public class IntegerHandler implements CommandParamResolverTemplate<Integer> {
 
     @Override

@@ -6,16 +6,16 @@ import org.jetbrains.annotations.Nullable;
 
 public interface StringCodeValue extends PsiElement {
 
-  @Nullable
-  StringCodeFunction getFunction();
+    @Nullable
+    StringCodeFunction getFunction();
 
-  @Nullable
-  PsiElement getIdentifierLiteral();
+    @Nullable
+    PsiElement getIdentifierLiteral();
 
-  @Nullable
-  PsiElement getIntegerLiteral();
+    @Nullable
+    PsiElement getIntegerLiteral();
 
-  @Nullable
-  PsiElement getStringLiteral();
+    @Nullable
+    PsiElement getStringLiteral();
 
 }

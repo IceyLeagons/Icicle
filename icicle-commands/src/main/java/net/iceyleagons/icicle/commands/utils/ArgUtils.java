@@ -35,7 +35,8 @@ import net.iceyleagons.icicle.utilities.lang.Utility;
 @Utility
 public class ArgUtils {
 
-    private ArgUtils() {}
+    private ArgUtils() {
+    }
 
     public static String join(String[] args, int startFrom) {
         StringBuilder sb = new StringBuilder();

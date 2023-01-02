@@ -41,7 +41,7 @@ import java.lang.reflect.Parameter;
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
-@CommandParamHandler({ Message.Attachment.class })
+@CommandParamHandler({Message.Attachment.class})
 public class AttachmentHandler implements CommandParamResolverTemplate<Message.Attachment> {
 
     @Override

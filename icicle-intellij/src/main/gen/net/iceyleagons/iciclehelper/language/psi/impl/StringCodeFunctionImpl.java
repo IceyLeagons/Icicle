@@ -41,30 +41,30 @@ import java.util.List;
 
 public class StringCodeFunctionImpl extends ASTWrapperPsiElement implements StringCodeFunction {
 
-  public StringCodeFunctionImpl(@NotNull ASTNode node) {
-    super(node);
-  }
+    public StringCodeFunctionImpl(@NotNull ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull StringCodeVisitor visitor) {
-    visitor.visitFunction(this);
-  }
+    public void accept(@NotNull StringCodeVisitor visitor) {
+        visitor.visitFunction(this);
+    }
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof StringCodeVisitor) accept((StringCodeVisitor)visitor);
-    else super.accept(visitor);
-  }
+    @Override
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof StringCodeVisitor) accept((StringCodeVisitor) visitor);
+        else super.accept(visitor);
+    }
 
-  @Override
-  @NotNull
-  public List<StringCodeFunctionBody> getFunctionBodyList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, StringCodeFunctionBody.class);
-  }
+    @Override
+    @NotNull
+    public List<StringCodeFunctionBody> getFunctionBodyList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, StringCodeFunctionBody.class);
+    }
 
-  @Override
-  @NotNull
-  public PsiElement getKeyword() {
-    return findNotNullChildByType(StringCodeTypes.KEYWORD);
-  }
+    @Override
+    @NotNull
+    public PsiElement getKeyword() {
+        return findNotNullChildByType(StringCodeTypes.KEYWORD);
+    }
 
 }

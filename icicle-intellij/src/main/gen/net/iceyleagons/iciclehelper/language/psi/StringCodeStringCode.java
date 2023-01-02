@@ -32,7 +32,7 @@ import java.util.List;
 
 public interface StringCodeStringCode extends PsiElement {
 
-  @NotNull
-  List<StringCodeFunction> getFunctionList();
+    @NotNull
+    List<StringCodeFunction> getFunctionList();
 
 }

@@ -50,6 +50,17 @@ public abstract class Endpoint {
     private final Object parent;
     private final Method method;
 
+    public static Endpoint create(Method method, Object parent) {
+        if (GetEndpoint.isType(method)) {
+            return new GetEndpoint(parent, method);
+        }
+        if (PostEndpoint.isType(method)) {
+            return new PostEndpoint(parent, method);
+        }
+
+        return null;
+    }
+
     public abstract void registerToJavalin(Javalin javalin);
 
     public Object invoke(Context ctx) throws Exception {
@@ -98,16 +109,5 @@ public abstract class Endpoint {
         }
 
         return method.invoke(parent, params);
-    }
-
-    public static Endpoint create(Method method, Object parent) {
-        if (GetEndpoint.isType(method)) {
-            return new GetEndpoint(parent, method);
-        }
-        if (PostEndpoint.isType(method)) {
-            return new PostEndpoint(parent, method);
-        }
-
-        return null;
     }
 }

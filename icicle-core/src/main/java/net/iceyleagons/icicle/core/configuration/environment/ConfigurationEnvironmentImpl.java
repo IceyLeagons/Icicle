@@ -51,7 +51,7 @@ import java.util.stream.Stream;
  */
 public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
 
-    private static final String[] possibleResources = new String[] { "application.properties", "application.yml", "config.properties", "config.yml" };
+    private static final String[] possibleResources = new String[]{"application.properties", "application.yml", "config.properties", "config.yml"};
 
     private final Map<Class<?>, Configuration> configurations = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
     private final Map<String, Object> values = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());

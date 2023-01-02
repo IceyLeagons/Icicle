@@ -39,6 +39,7 @@ import java.lang.annotation.Target;
 public @interface QueryParam {
 
     String value();
+
     boolean required() default true;
 
 }

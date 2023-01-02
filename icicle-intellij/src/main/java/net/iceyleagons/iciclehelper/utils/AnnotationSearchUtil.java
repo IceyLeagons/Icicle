@@ -51,10 +51,10 @@ public class AnnotationSearchUtil {
     public static boolean isAnnotatedWith(PsiModifierListOwner modifierListOwner, String... annotations) {
         return findAnnotation(modifierListOwner, annotations) != null;
     }
-    
+
     public static List<PsiAnnotation> getAllAnnotations(PsiModifierListOwner modifierListOwner, Collection<String> annotations) {
         if (annotations.isEmpty()) return Collections.emptyList();
-        
+
         List<PsiAnnotation> result = new ArrayList<>();
         for (PsiAnnotation annotation : modifierListOwner.getAnnotations()) {
             if (ContainerUtil.exists(annotations, annotation::hasQualifiedName)) {

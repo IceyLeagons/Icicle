@@ -34,7 +34,10 @@ public interface CommandManager {
     void onCommand(Object sender, String cmd, String[] args) throws Exception;
 
     String getRoot();
+
     boolean isSubCommand();
+
     CommandService getCommandService();
+
     CommandRegistry getCommandRegistry();
 }

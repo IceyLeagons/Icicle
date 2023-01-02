@@ -53,10 +53,9 @@ public class CommandRegistryImpl implements CommandRegistry {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandRegistryImpl.class);
 
     private final CommandManager commandManager;
-
-    private Command rootCommand = null;
     private final Map<String, Command> commands = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
     private final Map<String, CommandManager> subCommands = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
+    private Command rootCommand = null;
 
     @Override
     public void registerSubCommand(CommandManager subManager, String... aliases) throws CommandRegistrationException {

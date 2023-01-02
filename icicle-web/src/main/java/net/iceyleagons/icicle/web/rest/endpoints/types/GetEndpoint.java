@@ -41,6 +41,10 @@ public class GetEndpoint extends Endpoint {
         super(parent, method);
     }
 
+    public static boolean isType(Method method) {
+        return method.isAnnotationPresent(Get.class);
+    }
+
     @Override
     public void registerToJavalin(Javalin javalin) {
         String path = super.getMethod().getAnnotation(Get.class).value();
@@ -50,9 +54,5 @@ public class GetEndpoint extends Endpoint {
                 ctx.json(val);
             }
         });
-    }
-
-    public static boolean isType(Method method) {
-        return method.isAnnotationPresent(Get.class);
     }
 }

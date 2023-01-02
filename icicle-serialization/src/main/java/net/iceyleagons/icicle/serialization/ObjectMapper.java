@@ -52,8 +52,8 @@ import java.util.stream.Collectors;
  */
 public class ObjectMapper {
 
-    private final SerializationProvider serializationProvider;
     public static boolean USE_DATA_VER = false;
+    private final SerializationProvider serializationProvider;
 
     public ObjectMapper() {
         this.serializationProvider = new JsonSerializer();

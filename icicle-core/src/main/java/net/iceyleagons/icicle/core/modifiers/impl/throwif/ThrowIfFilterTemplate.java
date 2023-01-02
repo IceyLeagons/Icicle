@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 IceyLeagons and Contributors
+ * Copyright (c) 2023 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,20 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.modifiers.impl;
-
-import net.iceyleagons.icicle.core.modifiers.MethodValueModifier;
-import net.iceyleagons.icicle.core.modifiers.ValueModifier;
+package net.iceyleagons.icicle.core.modifiers.impl.throwif;
 
 import java.lang.reflect.Parameter;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jun. 16, 2022
+ * @since Jan. 02, 2023
  */
-@MethodValueModifier(DefaultValue.class)
-public class DefaultValueHandler implements ValueModifier {
+public interface ThrowIfFilterTemplate {
 
-    @Override
-    public Object modify(Object input, Parameter parameter) {
-        return input == null ? parameter.getAnnotation(DefaultValue.class).value() : input;
-    }
+    /**
+     * @return false if the parameter did not pass the test
+     */
+    boolean filter(Parameter parameter, Object value);
+
 }

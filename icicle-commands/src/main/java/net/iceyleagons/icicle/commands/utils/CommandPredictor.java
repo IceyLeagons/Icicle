@@ -42,7 +42,8 @@ import java.util.Set;
 @Utility
 public class CommandPredictor {
 
-    private CommandPredictor() {}
+    private CommandPredictor() {
+    }
 
     public static Optional<Command> predictFromInput(CommandManager commandManager, String[] input) {
         final Double2ObjectRBTreeMap<Command> possibilities = new Double2ObjectRBTreeMap<>();

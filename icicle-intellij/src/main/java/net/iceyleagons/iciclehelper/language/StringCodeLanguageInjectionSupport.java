@@ -44,6 +44,6 @@ public class StringCodeLanguageInjectionSupport extends AbstractLanguageInjectio
 
     @Override
     public Class<?> @NotNull [] getPatternClasses() {
-        return new Class[] { PsiJavaPatterns.class };
+        return new Class[]{PsiJavaPatterns.class};
     }
 }

@@ -50,11 +50,15 @@ public interface CommandService {
     Set<CommandManager> getCommandManagers();
 
     ParameterResolverStore getParameterResolverStore();
+
     MiddlewareStore getMiddlewareStore();
+
     ValidatorStore getValidatorStore();
+
     CommandExecutionHandler getExecutionHandler();
 
     Application getApplication();
+
     TranslationService getTranslationService();
 
 }

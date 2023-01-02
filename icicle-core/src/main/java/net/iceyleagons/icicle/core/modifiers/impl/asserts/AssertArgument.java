@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 IceyLeagons and Contributors
+ * Copyright (c) 2023 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,24 +22,37 @@
  * SOFTWARE.
  */
 
-// This is a generated file. Not intended for manual editing.
-package net.iceyleagons.iciclehelper.language.psi;
+package net.iceyleagons.icicle.core.modifiers.impl.asserts;
 
-import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.Nullable;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface StringCodeValue extends PsiElement {
+/**
+ * This feature requires a scripting engine to be installed.
+ * We require mozilla's Rhino project, for which the scriptEngine field is already set up.
+ * Please note that you will need the rhino and rhino-engine dependency as well!
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Jan. 02, 2023
+ */
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface AssertArgument {
 
-    @Nullable
-    StringCodeFunction getFunction();
+    /**
+     * Value of the parameter is passed in as "value".
+     * The expression should return true if the input passed the test.
+     * Returning false will result in throwing an {@link IllegalArgumentException} with the error specified.
+     *
+     * @return the expression.
+     */
+    String expression();
 
-    @Nullable
-    PsiElement getIdentifierLiteral();
+    String scriptEngine() default "javascript";
 
-    @Nullable
-    PsiElement getIntegerLiteral();
-
-    @Nullable
-    PsiElement getStringLiteral();
+    String error();
 
 }

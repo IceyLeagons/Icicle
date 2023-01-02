@@ -40,7 +40,7 @@ public interface CommandValidatorTemplate {
      * If the validation fails, this method will throw a {@link ParameterValidationException}
      *
      * @param parameter the parameter
-     * @param input the input to validate
+     * @param input     the input to validate
      * @throws ParameterValidationException if the validation fails
      */
     void validate(Parameter parameter, String input) throws ParameterValidationException;

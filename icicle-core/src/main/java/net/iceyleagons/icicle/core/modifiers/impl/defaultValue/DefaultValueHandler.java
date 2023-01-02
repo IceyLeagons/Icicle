@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 IceyLeagons and Contributors
+ * Copyright (c) 2023 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,24 +22,23 @@
  * SOFTWARE.
  */
 
-// This is a generated file. Not intended for manual editing.
-package net.iceyleagons.iciclehelper.language.psi;
+package net.iceyleagons.icicle.core.modifiers.impl.defaultValue;
 
-import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.Nullable;
+import net.iceyleagons.icicle.core.modifiers.MethodValueModifier;
+import net.iceyleagons.icicle.core.modifiers.ValueModifier;
 
-public interface StringCodeValue extends PsiElement {
+import java.lang.reflect.Parameter;
 
-    @Nullable
-    StringCodeFunction getFunction();
+/**
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Jun. 16, 2022
+ */
+@MethodValueModifier(DefaultValue.class)
+public class DefaultValueHandler implements ValueModifier {
 
-    @Nullable
-    PsiElement getIdentifierLiteral();
-
-    @Nullable
-    PsiElement getIntegerLiteral();
-
-    @Nullable
-    PsiElement getStringLiteral();
-
+    @Override
+    public Object modify(Object input, Parameter parameter) {
+        return input == null ? parameter.getAnnotation(DefaultValue.class).value() : input;
+    }
 }

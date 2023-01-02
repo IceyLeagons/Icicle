@@ -44,7 +44,7 @@ import java.util.Set;
  */
 @AnnotationHandler
 @RequiredArgsConstructor(onConstructor__ = @Autowired)
-public class ParamHandlerAutoCreateHandler implements CustomAutoCreateAnnotationHandler  {
+public class ParamHandlerAutoCreateHandler implements CustomAutoCreateAnnotationHandler {
 
     private final CommandServiceImpl commandService;
 

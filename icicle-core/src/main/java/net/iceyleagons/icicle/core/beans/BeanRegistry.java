@@ -82,10 +82,11 @@ public interface BeanRegistry {
     /**
      * Returns the bean for the supplied qualifier key or null.
      *
-     * @param qualifierKey  the qualifierKey
+     * @param qualifierKey the qualifierKey
      * @return the bean (if exists) or null
      */
-    @Nullable default Object getBeanNullable(QualifierKey qualifierKey) {
+    @Nullable
+    default Object getBeanNullable(QualifierKey qualifierKey) {
         return getBeanNullable(qualifierKey.getClazz(), qualifierKey.getName());
     }
 
@@ -110,7 +111,7 @@ public interface BeanRegistry {
      * Checks whether a bean instance has been registered for the supplied class.
      * This will call {@link #isRegistered(Class, String)} after unwrapping the {@link QualifierKey} supplied.
      *
-     * @param qualifier      the QualifierKey to check
+     * @param qualifier the QualifierKey to check
      * @return true if a bean instance is registered for this class
      */
     default boolean isRegistered(QualifierKey qualifierKey) {

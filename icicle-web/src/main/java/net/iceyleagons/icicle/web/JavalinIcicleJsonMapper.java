@@ -48,6 +48,7 @@ public class JavalinIcicleJsonMapper implements JsonMapper {
     public <T> T fromJsonString(@NotNull String json, @NotNull Type targetType) {
         return (T) objectMapper.readValueFromString(json, GenericUtils.getGenericTypeClass(targetType));
     }
+
     @NotNull
     @Override
     public String toJsonString(@NotNull Object obj, @NotNull Type type) {

@@ -14,24 +14,24 @@ import java.util.List;
 
 public class StringCodeStringCodeImpl extends ASTWrapperPsiElement implements StringCodeStringCode {
 
-  public StringCodeStringCodeImpl(@NotNull ASTNode node) {
-    super(node);
-  }
+    public StringCodeStringCodeImpl(@NotNull ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull StringCodeVisitor visitor) {
-    visitor.visitStringCode(this);
-  }
+    public void accept(@NotNull StringCodeVisitor visitor) {
+        visitor.visitStringCode(this);
+    }
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof StringCodeVisitor) accept((StringCodeVisitor)visitor);
-    else super.accept(visitor);
-  }
+    @Override
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof StringCodeVisitor) accept((StringCodeVisitor) visitor);
+        else super.accept(visitor);
+    }
 
-  @Override
-  @NotNull
-  public List<StringCodeFunction> getFunctionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, StringCodeFunction.class);
-  }
+    @Override
+    @NotNull
+    public List<StringCodeFunction> getFunctionList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, StringCodeFunction.class);
+    }
 
 }

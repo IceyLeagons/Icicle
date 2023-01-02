@@ -39,6 +39,7 @@ import java.lang.annotation.Target;
 public @interface CommandManager {
 
     String value();
+
     boolean isSubCommand() default false;
 
 }

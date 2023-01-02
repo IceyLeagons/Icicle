@@ -39,6 +39,7 @@ import java.lang.annotation.Target;
 public @interface Description {
 
     String key();
+
     String defaultValue();
 
 }

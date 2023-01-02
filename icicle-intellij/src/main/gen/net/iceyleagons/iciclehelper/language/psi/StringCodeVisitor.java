@@ -31,28 +31,28 @@ import org.jetbrains.annotations.NotNull;
 
 public class StringCodeVisitor extends PsiElementVisitor {
 
-  public void visitFunction(@NotNull StringCodeFunction o) {
-    visitPsiElement(o);
-  }
+    public void visitFunction(@NotNull StringCodeFunction o) {
+        visitPsiElement(o);
+    }
 
-  public void visitFunctionBody(@NotNull StringCodeFunctionBody o) {
-    visitPsiElement(o);
-  }
+    public void visitFunctionBody(@NotNull StringCodeFunctionBody o) {
+        visitPsiElement(o);
+    }
 
-  public void visitNotBracketOrNextValue(@NotNull StringCodeNotBracketOrNextValue o) {
-    visitPsiElement(o);
-  }
+    public void visitNotBracketOrNextValue(@NotNull StringCodeNotBracketOrNextValue o) {
+        visitPsiElement(o);
+    }
 
-  public void visitStringCode(@NotNull StringCodeStringCode o) {
-    visitPsiElement(o);
-  }
+    public void visitStringCode(@NotNull StringCodeStringCode o) {
+        visitPsiElement(o);
+    }
 
-  public void visitValue(@NotNull StringCodeValue o) {
-    visitPsiElement(o);
-  }
+    public void visitValue(@NotNull StringCodeValue o) {
+        visitPsiElement(o);
+    }
 
-  public void visitPsiElement(@NotNull PsiElement o) {
-    visitElement(o);
-  }
+    public void visitPsiElement(@NotNull PsiElement o) {
+        visitElement(o);
+    }
 
 }

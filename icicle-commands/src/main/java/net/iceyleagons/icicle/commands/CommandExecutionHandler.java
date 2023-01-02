@@ -37,7 +37,9 @@ import net.iceyleagons.icicle.commands.exception.CommandRegistrationException;
 public interface CommandExecutionHandler {
 
     void registerCommandManagerIntoContext(String rootCommand, CommandManager manager, String[] rootAliases) throws CommandRegistrationException;
+
     void sendToSender(Object commandSender, String text);
+
     void sendErrorToSender(Object commandSender, String error);
 
     void printHelp(Object commandSender, int page);

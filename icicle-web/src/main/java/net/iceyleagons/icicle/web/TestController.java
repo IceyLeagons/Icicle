@@ -60,14 +60,14 @@ public class TestController {
         return callTest();
     }
 
+    @PythonFile("test.py")
+    public List<String> callTest() {
+        return Collections.emptyList();
+    }
+
     @AllArgsConstructor
     @NoArgsConstructor
     static class TestResponse {
         private List<String> response;
-    }
-
-    @PythonFile("test.py")
-    public List<String> callTest() {
-        return Collections.emptyList();
     }
 }

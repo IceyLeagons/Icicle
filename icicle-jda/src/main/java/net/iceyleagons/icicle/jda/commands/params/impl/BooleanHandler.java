@@ -40,7 +40,7 @@ import java.lang.reflect.Parameter;
  * @version 1.0.0
  * @since Dec. 28, 2022
  */
-@CommandParamHandler({ Boolean.class, boolean.class })
+@CommandParamHandler({Boolean.class, boolean.class})
 public class BooleanHandler implements CommandParamResolverTemplate<Boolean> {
 
     @Override

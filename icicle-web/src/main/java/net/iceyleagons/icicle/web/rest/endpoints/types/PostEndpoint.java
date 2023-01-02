@@ -41,6 +41,10 @@ public class PostEndpoint extends Endpoint {
         super(parent, method);
     }
 
+    public static boolean isType(Method method) {
+        return method.isAnnotationPresent(Post.class);
+    }
+
     @Override
     public void registerToJavalin(Javalin javalin) {
         String path = super.getMethod().getAnnotation(Post.class).value();
@@ -50,9 +54,5 @@ public class PostEndpoint extends Endpoint {
                 ctx.json(val);
             }
         });
-    }
-
-    public static boolean isType(Method method) {
-        return method.isAnnotationPresent(Post.class);
     }
 }

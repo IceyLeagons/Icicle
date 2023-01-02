@@ -15,42 +15,42 @@ import static net.iceyleagons.iciclehelper.language.psi.StringCodeTypes.*;
 
 public class StringCodeValueImpl extends ASTWrapperPsiElement implements StringCodeValue {
 
-  public StringCodeValueImpl(@NotNull ASTNode node) {
-    super(node);
-  }
+    public StringCodeValueImpl(@NotNull ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull StringCodeVisitor visitor) {
-    visitor.visitValue(this);
-  }
+    public void accept(@NotNull StringCodeVisitor visitor) {
+        visitor.visitValue(this);
+    }
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof StringCodeVisitor) accept((StringCodeVisitor)visitor);
-    else super.accept(visitor);
-  }
+    @Override
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof StringCodeVisitor) accept((StringCodeVisitor) visitor);
+        else super.accept(visitor);
+    }
 
-  @Override
-  @Nullable
-  public StringCodeFunction getFunction() {
-    return findChildByClass(StringCodeFunction.class);
-  }
+    @Override
+    @Nullable
+    public StringCodeFunction getFunction() {
+        return findChildByClass(StringCodeFunction.class);
+    }
 
-  @Override
-  @Nullable
-  public PsiElement getIdentifierLiteral() {
-    return findChildByType(IDENTIFIER_LITERAL);
-  }
+    @Override
+    @Nullable
+    public PsiElement getIdentifierLiteral() {
+        return findChildByType(IDENTIFIER_LITERAL);
+    }
 
-  @Override
-  @Nullable
-  public PsiElement getIntegerLiteral() {
-    return findChildByType(INTEGER_LITERAL);
-  }
+    @Override
+    @Nullable
+    public PsiElement getIntegerLiteral() {
+        return findChildByType(INTEGER_LITERAL);
+    }
 
-  @Override
-  @Nullable
-  public PsiElement getStringLiteral() {
-    return findChildByType(STRING_LITERAL);
-  }
+    @Override
+    @Nullable
+    public PsiElement getStringLiteral() {
+        return findChildByType(STRING_LITERAL);
+    }
 
 }

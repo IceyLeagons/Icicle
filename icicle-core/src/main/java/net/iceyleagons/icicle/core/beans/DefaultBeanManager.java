@@ -316,7 +316,6 @@ public class DefaultBeanManager implements BeanManager {
         createAnnotationHandlers(autoCreationTypes);
 
 
-
         PerformanceLog.begin(application, "Creating non-exclusive beans", DefaultBeanManager.class);
 
         for (Class<?> autoCreationType : autoCreationTypes) {

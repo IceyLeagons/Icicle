@@ -26,11 +26,8 @@ package net.iceyleagons.test.icicle.jda;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
@@ -51,12 +48,6 @@ import java.util.Optional;
  */
 @CommandContainer
 public class TestCommand {
-
-    enum Test {
-        OPTION1,
-        SECOND,
-        RANDOM
-    }
 
     @Command(
             name = "enumtest",
@@ -96,7 +87,7 @@ public class TestCommand {
 
 
         Modal modal = InteractionUtils.withCallback(Modal.create("modmail", "Modmail"), e -> {
-            e.deferReply(true).addContent("Got your answer! Subject: " + Objects.requireNonNull(e.getValue("subject")).getAsString() + " Body: " + Objects.requireNonNull(e.getValue("body")).getAsString()).queue();
+                    e.deferReply(true).addContent("Got your answer! Subject: " + Objects.requireNonNull(e.getValue("subject")).getAsString() + " Body: " + Objects.requireNonNull(e.getValue("body")).getAsString()).queue();
                 })
                 .addActionRows(ActionRow.of(subject), ActionRow.of(body))
                 .build();
@@ -111,8 +102,8 @@ public class TestCommand {
     public void testSelect(SlashCommandInteractionEvent event) {
         event.deferReply(true).setActionRow(
                 InteractionUtils.withCallback(StringSelectMenu.create("my-id"), stringSelectInteractionEvent -> {
-                    stringSelectInteractionEvent.deferReply(true).addContent("Got your reply: " + stringSelectInteractionEvent.getSelectedOptions().get(0).getValue()).queue();
-                })
+                            stringSelectInteractionEvent.deferReply(true).addContent("Got your reply: " + stringSelectInteractionEvent.getSelectedOptions().get(0).getValue()).queue();
+                        })
                         .addOption("Option 1", "opt1")
                         .addOption("Option 2", "opt2")
                         .addOption("Option 3", "opt3")
@@ -131,5 +122,11 @@ public class TestCommand {
             SlashCommandInteractionEvent event) {
 
         event.deferReply(true).addContent("Got your message " + user.getName() + "! Param is: " + param + " | your optional value is " + (optInt.isEmpty() ? "not present" : optInt.get())).queue();
+    }
+
+    enum Test {
+        OPTION1,
+        SECOND,
+        RANDOM
     }
 }

@@ -39,6 +39,7 @@ import java.util.Map;
 public class CommandNotFoundException extends TranslatableException {
 
     private final String command;
+
     public CommandNotFoundException(String cmd) {
         super(StandardCommandErrors.REGISTRY_CMD_NOT_FOUND_KEY, StandardCommandErrors.REGISTRY_CMD_NOT_FOUND_DEFAULT, Map.of("cmd", cmd));
         this.command = cmd;

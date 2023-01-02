@@ -48,10 +48,10 @@ public class StringCodeSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey STRING = createTextAttributesKey("STRINGCODE_STRING", DefaultLanguageHighlighterColors.STRING);
 
 
-    private static final TextAttributesKey[] BRACES_KEYS = new TextAttributesKey[]{ BRACES };
-    private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{ KEYWORD };
-    private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{ STRING };
-    private static final TextAttributesKey[] COMMA_KEYS = new TextAttributesKey[]{ COMMA };
+    private static final TextAttributesKey[] BRACES_KEYS = new TextAttributesKey[]{BRACES};
+    private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{KEYWORD};
+    private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{STRING};
+    private static final TextAttributesKey[] COMMA_KEYS = new TextAttributesKey[]{COMMA};
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
     @Override

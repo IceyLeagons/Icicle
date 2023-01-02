@@ -30,7 +30,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 18, 2022

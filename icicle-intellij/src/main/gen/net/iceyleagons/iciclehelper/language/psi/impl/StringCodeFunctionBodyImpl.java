@@ -35,24 +35,24 @@ import org.jetbrains.annotations.NotNull;
 
 public class StringCodeFunctionBodyImpl extends ASTWrapperPsiElement implements StringCodeFunctionBody {
 
-  public StringCodeFunctionBodyImpl(@NotNull ASTNode node) {
-    super(node);
-  }
+    public StringCodeFunctionBodyImpl(@NotNull ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull StringCodeVisitor visitor) {
-    visitor.visitFunctionBody(this);
-  }
+    public void accept(@NotNull StringCodeVisitor visitor) {
+        visitor.visitFunctionBody(this);
+    }
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof StringCodeVisitor) accept((StringCodeVisitor)visitor);
-    else super.accept(visitor);
-  }
+    @Override
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof StringCodeVisitor) accept((StringCodeVisitor) visitor);
+        else super.accept(visitor);
+    }
 
-  @Override
-  @NotNull
-  public StringCodeValue getValue() {
-    return findNotNullChildByClass(StringCodeValue.class);
-  }
+    @Override
+    @NotNull
+    public StringCodeValue getValue() {
+        return findNotNullChildByClass(StringCodeValue.class);
+    }
 
 }

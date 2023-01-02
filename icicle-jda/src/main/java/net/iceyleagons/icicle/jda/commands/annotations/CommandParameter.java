@@ -39,6 +39,7 @@ import java.lang.annotation.Target;
 public @interface CommandParameter {
 
     String name();
+
     String description();
 
 }

@@ -91,7 +91,7 @@ public class CommandManagerImpl implements CommandManager {
         if (!cmd.equalsIgnoreCase(this.getRoot())) return;
 
         try {
-            if (args.length < 1 ) {
+            if (args.length < 1) {
                 final net.iceyleagons.icicle.commands.Command root = commandRegistry.getRootCommand();
                 if (root == null) {
                     throw new TranslatableException(StandardCommandErrors.TOO_FEW_ARGS_KEY, StandardCommandErrors.TOO_FEW_ARGS_DEFAULT);

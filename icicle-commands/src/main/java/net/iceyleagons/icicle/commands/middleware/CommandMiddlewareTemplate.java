@@ -38,9 +38,9 @@ import java.lang.reflect.Method;
 public interface CommandMiddlewareTemplate {
 
     /**
-     * @param commandManager the {@link CommandManager}
+     * @param commandManager      the {@link CommandManager}
      * @param commandManagerClass the commandManager's class
-     * @param method the method to-be-executed
+     * @param method              the method to-be-executed
      * @return true if the command can proceed, false if issues arise.
      * @throws Exception if anything bad happens
      */
@@ -48,9 +48,9 @@ public interface CommandMiddlewareTemplate {
                       Method method, Object sender, TranslationService translationService) throws Exception;
 
     /**
-     * @param commandManager the {@link CommandManager}
+     * @param commandManager      the {@link CommandManager}
      * @param commandManagerClass the commandManager's class
-     * @param field the field to-be-handled
+     * @param field               the field to-be-handled
      * @return true if the command can proceed, false if issues arise.
      * @throws Exception if anything bad happens
      */

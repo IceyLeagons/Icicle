@@ -39,6 +39,7 @@ import java.lang.annotation.*;
 public @interface CommandValidator {
 
     Class<? extends Annotation> value();
+
     /**
      * This value is here, so users can override our default middlewares.
      *

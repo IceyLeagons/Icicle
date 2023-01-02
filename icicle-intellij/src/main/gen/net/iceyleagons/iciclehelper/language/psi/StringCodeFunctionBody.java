@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface StringCodeFunctionBody extends PsiElement {
 
-  @NotNull
-  StringCodeValue getValue();
+    @NotNull
+    StringCodeValue getValue();
 
 }

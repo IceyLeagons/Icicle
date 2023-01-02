@@ -30,5 +30,6 @@ import com.intellij.lang.parser.GeneratedParserUtilBase;
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Aug. 21, 2022
- */public class StringCodeParserUtil extends GeneratedParserUtilBase {
+ */
+public class StringCodeParserUtil extends GeneratedParserUtilBase {
 }

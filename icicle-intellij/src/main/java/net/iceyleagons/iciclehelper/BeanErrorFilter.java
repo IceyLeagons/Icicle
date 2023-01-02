@@ -52,6 +52,7 @@ import java.util.Map;
 public class BeanErrorFilter implements HighlightInfoFilter {
 
     private final Map<HighlightSeverity, Map<TextAttributesKey, List<IcicleHighlightFilter>>> filters;
+
     public BeanErrorFilter() {
         filters = new Object2ObjectOpenHashMap<>();
         for (IcicleHighlightFilter value : IcicleHighlightFilter.values()) {
@@ -86,7 +87,6 @@ public class BeanErrorFilter implements HighlightInfoFilter {
     private enum IcicleHighlightFilter {
 
         UNUSED_TYPE(HighlightSeverity.WARNING, CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES) {
-
             // TODO find key for Class is never used error message.
             //private final Pattern pattern = Pattern.compile(JavaBundle.message("inspection.unused.assignment.problem.descriptor1", "(.+)"));
             @Override
@@ -113,8 +113,8 @@ public class BeanErrorFilter implements HighlightInfoFilter {
         }
 
         /**
-         * @param description            of the current highlighted element
-         * @param highlightedElement     the current highlighted element
+         * @param description        of the current highlighted element
+         * @param highlightedElement the current highlighted element
          * @return true if the filter can handle current type of the highlight info with that kind of the description
          */
         abstract public boolean descriptionCheck(@Nullable String description, PsiElement highlightedElement);

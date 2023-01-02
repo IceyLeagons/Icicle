@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 IceyLeagons and Contributors
+ * Copyright (c) 2023 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.modifiers.impl;
+package net.iceyleagons.icicle.core.modifiers.impl.throwif;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -32,12 +32,14 @@ import java.lang.annotation.Target;
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jun. 16, 2022
+ * @since Jan. 02, 2023
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DefaultValue {
+public @interface ThrowIf {
 
-    String value();
+    Class<? extends ThrowIfFilterTemplate> filter();
+
+    Class<? extends Exception> exception();
 
 }

@@ -30,8 +30,8 @@
 
 
     <extensions defaultExtensionNs="org.intellij.intelliLang">
-        <languageSupport implementation="net.iceyleagons.iciclehelper.language.StringCodeLanguageInjectionSupport" />
-        <injectionConfig config="resources/javaInjections.xml" />
+        <languageSupport implementation="net.iceyleagons.iciclehelper.language.StringCodeLanguageInjectionSupport"/>
+        <injectionConfig config="resources/javaInjections.xml"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -42,14 +42,15 @@
                 language="StringCode"
                 extensions="strcode"/>
         <lang.parserDefinition
-            language="StringCode"
-            implementationClass="net.iceyleagons.iciclehelper.language.parser.StringCodeParserDefinition" />
+                language="StringCode"
+                implementationClass="net.iceyleagons.iciclehelper.language.parser.StringCodeParserDefinition"/>
         <lang.syntaxHighlighterFactory
-            language="StringCode"
-            implementationClass="net.iceyleagons.iciclehelper.language.highlight.StringCodeSyntaxHighlighterFactory" />
-        <colorSettingsPage implementation="net.iceyleagons.iciclehelper.language.highlight.StringCodeColorSettingsPage" />
+                language="StringCode"
+                implementationClass="net.iceyleagons.iciclehelper.language.highlight.StringCodeSyntaxHighlighterFactory"/>
+        <colorSettingsPage
+                implementation="net.iceyleagons.iciclehelper.language.highlight.StringCodeColorSettingsPage"/>
 
-        <daemon.highlightInfoFilter implementation="net.iceyleagons.iciclehelper.BeanErrorFilter" />
+        <daemon.highlightInfoFilter implementation="net.iceyleagons.iciclehelper.BeanErrorFilter"/>
     </extensions>
 
     <depends>com.intellij.modules.lang</depends>

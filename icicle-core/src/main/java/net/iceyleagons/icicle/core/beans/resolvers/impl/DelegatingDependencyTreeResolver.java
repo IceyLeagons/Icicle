@@ -71,21 +71,6 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         this.autoCreateResolver = autoCreateResolver;
         this.autowiringAnnotationResolver = autowiringAnnotationResolver;
     }
-    
-    private Class<?> findClassThatCouldContainBeanMethodForType(QualifierKey key) {
-        for (Method method : this.autoCreateResolver.getReflections().getMethodsAnnotatedWith(Bean.class)) {
-            if (method.getReturnType().equals(key.getClazz())) {
-                if (method.isAnnotationPresent(Qualifier.class)) {
-                    if (method.getAnnotation(Qualifier.class).value().equals(key.getName())) {
-                        return method.getDeclaringClass();
-                    }
-                    return null;
-                }
-                return method.getDeclaringClass();
-            }
-        }
-        return null;
-    }
 
     /**
      * Formats a human-friendly "graph" of the dependency circle.
@@ -114,6 +99,21 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         stringBuilder.append("\t\t└─────┘").append("\n\r");
 
         return stringBuilder.toString();
+    }
+
+    private Class<?> findClassThatCouldContainBeanMethodForType(QualifierKey key) {
+        for (Method method : this.autoCreateResolver.getReflections().getMethodsAnnotatedWith(Bean.class)) {
+            if (method.getReturnType().equals(key.getClazz())) {
+                if (method.isAnnotationPresent(Qualifier.class)) {
+                    if (method.getAnnotation(Qualifier.class).value().equals(key.getName())) {
+                        return method.getDeclaringClass();
+                    }
+                    return null;
+                }
+                return method.getDeclaringClass();
+            }
+        }
+        return null;
     }
 
     /**

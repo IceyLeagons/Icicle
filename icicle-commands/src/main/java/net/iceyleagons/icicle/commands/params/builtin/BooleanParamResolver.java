@@ -39,7 +39,7 @@ import java.util.Map;
  * @version 1.0.0
  * @since Sept. 11, 2022
  */
-@CommandParameterResolver({ boolean.class, Boolean.class })
+@CommandParameterResolver({boolean.class, Boolean.class})
 public class BooleanParamResolver implements CommandParameterResolverTemplate {
 
     @Override

@@ -40,14 +40,21 @@ import java.util.Arrays;
  */
 public interface Command extends CompletionHandler {
 
+    static String[] getAliases(Method method) {
+        final String[] aliases = method.isAnnotationPresent(Alias.class) ? method.getAnnotation(Alias.class).value() : new String[0];
+        return Arrays.stream(aliases).map(String::toLowerCase).toArray(String[]::new);
+    }
+
     CommandManager getManager();
 
     String getName();
+
     String[] getAliases();
 
     boolean isSupplyingTranslationKeys();
 
     Method getMethod();
+
     Object getOrigin();
 
     default Class<?>[] getParameterTypes() {
@@ -69,10 +76,5 @@ public interface Command extends CompletionHandler {
 
     default Description getDescription() {
         return ReflectionUtils.getAnnotationOrNull(this.getMethod(), Description.class);
-    }
-
-    static String[] getAliases(Method method) {
-        final String[] aliases = method.isAnnotationPresent(Alias.class) ? method.getAnnotation(Alias.class).value() : new String[0];
-        return Arrays.stream(aliases).map(String::toLowerCase).toArray(String[]::new);
     }
 }

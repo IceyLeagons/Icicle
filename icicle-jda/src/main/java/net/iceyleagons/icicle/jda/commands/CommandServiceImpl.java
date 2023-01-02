@@ -65,6 +65,10 @@ public class CommandServiceImpl implements CommandService {
         this.beanRegistry = beanRegistry;
     }
 
+    public static Class<?> getOptionalInternalClass(Parameter parameter) {
+        return (Class<?>) ((ParameterizedType) parameter.getParameterizedType()).getActualTypeArguments()[0];
+    }
+
     @Override
     public void registerCommandContainer(Object bean, Class<?> type) {
         Arrays.stream(type.getDeclaredMethods())
@@ -165,9 +169,5 @@ public class CommandServiceImpl implements CommandService {
         }
 
         return response;
-    }
-
-    public static Class<?> getOptionalInternalClass(Parameter parameter) {
-        return (Class<?>) ((ParameterizedType) parameter.getParameterizedType()).getActualTypeArguments()[0];
     }
 }

@@ -39,10 +39,10 @@ public interface CommandParameterResolverTemplate extends CompletionHandler {
      * Resolves a parameter, meaning it parses the given arg string and returns
      * an appropriate Java Object.
      *
-     * @param type the required type
+     * @param type           the required type
      * @param commandManager the {@link CommandManager}
-     * @param arg the string to parse
-     * @param sender the command sender
+     * @param arg            the string to parse
+     * @param sender         the command sender
      * @return the parsed object
      * @throws ParamParsingException if the arg cannot be parsed
      */

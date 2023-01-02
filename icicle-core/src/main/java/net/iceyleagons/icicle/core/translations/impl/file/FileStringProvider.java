@@ -25,6 +25,7 @@
 package net.iceyleagons.icicle.core.translations.impl.file;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.extern.slf4j.Slf4j;
 import net.iceyleagons.icicle.core.translations.TranslationStringProvider;
 
 import java.util.Map;
@@ -34,6 +35,7 @@ import java.util.Map;
  * @version 1.0.0
  * @since Apr. 03, 2022
  */
+@Slf4j
 public class FileStringProvider implements TranslationStringProvider {
 
     private final Map<String, LanguageFile> languageFiles = new Object2ObjectOpenHashMap<>();
@@ -46,7 +48,7 @@ public class FileStringProvider implements TranslationStringProvider {
 
     public void addLanguageFile(LanguageFile file) {
         this.languageFiles.put(file.getProvidedLanguageCode(), file);
-        System.out.println("Registered language: " + file.getProvidedLanguageCode());
+        log.info("Registered language: " + file.getProvidedLanguageCode());
     }
 
     @Override
