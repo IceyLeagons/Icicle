@@ -28,6 +28,7 @@ import it.unimi.dsi.fastutil.objects.ObjectSets;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.HighPriority;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.QualifierKey;
@@ -41,6 +42,7 @@ import java.util.Set;
  * @version 1.0.0
  * @since Mar. 25, 2022
  */
+@HighPriority
 @AnnotationHandler
 @RequiredArgsConstructor
 public class ServiceAnnotationHandler implements CustomAutoCreateAnnotationHandler {

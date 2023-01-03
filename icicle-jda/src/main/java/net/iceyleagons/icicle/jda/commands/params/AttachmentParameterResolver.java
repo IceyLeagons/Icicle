@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 IceyLeagons and Contributors
+ * Copyright (c) 2023 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,19 +22,29 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.commands.annotations;
+package net.iceyleagons.icicle.jda.commands.params;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
+import net.iceyleagons.icicle.commands.params.ParamParsingException;
+import net.iceyleagons.icicle.commands.params.ParameterInfo;
+import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate;
+
+import java.lang.reflect.Parameter;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 28, 2022
+ * @since Jan. 03, 2023
  */
-@Target(ElementType.PARAMETER)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface CommandSender {
+@ParameterResolver({Message.Attachment.class})
+public class AttachmentParameterResolver implements ParameterResolverTemplate<Message.Attachment> {
+
+    @Override
+    public Message.Attachment parse(Parameter parameter, Class<?> type, Object value, ParameterInfo info, Map<Class<?>, Object> additionalParameters) throws ParamParsingException {
+        return Objects.requireNonNull(((SlashCommandInteractionEvent) additionalParameters.get(SlashCommandInteractionEvent.class)).getOption(info.getName())).getAsAttachment();
+    }
 }

@@ -31,7 +31,7 @@ import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@ParameterResolver({ short.class, Short.class })
+@ParameterResolver({short.class, Short.class})
 public class ShortParameterResolver extends AbstractNumberParser<Short> {
 
     public ShortParameterResolver() {

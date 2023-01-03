@@ -31,7 +31,7 @@ import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@ParameterResolver({ double.class, Double.class })
+@ParameterResolver({double.class, Double.class})
 public class DoubleParameterResolver extends AbstractNumberParser<Double> {
 
     public DoubleParameterResolver() {

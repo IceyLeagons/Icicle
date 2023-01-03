@@ -43,7 +43,9 @@ public interface CommandService {
     void registerCommandContainer(Class<?> container, Object bean);
 
     CommandRegistry getCommandRegistry();
+
     InvocationParameterBuilder getParameterBuilder();
+
     ParameterResolverRegistry getParameterResolverRegistry();
 
 }

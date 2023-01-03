@@ -26,6 +26,7 @@ package net.iceyleagons.icicle.commands.params.resolvers.impl.numbers;
 
 import net.iceyleagons.icicle.commands.CommandUtils;
 import net.iceyleagons.icicle.commands.params.ParamParsingException;
+import net.iceyleagons.icicle.commands.params.ParameterInfo;
 import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate;
 
 import java.lang.reflect.Parameter;
@@ -47,7 +48,7 @@ public abstract class AbstractNumberParser<T> implements ParameterResolverTempla
     }
 
     @Override
-    public T parse(Parameter parameter, Class<?> type, Object value) throws ParamParsingException {
+    public T parse(Parameter parameter, Class<?> type, Object value, ParameterInfo info, Map<Class<?>, Object> additionalParameters) throws ParamParsingException {
         String arg = value.toString();
 
         try {

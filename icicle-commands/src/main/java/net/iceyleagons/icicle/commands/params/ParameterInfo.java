@@ -28,10 +28,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.commands.CommandUtils;
 import net.iceyleagons.icicle.commands.annotations.CommandParameter;
+import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverRegistry;
+import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -49,14 +53,26 @@ public class ParameterInfo {
     private final Class<?> type;
     private final Map<Class<? extends Annotation>, Annotation> annotations;
     private final boolean required;
+    private final List<String> options;
 
-    public static ParameterInfo from(Parameter parameter) {
-        if (!parameter.isAnnotationPresent(CommandParameter.class)) {
-            throw new IllegalArgumentException("Command parameters must be annotated with @CommandParameter!");
+    public static ParameterInfo from(Parameter parameter, ParameterResolverRegistry registry) {
+        if (parameter.isAnnotationPresent(CommandParameter.class)) {
+            CommandParameter annotation = parameter.getAnnotation(CommandParameter.class);
+
+            Class<?> type = CommandUtils.getActualParamType(parameter);
+            if (type.equals(String.class)) {
+                return new ParameterInfo(annotation.name(), annotation.description(), type, getAnnotations(parameter), CommandUtils.isRequired(parameter), Collections.emptyList());
+            }
+
+            ParameterResolverTemplate<?> resolver = type.isEnum() ? registry.get(Enum.class) : registry.get(type);
+            if (resolver == null) {
+                throw new IllegalStateException("No parameter resolver found for type " + type.getName() + " !");
+            }
+
+            return new ParameterInfo(annotation.name(), annotation.description(), type, getAnnotations(parameter), CommandUtils.isRequired(parameter), resolver.getOptions(type, parameter));
         }
 
-        CommandParameter annotation = parameter.getAnnotation(CommandParameter.class);
-        return new ParameterInfo(annotation.name(), annotation.description(), CommandUtils.getActualParamType(parameter), getAnnotations(parameter), CommandUtils.isRequired(parameter));
+        return null;
     }
 
     private static Map<Class<? extends Annotation>, Annotation> getAnnotations(Parameter parameter) {

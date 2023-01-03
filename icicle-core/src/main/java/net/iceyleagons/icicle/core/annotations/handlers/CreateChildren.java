@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 IceyLeagons and Contributors
+ * Copyright (c) 2023 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,9 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.commands.annotations;
+package net.iceyleagons.icicle.core.annotations.handlers;
+
+import net.iceyleagons.icicle.utilities.lang.Experimental;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -32,14 +34,10 @@ import java.lang.annotation.Target;
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 28, 2022
+ * @since Jan. 03, 2023
  */
-@Target(ElementType.PARAMETER)
+@Experimental
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CommandParameter {
-
-    String name();
-
-    String description();
-
+public @interface CreateChildren {
 }

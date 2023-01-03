@@ -27,6 +27,7 @@ package net.iceyleagons.icicle.commands.params.resolvers.impl;
 import net.iceyleagons.icicle.commands.CommandUtils;
 import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 import net.iceyleagons.icicle.commands.params.ParamParsingException;
+import net.iceyleagons.icicle.commands.params.ParameterInfo;
 import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate;
 
 import java.lang.reflect.Parameter;
@@ -38,11 +39,11 @@ import java.util.UUID;
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@ParameterResolver({ UUID.class })
+@ParameterResolver({UUID.class})
 public class UUIDParameterResolver implements ParameterResolverTemplate<UUID> {
 
     @Override
-    public UUID parse(Parameter parameter, Class<?> type, Object value) throws ParamParsingException {
+    public UUID parse(Parameter parameter, Class<?> type, Object value, ParameterInfo info, Map<Class<?>, Object> additionalParameters) throws ParamParsingException {
         String arg = value.toString();
 
         try {

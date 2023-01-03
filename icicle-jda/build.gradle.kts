@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
     implementation(project(":icicle-serialization"))
+    implementation(project(":icicle-commands"))
     compileOnly(libs.reflections)
     compileOnly(libs.fastutil)
     compileOnly(libs.jetbrainsannotations)

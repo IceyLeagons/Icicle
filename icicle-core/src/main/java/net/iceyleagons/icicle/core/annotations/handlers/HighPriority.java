@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 IceyLeagons and Contributors
+ * Copyright (c) 2023 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,31 +22,22 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.jda.commands;
+package net.iceyleagons.icicle.core.annotations.handlers;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import net.iceyleagons.icicle.utilities.lang.Experimental;
 
-import java.lang.reflect.Method;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 28, 2022
+ * @since Jan. 03, 2023
  */
-@Getter
-@RequiredArgsConstructor
-public class RegisteredCommand {
-
-    private final String name;
-    private final String description;
-
-    private final Object origin;
-    private final Method method;
-
-    @SneakyThrows
-    public void execute(Object[] params) {
-        method.invoke(origin, params);
-    }
+@Experimental
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface HighPriority {
 }

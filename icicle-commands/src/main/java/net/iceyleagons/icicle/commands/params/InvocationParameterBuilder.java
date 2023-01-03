@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.commands.params;
 
+import net.iceyleagons.icicle.commands.RegisteredCommand;
+
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -34,6 +36,6 @@ import java.util.Map;
  */
 public interface InvocationParameterBuilder {
 
-    Object[] buildParameters(Method method, Object sender, Object[] commandInputs, Map<Class<?>, Object> externalParams);
+    Object[] buildParameters(Method method, Object sender, RegisteredCommand cmd, Object[] commandInputs, Map<Class<?>, Object> externalParams) throws ParamParsingException;
 
 }

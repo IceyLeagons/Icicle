@@ -80,7 +80,6 @@ public class DelegatingInjectionParameterResolver implements InjectionParameterR
             }
 
             if (result == null) throw new UnsatisfiedDependencyException(parameter);
-
             params[i] = result;
         }
 

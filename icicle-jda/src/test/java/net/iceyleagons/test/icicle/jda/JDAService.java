@@ -26,15 +26,13 @@ package net.iceyleagons.test.icicle.jda;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.iceyleagons.icicle.commands.manager.CommandService;
+import net.iceyleagons.icicle.core.annotations.PostAppConstruct;
 import net.iceyleagons.icicle.core.annotations.bean.Bean;
 import net.iceyleagons.icicle.core.annotations.config.Property;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.jda.InteractionUtils;
-import net.iceyleagons.icicle.jda.commands.CommandListener;
-import net.iceyleagons.icicle.jda.commands.CommandServiceImpl;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import net.iceyleagons.icicle.jda.commands.JDACommandMapper;
 
 /**
  * @author TOTHTOMI
@@ -44,29 +42,24 @@ import java.util.TimerTask;
 @Service
 public class JDAService {
 
-    private final CommandServiceImpl commandService;
+    private final CommandService commandService;
     private final String token;
 
-    public JDAService(CommandServiceImpl commandService, @Property("bot.token") String token) {
+    public JDAService(CommandService commandService, @Property("bot.token") String token) {
         this.commandService = commandService;
         this.token = token;
     }
 
+    @PostAppConstruct
+    public void afterAll() throws InterruptedException {
+        jda().updateCommands().addCommands(JDACommandMapper.mapCommands(commandService)).queue();
+    }
+
     @Bean
     public JDA jda() throws InterruptedException {
-        JDA jda = JDABuilder.createDefault(token)
-                .addEventListeners(new CommandListener(commandService), InteractionUtils.getListener())
+        return JDABuilder.createDefault(token)
+                .addEventListeners(JDACommandMapper.createCommandListener(commandService), InteractionUtils.getListener())
                 .build().awaitReady();
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                commandService.registerToJda(jda);
-            }
-        }, 3000L);
-
-
-        return jda;
     }
 
 }

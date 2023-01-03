@@ -31,7 +31,7 @@ import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@ParameterResolver({ float.class, Float.class })
+@ParameterResolver({float.class, Float.class})
 public class FloatParameterResolver extends AbstractNumberParser<Float> {
 
     public FloatParameterResolver() {

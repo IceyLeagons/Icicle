@@ -26,6 +26,7 @@ package net.iceyleagons.icicle.commands.params;
 
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.commands.CommandUtils;
+import net.iceyleagons.icicle.commands.RegisteredCommand;
 import net.iceyleagons.icicle.commands.annotations.CommandSender;
 import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverRegistry;
 import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate;
@@ -48,8 +49,12 @@ public class InvocationParameterBuilderImpl implements InvocationParameterBuilde
     private final BeanRegistry beanRegistry;
     private final ParameterResolverRegistry parameterResolverRegistry;
 
+    private static Object encaseWithOptionalIfNecessary(Object value, Parameter parameter) {
+        return CommandUtils.isRequired(parameter) ? value : Optional.ofNullable(value);
+    }
+
     @Override
-    public Object[] buildParameters(Method method, Object sender, Object[] commandInputs, Map<Class<?>, Object> externalParams) {
+    public Object[] buildParameters(Method method, Object sender, RegisteredCommand cmd, Object[] commandInputs, Map<Class<?>, Object> externalParams) throws ParamParsingException {
         final Parameter[] params = method.getParameters();
         final Object[] response = new Object[params.length];
 
@@ -74,13 +79,20 @@ public class InvocationParameterBuilderImpl implements InvocationParameterBuilde
                 continue;
             }
 
+            if (type.isEnum()) {
+                final Object resolved = (j < commandInputs.length) ? parameterResolverRegistry.get(Enum.class).parse(parameter, type, commandInputs[j++], cmd.getParameters().get(i), externalParams) : null;
+                response[i] = encaseWithOptionalIfNecessary(resolved, parameter);
+                continue;
+            }
+
             ParameterResolverTemplate<?> resolver = parameterResolverRegistry.get(type);
             if (resolver == null) {
                 response[i] = encaseWithOptionalIfNecessary(getParamFromBeanRegistry(parameter, type), parameter);
                 continue;
             }
 
-            final Object resolved = resolver.parse(parameter, type, commandInputs[j++]);
+
+            final Object resolved = (j < commandInputs.length) ? resolver.parse(parameter, type, commandInputs[j++], cmd.getParameters().get(i), externalParams) : null;
             response[i] = encaseWithOptionalIfNecessary(resolved, parameter);
         }
 
@@ -95,9 +107,5 @@ public class InvocationParameterBuilderImpl implements InvocationParameterBuilde
         }
 
         return beanRegistry.getBeanNullable(key);
-    }
-
-    private static Object encaseWithOptionalIfNecessary(Object value, Parameter parameter) {
-        return CommandUtils.isRequired(parameter) ? value : Optional.ofNullable(value);
     }
 }

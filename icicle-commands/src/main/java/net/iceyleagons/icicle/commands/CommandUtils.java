@@ -24,10 +24,10 @@
 
 package net.iceyleagons.icicle.commands;
 
-import net.iceyleagons.icicle.utilities.generic.GenericUtils;
 import net.iceyleagons.icicle.utilities.lang.Utility;
 
 import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
 import java.util.Optional;
 
 /**
@@ -38,20 +38,20 @@ import java.util.Optional;
 @Utility
 public class CommandUtils {
 
-    private CommandUtils() {}
-
     public static final String PARAMETER_PARSER_VALUE_ERROR_KEY = "icicle.commands.params.valueError";
     public static final String PARAMETER_PARSER_VALUE_ERROR = "Invalid value give for parameter. Expected: {expected}.";
+    private CommandUtils() {
+    }
 
     public static Class<?> getActualParamType(Parameter parameter) {
-        return isRequired(parameter) ? parameter.getType() : getOptionalType(parameter.getType());
+        return isRequired(parameter) ? parameter.getType() : getOptionalType(parameter);
     }
 
     public static boolean isRequired(Parameter parameter) {
         return !parameter.getType().equals(Optional.class);
     }
 
-    public static Class<?> getOptionalType(Class<?> optional) {
-        return GenericUtils.getGenericTypeClass(optional, 0);
+    public static Class<?> getOptionalType(Parameter optional) {
+        return (Class<?>) ((ParameterizedType) optional.getParameterizedType()).getActualTypeArguments()[0];
     }
 }

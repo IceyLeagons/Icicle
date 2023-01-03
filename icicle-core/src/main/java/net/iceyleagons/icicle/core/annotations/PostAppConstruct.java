@@ -43,4 +43,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(METHOD)
 @Retention(RUNTIME)
 public @interface PostAppConstruct {
+
+    boolean highPriority() default false;
+
 }

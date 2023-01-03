@@ -26,10 +26,10 @@ package net.iceyleagons.icicle.commands.params.resolvers;
 
 import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 import net.iceyleagons.icicle.commands.manager.CommandService;
-import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.CreateChildren;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,6 +42,7 @@ import java.util.Set;
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
+@CreateChildren
 @AnnotationHandler
 public class ParameterResolverAutoCreateHandler implements CustomAutoCreateAnnotationHandler {
 

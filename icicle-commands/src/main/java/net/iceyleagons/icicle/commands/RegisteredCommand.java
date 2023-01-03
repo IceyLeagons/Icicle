@@ -24,11 +24,17 @@
 
 package net.iceyleagons.icicle.commands;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.commands.annotations.Command;
+import net.iceyleagons.icicle.commands.params.ParameterInfo;
+import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverRegistry;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author TOTHTOMI
@@ -46,13 +52,19 @@ public class RegisteredCommand {
 
     private final Method method;
     private final Object origin;
+    private final List<ParameterInfo> parameters = new ObjectArrayList<>();
+
+    public static RegisteredCommand from(Method method, Object bean, ParameterResolverRegistry parameterResolverRegistry) {
+        Command cmd = method.getAnnotation(Command.class);
+        RegisteredCommand registeredCommand = new RegisteredCommand(cmd.name(), cmd.description(), new String[0], method, bean);
+        registeredCommand.getParameters().addAll(Arrays.stream(method.getParameters())
+                .map(param -> ParameterInfo.from(param, parameterResolverRegistry))
+                .filter(Objects::nonNull)
+                .toList());
+        return registeredCommand;
+    }
 
     public Object execute(Object[] arguments) throws Exception {
         return this.method.invoke(origin, arguments);
-    }
-
-    public static RegisteredCommand from(Method method, Object bean) {
-        Command cmd = method.getAnnotation(Command.class);
-        return new RegisteredCommand(cmd.name(), cmd.description(), new String[0], method, bean);
     }
 }

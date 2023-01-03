@@ -27,6 +27,7 @@ package net.iceyleagons.icicle.commands.params.resolvers.impl;
 import net.iceyleagons.icicle.commands.CommandUtils;
 import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 import net.iceyleagons.icicle.commands.params.ParamParsingException;
+import net.iceyleagons.icicle.commands.params.ParameterInfo;
 import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate;
 
 import java.lang.reflect.Parameter;
@@ -37,11 +38,11 @@ import java.util.Map;
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@ParameterResolver({ boolean.class, Boolean.class})
+@ParameterResolver({boolean.class, Boolean.class})
 public class BooleanParameterResolver implements ParameterResolverTemplate<Boolean> {
 
     @Override
-    public Boolean parse(Parameter parameter, Class<?> type, Object value) throws ParamParsingException {
+    public Boolean parse(Parameter parameter, Class<?> type, Object value, ParameterInfo info, Map<Class<?>, Object> additionalParameters) throws ParamParsingException {
         String arg = value.toString();
         if (!arg.equalsIgnoreCase("true") && !arg.equalsIgnoreCase("false")) {
             throw new ParamParsingException(CommandUtils.PARAMETER_PARSER_VALUE_ERROR_KEY, CommandUtils.PARAMETER_PARSER_VALUE_ERROR, Map.of("expected", "true/false"));

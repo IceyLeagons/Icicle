@@ -34,9 +34,7 @@ import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.bean.Bean;
 import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.config.ConfigurationDriver;
-import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.*;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodAdviceHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
@@ -69,9 +67,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Default implementation of {@link BeanManager}.
@@ -284,18 +280,32 @@ public class DefaultBeanManager implements BeanManager {
         PerformanceLog.begin(application, "Creating annotation handlers", DefaultBeanManager.class);
         Set<Class<?>> handlers = getAndRemoveTypesAnnotatedWith(AnnotationHandler.class, autoCreationTypes);
 
-        for (Class<?> handler : handlers) {
-            createAndRegisterBean(handler);
-            Object object = this.beanRegistry.getBeanNullable(handler);
+        for (Class<?> highPriorityHandlers : getAndRemoveTypesAnnotatedWith(HighPriority.class, handlers)) {
+            createAnnotationHandler(highPriorityHandlers, autoCreationTypes);
+        }
 
-            if (object instanceof AutowiringAnnotationHandler) {
-                this.autowiringAnnotationResolver.registerAutowiringAnnotationHandler((AutowiringAnnotationHandler) object);
-            } else if (object instanceof CustomAutoCreateAnnotationHandler) {
-                this.customAutoCreateAnnotationResolver.registerCustomAutoCreateAnnotationHandler((CustomAutoCreateAnnotationHandler) object);
-            }
+        for (Class<?> handler : handlers) {
+            createAnnotationHandler(handler, autoCreationTypes);
         }
 
         PerformanceLog.end(application);
+    }
+
+    private void createAnnotationHandler(Class<?> handler, Set<Class<?>> autoCreationTypes) throws Exception {
+        createAndRegisterBean(handler);
+        Object object = this.beanRegistry.getBeanNullable(handler);
+
+        if (object instanceof AutowiringAnnotationHandler) {
+            this.autowiringAnnotationResolver.registerAutowiringAnnotationHandler((AutowiringAnnotationHandler) object);
+        } else if (object instanceof CustomAutoCreateAnnotationHandler) {
+            this.customAutoCreateAnnotationResolver.registerCustomAutoCreateAnnotationHandler((CustomAutoCreateAnnotationHandler) object);
+        }
+
+        if (handler.isAnnotationPresent(CreateChildren.class)) {
+            for (Class<?> aClass : getAndRemoveTypesAnnotatedWith(handler.getAnnotation(AnnotationHandler.class).annotationType(), autoCreationTypes)) {
+                createAndRegisterBean(aClass);
+            }
+        }
     }
 
     /**
@@ -323,8 +333,18 @@ public class DefaultBeanManager implements BeanManager {
 
         PerformanceLog.begin(application, "Creating non-exclusive beans", DefaultBeanManager.class);
 
+        List<Class<?>> lastOnes = new ArrayList<>();
         for (Class<?> autoCreationType : autoCreationTypes) {
+            if (autoCreationType.isAnnotationPresent(CreateLast.class)) {
+                lastOnes.add(autoCreationType);
+                continue;
+            }
+
             createAndRegisterBean(autoCreationType);
+        }
+
+        for (Class<?> lastOne : lastOnes) {
+            createAndRegisterBean(lastOne);
         }
         PerformanceLog.end(application);
 
@@ -379,7 +399,6 @@ public class DefaultBeanManager implements BeanManager {
 
         if (!this.beanRegistry.isRegistered(beanClass)) { //this is here because a class may have multiple auto-create annotations and also just a precaution
             LOGGER.debug("Creating and registering bean of type: {}", beanClass.getName());
-
             Constructor<?> constructor = BeanUtils.getResolvableConstructor(beanClass);
 
             if (constructor.getParameterTypes().length == 0) {
@@ -409,11 +428,27 @@ public class DefaultBeanManager implements BeanManager {
      * This should only be called after all beans have been initialized!
      */
     private void callPostAppConstructors() {
+        final List<Tuple<Object, Method>> lowPriority = new ArrayList<>();
+
         postAppConstructs.forEach(tuple -> {
+            try {
+                if (!tuple.getB().getAnnotation(PostAppConstruct.class).highPriority()) {
+                    lowPriority.add(tuple);
+                } else {
+                    tuple.getB().invoke(tuple.getA());
+                }
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                LOGGER.error("Could not call @PostAppConstruct inside " + tuple.getA().getClass().getName());
+                e.printStackTrace();
+            }
+        });
+
+        lowPriority.forEach(tuple -> {
             try {
                 tuple.getB().invoke(tuple.getA());
             } catch (IllegalAccessException | InvocationTargetException e) {
-                LOGGER.warn("Could not call @PostAppConstruct inside " + tuple.getA().getClass().getName());
+                LOGGER.error("Could not call @PostAppConstruct inside " + tuple.getA().getClass().getName());
+                e.printStackTrace();
             }
         });
     }

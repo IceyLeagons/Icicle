@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 IceyLeagons and Contributors
+ * Copyright (c) 2023 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,33 +24,27 @@
 
 package net.iceyleagons.icicle.jda.commands.params;
 
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.iceyleagons.icicle.jda.commands.annotations.CommandParameter;
-import org.jetbrains.annotations.Nullable;
+import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
+import net.iceyleagons.icicle.commands.params.ParamParsingException;
+import net.iceyleagons.icicle.commands.params.ParameterInfo;
+import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate;
 
 import java.lang.reflect.Parameter;
-import java.util.Optional;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Dec. 28, 2022
+ * @since Jan. 03, 2023
  */
-public interface CommandParamResolverTemplate<T> {
+@ParameterResolver({Member.class})
+public class MemberParameterResolver implements ParameterResolverTemplate<Member> {
 
-    @Nullable
-    OptionData buildFromParameter(Parameter param, boolean autoComplete);
-
-    @Nullable
-    T parse(Parameter parameter, SlashCommandInteractionEvent event);
-
-    default boolean isRequired(Parameter parameter) {
-        return !parameter.getType().equals(Optional.class);
+    @Override
+    public Member parse(Parameter parameter, Class<?> type, Object value, ParameterInfo info, Map<Class<?>, Object> additionalParameters) throws ParamParsingException {
+        return Objects.requireNonNull(((SlashCommandInteractionEvent) additionalParameters.get(SlashCommandInteractionEvent.class)).getOption(info.getName())).getAsMember();
     }
-
-    default CommandParameter getParamAnnotation(Parameter parameter) {
-        return parameter.getAnnotation(CommandParameter.class);
-    }
-
 }

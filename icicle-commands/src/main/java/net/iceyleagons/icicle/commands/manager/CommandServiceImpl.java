@@ -60,7 +60,7 @@ public class CommandServiceImpl implements CommandService {
     public Object execute(String name, Object sender, Object[] commandInputs, Map<Class<?>, Object> externalParams) throws Exception {
         RegisteredCommand cmd = commandRegistry.get(name);
         if (cmd != null) {
-            Object[] parameters = getParameterBuilder().buildParameters(cmd.getMethod(), sender, commandInputs, externalParams);
+            Object[] parameters = getParameterBuilder().buildParameters(cmd.getMethod(), sender, cmd, commandInputs, externalParams);
             Object response = cmd.execute(parameters);
             return cmd.getMethod().getReturnType().equals(Void.class) ? null : response;
         }
@@ -72,7 +72,7 @@ public class CommandServiceImpl implements CommandService {
     public void registerCommandContainer(Class<?> container, Object bean) {
         for (Method declaredMethod : container.getDeclaredMethods()) {
             if (declaredMethod.isAnnotationPresent(Command.class)) {
-                this.commandRegistry.registerCommand(RegisteredCommand.from(declaredMethod, bean));
+                this.commandRegistry.registerCommand(RegisteredCommand.from(declaredMethod, bean, this.parameterResolverRegistry));
             }
         }
     }

@@ -31,7 +31,7 @@ import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@ParameterResolver({ byte.class, Byte.class })
+@ParameterResolver({byte.class, Byte.class})
 public class ByteParameterResolver extends AbstractNumberParser<Byte> {
 
     public ByteParameterResolver() {

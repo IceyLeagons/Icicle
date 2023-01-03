@@ -22,26 +22,38 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.params.resolvers;
+package net.iceyleagons.icicle.commands.params.resolvers.impl;
 
+import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 import net.iceyleagons.icicle.commands.params.ParamParsingException;
 import net.iceyleagons.icicle.commands.params.ParameterInfo;
+import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate;
 
 import java.lang.reflect.Parameter;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-public interface ParameterResolverTemplate<T> {
+@ParameterResolver({Enum.class})
+public class EnumParameterResolver implements ParameterResolverTemplate<Object> {
 
-    T parse(Parameter parameter, Class<?> type, Object value, ParameterInfo info, Map<Class<?>, Object> additionalParameters) throws ParamParsingException;
+    @Override
+    public Object parse(Parameter parameter, Class<?> type, Object value, ParameterInfo info, Map<Class<?>, Object> additionalParameters) throws ParamParsingException {
+        return Enum.valueOf((Class<? extends Enum>) type, value.toString().toUpperCase());
+    }
 
-    default List<String> getOptions(Class<?> type, Parameter parameter) {
-        return Collections.emptyList();
+
+    @Override
+    public List<String> getOptions(Class<?> type, Parameter parameter) {
+        return Arrays.stream(type.getEnumConstants()).map(o -> {
+            String val = o.toString();
+            return val.substring(0, 1).toUpperCase() + val.substring(1);
+        }).collect(Collectors.toList());
     }
 }

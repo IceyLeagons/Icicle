@@ -24,10 +24,14 @@
 
 package net.iceyleagons.icicle.commands.manager;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.iceyleagons.icicle.commands.annotations.CommandContainer;
+import net.iceyleagons.icicle.core.annotations.PostAppConstruct;
 import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
+import net.iceyleagons.icicle.utilities.datastores.tuple.UnmodifiableTuple;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -44,6 +48,9 @@ public class CommandContainerAutoCreateHandler implements CustomAutoCreateAnnota
 
     private final CommandService commandService;
 
+    // Hacky way but I have no f*cking clue why some command param resolvers don't get registered in time.
+    private final Set<Tuple<Object, Class<?>>> cache = new ObjectOpenHashSet<>();
+
     @Autowired
     public CommandContainerAutoCreateHandler(CommandService commandService) {
         this.commandService = commandService;
@@ -56,6 +63,14 @@ public class CommandContainerAutoCreateHandler implements CustomAutoCreateAnnota
 
     @Override
     public void onCreated(Object bean, Class<?> type) {
-        commandService.registerCommandContainer(type, bean);
+        cache.add(new UnmodifiableTuple<>(bean, type));
+    }
+
+    @PostAppConstruct(highPriority = true)
+    public void registerCommands() {
+        for (Tuple<Object, Class<?>> objectClassTuple : cache) {
+            commandService.registerCommandContainer(objectClassTuple.getB(), objectClassTuple.getA());
+        }
+        cache.clear();
     }
 }
