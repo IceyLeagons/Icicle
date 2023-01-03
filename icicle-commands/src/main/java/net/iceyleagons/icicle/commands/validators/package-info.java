@@ -22,23 +22,11 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.annotations;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
+package net.iceyleagons.icicle.commands.validators;
 
-    String name();
-    String description();
-
-}
+// TODO

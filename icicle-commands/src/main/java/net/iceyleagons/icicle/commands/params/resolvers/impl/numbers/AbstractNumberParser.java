@@ -22,23 +22,42 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.annotations;
+package net.iceyleagons.icicle.commands.params.resolvers.impl.numbers;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import net.iceyleagons.icicle.commands.CommandUtils;
+import net.iceyleagons.icicle.commands.params.ParamParsingException;
+import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate;
+
+import java.lang.reflect.Parameter;
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
+public abstract class AbstractNumberParser<T> implements ParameterResolverTemplate<T> {
 
-    String name();
-    String description();
+    private final NumberValueMapper<T> mapper;
+    private final String expected;
 
+    public AbstractNumberParser(NumberValueMapper<T> mapper, String expected) {
+        this.mapper = mapper;
+        this.expected = expected;
+    }
+
+    @Override
+    public T parse(Parameter parameter, Class<?> type, Object value) throws ParamParsingException {
+        String arg = value.toString();
+
+        try {
+            return mapper.parse(arg);
+        } catch (NumberFormatException e) {
+            throw new ParamParsingException(CommandUtils.PARAMETER_PARSER_VALUE_ERROR_KEY, CommandUtils.PARAMETER_PARSER_VALUE_ERROR, Map.of("expected", expected));
+        }
+    }
+
+    interface NumberValueMapper<T> {
+        T parse(String input) throws NumberFormatException;
+    }
 }

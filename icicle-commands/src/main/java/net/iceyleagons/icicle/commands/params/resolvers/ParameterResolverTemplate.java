@@ -22,23 +22,20 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.annotations;
+package net.iceyleagons.icicle.commands.params.resolvers;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import net.iceyleagons.icicle.commands.params.ParamParsingException;
+import net.iceyleagons.icicle.commands.params.ParameterInfo;
+
+import java.lang.reflect.Parameter;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
+public interface ParameterResolverTemplate<T> {
 
-    String name();
-    String description();
+    T parse(Parameter parameter, Class<?> type, Object value) throws ParamParsingException;
 
 }

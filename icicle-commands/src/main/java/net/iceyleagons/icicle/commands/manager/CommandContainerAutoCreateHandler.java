@@ -22,23 +22,40 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.annotations;
+package net.iceyleagons.icicle.commands.manager;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import net.iceyleagons.icicle.commands.annotations.CommandContainer;
+import net.iceyleagons.icicle.core.annotations.bean.Autowired;
+import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
+@AnnotationHandler
+public class CommandContainerAutoCreateHandler implements CustomAutoCreateAnnotationHandler {
 
-    String name();
-    String description();
+    private final CommandService commandService;
 
+    @Autowired
+    public CommandContainerAutoCreateHandler(CommandService commandService) {
+        this.commandService = commandService;
+    }
+
+    @Override
+    public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
+        return Collections.singleton(CommandContainer.class);
+    }
+
+    @Override
+    public void onCreated(Object bean, Class<?> type) {
+        commandService.registerCommandContainer(type, bean);
+    }
 }

@@ -34,9 +34,9 @@ import java.lang.annotation.Target;
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
+public @interface CommandParameter {
 
     String name();
     String description();

@@ -22,23 +22,36 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.annotations;
+package net.iceyleagons.icicle.commands;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import net.iceyleagons.icicle.utilities.generic.GenericUtils;
+import net.iceyleagons.icicle.utilities.lang.Utility;
+
+import java.lang.reflect.Parameter;
+import java.util.Optional;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
+@Utility
+public class CommandUtils {
 
-    String name();
-    String description();
+    private CommandUtils() {}
 
+    public static final String PARAMETER_PARSER_VALUE_ERROR_KEY = "icicle.commands.params.valueError";
+    public static final String PARAMETER_PARSER_VALUE_ERROR = "Invalid value give for parameter. Expected: {expected}.";
+
+    public static Class<?> getActualParamType(Parameter parameter) {
+        return isRequired(parameter) ? parameter.getType() : getOptionalType(parameter.getType());
+    }
+
+    public static boolean isRequired(Parameter parameter) {
+        return !parameter.getType().equals(Optional.class);
+    }
+
+    public static Class<?> getOptionalType(Class<?> optional) {
+        return GenericUtils.getGenericTypeClass(optional, 0);
+    }
 }

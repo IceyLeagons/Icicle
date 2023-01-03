@@ -28,6 +28,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.SneakyThrows;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.MergedAnnotationResolver;
+import net.iceyleagons.icicle.core.annotations.PostAppConstruct;
 import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.bean.Bean;
@@ -58,6 +59,8 @@ import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
+import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
+import net.iceyleagons.icicle.utilities.datastores.tuple.UnmodifiableTuple;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +97,8 @@ public class DefaultBeanManager implements BeanManager {
     private final CustomAutoCreateAnnotationResolver customAutoCreateAnnotationResolver;
 
     private final Application application;
+
+    private final Set<Tuple<Object, Method>> postAppConstructs = new ObjectOpenHashSet<>();
 
     public DefaultBeanManager(Application application) throws MultipleInstanceException {
         this.application = application;
@@ -323,6 +328,8 @@ public class DefaultBeanManager implements BeanManager {
         }
         PerformanceLog.end(application);
 
+
+        callPostAppConstructors(); // This must be called at the end!
         PerformanceLog.end(application);
     }
 
@@ -398,6 +405,20 @@ public class DefaultBeanManager implements BeanManager {
     }
 
     /**
+     * Calls @PostAppConstruct methods.
+     * This should only be called after all beans have been initialized!
+     */
+    private void callPostAppConstructors() {
+        postAppConstructs.forEach(tuple -> {
+            try {
+                tuple.getB().invoke(tuple.getA());
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                LOGGER.warn("Could not call @PostAppConstruct inside " + tuple.getA().getClass().getName());
+            }
+        });
+    }
+
+    /**
      * Resolves the dependency tree for the given bean (for its constructor)
      *
      * @param beanClass the bean
@@ -458,6 +479,11 @@ public class DefaultBeanManager implements BeanManager {
      */
     private void callBeanMethodsInsideBean(Class<?> beanClass, Object bean) {
         for (Method method : beanClass.getDeclaredMethods()) {
+            if (method.isAnnotationPresent(PostAppConstruct.class)) {
+                postAppConstructs.add(new UnmodifiableTuple<>(bean, method));
+                continue;
+            }
+
             if (!method.isAnnotationPresent(Bean.class)) continue; // Moved from stream due to occasional issues
             try {
                 method.setAccessible(true);

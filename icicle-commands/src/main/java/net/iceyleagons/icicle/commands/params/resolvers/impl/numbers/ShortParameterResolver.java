@@ -22,23 +22,20 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.annotations;
+package net.iceyleagons.icicle.commands.params.resolvers.impl.numbers;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
+@ParameterResolver({ short.class, Short.class })
+public class ShortParameterResolver extends AbstractNumberParser<Short> {
 
-    String name();
-    String description();
-
+    public ShortParameterResolver() {
+        super(Short::parseShort, "short");
+    }
 }
+

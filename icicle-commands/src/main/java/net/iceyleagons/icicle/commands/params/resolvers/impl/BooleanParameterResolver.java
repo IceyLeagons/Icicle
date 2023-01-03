@@ -22,23 +22,31 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.annotations;
+package net.iceyleagons.icicle.commands.params.resolvers.impl;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import net.iceyleagons.icicle.commands.CommandUtils;
+import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
+import net.iceyleagons.icicle.commands.params.ParamParsingException;
+import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate;
+
+import java.lang.reflect.Parameter;
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
+@ParameterResolver({ boolean.class, Boolean.class})
+public class BooleanParameterResolver implements ParameterResolverTemplate<Boolean> {
 
-    String name();
-    String description();
+    @Override
+    public Boolean parse(Parameter parameter, Class<?> type, Object value) throws ParamParsingException {
+        String arg = value.toString();
+        if (!arg.equalsIgnoreCase("true") && !arg.equalsIgnoreCase("false")) {
+            throw new ParamParsingException(CommandUtils.PARAMETER_PARSER_VALUE_ERROR_KEY, CommandUtils.PARAMETER_PARSER_VALUE_ERROR, Map.of("expected", "true/false"));
+        }
 
+        return Boolean.parseBoolean(arg);
+    }
 }

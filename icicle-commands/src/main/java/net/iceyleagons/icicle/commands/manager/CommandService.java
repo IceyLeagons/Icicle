@@ -22,23 +22,28 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.annotations;
+package net.iceyleagons.icicle.commands.manager;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import net.iceyleagons.icicle.commands.params.InvocationParameterBuilder;
+import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverRegistry;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
+public interface CommandService {
 
-    String name();
-    String description();
+    @Nullable
+    Object execute(String name, Object sender, Object[] commandInputs, Map<Class<?>, Object> externalParams) throws Exception; // params can be SlashCommandInteractionEvent in case of JDA or Command etc. in MC
+
+    void registerCommandContainer(Class<?> container, Object bean);
+
+    CommandRegistry getCommandRegistry();
+    InvocationParameterBuilder getParameterBuilder();
+    ParameterResolverRegistry getParameterResolverRegistry();
 
 }

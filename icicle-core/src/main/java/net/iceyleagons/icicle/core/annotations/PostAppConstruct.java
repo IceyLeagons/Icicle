@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 IceyLeagons and Contributors
+ * Copyright (c) 2021 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,25 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.annotations;
+package net.iceyleagons.icicle.core.annotations;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 /**
+ * PostAppConstruct can be used on methods inside Icicle managed bean classes.
+ * These methods will only be called after the IcicleApplication has boot, in more detail when all the bean classes have been initialized and autowired.
+ * <p>
+ * Post App construct method must not have parameters!
+ *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jan. 03, 2023
+ * @since Nov. 28, 2021
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
-
-    String name();
-    String description();
-
+@Target(METHOD)
+@Retention(RUNTIME)
+public @interface PostAppConstruct {
 }

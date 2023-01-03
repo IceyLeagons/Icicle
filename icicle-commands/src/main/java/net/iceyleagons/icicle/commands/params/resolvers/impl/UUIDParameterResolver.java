@@ -22,23 +22,33 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.annotations;
+package net.iceyleagons.icicle.commands.params.resolvers.impl;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import net.iceyleagons.icicle.commands.CommandUtils;
+import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
+import net.iceyleagons.icicle.commands.params.ParamParsingException;
+import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate;
+
+import java.lang.reflect.Parameter;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
+@ParameterResolver({ UUID.class })
+public class UUIDParameterResolver implements ParameterResolverTemplate<UUID> {
 
-    String name();
-    String description();
+    @Override
+    public UUID parse(Parameter parameter, Class<?> type, Object value) throws ParamParsingException {
+        String arg = value.toString();
 
+        try {
+            return UUID.fromString(arg);
+        } catch (IllegalArgumentException e) {
+            throw new ParamParsingException(CommandUtils.PARAMETER_PARSER_VALUE_ERROR_KEY, CommandUtils.PARAMETER_PARSER_VALUE_ERROR, Map.of("expected", "UUID"));
+        }
+    }
 }

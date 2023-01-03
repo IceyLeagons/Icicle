@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.commands.annotations;
 
+import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -34,11 +36,8 @@ import java.lang.annotation.Target;
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
+@AutoCreate
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
-
-    String name();
-    String description();
-
+public @interface CommandContainer {
 }

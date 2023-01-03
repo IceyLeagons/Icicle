@@ -22,23 +22,37 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.annotations;
+package net.iceyleagons.icicle.commands;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.commands.annotations.Command;
+
+import java.lang.reflect.Method;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
+@Getter
+@RequiredArgsConstructor
+public class RegisteredCommand {
 
-    String name();
-    String description();
+    private final String name;
+    private final String description;
 
+    private final String[] aliases;
+
+    private final Method method;
+    private final Object origin;
+
+    public Object execute(Object[] arguments) throws Exception {
+        return this.method.invoke(origin, arguments);
+    }
+
+    public static RegisteredCommand from(Method method, Object bean) {
+        Command cmd = method.getAnnotation(Command.class);
+        return new RegisteredCommand(cmd.name(), cmd.description(), new String[0], method, bean);
+    }
 }

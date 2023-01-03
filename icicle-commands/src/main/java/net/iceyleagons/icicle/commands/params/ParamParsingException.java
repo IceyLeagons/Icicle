@@ -22,23 +22,24 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.commands.annotations;
+package net.iceyleagons.icicle.commands.params;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import net.iceyleagons.icicle.core.exceptions.TranslatableException;
+
+import java.util.Map;
 
 /**
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command {
+public class ParamParsingException extends TranslatableException {
 
-    String name();
-    String description();
+    public ParamParsingException(String key, String defaultValue) {
+        super(key, defaultValue);
+    }
 
+    public ParamParsingException(String key, String defaultValue, Map<String, String> params) {
+        super(key, defaultValue, params);
+    }
 }
