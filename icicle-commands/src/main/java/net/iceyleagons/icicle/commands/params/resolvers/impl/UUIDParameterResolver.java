@@ -35,6 +35,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
+ * Icicle's default parameter resolver for {@link UUID}s.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023

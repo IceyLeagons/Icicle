@@ -111,7 +111,7 @@ public interface BeanRegistry {
      * Checks whether a bean instance has been registered for the supplied class.
      * This will call {@link #isRegistered(Class, String)} after unwrapping the {@link QualifierKey} supplied.
      *
-     * @param qualifier the QualifierKey to check
+     * @param qualifierKey the QualifierKey to check
      * @return true if a bean instance is registered for this class
      */
     default boolean isRegistered(QualifierKey qualifierKey) {
@@ -123,6 +123,7 @@ public interface BeanRegistry {
      *
      * @param type   the type to register the bean as
      * @param object the bean
+     * @throws MultipleInstanceException if an instance of the supplied type is already registered
      */
     void registerBean(Class<?> type, Object object) throws MultipleInstanceException;
 
@@ -132,6 +133,7 @@ public interface BeanRegistry {
      * @param type      the type to register the bean as
      * @param qualifier the name of the implementation
      * @param object    the bean
+     * @throws MultipleInstanceException if an instance of the supplied type is already registered
      */
     void registerBean(Class<?> type, Object object, String qualifier) throws MultipleInstanceException;
 
@@ -139,6 +141,7 @@ public interface BeanRegistry {
      * Registers a bean using {@link Object#getClass()} as its type.
      *
      * @param object the bean
+     * @throws MultipleInstanceException if an instance of the supplied type is already registered
      */
     void registerBean(Object object) throws MultipleInstanceException;
 
@@ -147,6 +150,7 @@ public interface BeanRegistry {
      *
      * @param object    the bean
      * @param qualifier the name of the implementation
+     * @throws MultipleInstanceException if an instance of the supplied type is already registered
      */
     void registerBean(Object object, String qualifier) throws MultipleInstanceException;
 
@@ -155,6 +159,7 @@ public interface BeanRegistry {
      * <p>
      * <b>WARNING!</b>
      * Should only be called internally, otherwise it may cause serious issues with dependency tree resolving.
+     * </p>
      *
      * @param type the type to unregister
      * @see Internal
@@ -167,6 +172,7 @@ public interface BeanRegistry {
      * <p>
      * <b>WARNING!</b>
      * Should only be called internally, otherwise it may cause serious issues with dependency tree resolving.
+     * </p>
      *
      * @param type      the type to unregister
      * @param qualifier the name of the implementation
@@ -184,6 +190,7 @@ public interface BeanRegistry {
      * <b>WARNING!</b>
      * Should only be called internally, and only when the application shuts down,
      * otherwise it may cause serious issues with dependency tree resolving.
+     * </p>
      *
      * @see Internal
      */

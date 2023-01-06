@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 IceyLeagons and Contributors
+ * Copyright (c) 2023 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,36 +22,12 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.web;
-
-import io.javalin.json.JsonMapper;
-import net.iceyleagons.icicle.serialization.ObjectMapper;
-import net.iceyleagons.icicle.serialization.serializers.JsonSerializer;
-import net.iceyleagons.icicle.utilities.generic.GenericUtils;
-import net.iceyleagons.icicle.utilities.lang.Experimental;
-import org.jetbrains.annotations.NotNull;
-
-import java.lang.reflect.Type;
-
 /**
+ * Contains utility classes used by Icicle.
+ * These are not included inside icicle-utilities because they're heavily tied with icicle-core.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 12, 2022
+ * @since Aug. 23, 2021
  */
-@Experimental
-public class JavalinIcicleJsonMapper implements JsonMapper {
-    private final ObjectMapper objectMapper = new ObjectMapper(new JsonSerializer());
-
-    @NotNull
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T> T fromJsonString(@NotNull String json, @NotNull Type targetType) {
-        return (T) objectMapper.readValueFromString(json, GenericUtils.getGenericTypeClass(targetType));
-    }
-
-    @NotNull
-    @Override
-    public String toJsonString(@NotNull Object obj, @NotNull Type type) {
-        return objectMapper.writeValueAsString(obj);
-    }
-}
+package net.iceyleagons.icicle.core.utils;

@@ -37,6 +37,8 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
+ * Default implementation of {@link CommandService}
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
@@ -49,6 +51,11 @@ public class CommandServiceImpl implements CommandService {
 
     private final InvocationParameterBuilder invocationParameterBuilder;
 
+    /**
+     * Creates a new CommandServiceImpl instance along with the necessary companion registries and handlers.
+     *
+     * @param beanRegistry the bean registry to use when injecting command parameters
+     */
     @Autowired
     public CommandServiceImpl(BeanRegistry beanRegistry) {
         this.commandRegistry = new CommandRegistry();

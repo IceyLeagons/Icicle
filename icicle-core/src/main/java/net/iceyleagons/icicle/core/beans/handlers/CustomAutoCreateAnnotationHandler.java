@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 IceyLeagons and Contributors
+ * Copyright (c) 2023 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations.handlers;
+package net.iceyleagons.icicle.core.beans.handlers;
 
 import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 import org.jetbrains.annotations.NotNull;
@@ -53,8 +53,9 @@ public interface CustomAutoCreateAnnotationHandler {
     /**
      * This method is called after the bean has been initialized and auto-wired.
      * <p>
-     * The supplied type must be used instead of calling {@link #getClass()} on the bean, due to proxying.
+     * The supplied type must be used instead of getting class from the bean , due to proxying.
      * The type is the actual type of the bean, while the bean's class can be proxied.
+     * </p>
      *
      * @param bean the bean
      * @param type the actual type of the bean. (supplied due to proxying)

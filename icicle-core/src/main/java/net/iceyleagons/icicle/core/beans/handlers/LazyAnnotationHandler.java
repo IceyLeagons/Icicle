@@ -32,7 +32,6 @@ import net.bytebuddy.implementation.attribute.AnnotationRetention;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.iceyleagons.icicle.core.annotations.bean.Lazy;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
 import net.iceyleagons.icicle.core.beans.BeanManager;
 import net.iceyleagons.icicle.core.beans.QualifierKey;
 import net.iceyleagons.icicle.core.proxy.ByteBuddyProxyHandler;
@@ -50,9 +49,12 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
+ * This manages the autowiring of parameters marked with @{@link Lazy}
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Aug. 18, 2022
+ * @see Lazy
  */
 @AnnotationHandler
 @RequiredArgsConstructor
@@ -60,7 +62,6 @@ public class LazyAnnotationHandler implements AutowiringAnnotationHandler {
 
     private final BeanManager beanManager;
     private final ByteBuddy byteBuddy = ByteBuddyProxyHandler.getNewByteBuddyInstance();
-
     @Override
     public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
         return Collections.singleton(Lazy.class);
@@ -77,6 +78,18 @@ public class LazyAnnotationHandler implements AutowiringAnnotationHandler {
         }
     }
 
+    /**
+     * Creates the temporary implementation proxy for the given type and qualifier.
+     *
+     * @param type the type class
+     * @param qualifierKey the qualifier
+     * @return the created proxy instance
+     * @param <T> the type
+     * @throws NoSuchMethodException if the proxy cannot be created due to an underlying {@link NoSuchMethodException}
+     * @throws InvocationTargetException if the proxy cannot be created due to an underlying {@link InvocationTargetException}
+     * @throws InstantiationException if the proxy cannot be created due to an underlying {@link InstantiationException}
+     * @throws IllegalAccessException if the proxy cannot be created due to an underlying {@link IllegalAccessException}
+     */
     private <T> T getProxy(Class<T> type, QualifierKey qualifierKey) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         // TODO At the moment fields are not counted for!!
         Constructor<T> constructor = BeanUtils.getResolvableConstructor(type);

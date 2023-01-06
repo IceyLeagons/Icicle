@@ -30,11 +30,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * This is a flag marking a method to be scanned and handled for value modifiers.
+ * If this annotation is not present, the method will not be registered and as a result
+ * ValueModifiers will not act upon that method!
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 16, 2022
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ModifiersActive {
-}
+public @interface ModifiersActive { }

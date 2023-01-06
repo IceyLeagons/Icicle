@@ -69,9 +69,6 @@ public class Icicle {
      */
     public static final ClassLoader ICICLE_CLASS_LOADER = URLClassLoader.newInstance(new URL[0], Icicle.class.getClassLoader());
 
-    // In newer version of Java, the default class loader is AppClassLoader, which cannot be cast to URLClassLoader, so we do it this way:
-    public static final ClassLoader[] ICICLE_CLASS_LOADERS = new ClassLoader[]{ICICLE_CLASS_LOADER};
-
     /**
      * The instance of our Reflections.
      */
@@ -84,12 +81,16 @@ public class Icicle {
     public static final MavenDependency[] CORE_DEPENDENCIES = new MavenDependency[]{
             new MavenDependency("net.bytebuddy", "byte-buddy", "1.11.15", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("net.bytebuddy", "byte-buddy-agent", "1.11.15", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
-            new MavenDependency("me.carleslc.Simple-YAML", "Simple-Yaml", "1.8", MavenLibraryLoader.MAVEN_JITPACK),
-            new MavenDependency("ch.qos.logback", "logback-core", "1.2.9", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
+            new MavenDependency("me.carleslc.Simple-YAML", "Simple-Yaml", "1.8.3", MavenLibraryLoader.MAVEN_JITPACK),
+
+            new MavenDependency("ch.qos.logback", "logback-core", "1.4.4", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
+            new MavenDependency("ch.qos.logback", "logback-classic", "1.4.4", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
+
             new MavenDependency("org.jetbrains.kotlin", "kotlin-reflect", "1.7.10", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("org.jetbrains.kotlin", "kotlin-stdlib", "1.7.10", MavenLibraryLoader.MAVEN_CENTRAL_REPO),
             new MavenDependency("it.unimi.dsi", "fastutil-core", "8.5.8", MavenLibraryLoader.MAVEN_CENTRAL_REPO)
     };
+
     /**
      * Whether Icicle is currently loaded.
      */
@@ -109,6 +110,11 @@ public class Icicle {
         return String.format("Loading Icicle v%s. %s", ICICLE_VERSION, getCopyrightText());
     }
 
+    /**
+     * Boots up a {@link StandaloneIcicleApplication}.
+     *
+     * @param clazz the main class
+     */
     @SneakyThrows
     public static void bootStandalone(Class<?> clazz) {
         loadIcicle(null);
@@ -127,6 +133,7 @@ public class Icicle {
     /**
      * Initializes Icicle.
      *
+     * @param classLoader the classLoader to use (in some contexts we cannot use the classloader of the class)
      * @throws IllegalStateException if Icicle was already loaded.
      */
     @Internal
@@ -151,6 +158,9 @@ public class Icicle {
         LOADED = true;
     }
 
+    /**
+     * Prints the Icicle ASCII art logo to the console.
+     */
     public static void printAsciiArt() {
         System.out.println("\033[0;36m  _                   _          \n" +
                 " (_)        _        (_ )        \n" +

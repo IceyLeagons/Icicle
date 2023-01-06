@@ -30,6 +30,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * This annotation is used to provide information about a parameter for the command system.
+ * <p>
+ * <b>Only the parameters that the user actually enters need this!</b> For ex.: autowired beans or additional "context information beans" don't need to be annotated with it.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
@@ -38,8 +42,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CommandParameter {
 
+    /**
+     * @return the name of the parameter
+     */
     String name();
 
+    /**
+     * @return the description of the parameter
+     */
     String description();
 
 }

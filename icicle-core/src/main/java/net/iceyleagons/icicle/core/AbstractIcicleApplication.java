@@ -56,6 +56,8 @@ import java.io.File;
  * };}</pre>
  *
  * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Aug. 23, 2021
  */
 public abstract class AbstractIcicleApplication implements Application {
 
@@ -68,6 +70,14 @@ public abstract class AbstractIcicleApplication implements Application {
     private final BeanManager beanManager;
     private final ConfigurationEnvironment configurationEnvironment;
 
+    /**
+     * Instantiates a new instance of the base application.
+     * This will call {@link #AbstractIcicleApplication(String, ExecutionHandler, GlobalServiceProvider, File, ClassLoader...)} with "configs" as the config directory, and will define no additional {@link ClassLoader}s.
+     *
+     * @param rootPackage the package in which all the icicle annotated classes are contained. <i>(Icicle searches through subclasses as well.)</i>
+     * @param executionHandler an instance of a {@link net.iceyleagons.icicle.core.utils.ExecutionHandler} fully implemented.
+     * @param globalServiceProvider an instance of a {@link net.iceyleagons.icicle.core.beans.GlobalServiceProvider}.
+     */
     public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler, GlobalServiceProvider globalServiceProvider) {
         this(rootPackage, executionHandler, globalServiceProvider, new File("configs"));
     }
@@ -79,6 +89,7 @@ public abstract class AbstractIcicleApplication implements Application {
      * @param executionHandler      an instance of a {@link net.iceyleagons.icicle.core.utils.ExecutionHandler} fully implemented.
      * @param globalServiceProvider an instance of a {@link net.iceyleagons.icicle.core.beans.GlobalServiceProvider}.
      * @param configRoot            the root folder, where the configs will be placed
+     * @param classLoaders the classLoader to use with {@link Reflections}
      */
     @SneakyThrows
     public AbstractIcicleApplication(String rootPackage, ExecutionHandler executionHandler, GlobalServiceProvider globalServiceProvider, File configRoot, ClassLoader... classLoaders) {
@@ -104,12 +115,8 @@ public abstract class AbstractIcicleApplication implements Application {
         PerformanceLog.end(this);
     }
 
-    protected void onConstructed() {
-    }
+    protected void onConstructed() {}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void start() throws Exception {
         LOGGER.info("Booting Icicle application named: " + getName());
@@ -120,9 +127,6 @@ public abstract class AbstractIcicleApplication implements Application {
         PerformanceLog.end(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void shutdown() {
         LOGGER.info("Shutting down Icicle application named: " + getName());
@@ -130,41 +134,26 @@ public abstract class AbstractIcicleApplication implements Application {
         this.configurationEnvironment.cleanUp();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public BeanManager getBeanManager() {
         return this.beanManager;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ConfigurationEnvironment getConfigurationEnvironment() {
         return this.configurationEnvironment;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Reflections getReflections() {
         return this.reflections;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ExecutionHandler getExecutionHandler() {
         return this.executionHandler;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public GlobalServiceProvider getGlobalServiceProvider() {
         return this.globalServiceProvider;

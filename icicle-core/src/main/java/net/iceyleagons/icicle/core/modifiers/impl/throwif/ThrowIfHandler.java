@@ -29,6 +29,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.iceyleagons.icicle.core.exceptions.BeanCreationException;
 import net.iceyleagons.icicle.core.modifiers.MethodValueModifier;
 import net.iceyleagons.icicle.core.modifiers.ValueModifier;
+import net.iceyleagons.icicle.core.modifiers.impl.defaultValue.DefaultValue;
 import net.iceyleagons.icicle.core.utils.BeanUtils;
 
 import java.lang.reflect.Constructor;
@@ -36,6 +37,8 @@ import java.lang.reflect.Parameter;
 import java.util.Map;
 
 /**
+ * Implementation of the {@link ThrowIf} modifier.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 02, 2023
@@ -57,6 +60,13 @@ public class ThrowIfHandler implements ValueModifier {
         return input;
     }
 
+    /**
+     * Creates the exception from the given type.
+     *
+     * @param exception the exception type
+     * @return the resulting exception object
+     * @throws BeanCreationException if the exception cannot be created
+     */
     private Exception createException(Class<? extends Exception> exception) throws BeanCreationException {
         final Constructor<? extends Exception> constructor = BeanUtils.getResolvableConstructor(exception);
         if (constructor.getParameterCount() != 0)
@@ -65,6 +75,13 @@ public class ThrowIfHandler implements ValueModifier {
         return BeanUtils.instantiateClass(constructor, null);
     }
 
+    /**
+     * Creates the filter from the given type
+     *
+     * @param filterClass the filter type
+     * @return the resulting filter instance
+     * @throws BeanCreationException if the filter cannot be created
+     */
     private ThrowIfFilterTemplate getOrCreateFilter(Class<? extends ThrowIfFilterTemplate> filterClass) throws BeanCreationException {
         if (cache.containsKey(filterClass)) {
             return cache.get(filterClass);

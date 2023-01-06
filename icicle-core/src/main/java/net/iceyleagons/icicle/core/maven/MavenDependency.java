@@ -41,10 +41,16 @@ public class MavenDependency {
     private final String version;
     private final String repository;
 
+    /**
+     * @return the following "%artifactId-%version"
+     */
     public String getName() {
         return getArtifactId() + "-" + getVersion();
     }
 
+    /**
+     * @return the direct url to download the file from
+     */
     public String getRequestUrl() {
         String repo = this.repository;
 

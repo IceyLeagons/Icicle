@@ -31,11 +31,14 @@ import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.bean.Bean;
+import net.iceyleagons.icicle.core.annotations.execution.Sync;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 
 /**
+ * MethodInterceptorHandler for the @{@link Bean} annotation.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 28, 2021

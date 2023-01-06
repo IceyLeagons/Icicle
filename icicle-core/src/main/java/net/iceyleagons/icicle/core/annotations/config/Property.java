@@ -24,6 +24,8 @@
 
 package net.iceyleagons.icicle.core.annotations.config;
 
+import net.iceyleagons.icicle.core.beans.handlers.AutowiringAnnotationHandler;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -39,7 +41,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @version 1.0.0
  * @see net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment
  * @see net.iceyleagons.icicle.core.configuration.ConfigPropertyAutowiringHandler
- * @see net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler
+ * @see AutowiringAnnotationHandler
  * @see net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler
  * @since Aug. 27, 2021
  */
@@ -51,5 +53,4 @@ public @interface Property {
      * @return the config path
      */
     String value();
-
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 IceyLeagons and Contributors
+ * Copyright (c) 2023 IceyLeagons and Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,11 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.web;
-
-import net.iceyleagons.icicle.core.Icicle;
-import net.iceyleagons.icicle.core.annotations.IcicleApplication;
-
 /**
+ * This package contains interfaces for annotatation handlers, and all the default annotation handler implementations that are related to bean annotations.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Nov. 12, 2022
+ * @since Jan. 04, 2023
  */
-@IcicleApplication("net.iceyleagons.icicle.web")
-public class TestMain {
-
-    public static void main(String[] args) {
-        Icicle.bootStandalone(TestMain.class);
-    }
-}
+package net.iceyleagons.icicle.core.beans.handlers;

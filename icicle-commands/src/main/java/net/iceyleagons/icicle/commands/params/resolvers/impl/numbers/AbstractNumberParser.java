@@ -33,15 +33,24 @@ import java.lang.reflect.Parameter;
 import java.util.Map;
 
 /**
+ * Abstraction layer for parsing numbers, as they are all similar but the actual parsing method is different.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
+ * @param <T> the output type of the resolver
  */
 public abstract class AbstractNumberParser<T> implements ParameterResolverTemplate<T> {
 
     private final NumberValueMapper<T> mapper;
     private final String expected;
 
+    /**
+     * Creates a new number parser instance
+     *
+     * @param mapper the mapper function (ex.: {@link Integer#parseInt(String)}
+     * @param expected the name of the type (used for the errors, ex. output: expected int)
+     */
     public AbstractNumberParser(NumberValueMapper<T> mapper, String expected) {
         this.mapper = mapper;
         this.expected = expected;
@@ -58,7 +67,20 @@ public abstract class AbstractNumberParser<T> implements ParameterResolverTempla
         }
     }
 
+    /**
+     * Abstraction layer for Java built-in number parses implementations.
+     *
+     * @param <T> the output type
+     */
     interface NumberValueMapper<T> {
+
+        /**
+         * Parses the given string input to the appropriate number type via Java's built-in parsers.
+         *
+         * @param input the user input
+         * @return the resulting number instance
+         * @throws NumberFormatException if the input is not a valid number
+         */
         T parse(String input) throws NumberFormatException;
     }
 }

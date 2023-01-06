@@ -36,6 +36,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 /**
+ * Uses {@link Unsafe} to load libraries. Primarily used as a fallback.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Feb. 06, 2022
@@ -58,6 +60,10 @@ public class UnsafeLoader implements AdvancedClassLoader {
     private final ArrayList<URL> pathURLs;
     private final URLClassLoader origin;
 
+    /**
+     * Creates a new UnsafeLoader instance
+     * @param origin the parent classloader
+     */
     @SuppressWarnings("unchecked")
     public UnsafeLoader(URLClassLoader origin) {
         this.origin = origin;
@@ -77,10 +83,22 @@ public class UnsafeLoader implements AdvancedClassLoader {
         this.pathURLs = pathURLs;
     }
 
+    /**
+     * @return true if this loader is supported by the underlying JVM runtime.
+     */
     public static boolean isSupported() {
         return unsafe != null;
     }
 
+    /**
+     * Utility class to get fields via unsafe
+     *
+     * @param clazz the declaring class
+     * @param object the declaring class instance
+     * @param name the field's name
+     * @return the resulting value
+     * @throws NoSuchFieldException if a field with the given name is not present
+     */
     private static Object getField(final Class<?> clazz, final Object object, final String name) throws NoSuchFieldException {
         Field f = clazz.getDeclaredField(name);
         long o = unsafe.objectFieldOffset(f);

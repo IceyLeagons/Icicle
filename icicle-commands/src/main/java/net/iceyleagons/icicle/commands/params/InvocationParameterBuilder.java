@@ -30,12 +30,26 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
+ * Instances of this interface are tasked with building out the required arguments for command methods.
+ * Default implementation: {@link InvocationParameterBuilderImpl}
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
 public interface InvocationParameterBuilder {
 
+    /**
+     * This method constructs the required arguments for executing a command parameter.
+     *
+     * @param method the target method
+     * @param sender the command sender
+     * @param cmd the command registered to that method
+     * @param commandInputs the user entered inputs (in the order of the parameters, due to optionals this may not equal the length of the method parameters)
+     * @param externalParams any additional context parameters (to be injected if requried)
+     * @return the arguments in the order of the parameters
+     * @throws ParamParsingException if the parameter cannot be parsed
+     */
     Object[] buildParameters(Method method, Object sender, RegisteredCommand cmd, Object[] commandInputs, Map<Class<?>, Object> externalParams) throws ParamParsingException;
 
 }

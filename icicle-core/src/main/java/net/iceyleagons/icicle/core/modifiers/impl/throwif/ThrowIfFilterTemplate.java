@@ -34,6 +34,8 @@ import java.lang.reflect.Parameter;
 public interface ThrowIfFilterTemplate {
 
     /**
+     * @param parameter the parameter marked with the filter
+     * @param value the passed value
      * @return false if the parameter did not pass the test
      */
     boolean filter(Parameter parameter, Object value);

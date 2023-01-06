@@ -48,6 +48,10 @@ import java.util.stream.Stream;
 
 /**
  * Default implementation of {@link ConfigurationEnvironment}
+ *
+ * This environment has 2 caches:
+ *   - values (used for registered {@link org.simpleyaml.configuration.Configuration}s' values)
+ *   - fixedValues ( used for default configs on the file system. Not declared by developers with code)
  */
 public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
 
@@ -60,6 +64,12 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
     private final ConfigDelegator delegator;
     private final File configRootFolder;
 
+    /**
+     * Creates a new instance of ConfigurationEnvironmentImpl
+     *
+     * @param configRootFolder the root directory to use
+     * @param bytebuddy the {@link ByteBuddy} instance to use for delegation
+     */
     public ConfigurationEnvironmentImpl(File configRootFolder, ByteBuddy bytebuddy) {
         this.configRootFolder = configRootFolder;
         this.delegator = new ConfigDelegator(bytebuddy, configRootFolder.toPath());
@@ -68,6 +78,9 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
     }
 
     @SneakyThrows
+    /**
+     * This method scans for configurations on the file-system, which are not declared by developers with code.
+     */
     private void scanForDefaultConfigurations() {
         for (String resourceName : possibleResources) {
             URL url = this.getClass().getResource(resourceName);
@@ -103,6 +116,12 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
         }
     }
 
+    /**
+     * Loads a YAML file into the fixedValues cache.
+     *
+     * @param path the path to the file
+     * @throws Exception if the file cannot be loaded
+     */
     private void loadDefaultYaml(Path path) throws Exception {
         try (InputStream is = Files.newInputStream(path)) {
             YamlFile yamlFile = new YamlFile();
@@ -112,6 +131,12 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
         }
     }
 
+    /**
+     * Loads a Properties file into the fixedValues cache.
+     *
+     * @param path the path to the file
+     * @throws IOException if the file cannot be loaded
+     */
     private void loadDefaultProperties(Path path) throws IOException {
         try (InputStream is = Files.newInputStream(path)) {
             Properties properties = new Properties();
@@ -130,7 +155,7 @@ public class ConfigurationEnvironmentImpl implements ConfigurationEnvironment {
     public void updateValues() {
         values.clear();
 
-        getConfigurations().forEach(configuration ->
+        getConfigurations().stream().peek(Configuration::reload).forEach(configuration ->
                 configuration.getValues().forEach(entry ->
                         values.put(entry.getKey(), entry.getValue())));
     }

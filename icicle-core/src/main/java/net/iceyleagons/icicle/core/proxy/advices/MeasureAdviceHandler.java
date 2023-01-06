@@ -32,6 +32,13 @@ import net.iceyleagons.icicle.core.annotations.execution.Measure;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodAdviceHandler;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodAdviceHandlerTemplate;
 
+/**
+ * This handler manages the proxying of {@link Measure}.
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
+ * @since Sep. 25, 2023
+ */
 @MethodAdviceHandler
 public class MeasureAdviceHandler implements MethodAdviceHandlerTemplate {
 

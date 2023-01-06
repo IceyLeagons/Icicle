@@ -30,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 import java.util.Map;
 
 /**
+ * This exception has special properties to make it compatible with our translation system.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
@@ -38,10 +40,25 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TranslatableException extends Exception {
 
+    /**
+     * The translation key
+     */
     private final String key;
+
+    /**
+     * The default value of the translation
+     */
     private final String defaultValue;
+
+    /**
+     * The parameters to be passed to the string code parser
+     */
     private final Map<String, String> params;
 
+    /**
+     * @param key the translation key
+     * @param defaultValue the default value of the translation
+     */
     public TranslatableException(String key, String defaultValue) {
         this(key, defaultValue, Map.of());
     }

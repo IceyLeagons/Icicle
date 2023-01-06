@@ -27,6 +27,8 @@ package net.iceyleagons.icicle.commands.params.resolvers.impl.numbers;
 import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 
 /**
+ * Icicle's default parameter resolver for floats.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
@@ -34,6 +36,10 @@ import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 @ParameterResolver({float.class, Float.class})
 public class FloatParameterResolver extends AbstractNumberParser<Float> {
 
+    /**
+     * Creates a new FloatParameterResolver instance.
+     * Actual parsing logic is implemented in the {@link AbstractNumberParser} abstraction layer.
+     */
     public FloatParameterResolver() {
         super(Float::parseFloat, "float");
     }

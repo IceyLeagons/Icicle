@@ -31,6 +31,11 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Indicates a method that produces a bean to be managed by Icicle.
+ * These methods are autowired, and called automatically.
+ * After the initial call these methods will be proxied and the original code will not be executed a second time, instead the
+ * registered bean will be returned.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 28, 2021
@@ -38,5 +43,4 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(METHOD)
 @Retention(RUNTIME)
 public @interface Bean {
-
 }

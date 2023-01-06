@@ -27,6 +27,8 @@ package net.iceyleagons.icicle.commands.params.resolvers.impl.numbers;
 import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 
 /**
+ * Icicle's default parameter resolver for integers.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
@@ -34,6 +36,10 @@ import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 @ParameterResolver({int.class, Integer.class})
 public class IntParameterResolver extends AbstractNumberParser<Integer> {
 
+    /**
+     * Creates a new IntParameterResolver instance.
+     * Actual parsing logic is implemented in the {@link AbstractNumberParser} abstraction layer.
+     */
     public IntParameterResolver() {
         super(Integer::parseInt, "integer");
     }

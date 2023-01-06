@@ -34,6 +34,8 @@ import net.iceyleagons.icicle.core.beans.QualifierKey;
 import java.lang.reflect.Method;
 
 /**
+ * This class is responsible for creating the mock proxy classes for {@link net.iceyleagons.icicle.core.annotations.bean.Lazy} annotated parameters.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Aug. 18, 2022

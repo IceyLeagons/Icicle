@@ -27,11 +27,18 @@ package net.iceyleagons.icicle.core.proxy.interfaces;
 import net.bytebuddy.implementation.Implementation;
 
 /**
+ * Instances of this interface are responsible for registering and managing method interceptors.
+ * Classes implementing this interface must be marked with @{@link net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler}.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 13, 2021
  */
 public interface MethodInterceptorHandlerTemplate extends MethodDescriptor {
 
+    /**
+     * @return the actual delegation
+     * @see Implementation
+     */
     Implementation getImplementation();
 }

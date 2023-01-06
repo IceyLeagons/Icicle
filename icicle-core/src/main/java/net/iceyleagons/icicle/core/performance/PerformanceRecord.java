@@ -30,6 +30,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**
+ * This class holds all the information about a section in the performance log.
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
  * @since Oct. 31, 2021
  */
 @Getter
@@ -46,10 +50,20 @@ public class PerformanceRecord {
     @Setter
     private PerformanceRecord parent = null;
 
+    /**
+     * Creates a new record instance
+     *
+     * @param name the name of the section
+     * @param clazz the class starting the section
+     * @return the record
+     */
     public static PerformanceRecord of(String name, Class<?> clazz) {
         return new PerformanceRecord(name, System.currentTimeMillis(), clazz);
     }
 
+    /**
+     * @return the time it took for the section to complete
+     */
     public long getExecutionTime() {
         return endMs - startMs;
     }

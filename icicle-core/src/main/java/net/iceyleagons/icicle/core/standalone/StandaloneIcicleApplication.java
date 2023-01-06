@@ -27,6 +27,8 @@ package net.iceyleagons.icicle.core.standalone;
 import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 
 /**
+ * The actual {@link net.iceyleagons.icicle.core.Application} implementation for Icicle standalone execution.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 24, 2022
@@ -34,8 +36,19 @@ import net.iceyleagons.icicle.core.AbstractIcicleApplication;
 public class StandaloneIcicleApplication extends AbstractIcicleApplication {
 
     private final String name;
+
+    /**
+     * This is used for an internal loop to keep Icicle running.
+     * If it is true, Icicle is running.
+     */
     public boolean running = false;
 
+    /**
+     * Creates a new StandaloneIcicleApplication instance
+     *
+     * @param rootPackage the root package of the application
+     * @param clazz the class booting up the application, aka. the main class in most cases
+     */
     public StandaloneIcicleApplication(String rootPackage, Class<?> clazz) {
         super(rootPackage, new StandaloneExecutionHandler(), null);
         this.name = clazz.getName();

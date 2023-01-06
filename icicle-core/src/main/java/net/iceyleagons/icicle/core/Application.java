@@ -34,6 +34,8 @@ import org.reflections.Reflections;
  * Root of an Icicle-using project. Gives access to all the internals of the Icicle framework.
  *
  * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Aug. 23, 2021
  */
 public interface Application {
 

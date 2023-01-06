@@ -25,6 +25,8 @@
 package net.iceyleagons.icicle.core.annotations.handlers;
 
 import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
+import net.iceyleagons.icicle.core.beans.handlers.AutowiringAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.handlers.CustomAutoCreateAnnotationHandler;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -49,5 +51,4 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface AnnotationHandler {
-
 }

@@ -55,9 +55,6 @@ public class DelegatingInjectionParameterResolver implements InjectionParameterR
         this.autowiringAnnotationResolver = autowiringAnnotationResolver;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Object[] resolveConstructorParameters(Executable executable, BeanRegistry beanRegistry) throws UnsatisfiedDependencyException {
         Parameter[] parameters = executable.getParameters();

@@ -26,7 +26,7 @@ package net.iceyleagons.icicle.serialization.mapping;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.handlers.CustomAutoCreateAnnotationHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;

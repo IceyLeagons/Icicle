@@ -26,10 +26,13 @@ package net.iceyleagons.icicle.core.modifiers.impl.defaultValue;
 
 import net.iceyleagons.icicle.core.modifiers.MethodValueModifier;
 import net.iceyleagons.icicle.core.modifiers.ValueModifier;
+import net.iceyleagons.icicle.core.modifiers.impl.asserts.AssertArgument;
 
 import java.lang.reflect.Parameter;
 
 /**
+ * Implementation of the {@link DefaultValue} modifier.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 16, 2022

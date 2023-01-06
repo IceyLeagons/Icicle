@@ -33,20 +33,43 @@ import java.net.URLClassLoader;
 import java.nio.file.Path;
 
 /**
+ * This is used as an abstraction for us to be able to switch between supported class loaders.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Feb. 06, 2022
  */
 public interface AdvancedClassLoader {
 
+    /**
+     * Adds the URL to the classloader
+     *
+     * @param url the url to add
+     */
     void addUrl(@NonNull URL url);
 
+    /**
+     * Loads a library from the given file.
+     * It calls {@link #addUrl(URL)}
+     *
+     * @param file the file
+     * @throws MalformedURLException if a URL cannot be constructed from the file
+     */
     void loadLibrary(@NonNull File file) throws MalformedURLException;
 
+    /**
+     * Loads a library from the given path.
+     *
+     * @param file the path
+     * @throws MalformedURLException if a URL cannot be constructed from the file
+     */
     default void loadLibrary(@NonNull Path file) throws MalformedURLException {
         loadLibrary(file.toFile());
     }
 
+    /**
+     * @return the parent class loader
+     */
     URLClassLoader getOrigin();
 
 }

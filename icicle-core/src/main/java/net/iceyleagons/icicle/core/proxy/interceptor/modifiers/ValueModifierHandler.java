@@ -31,11 +31,18 @@ import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
+import net.iceyleagons.icicle.core.annotations.execution.Sync;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;
 import net.iceyleagons.icicle.core.modifiers.ValueModifierAutoCreateHandler;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 
 /**
+ * MethodInterceptorHandler for the @{@link ModifiersActive} annotation.
+ * <br><br>
+ * <b>NOTE</b>: ValueModifier only work when ModifiersActive annotation is present.
+ * <p>
+ * We could have scanned for modifiers on every single method in a class but that's inefficient, so we want with this flag.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 16, 2022

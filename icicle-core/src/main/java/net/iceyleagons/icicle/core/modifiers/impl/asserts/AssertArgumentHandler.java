@@ -31,6 +31,8 @@ import javax.script.*;
 import java.lang.reflect.Parameter;
 
 /**
+ * Implementation of the {@link AssertArgument} modifier.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 16, 2022

@@ -64,5 +64,4 @@ public interface GlobalServiceProvider {
      * @throws Exception if something goes wrong
      */
     void registerService(Class<?> interfaceType, Class<?> providerType, Object object, Application registrar) throws Exception;
-
 }

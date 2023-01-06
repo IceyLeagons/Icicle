@@ -55,5 +55,4 @@ public @interface ConfigurationDriver {
      * @return the extensions supported
      */
     String[] value();
-
 }

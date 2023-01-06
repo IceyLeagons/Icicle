@@ -27,8 +27,17 @@ package net.iceyleagons.icicle.core.proxy.interfaces;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
+/**
+ * This interface is used as a utility to mitigate duplicate code.
+ * It is implemented by {@link MethodAdviceHandlerTemplate} and {@link net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler}.
+ *
+ * @since Sep. 25, 2021
+ */
 public interface MethodDescriptor {
 
+    /**
+     * @return the element filter for the proxy to use when targeting type elements and intercepting them.
+     */
     ElementMatcher<? super MethodDescription> getMatcher();
 
 }

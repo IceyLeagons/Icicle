@@ -46,5 +46,4 @@ public @interface ConfigField {
      * @return the config path
      */
     String value();
-
 }

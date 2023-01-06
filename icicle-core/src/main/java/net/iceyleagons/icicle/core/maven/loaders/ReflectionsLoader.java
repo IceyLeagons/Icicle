@@ -34,6 +34,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 /**
+ * Primary {@link AdvancedClassLoader}. If supported this is favoured over {@link UnsafeLoader}
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Feb. 06, 2022
@@ -54,6 +56,9 @@ public class ReflectionsLoader implements AdvancedClassLoader {
 
     private final URLClassLoader origin;
 
+    /**
+     * @return true if this loader is supported by the underlying JVM runtime.
+     */
     public static boolean isSupported() {
         return clazz != null;
     }

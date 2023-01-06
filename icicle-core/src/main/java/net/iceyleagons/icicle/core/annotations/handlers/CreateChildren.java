@@ -32,9 +32,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Can be used along with {@link AnnotationHandler}, more specifically with {@link net.iceyleagons.icicle.core.beans.handlers.CustomAutoCreateAnnotationHandler}.
+ * This annotation marks these handlers, so their children (types marked with their managed annotations) will be created right away, after the handler is constructed.
+ * This bypasses the usual creation order, because by default the children will be created in no particular order, after every special beans have been created and initialized.
+ * <p>
+ * <b>WARNING!</b> Experimental feature!
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
+ * @see Experimental
  */
 @Experimental
 @Target(ElementType.TYPE)

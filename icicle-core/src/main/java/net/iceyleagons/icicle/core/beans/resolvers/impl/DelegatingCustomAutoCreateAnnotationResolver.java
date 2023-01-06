@@ -26,7 +26,7 @@ package net.iceyleagons.icicle.core.beans.resolvers.impl;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.core.beans.resolvers.CustomAutoCreateAnnotationResolver;
 
 import java.lang.annotation.Annotation;
@@ -43,9 +43,6 @@ public class DelegatingCustomAutoCreateAnnotationResolver implements CustomAutoC
 
     private final Map<Class<? extends Annotation>, CustomAutoCreateAnnotationHandler> handlers = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void registerCustomAutoCreateAnnotationHandler(CustomAutoCreateAnnotationHandler handler) {
         for (Class<? extends Annotation> supportedAnnotation : handler.getSupportedAnnotations()) {
@@ -53,9 +50,6 @@ public class DelegatingCustomAutoCreateAnnotationResolver implements CustomAutoC
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onCreated(Object bean, Class<?> type) throws Exception {
         for (Annotation annotation : type.getAnnotations()) {
@@ -67,9 +61,6 @@ public class DelegatingCustomAutoCreateAnnotationResolver implements CustomAutoC
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean has(Class<?> type) {
         return handlers.containsKey(type);

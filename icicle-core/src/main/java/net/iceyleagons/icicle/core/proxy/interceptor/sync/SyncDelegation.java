@@ -41,6 +41,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Actual implementation of the sync proxy logic.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 13, 2021

@@ -26,8 +26,19 @@ package net.iceyleagons.icicle.core.proxy.interfaces;
 
 import net.bytebuddy.asm.Advice;
 
+/**
+ * Instances of this interface are responsible for registering and managing advices.
+ * Classes implementing this interface must be marked with @{@link net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodAdviceHandler}.
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Sep. 25, 2021
+ */
 public interface MethodAdviceHandlerTemplate extends MethodDescriptor {
 
+    /**
+     * @return the actual advice implementation
+     * @see Advice
+     */
     Advice getAsmAdvice();
-
 }

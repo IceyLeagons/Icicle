@@ -24,7 +24,7 @@
 
 package net.iceyleagons.icicle.core.beans.resolvers;
 
-import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.handlers.AutowiringAnnotationHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
@@ -42,7 +42,7 @@ import java.lang.reflect.Parameter;
 public interface AutowiringAnnotationResolver {
 
     /**
-     * Finds the appropriate {@link AutowiringAnnotationHandler} and calls it's {@link AutowiringAnnotationHandler#getValueForAnnotation(Annotation, Class)}
+     * Finds the appropriate {@link AutowiringAnnotationHandler} and calls it's {@link AutowiringAnnotationHandler#getValueForAnnotation(Annotation, Class, Parameter)}
      *
      * @param annotationType the type of the annotation
      * @param annotation     the annotation

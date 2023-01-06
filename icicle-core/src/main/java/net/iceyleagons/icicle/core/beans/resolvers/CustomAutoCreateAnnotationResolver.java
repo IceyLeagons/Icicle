@@ -24,8 +24,8 @@
 
 package net.iceyleagons.icicle.core.beans.resolvers;
 
-import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.handlers.AutowiringAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.handlers.CustomAutoCreateAnnotationHandler;
 
 /**
  * A CustomAutoCreateAnnotationResolver is basically a registry for all {@link CustomAutoCreateAnnotationHandler}s.
@@ -49,7 +49,7 @@ public interface CustomAutoCreateAnnotationResolver {
      * This method is called after the bean has been initialized and auto-wired.
      * This resolver will route this call to the appropriate {@link CustomAutoCreateAnnotationHandler#onCreated(Object, Class)}
      * <p>
-     * The supplied type must be used instead of calling {@link #getClass()} on the bean, due to proxying.
+     * The supplied type must be used instead of getting class from the bean, due to proxying.
      * The type is the actual type of the bean, while the bean's class can be proxied.
      *
      * @param bean the bean

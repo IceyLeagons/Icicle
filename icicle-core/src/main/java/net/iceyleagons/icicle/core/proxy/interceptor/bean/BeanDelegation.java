@@ -38,6 +38,8 @@ import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
 /**
+ * Actual implementation of the bean proxy logic.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 28, 2021

@@ -38,19 +38,49 @@ import java.util.Optional;
 @Utility
 public class CommandUtils {
 
+    /**
+     * Key for the parameter parsing exceptions. Used by the translation system.
+     */
     public static final String PARAMETER_PARSER_VALUE_ERROR_KEY = "icicle.commands.params.valueError";
-    public static final String PARAMETER_PARSER_VALUE_ERROR = "Invalid value give for parameter. Expected: {expected}.";
-    private CommandUtils() {
-    }
 
+    /**
+     * Default value for the parameter parsing exceptions. Used by the translation system.
+     */
+    public static final String PARAMETER_PARSER_VALUE_ERROR = "Invalid value give for parameter. Expected: {expected}.";
+    private CommandUtils() {}
+
+    /**
+     * Used for getting the actual type of the parameter, meaning if it's an Optional
+     * this method will return the generic type inside the Optional via {@link #getOptionalType(Parameter)},
+     * otherwise the {@link Parameter#getType()} will be returned instead.
+     *
+     * @param parameter the parameter
+     * @return the actual type of the parameter
+     */
     public static Class<?> getActualParamType(Parameter parameter) {
         return isRequired(parameter) ? parameter.getType() : getOptionalType(parameter);
     }
 
+    /**
+     * Checks whether the parameter is an {@link Optional} or not.
+     * If it's an optional then it's not a requried parameter.
+     *
+     * @param parameter the parameter to check
+     * @return true if the parameter is required (meaning it's not an {@link Optional} type), false otherwise
+     */
     public static boolean isRequired(Parameter parameter) {
         return !parameter.getType().equals(Optional.class);
     }
 
+    /**
+     * Used to retrieve the generic type inside an {@link Optional}.
+     * <p>
+     * <b>NOTE</b>: the parameter is not checked against whether it's an {@link Optional}. The calling
+     * method should do that check instead.
+     *
+     * @param optional the optional parameter
+     * @return the generic type
+     */
     public static Class<?> getOptionalType(Parameter optional) {
         return (Class<?>) ((ParameterizedType) optional.getParameterizedType()).getActualTypeArguments()[0];
     }

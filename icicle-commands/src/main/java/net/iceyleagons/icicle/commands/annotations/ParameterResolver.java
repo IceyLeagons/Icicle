@@ -32,15 +32,22 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * This marks a class as a parameter resolver. Classes flagged with this must implement {@link net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplate}.
+ * This is used to extend Icicle's default parameter support, so custom type parsing can be introduced in other contexts.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
+ * @see AutoCreate
  */
 @AutoCreate
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ParameterResolver {
 
+    /**
+     * @return the supported types of the resolver
+     */
     Class<?>[] value();
 
 }

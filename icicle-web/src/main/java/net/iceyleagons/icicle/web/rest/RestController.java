@@ -32,6 +32,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Marks a class as an endpoint controller, more specifically a REST controller.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 12, 2022

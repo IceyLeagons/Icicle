@@ -33,6 +33,15 @@ import java.util.List;
  */
 @FunctionalInterface
 public interface PythonExecutable {
+
+    /**
+     * Executes the underlying python file with the given parameters.
+     * As of now this currently opens a new process and calls python3.
+     *
+     * @param params the command line params
+     * @return the script output (including errors)
+     * @throws Exception if any error occurs during the execution
+     */
     List<String> call(String... params) throws Exception;
 
 }

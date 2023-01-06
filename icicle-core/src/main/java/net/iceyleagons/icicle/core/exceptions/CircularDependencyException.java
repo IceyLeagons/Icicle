@@ -24,13 +24,15 @@
 
 package net.iceyleagons.icicle.core.exceptions;
 
+import net.iceyleagons.icicle.core.beans.resolvers.impl.DefaultDependencyTreeResolver;
+
 /**
  * This exception is used when the dependency tree forms a circle.
  *
  * @author TOTHTOMI
  * @version 1.0.0
  * @see net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver
- * @see net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingDependencyTreeResolver
+ * @see DefaultDependencyTreeResolver
  * @since Aug. 23, 2021
  */
 public class CircularDependencyException extends Exception {

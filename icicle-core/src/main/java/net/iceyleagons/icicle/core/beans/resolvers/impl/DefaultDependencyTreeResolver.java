@@ -46,15 +46,16 @@ import java.util.stream.Collectors;
 
 /**
  * Default implementation of {@link DependencyTreeResolver}.
+ * Can be considered among the most important classes of Icicle.
  *
  * @author TOTHTOMI
  * @version 2.0.0
  * @see DependencyTreeResolver
  * @since Aug. 23, 2021
  */
-public class DelegatingDependencyTreeResolver implements DependencyTreeResolver {
+public class DefaultDependencyTreeResolver implements DependencyTreeResolver {
 
-    private static final Logger logger = LoggerFactory.getLogger(DelegatingDependencyTreeResolver.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultDependencyTreeResolver.class);
     private final BeanRegistry beanRegistry;
     private final AutowiringAnnotationResolver autowiringAnnotationResolver;
     private final MergedAnnotationResolver autoCreateResolver;
@@ -66,7 +67,7 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
      * @param autowiringAnnotationResolver the {@link AutowiringAnnotationResolver} the {@link net.iceyleagons.icicle.core.beans.BeanManager} uses
      * @param autoCreateResolver           the {@link MergedAnnotationResolver} the {@link net.iceyleagons.icicle.core.beans.BeanManager} uses
      */
-    public DelegatingDependencyTreeResolver(BeanRegistry beanRegistry, AutowiringAnnotationResolver autowiringAnnotationResolver, MergedAnnotationResolver autoCreateResolver) {
+    public DefaultDependencyTreeResolver(BeanRegistry beanRegistry, AutowiringAnnotationResolver autowiringAnnotationResolver, MergedAnnotationResolver autoCreateResolver) {
         this.beanRegistry = beanRegistry;
         this.autoCreateResolver = autoCreateResolver;
         this.autowiringAnnotationResolver = autowiringAnnotationResolver;
@@ -202,9 +203,6 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LinkedList<Class<?>> resolveDependencyTree(Method method) throws CircularDependencyException, UnsatisfiedDependencyException {
         logger.debug("Resolving dependency tree for method {} inside class: {}", method.getName(), method.getDeclaringClass().getName());
@@ -216,13 +214,10 @@ public class DelegatingDependencyTreeResolver implements DependencyTreeResolver 
         handleDependencies(params, stack, tree, method.getDeclaringClass()); // We fill in the stack with the methods parameters first
         resolveDependencyTreeForBean(tree, stack); // Then we call the DFS algorithm
 
-        return ListUtils.reverseLinkedList(tree) // TODO maybe we can optimise this??
+        return ListUtils.reverseLinkedList(tree)
                 .stream().map(QualifierKey::getClazz).collect(Collectors.toCollection(LinkedList::new));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LinkedList<Class<?>> resolveDependencyTree(Class<?> currentBean) throws CircularDependencyException, UnsatisfiedDependencyException {
         logger.debug("Resolving dependency tree for bean-type: {}", currentBean.getName());

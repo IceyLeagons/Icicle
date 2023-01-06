@@ -27,8 +27,8 @@ package net.iceyleagons.icicle.core.beans.handlers;
 import it.unimi.dsi.fastutil.objects.ObjectSets;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.HighPriority;
+import net.iceyleagons.icicle.core.annotations.service.GlobalService;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 import net.iceyleagons.icicle.core.beans.BeanRegistry;
 import net.iceyleagons.icicle.core.beans.QualifierKey;
@@ -38,9 +38,12 @@ import java.lang.annotation.Annotation;
 import java.util.Set;
 
 /**
+ * This manages all beans marked with @{@link Service}
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Mar. 25, 2022
+ * @see Service
  */
 @HighPriority
 @AnnotationHandler

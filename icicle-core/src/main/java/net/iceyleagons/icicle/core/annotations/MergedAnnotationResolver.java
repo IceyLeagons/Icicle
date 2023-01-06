@@ -53,7 +53,7 @@ public class MergedAnnotationResolver {
     private final Reflections reflections;
 
     /**
-     * Creates a new instance of {@link MergedAnnotationResolver}
+     * Creates a new instance of MergedAnnotationResolver.
      *
      * @param annotation  the annotation to search for in the tree
      * @param reflections the reflections instance to use
@@ -82,18 +82,6 @@ public class MergedAnnotationResolver {
                             .stream().filter(c -> !c.isAnnotation()).collect(Collectors.toSet())
             );
         }
-
-        /*
-        System.out.println("[!!!] Found AutoCreate instances: ");
-        result.forEach(s -> {
-            System.out.println(s.getName());
-        });
-        System.out.println("=======================================");
-        System.out.println();
-        System.out.println();
-
-
-         */
         return result;
     }
 
@@ -148,7 +136,6 @@ public class MergedAnnotationResolver {
                 }
             }
         }
-
         return children;
     }
 }

@@ -40,6 +40,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * This class is used to hold data about command parameters.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
@@ -48,13 +50,44 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ParameterInfo {
 
+    /**
+     * Name of the parameter
+     */
     private final String name;
+
+    /**
+     * Description of the parameter
+     */
     private final String description;
+
+    /**
+     * True type of the parameter (if it's an optional for ex. get the type inside the optional)
+     */
     private final Class<?> type;
+
+    /**
+     * Annotations of the parameter
+     */
     private final Map<Class<? extends Annotation>, Annotation> annotations;
+
+    /**
+     * Whether the parameter is required (if it's not required it's encapsulated in a {@link java.util.Optional})
+     */
     private final boolean required;
+
+    /**
+     * Options of the parameter. Used for auto completing in some contexts. Filled in automatically by the command system.
+     */
     private final List<String> options;
 
+    /**
+     * Constructs a new ParameterInfo instance
+     *
+     * @param parameter the parameter
+     * @param registry the parameter registry
+     * @return the resulting instance
+     * @throws IllegalStateException if no parameter resolvers are found for the parameter
+     */
     public static ParameterInfo from(Parameter parameter, ParameterResolverRegistry registry) {
         if (parameter.isAnnotationPresent(CommandParameter.class)) {
             CommandParameter annotation = parameter.getAnnotation(CommandParameter.class);
@@ -75,6 +108,12 @@ public class ParameterInfo {
         return null;
     }
 
+    /**
+     * Utility method to map the annotations of the parameter into a map, where the key is the annotation type, the value is the actual {@link Annotation} instance.
+     *
+     * @param parameter the parameter
+     * @return the resulting {@link Map}
+     */
     private static Map<Class<? extends Annotation>, Annotation> getAnnotations(Parameter parameter) {
         return Arrays.stream(parameter.getAnnotations()).collect(Collectors.toMap(Annotation::annotationType, v -> v));
     }

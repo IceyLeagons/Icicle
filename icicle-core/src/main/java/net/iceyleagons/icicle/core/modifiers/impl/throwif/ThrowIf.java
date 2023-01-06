@@ -30,6 +30,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * This is a filter modifier.
+ * If the supplied filter decides that the value is not correct the supplied Exception will be thrown.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 02, 2023
@@ -38,8 +41,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ThrowIf {
 
+    /**
+     * @return the filter to use (will be created automatically)
+     */
     Class<? extends ThrowIfFilterTemplate> filter();
 
+    /**
+     * @return the exception to throw (will be created automatically)
+     */
     Class<? extends Exception> exception();
 
 }

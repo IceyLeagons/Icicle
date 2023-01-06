@@ -53,17 +53,11 @@ public abstract class ConfigDriver implements Configuration {
     protected Object origin;
     protected Class<?> originType;
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Class<?> declaringType() {
         return this.originType;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Set<Map.Entry<String, Object>> getValues() {
         return getValues(getFields());
@@ -92,11 +86,21 @@ public abstract class ConfigDriver implements Configuration {
         });
     }
 
+    /**
+     * @return all fields marked with {@link ConfigField} inside the implementing class.
+     */
     protected Set<Field> getFields() {
         return Arrays.stream(originType.getDeclaredFields())
                 .filter(f -> f.isAnnotationPresent(ConfigField.class)).collect(Collectors.toSet());
     }
 
+    /**
+     * Extracts the path-value pairs from the given fields.
+     * These fields must be annotated with {@link ConfigField}, normally call it with the return of {@link #getFields()}
+     *
+     * @param fields the fields
+     * @return the resulting values
+     */
     protected Set<Map.Entry<String, Object>> getValues(Set<Field> fields) {
         Map<String, Object> values = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 

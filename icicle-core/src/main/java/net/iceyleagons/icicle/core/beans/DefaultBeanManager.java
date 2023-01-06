@@ -32,18 +32,21 @@ import net.iceyleagons.icicle.core.annotations.PostAppConstruct;
 import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.bean.Bean;
+import net.iceyleagons.icicle.core.annotations.bean.CreateLast;
 import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.config.ConfigurationDriver;
 import net.iceyleagons.icicle.core.annotations.handlers.*;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodAdviceHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;
+import net.iceyleagons.icicle.core.beans.handlers.AutowiringAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.core.beans.resolvers.AutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.CustomAutoCreateAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.DependencyTreeResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.InjectionParameterResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingAutowiringAnnotationResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingCustomAutoCreateAnnotationResolver;
-import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingDependencyTreeResolver;
+import net.iceyleagons.icicle.core.beans.resolvers.impl.DefaultDependencyTreeResolver;
 import net.iceyleagons.icicle.core.beans.resolvers.impl.DelegatingInjectionParameterResolver;
 import net.iceyleagons.icicle.core.configuration.Configuration;
 import net.iceyleagons.icicle.core.configuration.driver.ConfigDelegator;
@@ -96,14 +99,23 @@ public class DefaultBeanManager implements BeanManager {
 
     private final Set<Tuple<Object, Method>> postAppConstructs = new ObjectOpenHashSet<>();
 
-    public DefaultBeanManager(Application application) throws MultipleInstanceException {
+    /**
+     * Creates a new DefaultBeanManager instance for the passed application.
+     *
+     * @param application the application
+     */
+    public DefaultBeanManager(Application application) {
         this.application = application;
         this.reflections = application.getReflections();
 
         this.beanRegistry = new DelegatingBeanRegistry(application);
-        this.beanRegistry.registerBean(BeanManager.class, this);
-        this.beanRegistry.registerBean(BeanRegistry.class, beanRegistry);
-        this.beanRegistry.registerBean(DelegatingBeanRegistry.class, beanRegistry);
+        try {
+            this.beanRegistry.registerBean(BeanManager.class, this);
+            this.beanRegistry.registerBean(BeanRegistry.class, beanRegistry);
+            this.beanRegistry.registerBean(DelegatingBeanRegistry.class, beanRegistry);
+        } catch (Exception ignored) {
+            // This should never happen lol.
+        }
 
         this.autowiringAnnotationResolver = new DelegatingAutowiringAnnotationResolver();
         this.customAutoCreateAnnotationResolver = new DelegatingCustomAutoCreateAnnotationResolver();
@@ -112,7 +124,7 @@ public class DefaultBeanManager implements BeanManager {
         this.autoCreationAnnotationResolver = new MergedAnnotationResolver(AutoCreate.class, reflections);
         PerformanceLog.end(application);
 
-        this.dependencyTreeResolver = new DelegatingDependencyTreeResolver(this.beanRegistry, this.autowiringAnnotationResolver, this.autoCreationAnnotationResolver);
+        this.dependencyTreeResolver = new DefaultDependencyTreeResolver(this.beanRegistry, this.autowiringAnnotationResolver, this.autoCreationAnnotationResolver);
 
         this.beanProxyHandler = new ByteBuddyProxyHandler();
         this.constructorParameterResolver = new DelegatingInjectionParameterResolver(autowiringAnnotationResolver);
@@ -264,7 +276,7 @@ public class DefaultBeanManager implements BeanManager {
     }
 
     /**
-     * Creates and registers all the {@link AnnotationHandler}s.
+     * Creates and registers all the {@link AnnotationHandler}s with the appropriate priority (order).
      *
      * @param autoCreationTypes the set of all the {@link AutoCreate} annotated types from {@link MergedAnnotationResolver}
      *                          (this method calls {@link #getAndRemoveTypesAnnotatedWith(Class, Set)} with this parameter)
@@ -291,6 +303,20 @@ public class DefaultBeanManager implements BeanManager {
         PerformanceLog.end(application);
     }
 
+    /**
+     * Creates and registers all the {@link AnnotationHandler}s.
+     * This method is used to prevent code duplication.
+     *
+     * @param autoCreationTypes the set of all the {@link AutoCreate} annotated types from {@link MergedAnnotationResolver}
+     *                          (this method calls {@link #getAndRemoveTypesAnnotatedWith(Class, Set)} with this parameter)
+     * @throws BeanCreationException          if any other exception prevents the creation of a bean
+     * @throws CircularDependencyException    if one of the beans' dependencies form a circle
+     * @throws UnsatisfiedDependencyException if a bean cannot be created due to missing dependencies
+     * @see AnnotationHandler
+     * @see AutoCreate
+     * @see MergedAnnotationResolver
+     * @see #getAndRemoveTypesAnnotatedWith(Class, Set)
+     */
     private void createAnnotationHandler(Class<?> handler, Set<Class<?>> autoCreationTypes) throws Exception {
         createAndRegisterBean(handler);
         Object object = this.beanRegistry.getBeanNullable(handler);
@@ -299,18 +325,14 @@ public class DefaultBeanManager implements BeanManager {
             this.autowiringAnnotationResolver.registerAutowiringAnnotationHandler((AutowiringAnnotationHandler) object);
         } else if (object instanceof CustomAutoCreateAnnotationHandler) {
             this.customAutoCreateAnnotationResolver.registerCustomAutoCreateAnnotationHandler((CustomAutoCreateAnnotationHandler) object);
-        }
-
-        if (handler.isAnnotationPresent(CreateChildren.class)) {
-            for (Class<?> aClass : getAndRemoveTypesAnnotatedWith(handler.getAnnotation(AnnotationHandler.class).annotationType(), autoCreationTypes)) {
-                createAndRegisterBean(aClass);
+            if (handler.isAnnotationPresent(CreateChildren.class)) {
+                for (Class<?> aClass : getAndRemoveTypesAnnotatedWith(handler.getAnnotation(AnnotationHandler.class).annotationType(), autoCreationTypes)) {
+                    createAndRegisterBean(aClass);
+                }
             }
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void scanAndCreateBeans() throws Exception {
         PerformanceLog.begin(application, "Bean scanning & creation", DefaultBeanManager.class);
@@ -353,46 +375,6 @@ public class DefaultBeanManager implements BeanManager {
         PerformanceLog.end(application);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BeanRegistry getBeanRegistry() {
-        return this.beanRegistry;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public DependencyTreeResolver getDependencyTreeResolver() {
-        return this.dependencyTreeResolver;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public InjectionParameterResolver getConstructorParameterResolver() {
-        return this.constructorParameterResolver;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Reflections getReflectionsInstance() {
-        return this.reflections;
-    }
-
-    @Override
-    public BeanProxyHandler getProxyHandler() {
-        return this.beanProxyHandler;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void createAndRegisterBean(Class<?> beanClass) throws Exception {
         if (beanClass == String.class || beanClass.isPrimitive()) return;
@@ -424,7 +406,7 @@ public class DefaultBeanManager implements BeanManager {
     }
 
     /**
-     * Calls @PostAppConstruct methods.
+     * Calls @{@link PostAppConstruct} methods.
      * This should only be called after all beans have been initialized!
      */
     private void callPostAppConstructors() {
@@ -493,7 +475,15 @@ public class DefaultBeanManager implements BeanManager {
         autowireSetters(bean.getClass(), bean);
     }
 
+    /**
+     * Utility method to autowire all setters marked with {@link Autowired} inside the supplied bean.
+     *
+     * @param beanClass the true type of the bean (used because of proxying)
+     * @param bean the actual bean
+     * @throws Exception if the setters cannot be autowired
+     */
     public void autowireSetters(Class<?> beanClass, Object bean) throws Exception {
+        LOGGER.debug("Autowiring setter for bean {}", beanClass.getName());
         for (Method declaredMethod : beanClass.getDeclaredMethods()) {
             if (!declaredMethod.isAnnotationPresent(Autowired.class)) continue;
 
@@ -542,12 +532,34 @@ public class DefaultBeanManager implements BeanManager {
         this.customAutoCreateAnnotationResolver.onCreated(bean, beanClass);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void cleanUp() {
         this.autoCreationAnnotationResolver.cleanUp();
         this.beanRegistry.cleanUp();
+    }
+
+    @Override
+    public BeanRegistry getBeanRegistry() {
+        return this.beanRegistry;
+    }
+
+    @Override
+    public DependencyTreeResolver getDependencyTreeResolver() {
+        return this.dependencyTreeResolver;
+    }
+
+    @Override
+    public InjectionParameterResolver getConstructorParameterResolver() {
+        return this.constructorParameterResolver;
+    }
+
+    @Override
+    public Reflections getReflectionsInstance() {
+        return this.reflections;
+    }
+
+    @Override
+    public BeanProxyHandler getProxyHandler() {
+        return this.beanProxyHandler;
     }
 }

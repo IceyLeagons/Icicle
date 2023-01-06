@@ -33,14 +33,36 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * ParameterResolvers are responsible for implementing parameter parsing for the command system.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
+ * @param <T> the output type of the resolver
  */
 public interface ParameterResolverTemplate<T> {
 
+    /**
+     * The actual parsing function.
+     *
+     * @param parameter the parameter in question
+     * @param type the true type of the parameter (<b>DO NOT USE {@link Parameter#getType()}, this accounts for Optionals etc.</b>)
+     * @param value the used input value (mostly this will be a string)
+     * @param info the parameter information
+     * @param additionalParameters additional context parameters
+     * @return the parsed object. <b>It must not be an optional</b>, the {@link net.iceyleagons.icicle.commands.params.InvocationParameterBuilder} will take care of that automatically.
+     * @throws ParamParsingException if the parameter cannot be parsed
+     */
     T parse(Parameter parameter, Class<?> type, Object value, ParameterInfo info, Map<Class<?>, Object> additionalParameters) throws ParamParsingException;
 
+    /**
+     * Returns the options for this parameter.
+     * This is used in some contexts for auto completion.
+     *
+     * @param type the true type of the parameter (<b>DO NOT USE {@link Parameter#getType()}, this accounts for Optionals etc.</b>)
+     * @param parameter the parameter in question
+     * @return the list of options
+     */
     default List<String> getOptions(Class<?> type, Parameter parameter) {
         return Collections.emptyList();
     }

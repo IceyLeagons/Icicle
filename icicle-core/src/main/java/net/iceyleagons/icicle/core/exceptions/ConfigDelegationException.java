@@ -25,16 +25,30 @@
 package net.iceyleagons.icicle.core.exceptions;
 
 /**
+ * Used when the {@link net.iceyleagons.icicle.core.configuration.driver.ConfigDelegator} cannot delegate the configuration to the
+ * proper {@link net.iceyleagons.icicle.core.configuration.driver.ConfigDriver}.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jul. 19, 2022
  */
 public class ConfigDelegationException extends Exception {
 
+    /**
+     * Constructs a new exception with the specified detail message.
+     *
+     * @param msg the error message
+     */
     public ConfigDelegationException(String msg) {
         super(msg);
     }
 
+    /**
+     * Constructs a new exception with the specified detail message and cause.
+     *
+     * @param msg the error message
+     * @param t the underlying cause of the exception
+     */
     public ConfigDelegationException(String msg, Throwable t) {
         super(msg, t);
     }

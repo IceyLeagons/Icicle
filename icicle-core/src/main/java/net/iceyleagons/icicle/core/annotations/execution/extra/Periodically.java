@@ -52,5 +52,4 @@ public @interface Periodically {
      * @return the unit of the period
      */
     TimeUnit unit();
-
 }

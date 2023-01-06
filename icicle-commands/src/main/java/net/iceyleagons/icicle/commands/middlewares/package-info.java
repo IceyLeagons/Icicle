@@ -23,6 +23,8 @@
  */
 
 /**
+ * This package (will) contain all the logic for command middlewares.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023

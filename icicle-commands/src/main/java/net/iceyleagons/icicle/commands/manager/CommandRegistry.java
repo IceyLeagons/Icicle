@@ -28,12 +28,21 @@ import net.iceyleagons.icicle.commands.RegisteredCommand;
 import net.iceyleagons.icicle.core.utils.Store;
 
 /**
+ * This class holds all the registered commands for the {@link CommandService}.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
+ * @see Store
  */
 public class CommandRegistry extends Store<String, RegisteredCommand> {
 
+    /**
+     * Registers a new command into the registry.
+     * If the command has registered aliases, then the store will contain them as a separate entry.
+     *
+     * @param registeredCommand the command to register
+     */
     public void registerCommand(RegisteredCommand registeredCommand) {
         super.getElements().put(registeredCommand.getName(), registeredCommand);
         for (String alias : registeredCommand.getAliases()) {

@@ -32,9 +32,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Marks a class as a CommandContainer.
+ * <p>
+ * <b>NOTE</b>: Only CommandContainer flagged classes can have @{@link Command}s, otherwise those commands will not be registered.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
+ * @see AutoCreate
  */
 @AutoCreate
 @Target(ElementType.TYPE)

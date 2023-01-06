@@ -25,7 +25,7 @@
 package net.iceyleagons.test.icicle.core.bean.resolvable.custom;
 
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.handlers.AutowiringAnnotationHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

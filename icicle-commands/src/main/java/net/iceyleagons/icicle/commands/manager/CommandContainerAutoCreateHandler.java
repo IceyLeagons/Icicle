@@ -25,11 +25,12 @@
 package net.iceyleagons.icicle.commands.manager;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.commands.annotations.CommandContainer;
 import net.iceyleagons.icicle.core.annotations.PostAppConstruct;
 import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.utilities.datastores.tuple.Tuple;
 import net.iceyleagons.icicle.utilities.datastores.tuple.UnmodifiableTuple;
 import org.jetbrains.annotations.NotNull;
@@ -39,22 +40,20 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
+ * AutoCreateAnnotationHandler for the {@link CommandContainer} annotation.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
 @AnnotationHandler
+@RequiredArgsConstructor(onConstructor__ = @Autowired)
 public class CommandContainerAutoCreateHandler implements CustomAutoCreateAnnotationHandler {
 
     private final CommandService commandService;
 
     // Hacky way but I have no f*cking clue why some command param resolvers don't get registered in time.
     private final Set<Tuple<Object, Class<?>>> cache = new ObjectOpenHashSet<>();
-
-    @Autowired
-    public CommandContainerAutoCreateHandler(CommandService commandService) {
-        this.commandService = commandService;
-    }
 
     @Override
     public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {
@@ -66,6 +65,10 @@ public class CommandContainerAutoCreateHandler implements CustomAutoCreateAnnota
         cache.add(new UnmodifiableTuple<>(bean, type));
     }
 
+    /**
+     * This method is called by Icicle, after the application has completely booted up.
+     * This method is responsible for passing the cached commands to the {@link CommandService} and registering them.
+     */
     @PostAppConstruct(highPriority = true)
     public void registerCommands() {
         for (Tuple<Object, Class<?>> objectClassTuple : cache) {

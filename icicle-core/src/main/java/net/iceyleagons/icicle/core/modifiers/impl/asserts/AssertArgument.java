@@ -51,8 +51,17 @@ public @interface AssertArgument {
      */
     String expression();
 
+    /**
+     * Please note that script engines are not shipped with Icicle.
+     * You must have a driver installed in your dependencies.
+     *
+     * @return the script engine to use.
+     */
     String scriptEngine() default "javascript";
 
+    /**
+     * @return the error to throw when the expression returns false.
+     */
     String error();
 
 }

@@ -25,9 +25,11 @@
 package net.iceyleagons.icicle.web.rest;
 
 import io.javalin.Javalin;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.web.rest.endpoints.RestControllerEndpointManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,6 +40,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * AutoCreate handler for the {@link RestController} annotation.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 12, 2022
@@ -46,7 +50,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class RestControllerAnnotationHandler implements CustomAutoCreateAnnotationHandler {
 
-    private final Map<Class<?>, RestControllerEndpointManager> managers = new HashMap<>();
+    private final Map<Class<?>, RestControllerEndpointManager> managers = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
     private final Javalin javalin;
 
     @NotNull

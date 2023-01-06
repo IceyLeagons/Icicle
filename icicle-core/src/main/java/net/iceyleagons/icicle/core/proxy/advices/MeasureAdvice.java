@@ -26,6 +26,13 @@ package net.iceyleagons.icicle.core.proxy.advices;
 
 import net.bytebuddy.asm.Advice;
 
+/**
+ * This is the actual advice implementation for the annotation {@link net.iceyleagons.icicle.core.annotations.execution.Measure}
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Sep. 25, 2023
+ */
 public class MeasureAdvice {
 
     @Advice.OnMethodEnter(suppress = Throwable.class)

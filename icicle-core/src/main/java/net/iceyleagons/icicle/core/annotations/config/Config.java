@@ -57,12 +57,23 @@ public @interface Config {
      */
     String[] headerLines() default {};
 
-    String headerPrefixFirst() default ""; // TODO document these, 'cause I have no idea atm, what do they do :sweat_smile:
+    /**
+     * @return the prefix for the header first line.
+     */
+    String headerPrefixFirst() default "";
 
+    /**
+     * @return the comment prefix to apply to every line of the header
+     */
     String headerCommentPrefix() default "";
 
+    /**
+     * @return the comment suffix to append to every line of the header
+     */
     String headerCommentSuffix() default "";
 
+    /**
+     * @return the suffix to append to the end of the header
+     */
     String headerSuffixLast() default "";
-
 }

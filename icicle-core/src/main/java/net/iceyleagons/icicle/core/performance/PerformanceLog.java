@@ -33,6 +33,11 @@ import net.iceyleagons.icicle.core.Icicle;
 import java.util.Map;
 
 /**
+ * PerformanceLog logs time it takes to execute a code section.
+ * The {@link #begin(Application, String, Class)} and {@link #end(Application)} methods mark the boundary for a given section.
+ *
+ * @version 1.0.0
+ * @author TOTHTOMI
  * @since Oct. 31, 2021
  */
 public class PerformanceLog {
@@ -40,6 +45,13 @@ public class PerformanceLog {
     private static final long MS_THRESHOLD = 300;
     private static final Map<Application, PerformanceRecord> currentNodes = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>(4));
 
+    /**
+     * Marks a new section beginning.
+     *
+     * @param application the application holding the section
+     * @param name the name of the section
+     * @param clazz the class that calls this method
+     */
     public static void begin(Application application, String name, Class<?> clazz) {
         if (!Icicle.PERFORMANCE_LOG) return;
         PerformanceRecord currentNode = currentNodes.get(application);
@@ -49,6 +61,11 @@ public class PerformanceLog {
         currentNodes.put(application, executionRecord);
     }
 
+    /**
+     * Marks a section end. The section is automatically detected.
+     *
+     * @param application the application holding the section
+     */
     public static void end(Application application) {
         if (!Icicle.PERFORMANCE_LOG) return;
         PerformanceRecord currentNode = currentNodes.get(application);
@@ -58,6 +75,12 @@ public class PerformanceLog {
         currentNodes.put(application, currentNode.getParent() != null ? currentNode.getParent() : currentNode);
     }
 
+    /**
+     * Returns the performance log of the given application
+     *
+     * @param application the application holding the log
+     * @return the log
+     */
     public static String dumpExecutionLog(Application application) {
         if (!Icicle.PERFORMANCE_LOG) return "";
 
@@ -69,6 +92,13 @@ public class PerformanceLog {
         return stringBuilder.toString();
     }
 
+    /**
+     * Utility method to construct the performance log.
+     *
+     * @param record the record
+     * @param depth the current depth
+     * @param sb the string builder used
+     */
     private static void dumpExecutionLog(PerformanceRecord record, int depth, StringBuilder sb) {
         if (!Icicle.PERFORMANCE_LOG) return;
         String warning = (depth > 0 && record.getExecutionTime() >= MS_THRESHOLD) ? "[!]" : "   ";
@@ -82,6 +112,12 @@ public class PerformanceLog {
         }
     }
 
+    /**
+     * Utility method to set parent of record
+     *
+     * @param parent the parent
+     * @param child the child
+     */
     private static void setParent(PerformanceRecord parent, PerformanceRecord child) {
         if (!Icicle.PERFORMANCE_LOG) return;
         child.setParent(parent);

@@ -33,14 +33,17 @@ import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
+ * Icicle's default parameter resolver for enums.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@ParameterResolver({Enum.class})
+@ParameterResolver({ Enum.class })
 public class EnumParameterResolver implements ParameterResolverTemplate<Object> {
 
     @Override

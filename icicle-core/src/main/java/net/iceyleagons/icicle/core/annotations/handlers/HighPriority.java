@@ -32,9 +32,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Can be used along with {@link AnnotationHandler}.
+ * This annotation marks these handlers to be high priority, meaning they will be among the first to be created.
+ * <p>
+ * <b>WARNING!</b> Experimental feature!
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
+ * @see Experimental
  */
 @Experimental
 @Target(ElementType.TYPE)

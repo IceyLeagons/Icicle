@@ -1,9 +1,9 @@
 [versions]
-kotlin = "1.7.0"
+kotlin = "1.7.10"
 icicle = "1.10.0"
 reflections = "0.10.2"
 spigot = "1.18.2"
-simple-yaml = "1.8"
+simple-yaml = "1.8.3"
 jetbrains-annotations = "23.0.0"
 netty = "4.1.72.Final"
 guava = "31.1-jre"

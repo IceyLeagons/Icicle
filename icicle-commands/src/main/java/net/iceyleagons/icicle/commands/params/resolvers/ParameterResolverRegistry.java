@@ -28,12 +28,22 @@ import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 import net.iceyleagons.icicle.core.utils.Store;
 
 /**
+ * Used for holding all the {@link ParameterResolver} instances
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
+ * @see Store
  */
 public class ParameterResolverRegistry extends Store<Class<?>, ParameterResolverTemplate<?>> {
 
+    /**
+     * Registers a new {@link ParameterResolver}.
+     * If the resolver is handling multiple parameter types all of them will be registered as seperate entries in the store.
+     *
+     * @param resolverTemplate the resolver instance
+     * @param annotation the annotation
+     */
     public void registerParameterResolver(ParameterResolverTemplate<?> resolverTemplate, ParameterResolver annotation) {
         for (Class<?> aClass : annotation.value()) {
             super.elements.put(aClass, resolverTemplate);

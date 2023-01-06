@@ -36,6 +36,8 @@ import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemp
 import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 
 /**
+ * MethodInterceptorHandler for the @{@link Async} annotation.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 13, 2021

@@ -49,5 +49,4 @@ public @interface Qualifier {
      * @return the qualifier. (name of the implementation)
      */
     String value() default "";
-
 }

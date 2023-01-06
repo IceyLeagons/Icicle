@@ -22,22 +22,11 @@
  * SOFTWARE.
  */
 
-package net.iceyleagons.icicle.core.annotations.handlers;
-
-import net.iceyleagons.icicle.utilities.lang.Experimental;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
+ * Contains all the proxy manager classes related to the @{@link net.iceyleagons.icicle.core.annotations.execution.Sync} annotation.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
- * @since Jan. 03, 2023
+ * @since Nov. 13, 2021
  */
-@Experimental
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface CreateLast {
-}
+package net.iceyleagons.icicle.core.proxy.interceptor.sync;

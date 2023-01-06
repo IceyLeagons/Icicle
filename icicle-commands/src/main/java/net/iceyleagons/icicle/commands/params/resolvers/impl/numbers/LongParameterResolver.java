@@ -27,6 +27,8 @@ package net.iceyleagons.icicle.commands.params.resolvers.impl.numbers;
 import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 
 /**
+ * Icicle's default parameter resolver for longs.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
@@ -34,6 +36,10 @@ import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 @ParameterResolver({long.class, Long.class})
 public class LongParameterResolver extends AbstractNumberParser<Long> {
 
+    /**
+     * Creates a new LongParameterResolver instance.
+     * Actual parsing logic is implemented in the {@link AbstractNumberParser} abstraction layer.
+     */
     public LongParameterResolver() {
         super(Long::parseLong, "long");
     }

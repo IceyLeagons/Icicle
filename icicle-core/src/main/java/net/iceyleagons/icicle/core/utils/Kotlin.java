@@ -55,21 +55,30 @@ public final class Kotlin {
     private static Class<? extends Annotation> kotlinMeta;
     private static boolean kotlinReflectionPresent;
 
-
+    /**
+     * Initializes the Kotlin utility class.
+     * This method is used to detect, whether we're in a Kotlin environment.
+     *
+     * @param classLoader the parent classLoader
+     */
     public static void init(ClassLoader classLoader) {
         kotlinMeta = getKotlinMeta(classLoader);
         kotlinReflectionPresent = ReflectionUtils.isClassPresent("kotlin.reflect.full.KClasses", classLoader);
     }
 
+    /**
+     * Utility method to check for the kotlin.Metadata class.
+     *
+     * @param cl the classLoader to use
+     * @return the kotlin.Metadata class or null
+     */
     @SuppressWarnings("unchecked")
     private static Class<? extends Annotation> getKotlinMeta(ClassLoader cl) {
-        Class<?> meta = null;
         try {
-            meta = Class.forName("kotlin.Metadata", false, cl);
-        } catch (Exception ignored) {
-        }
+            return (Class<? extends Annotation>) Class.forName("kotlin.Metadata", false, cl);
+        } catch (Exception ignored) {}
 
-        return (Class<? extends Annotation>) meta;
+        return null;
     }
 
     /**
@@ -94,6 +103,12 @@ public final class Kotlin {
         return kotlinMeta != null && clazz.getDeclaredAnnotation(kotlinMeta) != null;
     }
 
+    /**
+     * Utility method check whether the supplied method is a suspending method inside the Kotlin environment
+     *
+     * @param method the method to check
+     * @return true if the method is a suspending method
+     */
     public static boolean isSuspendingMethod(Method method) {
         if (isKotlinType(method.getDeclaringClass())) {
             Class<?>[] types = method.getParameterTypes();
@@ -103,6 +118,13 @@ public final class Kotlin {
         return false;
     }
 
+    /**
+     * Utility to get the primary constructor of a class.
+     *
+     * @param clazz the class
+     * @return the primary constructor
+     * @param <T> the type of the class
+     */
     @Nullable
     public static <T> Constructor<T> findPrimaryConstructor(Class<T> clazz) {
         if (clazz == null || !isKotlinPresent() || !isKotlinReflectionPresent() || !isKotlinType(clazz)) return null;
@@ -113,6 +135,18 @@ public final class Kotlin {
         return ReflectJvmMapping.getJavaConstructor(primaryConst);
     }
 
+    /**
+     * Utility method to instantiate a kotlin class.
+     * If the constructor is not a kotlin constructor, then the regular {@link Constructor#newInstance(Object...)} will be called instead.
+     *
+     * @param constructor the constructor to use (ideally the primary constructor)
+     * @param args the arguments to use
+     * @return the resulting bean
+     * @param <T> the bean's type
+     * @throws InvocationTargetException if the underlying constructor throws an exception
+     * @throws InstantiationException if the class that declares the underlying constructor represents an abstract class
+     * @throws IllegalAccessException if the constructor cannot be accessed
+     */
     public static <T> T instantiateKotlinClass(Constructor<T> constructor, Object... args) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         KFunction<T> kotlinConstructor = ReflectJvmMapping.getKotlinFunction(constructor);
         if (kotlinConstructor == null) {

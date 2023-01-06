@@ -34,9 +34,6 @@ import net.iceyleagons.icicle.core.annotations.service.Service;
 @Service
 public class Circular1 {
 
-    private final Circular2 circular2;
-
     public Circular1(Circular2 circular2) {
-        this.circular2 = circular2;
     }
 }

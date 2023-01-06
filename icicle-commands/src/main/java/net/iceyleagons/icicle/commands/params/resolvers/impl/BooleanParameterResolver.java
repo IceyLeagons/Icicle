@@ -32,13 +32,16 @@ import net.iceyleagons.icicle.commands.params.resolvers.ParameterResolverTemplat
 
 import java.lang.reflect.Parameter;
 import java.util.Map;
+import java.util.UUID;
 
 /**
+ * Icicle's default parameter resolver for booleans.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
-@ParameterResolver({boolean.class, Boolean.class})
+@ParameterResolver({ boolean.class, Boolean.class })
 public class BooleanParameterResolver implements ParameterResolverTemplate<Boolean> {
 
     @Override

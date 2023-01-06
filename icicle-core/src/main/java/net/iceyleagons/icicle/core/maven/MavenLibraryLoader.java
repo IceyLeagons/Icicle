@@ -28,6 +28,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.iceyleagons.icicle.core.Icicle;
 import net.iceyleagons.icicle.core.maven.loaders.AdvancedClassLoader;
+import net.iceyleagons.icicle.core.maven.loaders.AdvancedClassLoaders;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.iceyleagons.icicle.utilities.file.FileUtils;
 import net.iceyleagons.icicle.utilities.lang.Experimental;
@@ -41,6 +42,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
+ * The manager of Maven loading.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Dec. 26, 2021
@@ -59,19 +62,47 @@ public class MavenLibraryLoader {
         ICICLE_LIB_FOLDER = new AdvancedFile(new File("icicleLibs"), true);
     }
 
+    /**
+     * Initalizes the library loader.
+     *
+     * @param classLoader the parent classloader
+     */
     public static void init(ClassLoader classLoader) {
         if (acl != null) return;
         acl = AdvancedClassLoaders.get((URLClassLoader) classLoader);
     }
 
+    /**
+     * Loads in the given dependency
+     *
+     * @param groupId the groupId
+     * @param artifactId the artifactId
+     * @param version the version
+     * @throws IllegalStateException if the library cannot be loaded
+     */
     public static void load(String groupId, String artifactId, String version) {
         load(groupId, artifactId, version, MAVEN_CENTRAL_REPO); //central maven
     }
 
+    /**
+     * Loads in the given dependency
+     *
+     * @param groupId the groupId
+     * @param artifactId the artifactId
+     * @param version the version
+     * @param repo the repository to use
+     * @throws IllegalStateException if the library cannot be loaded
+     */
     public static void load(String groupId, String artifactId, String version, String repo) {
         load(new MavenDependency(groupId, artifactId, version, repo));
     }
 
+    /**
+     * Loads in the given dependency
+     *
+     * @param dependency the dependency to load
+     * @throws IllegalStateException if the library cannot be loaded
+     */
     @SneakyThrows
     public static void load(MavenDependency dependency) {
         if (acl == null) {

@@ -46,18 +46,16 @@ repositories {
 dependencies {
     implementation(project(":icicle-core"))
     implementation(project(":icicle-utilities"))
-    implementation(project(":icicle-serialization"))
     compileOnly(libs.reflections)
     compileOnly(libs.fastutil)
     compileOnly(libs.jetbrainsannotations)
     compileOnly(libs.slf4j)
 
     implementation("io.javalin:javalin:5.1.3")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4.1")
     // implementation("org.pac4j:javalin-pac4j:5.0.1")
     //implementation("org.pac4j:pac4j-http:5.7.0")
 
-    // compileOnly(minecraft.spigotApi(libs.versions.spigot.get()))
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 }

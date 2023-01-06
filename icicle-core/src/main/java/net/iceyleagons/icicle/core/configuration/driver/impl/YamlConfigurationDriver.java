@@ -29,10 +29,12 @@ import net.iceyleagons.icicle.core.annotations.config.Config;
 import net.iceyleagons.icicle.core.annotations.config.ConfigComment;
 import net.iceyleagons.icicle.core.annotations.config.ConfigField;
 import net.iceyleagons.icicle.core.annotations.config.ConfigurationDriver;
+import net.iceyleagons.icicle.core.configuration.CommentPlacement;
 import net.iceyleagons.icicle.core.configuration.driver.ConfigDriver;
 import net.iceyleagons.icicle.utilities.Asserts;
 import net.iceyleagons.icicle.utilities.file.AdvancedFile;
 import net.iceyleagons.icicle.utilities.file.FileUtils;
+import org.simpleyaml.configuration.comments.CommentType;
 import org.simpleyaml.configuration.comments.format.YamlCommentFormat;
 import org.simpleyaml.configuration.comments.format.YamlHeaderFormatter;
 import org.simpleyaml.configuration.file.YamlFile;
@@ -44,6 +46,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Configuration driver for the YAML file type.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jul. 10, 2022
@@ -83,6 +87,11 @@ public class YamlConfigurationDriver extends ConfigDriver {
         }
     }
 
+    /**
+     * Applies the configuration options to the header formatter
+     *
+     * @param ann the annotation declaring the options
+     */
     private void applyHeaderOptions(Config ann) {
         final YamlHeaderFormatter formatter = file.options().headerFormatter();
 
@@ -97,8 +106,6 @@ public class YamlConfigurationDriver extends ConfigDriver {
         if (this.file != null) {
             this.file.addDefault(path, object);
         }
-
-        // Removed save to save performance
     }
 
     @Override
@@ -125,6 +132,9 @@ public class YamlConfigurationDriver extends ConfigDriver {
         return this.file != null ? this.file.get(path) : null;
     }
 
+    /**
+     * Saves the default values to disk, then reloads the config.
+     */
     private void loadDefaultValues() {
         Set<Field> fields = getFields();
         Set<Map.Entry<String, Object>> values = getValues(fields);
@@ -138,7 +148,6 @@ public class YamlConfigurationDriver extends ConfigDriver {
             Object value = entry.getValue();
 
             if (!file.contains(path)) {
-                //System.out.println("Setting \"" + path + "\" to " + value);
                 file.set(path, value);
             }
         });
@@ -148,7 +157,7 @@ public class YamlConfigurationDriver extends ConfigDriver {
             String path = f.getAnnotation(ConfigField.class).value();
             ConfigComment comment = f.getAnnotation(ConfigComment.class);
 
-            file.setComment(path, comment.value(), comment.type());
+            file.setComment(path, comment.value(), toSimpleYamlType(comment.type()));
         });
 
         save();
@@ -172,7 +181,15 @@ public class YamlConfigurationDriver extends ConfigDriver {
     }
 
     @Override
-    public void setOriginType(Class<?> originType) {
-        super.setOriginType(originType);
+    public void setDeclaringType(Class<?> declaringType) {
+        super.setDeclaringType(declaringType);
+    }
+
+    private static CommentType toSimpleYamlType(CommentPlacement placement) {
+        if (placement == CommentPlacement.SIDE) {
+            return CommentType.SIDE;
+        }
+
+        return CommentType.BLOCK;
     }
 }

@@ -30,13 +30,13 @@ import net.iceyleagons.icicle.core.utils.ExecutionHandler;
 import java.util.concurrent.*;
 
 /**
+ * Implementation of {@link ExecutionHandler} for the JVM used for the standalone application of Icicle.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 24, 2022
  */
 public class StandaloneExecutionHandler implements ExecutionHandler {
-
-    // TODO sync here is sometimes actually async!
 
     private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(4);
 

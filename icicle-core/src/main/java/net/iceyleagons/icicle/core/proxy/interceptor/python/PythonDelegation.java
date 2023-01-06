@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
-import net.iceyleagons.icicle.core.annotations.execution.python.PythonFile;
+import net.iceyleagons.icicle.core.annotations.execution.PythonFile;
 import net.iceyleagons.icicle.core.python.PythonExecutable;
 import net.iceyleagons.icicle.core.python.PythonFileHandler;
 
@@ -36,6 +36,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
+ * Actual implementation of the python file invoking logic.
+ * <b>NOTE</b>: Actual invocation of python files is managed by {@link PythonFileHandler}
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 16, 2022

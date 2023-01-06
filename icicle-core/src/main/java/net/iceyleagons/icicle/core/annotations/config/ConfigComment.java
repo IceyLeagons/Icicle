@@ -24,6 +24,7 @@
 
 package net.iceyleagons.icicle.core.annotations.config;
 
+import net.iceyleagons.icicle.core.configuration.CommentPlacement;
 import org.simpleyaml.configuration.comments.CommentType;
 
 import java.lang.annotation.Retention;
@@ -50,8 +51,7 @@ public @interface ConfigComment {
     String value();
 
     /**
-     * @return the type of the comment
+     * @return the placement of the comment
      */
-    CommentType type() default CommentType.SIDE; // TODO this is only simpleyaml, extend it to multiple file types (aka. have our own type system)
-
+    CommentPlacement type() default CommentPlacement.SIDE;
 }

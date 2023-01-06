@@ -33,6 +33,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
 /**
+ * This class is used to hold qualifier information about beans.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 06, 2022
@@ -41,11 +43,22 @@ import java.lang.reflect.Parameter;
 @EqualsAndHashCode
 @RequiredArgsConstructor
 public final class QualifierKey {
-    public static final String DEFAULT_NAME = "NON_SPECIFIED";
+
+    /**
+     * This constant value is used when no qualifier is present.
+     * It's short to use less memory.
+     */
+    public static final String DEFAULT_NAME = "NS";
 
     private final Class<?> clazz;
     private final String name;
 
+    /**
+     * Returns a qualifier for the given parameter.
+     *
+     * @param param the parameter
+     * @return the qualifier
+     */
     public static String getQualifier(Parameter param) {
         if (param.isAnnotationPresent(Qualifier.class)) {
             return getIfEmptyUseDefault(param.getAnnotation(Qualifier.class).value());
@@ -54,6 +67,12 @@ public final class QualifierKey {
         return DEFAULT_NAME;
     }
 
+    /**
+     * Returns a qualifier for the given bean type.
+     *
+     * @param beanClass the type
+     * @return the qualifier
+     */
     public static String getQualifier(Class<?> beanClass) {
         if (beanClass.isAnnotationPresent(Qualifier.class)) {
             return getIfEmptyUseDefault(beanClass.getAnnotation(Qualifier.class).value());
@@ -62,6 +81,12 @@ public final class QualifierKey {
         return DEFAULT_NAME;
     }
 
+    /**
+     * Returns a qualifier for the given method.
+     *
+     * @param method the method
+     * @return the qualifier
+     */
     public static String getQualifier(Method method) {
         if (method.isAnnotationPresent(Qualifier.class)) {
             return getIfEmptyUseDefault(method.getAnnotation(Qualifier.class).value());
@@ -70,6 +95,12 @@ public final class QualifierKey {
         return DEFAULT_NAME;
     }
 
+    /**
+     * Utility method to return DEFAULT_NAME if the given value is empty.
+     *
+     * @param value the value
+     * @return value or DEFAULT_NAME
+     */
     private static String getIfEmptyUseDefault(String value) {
         return value.isEmpty() ? DEFAULT_NAME : value;
     }

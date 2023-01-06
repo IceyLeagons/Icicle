@@ -47,7 +47,7 @@ public interface BeanManager {
 
     /**
      * Scans and creates the beans at startup.
-     *
+     * <p>
      * <b>WARNING!</b> Internal method: this method should only be called by an
      * {@link net.iceyleagons.icicle.core.Application} implementation, strictly at startup.
      *
@@ -73,7 +73,7 @@ public interface BeanManager {
     /**
      * Cleans up the bean manager.
      * (Mainly calling other classes' cleanUp method)
-     *
+     * <p>
      * <b>WARNING!</b> Internal method: should only be called internally by the implementation of
      * {@link net.iceyleagons.icicle.core.Application} at shutdown.
      *
@@ -102,5 +102,8 @@ public interface BeanManager {
      */
     Reflections getReflectionsInstance();
 
+    /**
+     * @return the {@link BeanProxyHandler} used by the manager
+     */
     BeanProxyHandler getProxyHandler();
 }

@@ -26,23 +26,37 @@ package net.iceyleagons.icicle.core.utils;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import lombok.Getter;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 /**
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Sept. 11, 2022
+ * @param <K> the key
+ * @param <V> the value
  */
 @Getter
 public abstract class Store<K, V> {
 
-    protected Map<K, V> elements = new Object2ObjectArrayMap<>(8);
+    protected final Map<K, V> elements = new Object2ObjectArrayMap<>(8);
 
+    /**
+     * Used to retrieve a value based on the key.
+     *
+     * @param key the key
+     * @return the value or null
+     */
+    @Nullable
     public V get(K key) {
         return elements.get(key);
     }
 
+    /**
+     * @return the elements of the store as an array
+     */
     @SuppressWarnings("unchecked")
     public V[] getElementsArray() {
         return (V[]) elements.values().toArray();

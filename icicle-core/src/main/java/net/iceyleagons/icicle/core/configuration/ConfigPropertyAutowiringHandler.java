@@ -24,9 +24,11 @@
 
 package net.iceyleagons.icicle.core.configuration;
 
+import lombok.RequiredArgsConstructor;
+import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.config.Property;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.AutowiringAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.handlers.AutowiringAnnotationHandler;
 import net.iceyleagons.icicle.core.configuration.environment.ConfigurationEnvironment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,14 +38,14 @@ import java.lang.reflect.Parameter;
 import java.util.Collections;
 import java.util.Set;
 
+/**
+ * Handles the autowiring of parameters marked with @{@link Property}
+ */
 @AnnotationHandler
+@RequiredArgsConstructor(onConstructor__ = @Autowired)
 public class ConfigPropertyAutowiringHandler implements AutowiringAnnotationHandler {
 
     private final ConfigurationEnvironment configurationEnvironment;
-
-    public ConfigPropertyAutowiringHandler(ConfigurationEnvironment configurationEnvironment) {
-        this.configurationEnvironment = configurationEnvironment;
-    }
 
     @Override
     public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {

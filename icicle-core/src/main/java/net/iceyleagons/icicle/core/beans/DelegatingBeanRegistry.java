@@ -40,6 +40,7 @@ import java.util.Optional;
 
 /**
  * Default implementation of {@link BeanRegistry}.
+ * This implementation is also calling {@link GlobalServiceProvider}.
  *
  * @author TOTHTOMI
  * @version 1.1.0
@@ -55,9 +56,6 @@ public class DelegatingBeanRegistry implements BeanRegistry {
 
     // Global service providers can only supply one implementation for a service, therefore qualifiers don't need to be implemented.
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public <T> Optional<T> getBean(Class<T> type) {
         return getBean(type, QualifierKey.DEFAULT_NAME);
@@ -77,9 +75,6 @@ public class DelegatingBeanRegistry implements BeanRegistry {
         return opt;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public <T> T getBeanNullable(Class<T> type) {
         return getBean(type).orElse(null);
@@ -90,9 +85,6 @@ public class DelegatingBeanRegistry implements BeanRegistry {
         return getBean(type, qualifier).orElse(null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isRegistered(Class<?> type) {
         return isRegistered(type, QualifierKey.getQualifier(type));
@@ -104,9 +96,6 @@ public class DelegatingBeanRegistry implements BeanRegistry {
         return this.beans.containsKey(new QualifierKey(type, qualifier)) || (globalServiceProvider != null && globalServiceProvider.isRegistered(type));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void registerBean(Class<?> type, Object object) throws MultipleInstanceException {
         registerBean(type, object, QualifierKey.getQualifier(type));
@@ -118,18 +107,13 @@ public class DelegatingBeanRegistry implements BeanRegistry {
 
         if (!isRegistered(type, qualifier)) {
             beans.put(new QualifierKey(type, qualifier), object);
-            //System.out.printf("Registered bean of type: %s. Qualifier: %s\n", type.getName(), qualifier);
             logger.debug("Registered bean of type: {}. Qualifier: {}", type.getName(), qualifier);
             return;
         }
 
-        // logger.warn("Bean with type {} and qualifier {} already registered! Ignoring...", type.getName(), qualifier);
         throw new MultipleInstanceException(String.format("Bean (type: %s | qualifier: %s) already registered!", type.getName(), qualifier));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void registerBean(Object object) throws MultipleInstanceException {
         this.registerBean(object.getClass(), object);
@@ -140,9 +124,6 @@ public class DelegatingBeanRegistry implements BeanRegistry {
         this.registerBean(object.getClass(), object, qualifier);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void unregisterBean(Class<?> type) {
         unregisterBean(type, QualifierKey.getQualifier(type));
@@ -154,9 +135,6 @@ public class DelegatingBeanRegistry implements BeanRegistry {
         this.beans.remove(new QualifierKey(type, qualifier));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void cleanUp() {
         logger.info("Cleaning up...");

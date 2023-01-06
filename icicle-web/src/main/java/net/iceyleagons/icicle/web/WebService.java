@@ -31,6 +31,9 @@ import net.iceyleagons.icicle.core.annotations.bean.Bean;
 import net.iceyleagons.icicle.core.annotations.service.Service;
 
 /**
+ * The actual bean responsible for booting up a {@link Javalin} instance.
+ * Port of the server can be set with config property "icicle.web.server.port". Default is 8080
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 12, 2022
@@ -39,11 +42,20 @@ import net.iceyleagons.icicle.core.annotations.service.Service;
 public class WebService {
     private final int port;
 
+    /**
+     * This constructor is called by Icicle automatically.
+     *
+     * @param application the current {@link Application} instance
+     * @see Autowired
+     */
     @Autowired
     public WebService(Application application) {
         this.port = application.getConfigurationEnvironment().getProperty("icicle.web.server.port", Integer.class).orElse(8080);
     }
 
+    /**
+     * @return a new {@link Javalin} instance or the proxied bean after the initial load.
+     */
     @Bean
     public Javalin getJavalin() {
         Javalin j = Javalin.create(conf -> conf.showJavalinBanner = false);

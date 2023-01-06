@@ -28,6 +28,7 @@ import lombok.SneakyThrows;
 import net.iceyleagons.icicle.utilities.lang.Experimental;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
@@ -37,6 +38,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * This class is responsible for constructing {@link PythonExecutable} implementations based on the {@link net.iceyleagons.icicle.core.annotations.execution.PythonFile} annotation.
+ * This is called by the {@link net.iceyleagons.icicle.core.proxy.interceptor.python.PythonFileHandler}.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Nov. 18, 2022
@@ -44,6 +48,13 @@ import java.util.stream.Collectors;
 @Experimental
 public class PythonFileHandler {
 
+    /**
+     * Creates a new {@link PythonExecutable} instance.
+     * Create a {@link Path} from the given rawPath, then calls {@link #createPythonSupplier(Path)}.
+     *
+     * @param rawPath the path to the python file
+     * @return the created instance
+     */
     @SneakyThrows
     public static PythonExecutable of(String rawPath) {
         final Path path = Path.of(rawPath);
@@ -52,6 +63,13 @@ public class PythonFileHandler {
         return params -> pythonSupplier.supply(Arrays.stream(params).map(Object::toString).collect(Collectors.joining()));
     }
 
+    /**
+     * Creates a {@link PythonSupplier} instance.
+     * This is responsible for actually executing the python file.
+     *
+     * @param path the path to the python file
+     * @return the created instance
+     */
     private static PythonSupplier createPythonSupplier(Path path) {
         return arguments -> {
             final ProcessBuilder processBuilder = new ProcessBuilder("python3", path.toAbsolutePath().toString(), arguments);
@@ -65,7 +83,15 @@ public class PythonFileHandler {
         };
     }
 
-    private static List<String> readProcessOutput(InputStream is) throws Exception {
+    /**
+     * Utility method to map an {@link InputStream} to a {@link List} of {@link String}.
+     * Each list entry corresponds to a line on the output.
+     *
+     * @param is the input stream
+     * @return the resulting list
+     * @throws IOException if any I/O error occurs
+     */
+    private static List<String> readProcessOutput(InputStream is) throws IOException {
         final List<String> result = new ArrayList<>(20);
         try (InputStreamReader inputStreamReader = new InputStreamReader(is)) {
             try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
@@ -79,7 +105,19 @@ public class PythonFileHandler {
         return result;
     }
 
+    /**
+     * Utility interface to abstract our code a little.
+     * Once we have built in python interpreter, this will act as an abstraction layer.
+     */
     private interface PythonSupplier {
+
+        /**
+         * Calls the python file and returns the resulting output.
+         *
+         * @param arguments the arguments to call the script with
+         * @return the output lines
+         * @throws Exception if any error occurs
+         */
         List<String> supply(String arguments) throws Exception;
     }
 }

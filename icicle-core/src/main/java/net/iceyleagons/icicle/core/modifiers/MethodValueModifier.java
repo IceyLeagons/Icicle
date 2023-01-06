@@ -29,6 +29,9 @@ import net.iceyleagons.icicle.core.annotations.bean.AutoCreate;
 import java.lang.annotation.*;
 
 /**
+ * Marks a bean as a method modifier.
+ * All beans marked with this annotation <b>must implement {@link ValueModifier}</b>
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 16, 2022

@@ -35,6 +35,8 @@ import java.lang.reflect.Parameter;
 import java.util.Map;
 
 /**
+ * Actual implementation of the value modifier logic.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 16, 2022

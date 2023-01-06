@@ -25,12 +25,19 @@
 package net.iceyleagons.icicle.core.exceptions;
 
 /**
+ * Used by {@link net.iceyleagons.icicle.core.beans.BeanRegistry}s, when a to-be-registered bean-type has already been registered.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 06, 2022
  */
 public class MultipleInstanceException extends Exception {
 
+    /**
+     * Constructs a new exception with the specified detail message.
+     *
+     * @param msg the error message
+     */
     public MultipleInstanceException(String msg) {
         super(msg);
     }

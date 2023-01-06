@@ -27,6 +27,9 @@ package net.iceyleagons.icicle.core.modifiers;
 import java.lang.reflect.Parameter;
 
 /**
+ * This is a middleware between the actual method and runtime-calling.
+ * It uses our proxy to intercept the call and change the passed values as needed.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 16, 2022
@@ -34,6 +37,14 @@ import java.lang.reflect.Parameter;
 @FunctionalInterface
 public interface ValueModifier {
 
+    /**
+     * Used to modify the runtime-passed value.
+     *
+     * @param input the passed value during runtime
+     * @param parameter the paremeter
+     * @return the value to replace with (can be the original input)
+     * @throws Exception if anything bad happens
+     */
     Object modify(Object input, Parameter parameter) throws Exception;
 
 }

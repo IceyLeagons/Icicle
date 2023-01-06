@@ -30,11 +30,14 @@ import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
-import net.iceyleagons.icicle.core.annotations.execution.python.PythonFile;
+import net.iceyleagons.icicle.core.annotations.execution.PythonFile;
+import net.iceyleagons.icicle.core.annotations.execution.Sync;
 import net.iceyleagons.icicle.core.annotations.handlers.proxy.MethodInterceptionHandler;
 import net.iceyleagons.icicle.core.proxy.interfaces.MethodInterceptorHandlerTemplate;
 
 /**
+ * MethodInterceptorHandler for the @{@link PythonFile} annotation.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 16, 2022

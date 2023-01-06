@@ -42,6 +42,13 @@ import java.util.stream.Collectors;
 
 import static net.iceyleagons.icicle.core.translations.code.CodeParserUtils.*;
 
+/**
+ * The actual CodeParser.
+ *
+ * @author TOTHTOMI
+ * @version 1.0.0
+ * @since Oct. 25, 2021
+ */
 @Getter
 public class CodeParser {
 

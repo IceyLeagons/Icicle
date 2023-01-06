@@ -35,10 +35,23 @@ import java.util.Map;
  */
 public class ParamParsingException extends TranslatableException {
 
+    /**
+     * @param key the translation key
+     * @param defaultValue the default value of the translation
+     *                     
+     * @see TranslatableException#TranslatableException(String, String)
+     */
     public ParamParsingException(String key, String defaultValue) {
         super(key, defaultValue);
     }
 
+    /**
+     * @param key the translation key
+     * @param defaultValue the default value of the translation
+     * @param params the parameters to be passed to the string code parser
+     * 
+     * @see TranslatableException#TranslatableException(String, String, Map)
+     */
     public ParamParsingException(String key, String defaultValue, Map<String, String> params) {
         super(key, defaultValue, params);
     }

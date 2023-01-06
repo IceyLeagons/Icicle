@@ -30,6 +30,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * This annotation marks a method as a command method.
+ * If a method is marked with this it will automatically get executed and passed with the correct parameters.
+ * Autowiring beans (aka. requiring beans as parameters) is allowed, but we recommend using the classes constructor for such jobs.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
@@ -38,8 +42,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Command {
 
+    /**
+     * @return the command name. (The actual thing the user will have to write)
+     */
     String name();
 
+    /**
+     * @return description of the command's function
+     */
     String description();
 
 }

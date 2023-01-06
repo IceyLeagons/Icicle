@@ -46,5 +46,4 @@ public @interface IcicleApplication {
      * @return the root package of the application
      */
     String value();
-
 }

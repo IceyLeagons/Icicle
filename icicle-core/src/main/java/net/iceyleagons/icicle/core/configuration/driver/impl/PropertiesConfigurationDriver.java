@@ -45,6 +45,8 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
+ * Configuration driver for the properties file type.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jul. 23, 2022
@@ -87,6 +89,9 @@ public class PropertiesConfigurationDriver extends ConfigDriver {
         }
     }
 
+    /**
+     * Saves the default values to disk, then reloads the config.
+     */
     private void loadDefaultValues() {
         Set<Field> fields = getFields();
         Set<Map.Entry<String, Object>> values = getValues(fields);
@@ -151,7 +156,7 @@ public class PropertiesConfigurationDriver extends ConfigDriver {
     }
 
     @Override
-    public void setOriginType(Class<?> originType) {
-        super.setOriginType(originType);
+    public void setDeclaringType(Class<?> declaringType) {
+        super.setDeclaringType(declaringType);
     }
 }

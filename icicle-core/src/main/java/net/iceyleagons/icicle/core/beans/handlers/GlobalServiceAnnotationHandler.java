@@ -27,7 +27,6 @@ package net.iceyleagons.icicle.core.beans.handlers;
 import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.service.GlobalService;
 import net.iceyleagons.icicle.core.beans.GlobalServiceProvider;
 import org.jetbrains.annotations.NotNull;
@@ -39,9 +38,12 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
+ * This manages all beans marked with @{@link GlobalService}
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Mar. 25, 2022
+ * @see GlobalService
  */
 @AnnotationHandler
 public class GlobalServiceAnnotationHandler implements CustomAutoCreateAnnotationHandler {
@@ -50,6 +52,13 @@ public class GlobalServiceAnnotationHandler implements CustomAutoCreateAnnotatio
     private final GlobalServiceProvider globalServiceProvider;
     private final Application application;
 
+    /**
+     * Creates a new instance of GlobalServiceAnnotationHandler
+     * This constructor is called by Icicle.
+     *
+     * @param application the application
+     * @see Autowired
+     */
     @Autowired
     public GlobalServiceAnnotationHandler(Application application) {
         this.globalServiceProvider = application.getGlobalServiceProvider();

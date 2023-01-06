@@ -24,13 +24,13 @@
 
 package net.iceyleagons.icicle.commands.params.resolvers;
 
+import lombok.RequiredArgsConstructor;
 import net.iceyleagons.icicle.commands.annotations.ParameterResolver;
 import net.iceyleagons.icicle.commands.manager.CommandService;
-import net.iceyleagons.icicle.core.Application;
 import net.iceyleagons.icicle.core.annotations.bean.Autowired;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
 import net.iceyleagons.icicle.core.annotations.handlers.CreateChildren;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.core.beans.handlers.CustomAutoCreateAnnotationHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -38,22 +38,18 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
+ * AutoCreateAnnotationHandler for the {@link ParameterResolver} annotation.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
  */
 @CreateChildren
 @AnnotationHandler
+@RequiredArgsConstructor(onConstructor__ = @Autowired)
 public class ParameterResolverAutoCreateHandler implements CustomAutoCreateAnnotationHandler {
 
     private final CommandService commandService;
-    private final Application application;
-
-    @Autowired
-    public ParameterResolverAutoCreateHandler(CommandService commandService, Application application) {
-        this.commandService = commandService;
-        this.application = application;
-    }
 
     @Override
     public @NotNull Set<Class<? extends Annotation>> getSupportedAnnotations() {

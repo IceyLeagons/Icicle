@@ -28,7 +28,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import net.iceyleagons.icicle.core.annotations.handlers.AnnotationHandler;
-import net.iceyleagons.icicle.core.annotations.handlers.CustomAutoCreateAnnotationHandler;
+import net.iceyleagons.icicle.core.annotations.service.GlobalService;
+import net.iceyleagons.icicle.core.beans.handlers.CustomAutoCreateAnnotationHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -37,9 +38,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * This manages all beans marked with @{@link MethodValueModifier}
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 16, 2022
+ * @see MethodValueModifier
+ * @see ValueModifier
  */
 @Getter
 @AnnotationHandler

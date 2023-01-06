@@ -39,6 +39,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * Default implementation of {@link InvocationParameterBuilder}
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jan. 03, 2023
@@ -49,6 +51,13 @@ public class InvocationParameterBuilderImpl implements InvocationParameterBuilde
     private final BeanRegistry beanRegistry;
     private final ParameterResolverRegistry parameterResolverRegistry;
 
+    /**
+     * Utility method to encapsulate values inside an Optional, if necessary.
+     *
+     * @param value the value
+     * @param parameter the parameter (used for checking whether it is an optional or not)
+     * @return the resulting {@link Optional} (or the original value)
+     */
     private static Object encaseWithOptionalIfNecessary(Object value, Parameter parameter) {
         return CommandUtils.isRequired(parameter) ? value : Optional.ofNullable(value);
     }
@@ -100,9 +109,17 @@ public class InvocationParameterBuilderImpl implements InvocationParameterBuilde
         return response;
     }
 
+    /**
+     * Utility method to get beans from the {@link BeanRegistry}.
+     *
+     * @param parameter the parameter (used for building a {@link QualifierKey})
+     * @param type the type required
+     * @return the bean
+     * @throws IllegalStateException if the parameter is not resolvable (aka. not registered)
+     */
     private Object getParamFromBeanRegistry(Parameter parameter, Class<?> type) {
         final QualifierKey key = new QualifierKey(type, QualifierKey.getQualifier(parameter));
-        if (beanRegistry.isRegistered(key)) {
+        if (!beanRegistry.isRegistered(key)) {
             throw new IllegalStateException("Unresolvable parameter!");
         }
 

@@ -30,6 +30,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * This can only be used on {@link String} parameters.
+ * When it's used and the string is null or empty the declared will be value set instead.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Jun. 16, 2022
@@ -38,6 +41,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DefaultValue {
 
+    /**
+     * @return the default value
+     */
     String value();
 
 }

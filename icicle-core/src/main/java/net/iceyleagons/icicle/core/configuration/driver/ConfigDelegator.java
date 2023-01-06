@@ -111,7 +111,7 @@ public class ConfigDelegator {
                     .getLoaded().getDeclaredConstructor(constructor.getParameterTypes())
                     .newInstance();
 
-            config.setOriginType(configClass);
+            config.setDeclaringType(configClass);
             config.setOrigin(config);
             config.afterConstruct(annotation, configRootFolder);
             return config;

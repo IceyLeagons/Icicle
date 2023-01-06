@@ -30,6 +30,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Indicates whether a bean should be autowired lazily.
+ * This means, that until the bean is actually used, a placeholder proxy class will be autowired instead of the
+ * actual implementation. This can be used to treat {@link net.iceyleagons.icicle.core.exceptions.CircularDependencyException}s.
+ *
  * @author TOTHTOMI
  * @version 1.0.0
  * @since Aug. 18, 2022
